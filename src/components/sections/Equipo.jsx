@@ -73,14 +73,9 @@ const MIEMBROS_RESPALDO = [
     email: 'A01286440@tec.mx',
     linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
     github: 'https://github.com/emigzzh',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Luis Daniel González Alcocer', rol: 'Coordinador de Marketing',
+        email: '', linkedin: 'https://www.linkedin.com/in/ludago4499' },
     ],
   },
   {
@@ -91,12 +86,11 @@ const MIEMBROS_RESPALDO = [
     email: 'A00845539@tec.mx',
     linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
     github: 'https://github.com/catherinegd7',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Ethiel Favila Alvarado', rol: 'Coordinadora de Investigación',
+        email: '', linkedin: 'https://www.linkedin.com/in/ethiel-favila-alvarado-459ba2358/' },
+      { nombre: 'Elías Perianza Robles', rol: 'Coordinador de Investigación',
+        email: '', linkedin: 'https://www.linkedin.com/in/elias-perianza-robles/' },
     ],
   },
   {
@@ -112,6 +106,22 @@ const MIEMBROS_RESPALDO = [
     coordinadores: [
       { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Finanzas',
         email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+    ],
+  },
+  {
+    id: 8,
+    nombre: 'Orlando Gael Cardozo Beltrán',
+    rol: 'Dirección de Responsabilidad Social',
+    foto: null,
+    email: 'A00841016@tec.mx',
+    linkedin: 'https://www.linkedin.com/in/orlando-gael-cardozo-beltr%C3%A1n-884b913b5/',
+    // Sin GitHub: el botón simplemente no aparece.
+    github: '',
+    coordinadores: [
+      { nombre: 'Edgar Axel Pérez Flores', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: 'https://www.linkedin.com/in/edgar-axel-flores' },
+      { nombre: 'Angel Everardo Rodríguez Guevara', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: 'https://www.linkedin.com/in/angelrdzg' },
     ],
   },
 ]
@@ -205,27 +215,38 @@ function PanelCoordinacion({ director, onClose }) {
     ? director.rol.replace('Dirección de', 'Coordinación de')
     : `Equipo de ${director.rol}`
 
+  // Con 1 persona, una sola columna ancha; con 2+ personas, hasta 3 columnas
+  // en pantallas grandes. Nunca full-height: la ventana se ajusta a su
+  // contenido (nada de espacio muerto abajo cuando hay poca gente) y solo
+  // hace scroll interno si algún día un área crece más de lo que cabe.
+  const columnas =
+    director.coordinadores.length === 1
+      ? ''
+      : director.coordinadores.length === 2
+        ? 'sm:grid-cols-2'
+        : 'sm:grid-cols-2 lg:grid-cols-3'
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[60] bg-brand-900/50 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-brand-900/50 p-4 backdrop-blur-sm sm:p-8"
       onClick={onClose}
     >
-      <motion.aside
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ duration: 0.4, ease: EASE }}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.97, y: 8 }}
+        transition={{ duration: 0.35, ease: EASE }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
-        className="absolute right-0 top-0 flex h-full w-full max-w-2xl flex-col bg-white shadow-2xl sm:rounded-l-3xl"
+        className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
         onClick={(event) => event.stopPropagation()}
       >
-        <header className="flex items-start justify-between gap-4 border-b border-brand-200 p-6">
+        <header className="flex shrink-0 items-start justify-between gap-4 border-b border-brand-200 p-6">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand-900/50">
               Dirige {director.nombre}
@@ -245,16 +266,19 @@ function PanelCoordinacion({ director, onClose }) {
           </button>
         </header>
 
-        {/* Una tarjeta por coordinador, con la foto como protagonista. Con una
-            sola persona ocupa todo el ancho; con varias, van de dos en dos. */}
-        <ul
-          className={`grid flex-1 content-start gap-4 overflow-y-auto overscroll-contain p-6 ${
-            director.coordinadores.length > 1 ? 'sm:grid-cols-2' : ''
-          }`}
+        {/* Una tarjeta por coordinador, con la foto como protagonista.
+            Entran con un ligero escalonado, para que el reflector se sienta
+            vivo aunque solo haya 1 o 2 personas. */}
+        <motion.ul
+          variants={staggerContainer(0.06)}
+          initial="hidden"
+          animate="show"
+          className={`grid gap-4 overflow-y-auto overscroll-contain p-6 ${columnas}`}
         >
           {director.coordinadores.map((c, i) => (
-            <li
+            <motion.li
               key={`${c.nombre}-${i}`}
+              variants={fadeUp}
               className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center"
             >
               <div className="rounded-full border border-brand-200 bg-white p-1.5">
@@ -307,10 +331,10 @@ function PanelCoordinacion({ director, onClose }) {
                   </a>
                 )}
               </div>
-            </li>
+            </motion.li>
           ))}
-        </ul>
-      </motion.aside>
+        </motion.ul>
+      </motion.div>
     </motion.div>
   )
 }
