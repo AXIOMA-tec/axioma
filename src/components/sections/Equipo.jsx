@@ -1,8 +1,10 @@
-import { motion } from 'framer-motion'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { EASE, fadeUp, revealProps, staggerContainer } from '../motion/variants'
 import { useApiData } from '../../hooks/useApiData'
 import { api } from '../../lib/api'
 import SectionHeader from '../SectionHeader'
+import { useBloquearScroll } from '../../hooks/useBloquearScroll'
 
 // Sección Equipo (id="equipo")
 // Los datos vienen de la API (server/ + MongoDB) para poder actualizarlos
@@ -16,8 +18,8 @@ const MIEMBROS_RESPALDO = [
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/hugo-a-meza',
+    github: 'https://github.com/hugo-meza',
   },
   {
     id: 2,
@@ -29,41 +31,76 @@ const MIEMBROS_RESPALDO = [
   },
   {
     id: 3,
-    nombre: 'Nombre Apellido',
-    rol: 'Coordinación de Problemas',
+    nombre: 'Gil Brandon García Contreras',
+    rol: 'Dirección de Proyectos',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
+    github: 'https://github.com/gil-brandon',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+    ],
   },
   {
     id: 4,
-    nombre: 'Nombre Apellido',
-    rol: 'Coordinación de Eventos',
+    nombre: 'Raúl Correa Ocañas',
+    rol: 'Dirección de Vinculación',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/rcorreao/',
+    github: 'https://github.com/Racoo203',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
+    ],
   },
   {
     id: 5,
-    nombre: 'Nombre Apellido',
-    rol: 'Difusión',
+    nombre: 'Emilio Alejandro González Huerta',
+    rol: 'Dirección de Comunicación',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
+    github: 'https://github.com/emigzzh',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+    ],
   },
   {
     id: 6,
-    nombre: 'Nombre Apellido',
-    rol: 'Tesorería',
+    nombre: 'Catherine González Díaz',
+    rol: 'Dirección de Investigación',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
+    github: 'https://github.com/catherinegd7',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
+    ],
+  },
+  {
+    id: 7,
+    nombre: 'Alejandro José Alfaro García',
+    rol: 'Dirección de Finanzas',
+    foto: null,
+    linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
+    // Sin GitHub: el botón simplemente no aparece.
+    github: '',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Finanzas' },
+    ],
   },
 ]
 
 // Diseño: tarjetas suaves y rectas (mismo lenguaje que Quiénes Somos y
 // Eventos), alineadas. Los dos primeros miembros (presidencia) van más
-// grandes, en una fila propia; el resto en filas de 4 en escritorio y de 2
+// grandes, en una fila propia; el resto en filas de 3 en escritorio y de 2
 // en móvil (así la sección no se hace interminable en el celular). Una fila
 // incompleta siempre queda centrada, sin importar cuántos miembros haya.
 
@@ -119,14 +156,107 @@ function EnlaceSocial({ href, red, nombre }) {
   )
 }
 
-function MemberCard({ miembro, destacado }) {
+// Panel lateral con la coordinación de un director (mismo patrón que el panel
+// de Problemas: entra desde la derecha, Esc o click fuera lo cierran, y la
+// página de atrás no se desplaza mientras está abierto).
+function PanelCoordinacion({ director, onClose }) {
+  const cerrarRef = useRef(null)
+  useBloquearScroll()
+
+  useEffect(() => {
+    cerrarRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    const alPresionar = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', alPresionar)
+    return () => window.removeEventListener('keydown', alPresionar)
+  }, [onClose])
+
+  const titulo = director.rol.startsWith('Dirección de')
+    ? director.rol.replace('Dirección de', 'Coordinación de')
+    : `Equipo de ${director.rol}`
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[60] bg-brand-900/50 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.aside
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ duration: 0.4, ease: EASE }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-coordinacion"
+        className="absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-white shadow-2xl sm:rounded-l-3xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header className="flex items-start justify-between gap-4 border-b border-brand-200 p-6">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand-900/50">
+              Dirige {director.nombre}
+            </p>
+            <h3 id="titulo-coordinacion" className="mt-2 font-display text-2xl leading-tight text-brand-900">
+              {titulo}
+            </h3>
+          </div>
+          <button
+            ref={cerrarRef}
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brand-200 text-brand-900/70 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
+          >
+            ✕
+          </button>
+        </header>
+
+        <ul className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-6">
+          {director.coordinadores.map((c, i) => (
+            <li
+              key={`${c.nombre}-${i}`}
+              className="flex items-center gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-4"
+            >
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-lg text-brand-400">
+                {c.foto ? (
+                  <img src={c.foto} alt={c.nombre} className="h-full w-full object-cover" />
+                ) : (
+                  iniciales(c.nombre)
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-base leading-tight tracking-wide text-brand-900">{c.nombre}</p>
+                <p className="mt-1 text-xs text-brand-900/60">{c.rol || 'Coordinación'}</p>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                <EnlaceSocial href={c.linkedin} red="linkedin" nombre={c.nombre} />
+                <EnlaceSocial href={c.github} red="github" nombre={c.nombre} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </motion.aside>
+    </motion.div>
+  )
+}
+
+function MemberCard({ miembro, destacado, onAbrir }) {
+  const coordinadores = miembro.coordinadores ?? []
   return (
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
       className={`group flex w-[calc(50%-8px)] flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-white p-4 text-center shadow-md transition-shadow duration-300 hover:shadow-xl sm:w-[calc(50%-12px)] sm:gap-4 sm:p-7 ${
-        destacado ? 'lg:w-[calc(50%-12px)]' : 'lg:w-[calc(25%-18px)]'
+        destacado ? 'lg:w-[calc(50%-12px)]' : 'lg:w-[calc(33.333%-16px)]'
       }`}
     >
       {/* Marco tipo "doble aro" alrededor de la foto. */}
@@ -161,9 +291,36 @@ function MemberCard({ miembro, destacado }) {
         </p>
       </div>
 
-      <div className="mt-1 flex gap-2">
-        <EnlaceSocial href={miembro.linkedin} red="linkedin" nombre={miembro.nombre} />
-        <EnlaceSocial href={miembro.github} red="github" nombre={miembro.nombre} />
+      {/* Enlaces y botón siempre pegados al fondo de la tarjeta: así quedan
+          alineados entre tarjetas de la misma fila aunque el nombre ocupe
+          más o menos líneas. */}
+      <div className="mt-auto flex flex-col items-center gap-3 pt-1">
+        <div className="flex gap-2">
+          <EnlaceSocial href={miembro.linkedin} red="linkedin" nombre={miembro.nombre} />
+          <EnlaceSocial href={miembro.github} red="github" nombre={miembro.nombre} />
+        </div>
+
+        {/* Solo los directores con coordinadores llevan este botón: abre el
+            panel lateral con su coordinación. */}
+        {coordinadores.length > 0 && (
+          <button
+            type="button"
+            onClick={() => onAbrir(miembro)}
+            className="inline-flex items-center gap-2 rounded-full border border-brand-200 px-3 py-1.5 text-xs font-medium text-brand-900/80 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
+          >
+            <span className="flex -space-x-1.5" aria-hidden="true">
+              {coordinadores.slice(0, 3).map((c, i) => (
+                <span
+                  key={`${c.nombre}-${i}`}
+                  className="flex h-5 w-5 items-center justify-center rounded-full border border-white bg-brand-200 font-display text-[8px] text-brand-900"
+                >
+                  {iniciales(c.nombre)}
+                </span>
+              ))}
+            </span>
+            Ver coordinación · {coordinadores.length}
+          </button>
+        )}
       </div>
     </motion.div>
   )
@@ -171,6 +328,8 @@ function MemberCard({ miembro, destacado }) {
 
 export default function Equipo() {
   const { data: miembros } = useApiData(api.getEquipo, MIEMBROS_RESPALDO)
+  const [directorAbierto, setDirectorAbierto] = useState(null)
+  const cerrarPanel = useCallback(() => setDirectorAbierto(null), [])
 
   return (
     <section
@@ -188,9 +347,20 @@ export default function Equipo() {
         {...revealProps}
       >
         {miembros.map((miembro, indice) => (
-          <MemberCard key={miembro.id} miembro={miembro} destacado={indice < 2} />
+          <MemberCard
+            key={miembro.id}
+            miembro={miembro}
+            destacado={indice < 2}
+            onAbrir={setDirectorAbierto}
+          />
         ))}
       </motion.div>
+
+      <AnimatePresence>
+        {directorAbierto && (
+          <PanelCoordinacion key="coordinacion" director={directorAbierto} onClose={cerrarPanel} />
+        )}
+      </AnimatePresence>
     </section>
   )
 }

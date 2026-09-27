@@ -3,8 +3,21 @@
 // por gente distinta del club — así no hay que buscar entre 93 problemas
 // para cambiar el nombre de un integrante o agregar un evento.
 //
-// Para actualizar: edita el arreglo de aquí abajo y vuelve a correr
-// `npm run seed`.
+// Para actualizar: edita el arreglo de aquí abajo, guarda el archivo y corre
+// `npm run seed:equipo` (solo actualiza Equipo y Eventos). NO uses
+// `npm run seed` para esto: ese además borra todos los comentarios.
+//
+// COORDINADORES: cada director puede tener su lista `coordinadores` (1 a 4
+// personas). En la página aparece el botón "Ver coordinación" solo si la
+// lista tiene gente. Ejemplo, dentro de la ficha del director:
+//
+//   coordinadores: [
+//     { nombre: 'Nombre Apellido', rol: 'Coordinación de X',
+//       foto: null, linkedin: 'https://...', github: 'https://...' },
+//   ],
+//
+// Solo `nombre` es obligatorio; `rol`, `foto`, `linkedin` y `github` son
+// opcionales.
 
 export const miembros = [
   {
@@ -12,8 +25,8 @@ export const miembros = [
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/hugo-a-meza',
+    github: 'https://github.com/hugo-meza',
   },
   {
     id: 2,
@@ -25,35 +38,70 @@ export const miembros = [
   },
   {
     id: 3,
-    nombre: 'Nombre Apellido',
-    rol: 'Coordinación de Problemas',
+    nombre: 'Gil Brandon García Contreras',
+    rol: 'Dirección de Proyectos',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
+    github: 'https://github.com/gil-brandon',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+    ],
   },
   {
     id: 4,
-    nombre: 'Nombre Apellido',
-    rol: 'Coordinación de Eventos',
+    nombre: 'Raúl Correa Ocañas',
+    rol: 'Dirección de Vinculación',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/rcorreao/',
+    github: 'https://github.com/Racoo203',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
+    ],
   },
   {
     id: 5,
-    nombre: 'Nombre Apellido',
-    rol: 'Difusión',
+    nombre: 'Emilio Alejandro González Huerta',
+    rol: 'Dirección de Comunicación',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
+    github: 'https://github.com/emigzzh',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+    ],
   },
   {
     id: 6,
-    nombre: 'Nombre Apellido',
-    rol: 'Tesorería',
+    nombre: 'Catherine González Díaz',
+    rol: 'Dirección de Investigación',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
+    github: 'https://github.com/catherinegd7',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
+    ],
+  },
+  {
+    id: 7,
+    nombre: 'Alejandro José Alfaro García',
+    rol: 'Dirección de Finanzas',
+    foto: null,
+    linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
+    // Sin GitHub: el botón simplemente no aparece.
+    github: '',
+    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
+    coordinadores: [
+      { nombre: 'Nombre Apellido', rol: 'Coordinación de Finanzas' },
+    ],
   },
 ]
 
