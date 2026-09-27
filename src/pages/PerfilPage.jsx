@@ -111,7 +111,7 @@ function PerfilPage() {
               Volver al inicio
             </Link>
             {mostrado.isAdmin && (
-              <Link to="/admin/eventos" className={secondaryButtonClass}>
+              <Link to="/admin" className={secondaryButtonClass}>
                 Panel de administración
               </Link>
             )}
