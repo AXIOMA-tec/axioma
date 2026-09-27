@@ -90,9 +90,16 @@ function ImagenMagnetica() {
         onMouseMove={alMoverMouse}
         onMouseLeave={reiniciar}
         style={{ x: translateX, y: translateY }}
-        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl border border-brand-200 bg-brand-100 text-sm text-brand-400 shadow-lg"
+        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl border border-brand-200 bg-brand-100 shadow-lg"
       >
-        Espacio para imagen grupal
+        {/* Foto real: presentación "Nuestro Axioma" ante el club. La imagen
+            es más ancha que este recuadro (4:3), así que object-cover
+            recorta un poco los lados y centra la pantalla y los ponentes. */}
+        <img
+          src="/quienes-somos-grupal.png"
+          alt="Presentación de Axioma ante el club, con la pantalla del logo al fondo"
+          className="h-full w-full object-cover"
+        />
       </motion.div>
     </motion.div>
   )
