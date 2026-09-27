@@ -18,7 +18,10 @@ import mongoose from 'mongoose'
 import Category from './models/Category.js'
 import Problem from './models/Problem.js'
 import Comment from './models/Comment.js'
+import Miembro from './models/Miembro.js'
+import Evento from './models/Evento.js'
 import { categorias, problemas } from './data/problemasReales.js'
+import { miembros, eventos } from './data/equipoEventos.js'
 
 async function seed() {
   await mongoose.connect(process.env.MONGO_URI)
@@ -50,6 +53,14 @@ async function seed() {
   )
 
   console.log(`Listo: ${categorias.length} categorías y ${problemas.length} problemas creados.`)
+
+  // Equipo y Eventos: mismo trato, datos separados en equipoEventos.js
+  // (ver ese archivo para actualizar nombres/eventos).
+  await Promise.all([Miembro.deleteMany({}), Evento.deleteMany({})])
+  await Miembro.insertMany(miembros)
+  await Evento.insertMany(eventos)
+  console.log(`Listo: ${miembros.length} miembros y ${eventos.length} eventos creados.`)
+
   await mongoose.disconnect()
   process.exit(0)
 }

@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants'
+import { useApiData } from '../../hooks/useApiData'
+import { api } from '../../lib/api'
 
 // Sección Eventos (id="eventos")
-// TODO equipo: reemplazar EVENTOS con la info real (póster, fecha, lugar,
-// link de registro) conforme se anuncien. "tipo: 'pasado'" los muestra
-// en blanco y negro como archivo; "tipo: 'proximo'" les pone la
-// etiqueta "Próximo".
+// La lista de eventos viene de la API (server/ + MongoDB) — agregar o
+// cambiar un evento ya no requiere tocar este archivo, ver README.
+// "tipo: 'pasado'" los muestra en blanco y negro como archivo;
+// "tipo: 'proximo'" les pone la etiqueta "Próximo".
+// EVENTOS_RESPALDO se usa solo si la API no responde.
 
-const EVENTOS = [
+const EVENTOS_RESPALDO = [
   {
     id: 1,
     tipo: 'proximo',
@@ -186,6 +189,8 @@ function EventCarousel({ eventos }) {
 }
 
 export default function Eventos() {
+  const { data: eventos } = useApiData(api.getEventos, EVENTOS_RESPALDO)
+
   return (
     <section
       id="eventos"
@@ -230,7 +235,7 @@ export default function Eventos() {
       </motion.div>
 
       <motion.div variants={staggerContainer(0.1)} {...revealProps}>
-        <EventCarousel eventos={EVENTOS} />
+        <EventCarousel eventos={eventos} />
       </motion.div>
     </section>
   )
