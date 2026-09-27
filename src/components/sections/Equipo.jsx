@@ -1,26 +1,30 @@
 import { motion } from 'framer-motion'
 import { fadeUp, revealProps, staggerContainer } from '../motion/variants'
+import { useApiData } from '../../hooks/useApiData'
+import { api } from '../../lib/api'
 
 // Sección Equipo (id="equipo")
-// TODO equipo: reemplazar los datos de MIEMBROS con la información real
-// (foto, nombre, rol, links) de cada integrante.
+// Los datos vienen de la API (server/ + MongoDB) para poder actualizarlos
+// sin tocar código — ver README para cómo agregar/editar miembros.
+// MIEMBROS_RESPALDO se usa solo si la API no responde (backend dormido,
+// sin conexión, etc.), para que la sección nunca se vea vacía.
 
-const MIEMBROS = [
+const MIEMBROS_RESPALDO = [
   {
     id: 1,
-    nombre: 'Nombre Apellido',
-    rol: 'Presidencia',
+    nombre: 'Hugo André Meza Fierros',
+    rol: 'Presidente',
     foto: null,
     linkedin: 'https://linkedin.com/in/placeholder',
     github: 'https://github.com/placeholder',
   },
   {
     id: 2,
-    nombre: 'Nombre Apellido',
-    rol: 'Vicepresidencia',
+    nombre: 'Lucero Díaz Ortega',
+    rol: 'Vicepresidente',
     foto: null,
-    linkedin: 'https://linkedin.com/in/placeholder',
-    github: 'https://github.com/placeholder',
+    linkedin: 'https://www.linkedin.com/in/lucero-d%C3%ADaz-ortega-98979b354/',
+    github: 'https://github.com/Luzdks',
   },
   {
     id: 3,
@@ -106,6 +110,8 @@ function MemberCard({ miembro }) {
 }
 
 export default function Equipo() {
+  const { data: miembros } = useApiData(api.getEquipo, MIEMBROS_RESPALDO)
+
   return (
     <section
       id="equipo"
@@ -124,7 +130,7 @@ export default function Equipo() {
         variants={staggerContainer(0.08)}
         {...revealProps}
       >
-        {MIEMBROS.map((miembro) => (
+        {miembros.map((miembro) => (
           <MemberCard key={miembro.id} miembro={miembro} />
         ))}
       </motion.div>
