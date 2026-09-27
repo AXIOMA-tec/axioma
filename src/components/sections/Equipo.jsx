@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { EASE, fadeUp, revealProps, staggerContainer } from '../motion/variants'
 import { useApiData } from '../../hooks/useApiData'
 import { api } from '../../lib/api'
+import SectionHeader from '../SectionHeader'
 
 // Sección Equipo (id="equipo")
 // Los datos vienen de la API (server/ + MongoDB) para poder actualizarlos
@@ -162,20 +163,10 @@ export default function Equipo() {
       id="equipo"
       className="mx-auto max-w-6xl scroll-mt-16 px-4 py-24 sm:px-6"
     >
-      <motion.h2
-        variants={fadeUp}
-        {...revealProps}
-        className="font-display mb-4 text-center text-3xl text-brand-900 sm:text-4xl"
-      >
-        Conoce al Equipo
-      </motion.h2>
-      <motion.p
-        variants={fadeUp}
-        {...revealProps}
-        className="mx-auto mb-12 max-w-xl text-center text-brand-900/70"
-      >
-        Las personas que organizan entrenamientos, concursos y todo lo demás en Axioma.
-      </motion.p>
+      <SectionHeader
+        titulo="Conoce al Equipo"
+        descripcion="Las personas que organizan entrenamientos, concursos y todo lo demás en Axioma."
+      />
 
       <motion.div
         className="flex flex-wrap justify-center gap-6"

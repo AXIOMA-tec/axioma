@@ -6,7 +6,8 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion'
-import { EASE, fadeUp, revealProps, staggerContainer } from '../motion/variants'
+import { EASE } from '../motion/variants'
+import SectionHeader from '../SectionHeader'
 
 // Sección Galería (id="galeria")
 // TODO equipo: reemplazar el array IMAGENES con fotos reales de eventos,
@@ -18,6 +19,8 @@ import { EASE, fadeUp, revealProps, staggerContainer } from '../motion/variants'
 // Diseño: dos filas de fotos de borde a borde de la pantalla que se
 // deslizan en sentidos opuestos según se hace scroll (sin espacios
 // vacíos a los lados, sin nada inclinado). Click en una foto = visor.
+// Mismo lenguaje suave que Equipo y Quiénes Somos: esquinas redondeadas,
+// bordes claros y sombra leve.
 
 const IMAGENES = [
   { id: 1, src: null, ratio: 4 / 5, alt: 'Sesión semanal de resolución de problemas de Axioma' },
@@ -34,7 +37,7 @@ function Contenido({ imagen, className = '' }) {
   return imagen.src ? (
     <img src={imagen.src} alt={imagen.alt} className={`h-full w-full object-cover ${className}`} />
   ) : (
-    <span className="px-4 text-center text-xs text-neutral-400">{imagen.alt}</span>
+    <span className="px-4 text-center text-xs text-brand-400">{imagen.alt}</span>
   )
 }
 
@@ -46,18 +49,18 @@ function Foto({ imagen, indice, onOpen }) {
       onClick={() => onOpen(indice)}
       aria-label={`Ver foto ${numero(indice)}: ${imagen.alt}`}
       style={{ aspectRatio: imagen.ratio }}
-      className="group relative h-56 shrink-0 overflow-hidden border border-neutral-950 bg-neutral-100 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950 sm:h-72 lg:h-80"
+      className="group relative h-56 shrink-0 overflow-hidden rounded-2xl border border-brand-200 bg-brand-100 text-left shadow-md transition-shadow duration-300 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900 sm:h-72 lg:h-80"
     >
       <div className="flex h-full w-full items-center justify-center transition-transform duration-700 ease-out group-hover:scale-105">
         <Contenido imagen={imagen} />
       </div>
 
-      <span className="absolute left-0 top-0 border-b border-r border-neutral-950 bg-white px-2.5 py-1 text-[11px] font-medium tabular-nums tracking-[0.15em] text-neutral-950">
+      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium tabular-nums tracking-[0.1em] text-brand-900 shadow-sm">
         {numero(indice)}
       </span>
 
       {/* Pie que sube desde abajo al pasar el mouse. */}
-      <span className="absolute inset-x-0 bottom-0 translate-y-full border-t border-neutral-950 bg-[#FFB401] px-3 py-2 text-xs leading-snug text-neutral-950 transition-transform duration-300 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0">
+      <span className="absolute inset-x-3 bottom-3 translate-y-[calc(100%+12px)] rounded-xl bg-brand-900/90 px-3 py-2 text-xs leading-snug text-white transition-transform duration-300 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0">
         {imagen.alt}
       </span>
     </button>
@@ -89,7 +92,7 @@ function BotonVisor({ onClick, disabled, label, children }) {
       disabled={disabled}
       aria-label={label}
       title={label}
-      className="flex h-10 w-10 items-center justify-center border border-white text-white transition-colors hover:bg-[#FFB401] hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-default disabled:border-white/30 disabled:text-white/30 disabled:hover:bg-transparent disabled:hover:text-white/30"
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 text-white transition-colors hover:bg-white hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-default disabled:border-white/25 disabled:text-white/25 disabled:hover:bg-transparent disabled:hover:text-white/25"
     >
       {children}
     </button>
@@ -121,7 +124,7 @@ function Visor({ indice, onIr, onClose }) {
       role="dialog"
       aria-modal="true"
       aria-label="Visor de fotos"
-      className="fixed inset-0 z-[60] flex flex-col bg-neutral-950/95 p-4 sm:p-8"
+      className="fixed inset-0 z-[60] flex flex-col bg-brand-900/90 p-4 backdrop-blur-sm sm:p-8"
       onClick={onClose}
     >
       <div className="flex items-center justify-between text-white" onClick={(e) => e.stopPropagation()}>
@@ -145,7 +148,7 @@ function Visor({ indice, onIr, onClose }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: EASE }}
           style={{ aspectRatio: imagen.ratio }}
-          className="flex max-h-full max-w-full items-center justify-center overflow-hidden border border-white bg-neutral-100"
+          className="flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-2xl bg-brand-100 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <Contenido imagen={imagen} />
@@ -186,25 +189,16 @@ export default function Galeria() {
   const invertidas = [...IMAGENES.slice(3), ...IMAGENES.slice(0, 3)]
 
   return (
-    <section id="galeria" ref={seccionRef} className="scroll-mt-16 overflow-x-clip bg-white py-24 sm:py-32">
-      <motion.div
-        className="mx-auto max-w-7xl px-4 sm:px-8"
-        variants={staggerContainer(0.1)}
-        {...revealProps}
-      >
-        <motion.div
-          variants={fadeUp}
-          className="flex items-end justify-between gap-6 border-b border-neutral-950 pb-4"
-        >
-          <h2 className="font-display text-5xl leading-none text-neutral-950 sm:text-7xl">Galería</h2>
-          <p className="hidden shrink-0 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500 sm:block">
-            Haz scroll · click para ampliar
-          </p>
-        </motion.div>
-      </motion.div>
+    <section id="galeria" ref={seccionRef} className="scroll-mt-16 overflow-x-clip py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <SectionHeader
+          titulo="Galería"
+          descripcion="Sesiones, concursos y momentos del club. Haz scroll para recorrerla y toca una foto para verla completa."
+        />
+      </div>
 
       {/* Filas de borde a borde: fuera del contenedor con max-width. */}
-      <div className="mt-10 flex flex-col gap-4 pl-4 sm:gap-6 sm:pl-8">
+      <div className="flex flex-col gap-4 pl-4 sm:gap-6 sm:pl-8">
         <Fila imagenes={IMAGENES} progreso={scrollYProgress} desde="0%" hasta="-30%" onOpen={setAbierta} />
         <Fila imagenes={invertidas} progreso={scrollYProgress} desde="-30%" hasta="0%" onOpen={setAbierta} />
       </div>

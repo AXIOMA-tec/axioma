@@ -145,38 +145,12 @@ export default function QuienesSomos() {
       <motion.div variants={staggerContainer(0.15)} {...revealProps}>
         <div className="grid items-center gap-16 md:grid-cols-2">
           <motion.div variants={staggerContainer(0.12)} className="flex flex-col items-start gap-5">
-            <motion.span
-              variants={fadeUp}
-              className="rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 text-xs font-medium text-brand-900/70"
-            >
-              Club de matemáticas · Tec de Monterrey
-            </motion.span>
-
             <motion.h2
               variants={fadeUp}
-              className="font-display text-4xl text-brand-900 sm:text-5xl"
+              className="font-display text-3xl text-brand-900 sm:text-4xl"
             >
               ¿Qué es Axioma?
             </motion.h2>
-
-            {/* Subrayado que se dibuja solo al entrar en pantalla. */}
-            <motion.svg
-              viewBox="0 0 220 12"
-              className="-mt-3 h-3 w-44 text-brand-900 sm:w-56"
-              fill="none"
-              aria-hidden="true"
-            >
-              <motion.path
-                d="M2 8 C 40 2, 70 12, 110 6 S 180 3, 218 7"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                variants={{
-                  hidden: { pathLength: 0 },
-                  show: { pathLength: 1, transition: { duration: 1, delay: 0.4, ease: EASE } },
-                }}
-              />
-            </motion.svg>
 
             <motion.p variants={fadeUp} className="text-brand-900/70">
               Axioma es el club de matemáticas del Tec de Monterrey. Reunimos a
