@@ -138,17 +138,23 @@ export default function QuienesSomos() {
             >
               ¿Qué es Axioma?
             </motion.h2>
+            {/* Propósito y visión oficiales, tal como quedaron registrados en
+                el Anexo 3 de LiFE (Grupos Estudiantiles) — no son texto de
+                relleno. */}
             <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
-              Axioma es el club de matemáticas del Tec de Monterrey. Reunimos a
-              estudiantes apasionados por resolver problemas, prepararnos para
-              competencias y compartir el gusto por las matemáticas fuera del
-              salón de clases. (Texto placeholder — reemplazar con misión y
-              visión reales.)
+              Axioma es el club de matemáticas del Tec de Monterrey. Nuestro
+              propósito es crear un ecosistema formal y sostenible para el
+              desarrollo del talento matemático en la institución: ser el
+              punto de unión para estudiantes apasionados por la resolución de
+              problemas, la docencia y las competencias, canalizando su
+              potencial para elevar el prestigio académico del Tec y generar
+              un impacto social positivo a través de la educación.
             </motion.p>
             <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
-              Nuestra visión es construir una comunidad donde cualquier persona,
-              sin importar su nivel, encuentre un espacio para aprender,
-              practicar y crecer junto a otros entusiastas de las matemáticas.
+              Nuestra visión es ser la principal cuna de talento matemático
+              del Tecnológico de Monterrey, reconocida por liderar en
+              competencias nacionales y por nuestro compromiso activo de
+              formar a los próximos talentos de la región.
             </motion.p>
           </motion.div>
 
