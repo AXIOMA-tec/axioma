@@ -401,7 +401,7 @@ function ComentarioItem({ comentario, esPropio, onEliminar }) {
 //  - ProblemaDetalle: enunciado + comentarios + formulario. Se monta de nuevo
 //    con cada problema (key={problema._id}), así que su estado arranca limpio.
 // ---------------------------------------------------------------------------
-function ProblemaDetalle({ problema, auth, onAuthSuccess, onAuthExpired }) {
+function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpired }) {
   // Arranca en `true` a propósito: "recién montado" siempre significa "aún no
   // llegan los comentarios de este problema".
   const [comentarios, setComentarios] = useState([])
@@ -469,84 +469,97 @@ function ProblemaDetalle({ problema, auth, onAuthSuccess, onAuthExpired }) {
   return (
     <>
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:px-8 sm:py-10">
-        <h3
-          id="titulo-panel-problema"
-          className="font-display text-3xl uppercase leading-[1.05] text-neutral-950 sm:text-5xl"
-        >
-          {formatearTitulo(problema)}
-        </h3>
+        {/* Al expandir, el contenido se centra en una columna de lectura
+            cómoda (no se estira a todo el ancho de la pantalla). */}
+        <div className={expandido ? 'mx-auto max-w-3xl' : ''}>
+          <h3
+            id="titulo-panel-problema"
+            className={`font-display uppercase leading-[1.05] text-neutral-950 ${
+              expandido ? 'text-4xl sm:text-6xl' : 'text-3xl sm:text-5xl'
+            }`}
+          >
+            {formatearTitulo(problema)}
+          </h3>
 
-        <p className="mt-5 text-[11px] uppercase tracking-[0.15em] text-neutral-500">
-          {problema.tipo} · {problema.año}
-        </p>
+          <p className="mt-5 text-[11px] uppercase tracking-[0.15em] text-neutral-500">
+            {problema.tipo} · {problema.año}
+          </p>
 
-        {/* div, no <p>: una fórmula en "display mode" se renderiza como un
-            <div>, y un <div> no puede vivir dentro de un <p> en HTML. */}
-        <div className="mt-8 whitespace-pre-line text-lg leading-relaxed text-neutral-800">
-          {renderEnunciado(problema.enunciado)}
-        </div>
+          {/* div, no <p>: una fórmula en "display mode" se renderiza como un
+              <div>, y un <div> no puede vivir dentro de un <p> en HTML. */}
+          <div
+            className={`mt-8 whitespace-pre-line leading-relaxed text-neutral-800 ${
+              expandido ? 'text-xl sm:text-2xl' : 'text-lg'
+            }`}
+          >
+            {renderEnunciado(problema.enunciado)}
+          </div>
 
-        <div className="mt-12 border-t border-neutral-950 pt-4">
-          <h4 className={labelClass}>Comentarios · {comentarios.length}</h4>
+          <div className="mt-12 border-t border-neutral-950 pt-4">
+            <h4 className={labelClass}>Comentarios · {comentarios.length}</h4>
 
-          {cargandoComentarios && (
-            <p className="mt-4 text-sm text-neutral-400">Cargando comentarios…</p>
-          )}
+            {cargandoComentarios && (
+              <p className="mt-4 text-sm text-neutral-400">Cargando comentarios…</p>
+            )}
 
-          {!cargandoComentarios && comentarios.length === 0 && (
-            <p className="mt-4 text-sm text-neutral-500">Sé el primero en comentar.</p>
-          )}
+            {!cargandoComentarios && comentarios.length === 0 && (
+              <p className="mt-4 text-sm text-neutral-500">Sé el primero en comentar.</p>
+            )}
 
-          <div className="mt-2 flex flex-col">
-            {comentarios.map((c) => (
-              <ComentarioItem
-                key={c._id}
-                comentario={c}
-                esPropio={Boolean(auth && c.author?._id === auth.user.id)}
-                onEliminar={() => handleEliminarComentario(c._id)}
-              />
-            ))}
+            <div className="mt-2 flex flex-col">
+              {comentarios.map((c) => (
+                <ComentarioItem
+                  key={c._id}
+                  comentario={c}
+                  esPropio={Boolean(auth && c.author?._id === auth.user.id)}
+                  onEliminar={() => handleEliminarComentario(c._id)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="max-h-[55%] shrink-0 overflow-y-auto border-t border-neutral-950 bg-white px-5 py-5 sm:px-8">
-        {auth ? (
-          <form onSubmit={handleEnviarComentario} className="flex flex-col gap-3">
-            <textarea
-              value={nuevoComentario}
-              onChange={(e) => setNuevoComentario(e.target.value)}
-              placeholder="Escribe un comentario…"
-              rows={3}
-              maxLength={2000}
-              className={`${inputClass} resize-none`}
-            />
-            {errorComentario && <p className="text-sm text-red-700">{errorComentario}</p>}
-            <div className="flex items-center justify-between">
-              <span className="text-xs tabular-nums text-neutral-400">
-                {nuevoComentario.length}/2000
-              </span>
-              <button type="submit" disabled={enviandoComentario} className={primaryButtonClass}>
-                {enviandoComentario ? 'Enviando…' : 'Comentar'}
-              </button>
-            </div>
-          </form>
-        ) : (
-          <AuthInlineForm onAuthSuccess={onAuthSuccess} />
-        )}
+        <div className={expandido ? 'mx-auto max-w-3xl' : ''}>
+          {auth ? (
+            <form onSubmit={handleEnviarComentario} className="flex flex-col gap-3">
+              <textarea
+                value={nuevoComentario}
+                onChange={(e) => setNuevoComentario(e.target.value)}
+                placeholder="Escribe un comentario…"
+                rows={3}
+                maxLength={2000}
+                className={`${inputClass} resize-none`}
+              />
+              {errorComentario && <p className="text-sm text-red-700">{errorComentario}</p>}
+              <div className="flex items-center justify-between">
+                <span className="text-xs tabular-nums text-neutral-400">
+                  {nuevoComentario.length}/2000
+                </span>
+                <button type="submit" disabled={enviandoComentario} className={primaryButtonClass}>
+                  {enviandoComentario ? 'Enviando…' : 'Comentar'}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <AuthInlineForm onAuthSuccess={onAuthSuccess} />
+          )}
+        </div>
       </div>
     </>
   )
 }
 
 // Botón cuadrado de la cabecera (← / →).
-function NavButton({ onClick, disabled, label, children }) {
+function NavButton({ onClick, disabled, label, pressed, children }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
+      aria-pressed={pressed}
       title={label}
       className={`flex h-8 w-8 items-center justify-center border border-neutral-950 text-sm transition-colors hover:bg-[#FFB401] disabled:cursor-default disabled:border-neutral-300 disabled:text-neutral-300 disabled:hover:bg-transparent ${focusRing}`}
     >
@@ -560,6 +573,9 @@ function NavButton({ onClick, disabled, label, children }) {
 // carpeta abierta, etc.), para poder ir al de antes / al de después.
 function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess, onAuthExpired }) {
   const [enlaceCopiado, setEnlaceCopiado] = useState(false)
+  // Opcional: agranda el panel a todo el ancho. Se mantiene al pasar de un
+  // problema a otro y se reinicia al cerrar el panel.
+  const [expandido, setExpandido] = useState(false)
 
   // Teclado: Escape cierra (estándar de accesibilidad para cualquier diálogo);
   // ← / → van al problema anterior / siguiente, salvo que se esté escribiendo
@@ -607,7 +623,9 @@ function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess,
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-panel-problema"
-        className="absolute right-0 top-0 flex h-full w-full max-w-2xl flex-col border-l border-neutral-950 bg-white"
+        className={`absolute right-0 top-0 flex h-full w-full flex-col border-l border-neutral-950 bg-white transition-[max-width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          expandido ? 'max-w-full' : 'max-w-2xl'
+        }`}
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex shrink-0 items-center justify-between gap-3 border-b border-neutral-950 px-4 py-3 sm:gap-4 sm:px-8">
@@ -633,6 +651,41 @@ function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess,
           </div>
 
           <div className="flex items-center gap-3 sm:gap-5">
+            {/* En móvil el panel ya ocupa toda la pantalla: no hace falta. */}
+            <span className="max-md:hidden">
+              <NavButton
+                label={expandido ? 'Contraer panel' : 'Expandir panel'}
+                pressed={expandido}
+                onClick={() => setExpandido((valor) => !valor)}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  {expandido ? (
+                    <>
+                      <polyline points="4 14 10 14 10 20" />
+                      <polyline points="20 10 14 10 14 4" />
+                      <line x1="14" x2="21" y1="10" y2="3" />
+                      <line x1="3" x2="10" y1="21" y2="14" />
+                    </>
+                  ) : (
+                    <>
+                      <polyline points="15 3 21 3 21 9" />
+                      <polyline points="9 21 3 21 3 15" />
+                      <line x1="21" x2="14" y1="3" y2="10" />
+                      <line x1="3" x2="10" y1="21" y2="14" />
+                    </>
+                  )}
+                </svg>
+              </NavButton>
+            </span>
             <button
               type="button"
               onClick={copiarEnlace}
@@ -656,6 +709,7 @@ function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess,
         <ProblemaDetalle
           key={problema._id}
           problema={problema}
+          expandido={expandido}
           auth={auth}
           onAuthSuccess={onAuthSuccess}
           onAuthExpired={onAuthExpired}
