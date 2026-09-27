@@ -11,7 +11,7 @@ export default function SectionHeader({ titulo, descripcion }) {
       <motion.h2
         variants={fadeUp}
         {...revealProps}
-        className="font-display mb-4 text-center text-3xl text-brand-900 sm:text-4xl"
+        className="font-display mb-4 text-center text-4xl text-brand-900 sm:text-5xl"
       >
         {titulo}
       </motion.h2>

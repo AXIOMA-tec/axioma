@@ -3,6 +3,7 @@ import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useBloquearScroll } from '../hooks/useBloquearScroll'
 import Counter from '../components/motion/Counter'
 import { EASE, staggerContainer } from '../components/motion/variants'
 
@@ -524,7 +525,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
   return (
     <>
       <div
-        className={`min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:py-10 ${
+        className={`min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-8 sm:py-10 ${
           expandido ? 'sm:px-14 lg:px-20' : 'sm:px-8'
         }`}
       >
@@ -581,7 +582,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
       </div>
 
       <div
-        className={`max-h-[55%] shrink-0 overflow-y-auto border-t border-neutral-950 bg-white px-5 py-5 ${
+        className={`max-h-[55%] shrink-0 overflow-y-auto overscroll-contain border-t border-neutral-950 bg-white px-5 py-5 ${
           expandido ? 'sm:px-14 lg:px-20' : 'sm:px-8'
         }`}
       >
@@ -641,6 +642,7 @@ function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess,
   // Se mantiene al pasar de un
   // problema a otro y se reinicia al cerrar el panel.
   const [expandido, setExpandido] = useState(false)
+  useBloquearScroll()
 
   // Teclado: Escape cierra (estándar de accesibilidad para cualquier diálogo);
   // ← / → van al problema anterior / siguiente, salvo que se esté escribiendo

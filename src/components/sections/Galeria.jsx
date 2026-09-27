@@ -7,6 +7,7 @@ import {
   useTransform,
 } from 'framer-motion'
 import { EASE } from '../motion/variants'
+import { useBloquearScroll } from '../../hooks/useBloquearScroll'
 import SectionHeader from '../SectionHeader'
 
 // Sección Galería (id="galeria")
@@ -101,6 +102,7 @@ function BotonVisor({ onClick, disabled, label, children }) {
 
 // Visor a pantalla completa con flechas y teclado.
 function Visor({ indice, onIr, onClose }) {
+  useBloquearScroll()
   const imagen = IMAGENES[indice]
   const anterior = indice > 0 ? indice - 1 : null
   const siguiente = indice < IMAGENES.length - 1 ? indice + 1 : null

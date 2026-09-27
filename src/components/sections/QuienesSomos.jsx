@@ -1,17 +1,15 @@
 import { useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import Counter from '../motion/Counter'
-import FloatingSymbol from '../motion/FloatingSymbol'
-import { EASE, fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants'
+import { fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants'
 
 // Sección Quiénes Somos (id="quienes-somos")
 // TODO equipo: reemplazar el texto de misión/visión, la imagen grupal
 // y las cifras de STATS por el contenido real del club.
 //
-// Diseño: suave y redondeado, en el mismo lenguaje que Eventos (tarjetas
-// claras, sombras leves), pero con todo derecho y alineado: nada inclinado.
-// Detalles: la imagen se mueve un poco hacia el cursor, los símbolos
-// matemáticos flotan y las tarjetas de cifras se levantan al pasar el mouse.
+// Diseño: dos columnas. Texto a la izquierda en tamaño de lectura (18 px,
+// ambos párrafos igual) y la imagen grupal a la derecha; para cerrar, las
+// cifras en una banda oscura de borde a borde.
 
 const STATS = [
   {
@@ -54,14 +52,15 @@ const STATS = [
   },
 ]
 
-// Imagen con un leve efecto "magnético" en 2D: se desplaza unos píxeles
-// hacia el cursor. Sin transforms 3D, que cuestan en equipos sin GPU buena.
+// Imagen grupal. Tiene una "hoja" suave desplazada detrás y un leve efecto
+// "magnético" en 2D: se desplaza unos píxeles hacia el cursor. Sin
+// transforms 3D, que cuestan en equipos sin GPU buena.
 function ImagenMagnetica() {
   const ref = useRef(null)
   const x = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 })
   const y = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 })
-  const translateX = useTransform(x, [-0.5, 0.5], [-8, 8])
-  const translateY = useTransform(y, [-0.5, 0.5], [-8, 8])
+  const translateX = useTransform(x, [-0.5, 0.5], [-6, 6])
+  const translateY = useTransform(y, [-0.5, 0.5], [-6, 6])
 
   const alMoverMouse = (event) => {
     const rect = ref.current.getBoundingClientRect()
@@ -76,46 +75,30 @@ function ImagenMagnetica() {
 
   return (
     <motion.div variants={popIn()} className="relative">
-      {/* Fondo suave desplazado, como una "hoja" detrás de la imagen. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 translate-x-3 translate-y-3 rounded-3xl bg-brand-200/70 sm:translate-x-4 sm:translate-y-4"
       />
-
       <motion.div
         ref={ref}
         onMouseMove={alMoverMouse}
         onMouseLeave={reiniciar}
         style={{ x: translateX, y: translateY }}
-        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl border border-dashed border-brand-300 bg-brand-100 text-sm text-brand-400 shadow-lg"
+        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl border border-brand-200 bg-brand-100 text-sm text-brand-400 shadow-lg"
       >
         Espacio para imagen grupal
       </motion.div>
-
-      <FloatingSymbol
-        symbol="π"
-        className="absolute right-2 -top-9 text-5xl text-brand-300 sm:text-6xl"
-        duration={7}
-      />
-      <FloatingSymbol
-        symbol="∑"
-        className="absolute -bottom-9 left-2 text-5xl text-brand-300/80 sm:text-6xl"
-        delay={1}
-        duration={8}
-      />
     </motion.div>
   )
 }
 
-function TarjetaCifra({ stat }) {
+function CifraBanda({ stat }) {
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.3, ease: EASE }}
-      className="flex items-center gap-4 rounded-2xl border border-brand-200 bg-white p-5 shadow-md sm:flex-col sm:gap-3 sm:p-7 sm:text-center"
+      className="flex flex-col items-center gap-4 text-center sm:border-l sm:border-white/15 sm:first:border-l-0"
     >
-      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-900">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -129,37 +112,40 @@ function TarjetaCifra({ stat }) {
           {stat.icono}
         </svg>
       </span>
-      <div>
-        <p className="font-display text-4xl leading-none text-brand-900 sm:text-5xl">
-          <Counter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
-        </p>
-        <p className="mt-2 text-sm font-medium text-brand-900/60">{stat.label}</p>
-      </div>
+      <p className="font-display text-6xl leading-none text-white sm:text-7xl">
+        <Counter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
+      </p>
+      <p className="text-sm font-medium text-white/70">{stat.label}</p>
     </motion.div>
   )
 }
 
 export default function QuienesSomos() {
   return (
-    <section id="quienes-somos" className="mx-auto max-w-6xl scroll-mt-16 px-4 py-24 sm:px-6">
-      <motion.div variants={staggerContainer(0.15)} {...revealProps}>
-        <div className="grid items-center gap-16 md:grid-cols-2">
+    <section id="quienes-somos" className="scroll-mt-16 bg-white">
+      <motion.div
+        className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-28"
+        variants={staggerContainer(0.15)}
+        {...revealProps}
+      >
+        <div className="grid items-center gap-14 md:grid-cols-2 md:gap-16 lg:gap-20">
+          {/* Texto en tamaño de lectura (18 px), alineado a la izquierda y con
+              un ancho cómodo: ni titular gigante ni bloque centrado. */}
           <motion.div variants={staggerContainer(0.12)} className="flex flex-col items-start gap-5">
             <motion.h2
               variants={fadeUp}
-              className="font-display text-3xl text-brand-900 sm:text-4xl"
+              className="font-display text-4xl leading-[1.05] text-brand-900 sm:text-5xl"
             >
               ¿Qué es Axioma?
             </motion.h2>
-
-            <motion.p variants={fadeUp} className="text-brand-900/70">
+            <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
               Axioma es el club de matemáticas del Tec de Monterrey. Reunimos a
               estudiantes apasionados por resolver problemas, prepararnos para
               competencias y compartir el gusto por las matemáticas fuera del
               salón de clases. (Texto placeholder — reemplazar con misión y
               visión reales.)
             </motion.p>
-            <motion.p variants={fadeUp} className="text-brand-900/70">
+            <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
               Nuestra visión es construir una comunidad donde cualquier persona,
               sin importar su nivel, encuentre un espacio para aprender,
               practicar y crecer junto a otros entusiastas de las matemáticas.
@@ -168,16 +154,19 @@ export default function QuienesSomos() {
 
           <ImagenMagnetica />
         </div>
+      </motion.div>
 
-        {/* Tres tarjetas del mismo tamaño, alineadas en fila. */}
-        <motion.div
-          variants={staggerContainer(0.12)}
-          className="mt-24 grid gap-4 sm:grid-cols-3 sm:gap-6"
-        >
+      {/* Banda oscura de borde a borde con las cifras. */}
+      <motion.div
+        variants={staggerContainer(0.12)}
+        {...revealProps}
+        className="bg-brand-900 px-4 py-16 sm:px-6 sm:py-20"
+      >
+        <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-3 sm:gap-0">
           {STATS.map((stat) => (
-            <TarjetaCifra key={stat.id} stat={stat} />
+            <CifraBanda key={stat.id} stat={stat} />
           ))}
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   )

@@ -80,8 +80,13 @@ export default function Navbar() {
   }
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 backdrop-blur transition-[padding,color] duration-300 ${TONE_CLASS[tone]} ${
+      className={`fixed top-0 inset-x-0 z-50 backdrop-blur transition-[padding,color,background-color,box-shadow] duration-300 ${TONE_CLASS[tone]} ${
         isScrolled ? 'py-0' : 'py-1.5'
+      } ${
+        // Sobre secciones claras, al hacer scroll, la barra se rellena: así el
+        // texto de la página que pasa por debajo no se mezcla con los links.
+        // Sobre secciones oscuras (Hero, Contacto) se queda transparente.
+        tone === 'dark' && isScrolled ? 'bg-white/85 shadow-[0_1px_0_0_rgba(15,23,42,0.08)]' : ''
       }`}
     >
       <nav ref={barRef} className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 sm:px-6">

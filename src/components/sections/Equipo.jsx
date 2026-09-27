@@ -62,8 +62,10 @@ const MIEMBROS_RESPALDO = [
 ]
 
 // Diseño: tarjetas suaves y rectas (mismo lenguaje que Quiénes Somos y
-// Eventos), todas del mismo tamaño y alineadas. La última fila siempre queda
-// centrada, sin importar cuántos miembros devuelva la API.
+// Eventos), alineadas. Los dos primeros miembros (presidencia) van más
+// grandes, en una fila propia; el resto en filas de 4 en escritorio y de 2
+// en móvil (así la sección no se hace interminable en el celular). Una fila
+// incompleta siempre queda centrada, sin importar cuántos miembros haya.
 
 const iniciales = (nombre) =>
   nombre
@@ -99,7 +101,7 @@ function EnlaceSocial({ href, red, nombre }) {
       target="_blank"
       rel="noreferrer"
       aria-label={`${etiqueta} de ${nombre}`}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-200 bg-brand-50 text-brand-900/70 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-brand-200 bg-brand-50 text-brand-900/70 sm:h-10 sm:w-10 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
     >
       <svg
         viewBox="0 0 24 24"
@@ -117,17 +119,23 @@ function EnlaceSocial({ href, red, nombre }) {
   )
 }
 
-function MemberCard({ miembro }) {
+function MemberCard({ miembro, destacado }) {
   return (
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
-      className="group flex w-full flex-col items-center gap-4 rounded-2xl border border-brand-200 bg-white p-7 text-center shadow-md transition-shadow duration-300 hover:shadow-xl sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
+      className={`group flex w-[calc(50%-8px)] flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-white p-4 text-center shadow-md transition-shadow duration-300 hover:shadow-xl sm:w-[calc(50%-12px)] sm:gap-4 sm:p-7 ${
+        destacado ? 'lg:w-[calc(50%-12px)]' : 'lg:w-[calc(25%-18px)]'
+      }`}
     >
       {/* Marco tipo "doble aro" alrededor de la foto. */}
       <div className="rounded-full border border-brand-200 p-1.5 transition-colors duration-300 group-hover:border-brand-900">
-        <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-3xl text-brand-400">
+        <div
+          className={`flex items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-brand-400 ${
+            destacado ? 'h-20 w-20 text-2xl sm:h-28 sm:w-28 sm:text-3xl lg:h-36 lg:w-36 lg:text-4xl' : 'h-20 w-20 text-2xl sm:h-28 sm:w-28 sm:text-3xl'
+          }`}
+        >
           {miembro.foto ? (
             <img
               src={miembro.foto}
@@ -141,8 +149,14 @@ function MemberCard({ miembro }) {
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <h3 className="text-lg font-semibold text-brand-900">{miembro.nombre}</h3>
-        <p className="rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-900/70">
+        <h3
+          className={`font-display leading-tight tracking-wide text-brand-900 ${
+            destacado ? 'text-lg sm:text-xl lg:text-2xl' : 'text-base sm:text-lg'
+          }`}
+        >
+          {miembro.nombre}
+        </h3>
+        <p className="rounded-full bg-brand-100 px-3 py-1 text-[11px] font-medium text-brand-900/70 sm:text-xs">
           {miembro.rol}
         </p>
       </div>
@@ -169,12 +183,12 @@ export default function Equipo() {
       />
 
       <motion.div
-        className="flex flex-wrap justify-center gap-6"
+        className="flex flex-wrap justify-center gap-4 sm:gap-6"
         variants={staggerContainer(0.08)}
         {...revealProps}
       >
-        {miembros.map((miembro) => (
-          <MemberCard key={miembro.id} miembro={miembro} />
+        {miembros.map((miembro, indice) => (
+          <MemberCard key={miembro.id} miembro={miembro} destacado={indice < 2} />
         ))}
       </motion.div>
     </section>
