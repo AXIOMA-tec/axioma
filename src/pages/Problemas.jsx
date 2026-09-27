@@ -220,30 +220,85 @@ function FilterGroup({ title, options, selected, onToggle, counts }) {
   )
 }
 
+// ¿Alguna carpeta de este nodo (o de sus descendientes) está marcada?
+function tieneSeleccionadaDentro(nodo, seleccionadas) {
+  return nodo.children.some(
+    (hijo) => seleccionadas.includes(hijo._id) || tieneSeleccionadaDentro(hijo, seleccionadas),
+  )
+}
+
 // Una fila del árbol de carpetas: se dibuja a sí misma y luego otra vez por
 // cada hijo, dentro de un bloque con una línea guía a la izquierda.
+// Las carpetas con subcarpetas (Putnam → 2021, 2022…) vienen CERRADAS: con
+// muchos concursos, mostrar todos los años a la vez llenaría el sidebar. La
+// flecha las abre/cierra; marcar la casilla filtra sin necesidad de abrirla.
+// Arrancan abiertas solo si ya hay algo marcado adentro (ej. un enlace
+// compartido con ?carpetas=Putnam/2021), para que se vea qué está activo.
 function CategoryTreeNode({ nodo, problemas, seleccionadas, onToggle }) {
+  const tieneHijos = nodo.children.length > 0
+  const [abierto, setAbierto] = useState(() => tieneSeleccionadaDentro(nodo, seleccionadas))
+
   return (
     <div>
-      <CheckRow
-        label={nodo.name}
-        checked={seleccionadas.includes(nodo._id)}
-        onChange={() => onToggle(nodo._id)}
-        count={contarProblemas(nodo, problemas)}
-      />
-      {nodo.children.length > 0 && (
-        <div className="ml-[7px] border-l border-neutral-300 pl-4">
-          {nodo.children.map((hijo) => (
-            <CategoryTreeNode
-              key={hijo._id}
-              nodo={hijo}
-              problemas={problemas}
-              seleccionadas={seleccionadas}
-              onToggle={onToggle}
-            />
-          ))}
+      <div className="flex items-center gap-1">
+        {tieneHijos ? (
+          <button
+            type="button"
+            onClick={() => setAbierto((valor) => !valor)}
+            aria-expanded={abierto}
+            aria-label={`${abierto ? 'Ocultar' : 'Mostrar'} subcarpetas de ${nodo.name}`}
+            className={`flex h-6 w-6 shrink-0 items-center justify-center text-neutral-500 transition-colors hover:text-neutral-950 ${focusRing}`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={`h-3.5 w-3.5 transition-transform duration-200 ${abierto ? 'rotate-90' : ''}`}
+              aria-hidden="true"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        ) : (
+          <span className="w-6 shrink-0" aria-hidden="true" />
+        )}
+        <div className="min-w-0 flex-1">
+          <CheckRow
+            label={nodo.name}
+            checked={seleccionadas.includes(nodo._id)}
+            onChange={() => onToggle(nodo._id)}
+            count={contarProblemas(nodo, problemas)}
+          />
         </div>
-      )}
+      </div>
+
+      <AnimatePresence initial={false}>
+        {tieneHijos && abierto && (
+          <motion.div
+            key="hijos"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="overflow-hidden"
+          >
+            <div className="ml-3 border-l border-neutral-300 pl-3">
+              {nodo.children.map((hijo) => (
+                <CategoryTreeNode
+                  key={hijo._id}
+                  nodo={hijo}
+                  problemas={problemas}
+                  seleccionadas={seleccionadas}
+                  onToggle={onToggle}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -468,14 +523,19 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
 
   return (
     <>
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:px-8 sm:py-10">
-        {/* Al expandir, el contenido se centra en una columna de lectura
-            cómoda (no se estira a todo el ancho de la pantalla). */}
-        <div className={expandido ? 'mx-auto max-w-3xl' : ''}>
+      <div
+        className={`min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:py-10 ${
+          expandido ? 'sm:px-14 lg:px-20' : 'sm:px-8'
+        }`}
+      >
+        {/* Al expandir, el panel ocupa toda la pantalla pero el texto solo
+            crece un poco (con tope) y queda en una columna de lectura
+            centrada: si se estira sin límite se vuelve incómodo de leer. */}
+        <div className={expandido ? 'mx-auto max-w-5xl' : ''}>
           <h3
             id="titulo-panel-problema"
             className={`font-display uppercase leading-[1.05] text-neutral-950 ${
-              expandido ? 'text-4xl sm:text-6xl' : 'text-3xl sm:text-5xl'
+              expandido ? 'text-4xl sm:text-[clamp(3rem,4vw,4rem)]' : 'text-3xl sm:text-5xl'
             }`}
           >
             {formatearTitulo(problema)}
@@ -489,7 +549,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
               <div>, y un <div> no puede vivir dentro de un <p> en HTML. */}
           <div
             className={`mt-8 whitespace-pre-line leading-relaxed text-neutral-800 ${
-              expandido ? 'text-xl sm:text-2xl' : 'text-lg'
+              expandido ? 'text-lg sm:text-[clamp(1.125rem,1.4vw,1.375rem)]' : 'text-lg'
             }`}
           >
             {renderEnunciado(problema.enunciado)}
@@ -520,8 +580,12 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
         </div>
       </div>
 
-      <div className="max-h-[55%] shrink-0 overflow-y-auto border-t border-neutral-950 bg-white px-5 py-5 sm:px-8">
-        <div className={expandido ? 'mx-auto max-w-3xl' : ''}>
+      <div
+        className={`max-h-[55%] shrink-0 overflow-y-auto border-t border-neutral-950 bg-white px-5 py-5 ${
+          expandido ? 'sm:px-14 lg:px-20' : 'sm:px-8'
+        }`}
+      >
+        <div className={expandido ? 'mx-auto max-w-5xl' : ''}>
           {auth ? (
             <form onSubmit={handleEnviarComentario} className="flex flex-col gap-3">
               <textarea
@@ -573,7 +637,8 @@ function NavButton({ onClick, disabled, label, pressed, children }) {
 // carpeta abierta, etc.), para poder ir al de antes / al de después.
 function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess, onAuthExpired }) {
   const [enlaceCopiado, setEnlaceCopiado] = useState(false)
-  // Opcional: agranda el panel a todo el ancho. Se mantiene al pasar de un
+  // Opcional: agranda el panel a toda la pantalla y el texto crece con él.
+  // Se mantiene al pasar de un
   // problema a otro y se reinicia al cerrar el panel.
   const [expandido, setExpandido] = useState(false)
 
