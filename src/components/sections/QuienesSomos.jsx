@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import Counter from '../motion/Counter'
 import { fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants'
@@ -14,7 +15,7 @@ import { fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants
 const STATS = [
   {
     id: 1,
-    value: 2019,
+    value: 2025,
     prefix: '',
     suffix: '',
     label: 'Fundado en',
@@ -23,10 +24,10 @@ const STATS = [
   },
   {
     id: 2,
-    value: 50,
+    value: 100,
     prefix: '+',
     suffix: '',
-    label: 'Miembros activos',
+    label: 'Miembros de la comunidad',
     // Personas
     icono: (
       <>
@@ -38,15 +39,20 @@ const STATS = [
   },
   {
     id: 3,
-    value: 12,
+    // Real, no una meta ni un número inventado: es justo lo que hay hoy en
+    // server/src/data/problemasReales.js (Putnam, OMMU Primera Ronda y OMMU
+    // Nacional). Si agregan más problemas ahí, actualicen este número —
+    // ver TODO al inicio del archivo.
+    value: 93,
     prefix: '',
     suffix: '',
-    label: 'Competencias por año',
-    // Trofeo
+    label: 'Problemas en el archivo',
+    href: '/problemas',
+    // Documento
     icono: (
       <>
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+        <path d="M14 2v6h6M9 13h6M9 17h6" />
       </>
     ),
   },
@@ -92,11 +98,20 @@ function ImagenMagnetica() {
   )
 }
 
+// Cuando la cifra tiene `href` (hoy solo "Problemas en el archivo"), la
+// tarjeta entera es un link — invita a ir a ver esos 93 problemas, no solo
+// a leer el número.
+const MotionLink = motion(Link)
+
 function CifraBanda({ stat }) {
+  const Envoltura = stat.href ? MotionLink : motion.div
   return (
-    <motion.div
+    <Envoltura
+      to={stat.href}
       variants={fadeUp}
-      className="flex flex-col items-center gap-4 text-center sm:border-l sm:border-white/15 sm:first:border-l-0"
+      className={`group flex flex-col items-center gap-4 text-center sm:border-l sm:border-white/15 sm:first:border-l-0 ${
+        stat.href ? 'transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white' : ''
+      }`}
     >
       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
         <svg
@@ -115,8 +130,15 @@ function CifraBanda({ stat }) {
       <p className="font-display text-6xl leading-none text-white sm:text-7xl">
         <Counter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
       </p>
-      <p className="text-sm font-medium text-white/70">{stat.label}</p>
-    </motion.div>
+      <p className="text-sm font-medium text-white/70">
+        {stat.label}
+        {stat.href && (
+          <span className="ml-1 inline-block transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+            →
+          </span>
+        )}
+      </p>
+    </Envoltura>
   )
 }
 
