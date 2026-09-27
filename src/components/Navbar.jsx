@@ -72,7 +72,7 @@ export default function Navbar() {
   }
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-[padding,color] duration-300 ${TONE_CLASS[tone]} ${
+      className={`fixed top-0 inset-x-0 z-50 backdrop-blur transition-[padding,color] duration-300 ${TONE_CLASS[tone]} ${
         isScrolled ? 'py-0' : 'py-1.5'
       }`}
     >
@@ -151,6 +151,10 @@ export default function Navbar() {
         </button>
       </nav>
 
+      {/* El menú mobile vive dentro del <header>, así que el backdrop-blur
+          del header ya desenfoca lo que queda detrás de él también. No se
+          repite aquí: un backdrop-filter anidado solo vería el header, no
+          la página. */}
       {isOpen && (
         <ul className="flex flex-col gap-1 px-4 pb-4 md:hidden">
           {SCROLL_LINKS.map((link) => (
