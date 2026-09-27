@@ -6,20 +6,30 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useBloquearScroll } from '../hooks/useBloquearScroll'
 import Counter from '../components/motion/Counter'
 import { EASE, staggerContainer } from '../components/motion/variants'
+// La sesión y el helper de la API se comparten con el Navbar y /perfil (ver
+// esos archivos): ya no viven aquí, como en versiones anteriores de esta
+// página.
+import AuthForm from '../components/AuthForm'
+import { apiFetch } from '../lib/api'
+import { useAuth } from '../lib/auth'
 
 // ---------------------------------------------------------------------------
 // ESQUELETO DE ESTE ARCHIVO
 //
-//   1. Datos y lógica (sin cambios de comportamiento): apiFetch, KaTeX,
-//      árbol de carpetas, títulos.
+//   1. Configuración. apiFetch() (hablar con el backend) vive en
+//      src/lib/api.js y la sesión en src/lib/auth.js (useAuth), compartidas
+//      con el Navbar y la página de Perfil — ya no son locales a este
+//      archivo, como en versiones anteriores.
 //   2. Sistema visual: plano y tipográfico. Blanco/negro, líneas de 1px,
 //      esquinas rectas, cero sombras y cero degradados. Un único acento
 //      (dorado del logo) que solo aparece en hover. Referencias: Uber
 //      (filas de índice), Apple (tipografía grande, filtros limpios) y
 //      Google (panel lateral para el detalle).
-//   3. Piezas: CheckRow / FilterGroup / CategoryFilter (sidebar),
-//      AuthInlineForm, ComentarioItem, ProblemaPanel (detalle),
-//      ProblemaRow, FolderRow, Breadcrumb, GridSpotlight, Encabezado.
+//   3. Piezas: CheckRow / FilterGroup / CategoryFilter (sidebar), AuthForm
+//      (formulario de login/registro, importado de
+//      src/components/AuthForm.jsx), ComentarioItem, ProblemaPanel
+//      (detalle), ProblemaRow, FolderRow, Breadcrumb, GridSpotlight,
+//      Encabezado.
 //   4. Problemas: el componente principal (estado, filtros, vistas).
 //
 // Nota: el cursor personalizado del sitio es oscuro, por eso los hover
@@ -27,45 +37,15 @@ import { EASE, staggerContainer } from '../components/motion/variants'
 // cursor desaparecería.
 // ---------------------------------------------------------------------------
 
-// Dirección del backend. En desarrollo, Vite expone las variables que
-// empiezan con VITE_ dentro de import.meta.env — viene de tu archivo .env.
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000'
-
-// Aquí guardamos la sesión en el navegador para que no se pierda al
-// recargar la página (localStorage sobrevive a un refresh).
-const AUTH_STORAGE_KEY = 'axioma_auth'
-
-// apiFetch centraliza lo que se repetiría en cada llamada: body como JSON,
-// token de sesión si existe, y convertir una respuesta de error en un Error
-// normal de JavaScript que se pueda atrapar con try/catch.
-async function apiFetch(path, { method = 'GET', body, token } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
-  if (token) headers.Authorization = `Bearer ${token}`
-
-  const res = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-
-  // Intentamos leer JSON incluso en errores, porque el backend manda
-  // { error: '...' } en sus respuestas de error (ver server/src/routes/*).
-  const data = await res.json().catch(() => null)
-
-  if (!res.ok) {
-    const error = new Error(data?.error || 'Error de red inesperado.')
-    error.status = res.status
-    throw error
-  }
-  return data
-}
-
-// Un enunciado es texto normal que PUEDE traer fórmulas entre signos de
-// pesos, como en LaTeX: "Sea $a>0$, demuestra que...".
-//   $formula$    -> en línea, dentro del párrafo
-//   $$formula$$  -> en pantalla (display), centrada en su propia línea
-// Primero separamos los bloques $$...$$ (si buscáramos $...$ primero, cada
-// "$$" se leería como dos fórmulas vacías pegadas).
+// Un enunciado es texto normal que PUEDE traer fórmulas metidas entre signos
+// de pesos, como en LaTeX de verdad: "Sea $a>0$, demuestra que...". Hay dos
+// tipos de fórmula, igual que en LaTeX real:
+//   $formula$    -> "en línea", metida dentro del párrafo de texto
+//   $$formula$$  -> "en pantalla" (display), centrada en su propia línea,
+//                   un poco más grande — para ecuaciones importantes
+// Primero separamos los bloques $$...$$ (porque si buscáramos $...$ primero,
+// cada "$$" se leería mal, como si fueran dos fórmulas vacías pegadas).
+// Lo que queda entre bloques display se vuelve a separar por $...$ normal.
 //
 // katex.renderToString regresa HTML (no JSX), por eso dangerouslySetInnerHTML.
 // Es seguro SOLO porque el enunciado viene de datos que nosotros sembramos
@@ -324,87 +304,6 @@ function CategoryFilter({ raices, problemas, seleccionadas, onToggle }) {
   )
 }
 
-// ---------------------------------------------------------------------------
-// Login / registro. Vive DENTRO del panel del problema (justo donde hace
-// falta, antes de comentar) para no tener que agregar una ruta nueva en
-// App.jsx, que es un archivo compartido con el resto del equipo.
-// ---------------------------------------------------------------------------
-function AuthInlineForm({ onAuthSuccess }) {
-  const [modo, setModo] = useState('login') // 'login' | 'signup'
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [enviando, setEnviando] = useState(false)
-  const [error, setError] = useState(null)
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError(null)
-    setEnviando(true)
-    try {
-      const path = modo === 'login' ? '/api/auth/login' : '/api/auth/signup'
-      const body = modo === 'login' ? { email, password } : { username, email, password }
-      const data = await apiFetch(path, { method: 'POST', body })
-      onAuthSuccess(data) // { token, user } — el componente padre lo guarda
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setEnviando(false)
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <p className={labelClass}>
-        {modo === 'login' ? 'Inicia sesión para comentar' : 'Crea una cuenta para comentar'}
-      </p>
-
-      {modo === 'signup' && (
-        <input
-          type="text"
-          placeholder="Nombre de usuario"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          className={inputClass}
-        />
-      )}
-      <input
-        type="email"
-        placeholder="Correo"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className={inputClass}
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        minLength={8}
-        className={inputClass}
-      />
-
-      {error && <p className="text-sm text-red-700">{error}</p>}
-
-      <div className="flex items-center justify-between gap-3">
-        <button type="submit" disabled={enviando} className={primaryButtonClass}>
-          {enviando ? 'Un momento…' : modo === 'login' ? 'Iniciar sesión' : 'Registrarme'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setModo(modo === 'login' ? 'signup' : 'login')}
-          className={`text-sm text-neutral-600 underline underline-offset-4 hover:text-neutral-950 ${focusRing}`}
-        >
-          {modo === 'login' ? 'Crear una cuenta' : 'Ya tengo cuenta'}
-        </button>
-      </div>
-    </form>
-  )
-}
-
 function ComentarioItem({ comentario, esPropio, onEliminar }) {
   const fecha = new Date(comentario.createdAt).toLocaleString('es-MX', {
     day: 'numeric',
@@ -608,7 +507,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
               </div>
             </form>
           ) : (
-            <AuthInlineForm onAuthSuccess={onAuthSuccess} />
+            <AuthForm onAuthSuccess={onAuthSuccess} motivo="para comentar" />
           )}
         </div>
       </div>
@@ -1054,15 +953,9 @@ export default function Problemas() {
   const navigate = useNavigate()
   const buscadorRef = useRef(null)
 
-  // auth arranca leyendo localStorage, para seguir logueado tras recargar.
-  const [auth, setAuth] = useState(() => {
-    try {
-      const guardado = localStorage.getItem(AUTH_STORAGE_KEY)
-      return guardado ? JSON.parse(guardado) : null
-    } catch {
-      return null
-    }
-  })
+  // La sesión es compartida con el resto del sitio (ver src/lib/auth.js):
+  // si inicias sesión aquí, el Navbar cambia a "Perfil", y viceversa.
+  const { auth, login: handleAuthSuccess, logout: handleLogout } = useAuth()
 
   useEffect(() => {
     apiFetch('/api/problems')
@@ -1197,16 +1090,6 @@ export default function Problemas() {
     })
     return ids
   }, [categoriasSeleccionadas, categoriasPorId])
-
-  const handleAuthSuccess = (data) => {
-    setAuth(data)
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(data))
-  }
-
-  const handleLogout = () => {
-    setAuth(null)
-    localStorage.removeItem(AUTH_STORAGE_KEY)
-  }
 
   // Buscador: se arma un texto normalizado por problema (título, tema, tipo,
   // año y enunciado) y se exige que aparezcan TODAS las palabras escritas.
