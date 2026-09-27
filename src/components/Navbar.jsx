@@ -36,7 +36,10 @@ const desktopLinkClass = (isActive) =>
     isActive ? 'opacity-100' : 'opacity-70 hover:opacity-100 focus-visible:opacity-100'
   }`
 
-const MOBILE_LINK_CLASS = `block px-3 py-2 text-sm font-medium transition-colors hover:bg-current/10 ${FOCUS_RING}`
+const mobileLinkClass = (isActive) =>
+  `block px-3 py-2 text-sm font-medium transition-colors hover:bg-current/10 ${FOCUS_RING} ${
+    isActive ? 'bg-current/10' : ''
+  }`
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -175,7 +178,8 @@ export default function Navbar() {
               <a
                 href={`#${link.id}`}
                 onClick={(event) => handleScrollClick(event, link.id)}
-                className={MOBILE_LINK_CLASS}
+                aria-current={activeId === link.id ? 'true' : undefined}
+                className={mobileLinkClass(activeId === link.id)}
               >
                 {link.label}
               </a>
@@ -185,7 +189,8 @@ export default function Navbar() {
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
-              className={MOBILE_LINK_CLASS}
+              aria-current={enProblemas ? 'page' : undefined}
+              className={mobileLinkClass(enProblemas)}
             >
               {ROUTE_LINK.label}
             </Link>
@@ -194,7 +199,8 @@ export default function Navbar() {
             <a
               href={`#${CONTACTO_LINK.id}`}
               onClick={(event) => handleScrollClick(event, CONTACTO_LINK.id)}
-              className={MOBILE_LINK_CLASS}
+              aria-current={activeId === CONTACTO_LINK.id ? 'true' : undefined}
+              className={mobileLinkClass(activeId === CONTACTO_LINK.id)}
             >
               {CONTACTO_LINK.label}
             </a>

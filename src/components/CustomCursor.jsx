@@ -4,7 +4,9 @@ import { motion, useMotionValue, useSpring } from 'framer-motion'
 const INTERACTIVE_SELECTOR = 'a, button, input, textarea, [role="button"]'
 
 // Cursor personalizado (punto + anillo con retraso) que crece sobre
-// elementos interactivos. Solo se activa en dispositivos con mouse
+// elementos interactivos. Es blanco con mix-blend-mode: difference, así
+// el navegador lo invierte solo: se ve oscuro sobre fondos claros y claro
+// sobre fondos oscuros (Hero, Contacto), sin depender de cada sección. Solo se activa en dispositivos con mouse
 // (pointer: fine); en touch no se monta nada.
 export default function CustomCursor() {
   // Se calcula una sola vez, al montar, en vez de con setState dentro de un
@@ -45,16 +47,18 @@ export default function CustomCursor() {
   if (!enabled) return null
 
   return (
-    <div className={`pointer-events-none fixed inset-0 z-[100] ${isVisible ? '' : 'opacity-0'}`}>
+    <div
+      className={`pointer-events-none fixed inset-0 z-[100] mix-blend-difference ${isVisible ? '' : 'opacity-0'}`}
+    >
       <motion.div
-        className="absolute rounded-full bg-brand-900"
+        className="absolute rounded-full bg-white"
         style={{ x: dotX, y: dotY, translateX: '-50%', translateY: '-50%' }}
         animate={{ width: isHovering ? 6 : 6, height: isHovering ? 6 : 6 }}
       />
       <motion.div
-        className="absolute rounded-full border border-brand-900/40"
+        className="absolute rounded-full border border-white"
         style={{ x: ringX, y: ringY, translateX: '-50%', translateY: '-50%' }}
-        animate={{ width: isHovering ? 52 : 32, height: isHovering ? 52 : 32, opacity: isHovering ? 0.6 : 0.35 }}
+        animate={{ width: isHovering ? 52 : 32, height: isHovering ? 52 : 32, opacity: isHovering ? 0.9 : 0.6 }}
         transition={{ duration: 0.2 }}
       />
     </div>
