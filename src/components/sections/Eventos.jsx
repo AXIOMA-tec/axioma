@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants'
 import { useApiData } from '../../hooks/useApiData'
 import { api } from '../../lib/api'
+import SectionHeader from '../SectionHeader'
 
 // Sección Eventos (id="eventos")
 // La lista de eventos viene de la API (server/ + MongoDB) — agregar o
@@ -54,6 +55,27 @@ const EVENTOS_RESPALDO = [
   },
 ]
 
+// Mientras un evento no tiene póster, el recuadro no se queda vacío: muestra
+// la fecha en grande, como un cartel tipográfico. "29 de agosto" -> "29" +
+// "agosto"; si la fecha no empieza con "N de" (ej. "Fecha por confirmar"),
+// se muestra completa.
+function FechaCartel({ fecha }) {
+  const partes = fecha.match(/^(\d{1,2})\s+de\s+(.+)$/u)
+  if (!partes) {
+    return (
+      <span className="px-6 text-center font-display text-3xl uppercase leading-tight text-brand-400">
+        {fecha}
+      </span>
+    )
+  }
+  return (
+    <span className="flex flex-col items-center px-4 text-center text-brand-400">
+      <span className="font-display text-8xl leading-none">{partes[1]}</span>
+      <span className="mt-2 text-sm font-medium uppercase tracking-[0.2em]">{partes[2]}</span>
+    </span>
+  )
+}
+
 // Tarjeta de evento: póster + etiqueta de estado + info corta abajo.
 // Los eventos pasados se ven en blanco y negro, como archivo.
 function EventCard({ evento }) {
@@ -74,7 +96,7 @@ function EventCard({ evento }) {
         {evento.src ? (
           <img src={evento.src} alt={evento.alt} className="h-full w-full object-cover" />
         ) : (
-          <span className="px-4 text-center">{evento.alt}</span>
+          <FechaCartel fecha={evento.fecha} />
         )}
 
         {esProximo ? (
@@ -94,7 +116,7 @@ function EventCard({ evento }) {
       </div>
 
       <div className="flex flex-col gap-0.5 px-1">
-        <h3 className="font-semibold text-brand-900">{evento.titulo}</h3>
+        <h3 className="font-display text-lg tracking-wide text-brand-900">{evento.titulo}</h3>
         <p className="text-sm text-brand-900/60">
           {evento.fecha}
           {evento.lugar ? ` · ${evento.lugar}` : ''}
@@ -153,7 +175,7 @@ function EventCarousel({ eventos }) {
     <div className="relative">
       <div
         ref={trackRef}
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 pl-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-1 pb-4 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {eventos.map((evento) => (
           <EventCard key={evento.id} evento={evento} />
@@ -192,51 +214,40 @@ export default function Eventos() {
   const { data: eventos } = useApiData(api.getEventos, EVENTOS_RESPALDO)
 
   return (
-    <section
-      id="eventos"
-      className="mx-auto max-w-6xl scroll-mt-16 px-4 py-24 sm:px-6"
-    >
-      <motion.h2
-        variants={fadeUp}
-        {...revealProps}
-        className="font-display mb-4 text-center text-3xl text-brand-900 sm:text-4xl"
-      >
-        Eventos
-      </motion.h2>
-      <motion.p
-        variants={fadeUp}
-        {...revealProps}
-        className="mx-auto mb-12 max-w-xl text-center text-brand-900/70"
-      >
-        Entrenamientos, simposiums y concursos de matemáticas — lo que viene y lo que ya hicimos.
-      </motion.p>
+    <section id="eventos" className="scroll-mt-16 bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <SectionHeader
+          titulo="Eventos"
+          descripcion="Entrenamientos, simposiums y concursos de matemáticas — lo que viene y lo que ya hicimos."
+        />
 
-      {/* Destacado fijo: el programa recurrente, no es un evento con
-          fecha única así que va aparte de la lista. */}
-      <motion.div
-        variants={fadeUp}
-        {...revealProps}
-        className="mb-12 flex flex-col items-center gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center shadow-sm sm:flex-row sm:text-left"
-      >
-        <motion.span
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-100 text-2xl"
-          animate={{ rotate: [0, -8, 8, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          aria-hidden="true"
+        {/* Destacado fijo: el programa recurrente, no es un evento con
+            fecha única así que va aparte de la lista. */}
+        <motion.div
+          variants={fadeUp}
+          {...revealProps}
+          className="mb-12 flex flex-col items-center gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center shadow-sm sm:flex-row sm:text-left"
         >
-          📐
-        </motion.span>
-        <div>
-          <h3 className="font-semibold text-brand-900">Cursos de matemáticas — todos los sábados</h3>
-          <p className="text-sm text-brand-900/60">
-            Abiertos a cualquier nivel, no se requiere experiencia previa.
-          </p>
-        </div>
-      </motion.div>
+          <motion.span
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-100 text-2xl"
+            animate={{ rotate: [0, -8, 8, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            aria-hidden="true"
+          >
+            📐
+          </motion.span>
+          <div>
+            <h3 className="font-display text-lg tracking-wide text-brand-900">Cursos de matemáticas — todos los sábados</h3>
+            <p className="text-sm text-brand-900/60">
+              Abiertos a cualquier nivel, no se requiere experiencia previa.
+            </p>
+          </div>
+        </motion.div>
 
-      <motion.div variants={staggerContainer(0.1)} {...revealProps}>
-        <EventCarousel eventos={eventos} />
-      </motion.div>
+        <motion.div variants={staggerContainer(0.1)} {...revealProps}>
+          <EventCarousel eventos={eventos} />
+        </motion.div>
+      </div>
     </section>
   )
 }

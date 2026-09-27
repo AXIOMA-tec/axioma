@@ -55,7 +55,10 @@ export default function GoogleButton({ onCredential, modo = 'login' }) {
         google.accounts.id.renderButton(el, {
           theme: 'outline',
           size: 'large',
-          shape: 'pill',
+          // 'rectangular' en vez de 'pill': Google dibuja este botón con su
+          // propio estilo (no se puede editar), pero al menos las esquinas
+          // combinan con los rectos del resto de los botones del sitio.
+          shape: 'rectangular',
           text: modo === 'signup' ? 'signup_with' : 'continue_with',
           locale: 'es',
           width: Math.min(400, Math.max(200, el.offsetWidth)),

@@ -1,56 +1,41 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MeshGradient } from '@paper-design/shaders-react'
-import FloatingSymbol from '../components/motion/FloatingSymbol'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useBloquearScroll } from '../hooks/useBloquearScroll'
 import Counter from '../components/motion/Counter'
-import { EASE, fadeUp, staggerContainer, popIn } from '../components/motion/variants'
+import { EASE, staggerContainer } from '../components/motion/variants'
+// La sesión y el helper de la API se comparten con el Navbar y /perfil (ver
+// esos archivos): ya no viven aquí, como en versiones anteriores de esta
+// página.
 import AuthForm from '../components/AuthForm'
 import { apiFetch } from '../lib/api'
 import { useAuth } from '../lib/auth'
 
 // ---------------------------------------------------------------------------
-// ESQUELETO GENERAL DE ESTE ARCHIVO (para orientarse antes de leer el código
-// real más abajo):
+// ESQUELETO DE ESTE ARCHIVO
 //
 //   1. Configuración. apiFetch() (hablar con el backend) vive en
 //      src/lib/api.js y la sesión en src/lib/auth.js (useAuth), compartidas
-//      con el Navbar y la página de Perfil.
-//   2. Constantes de filtros (AÑOS, TEMAS, TIPOS) + paleta Axioma reutilizada
-//      del Hero (rojo/naranja/dorado) para el rediseño visual.
-//   3. FilterGroup       -> la lista de opciones de un filtro, ahora como
-//                           "chips" de color en vez de checkboxes planos.
-//   4. (AuthForm         -> formulario de login/registro; ahora vive en
-//                           src/components/AuthForm.jsx y se muestra dentro
-//                           del modal cuando nadie ha iniciado sesión.)
-//   5. ComentarioItem    -> un comentario ya publicado.
-//   6. ProblemaModal     -> el modal de un problema: enunciado + comentarios,
-//                           ahora con animación de entrada/salida.
-//   7. ProblemaCard      -> una tarjeta de la cuadrícula de problemas (antes
-//                           era una fila de tabla).
-//   8. AutumnBackground  -> el fondo animado de "bosque de otoño" (fixed,
-//                           detrás de todo), + FallingLeaf, la hoja que cae.
-//   9. Problemas         -> el componente principal: pide los problemas a la
-//                           API, aplica los filtros, dibuja la cuadrícula y
-//                           decide qué modal mostrar.
+//      con el Navbar y la página de Perfil — ya no son locales a este
+//      archivo, como en versiones anteriores.
+//   2. Sistema visual: plano y tipográfico. Blanco/negro, líneas de 1px,
+//      esquinas rectas, cero sombras y cero degradados. Un único acento
+//      (dorado del logo) que solo aparece en hover. Referencias: Uber
+//      (filas de índice), Apple (tipografía grande, filtros limpios) y
+//      Google (panel lateral para el detalle).
+//   3. Piezas: CheckRow / FilterGroup / CategoryFilter (sidebar), AuthForm
+//      (formulario de login/registro, importado de
+//      src/components/AuthForm.jsx), ComentarioItem, ProblemaPanel
+//      (detalle), ProblemaRow, FolderRow, Breadcrumb, GridSpotlight,
+//      Encabezado.
+//   4. Problemas: el componente principal (estado, filtros, vistas).
 //
-// Este archivo mantiene exactamente la misma lógica de datos que antes
-// (fetch, filtros, autenticación, comentarios) — el rediseño solo cambia
-// el JSX/CSS de cómo se ve cada pieza, inspirado en el foro de AoPS
-// (estructura de carpetas + hilo por problema, que ya teníamos) y en el
-// estilo visual de Hack the North (color, movimiento, tarjetas "ladeadas",
-// y ahora un fondo temático animado).
+// Nota: el cursor personalizado del sitio es oscuro, por eso los hover
+// usan fondos CLAROS (dorado / gris claro) y no negros: sobre negro el
+// cursor desaparecería.
 // ---------------------------------------------------------------------------
-
-// Misma paleta que ya usa Hero.jsx para el fondo animado — reutilizarla
-// aquí hace que Problemas se sienta parte del mismo sitio, no una página
-// aparte con sus propios colores inventados.
-const AXIOMA_RED = '#B70B0D'
-const AXIOMA_ORANGE = '#E57505'
-const AXIOMA_GOLD = '#FFB401'
-const AXIOMA_DARK = '#120303'
-const AXIOMA_GRADIENT = `linear-gradient(135deg, ${AXIOMA_GOLD} 0%, ${AXIOMA_ORANGE} 45%, ${AXIOMA_RED} 100%)`
 
 // Un enunciado es texto normal que PUEDE traer fórmulas metidas entre signos
 // de pesos, como en LaTeX de verdad: "Sea $a>0$, demuestra que...". Hay dos
@@ -62,12 +47,10 @@ const AXIOMA_GRADIENT = `linear-gradient(135deg, ${AXIOMA_GOLD} 0%, ${AXIOMA_ORA
 // cada "$$" se leería mal, como si fueran dos fórmulas vacías pegadas).
 // Lo que queda entre bloques display se vuelve a separar por $...$ normal.
 //
-// katex.renderToString(...) regresa un pedazo de HTML (no JSX) — por eso
-// hace falta dangerouslySetInnerHTML para insertarlo. Esto SOLO es seguro
-// aquí porque el enunciado viene de datos que nosotros mismos sembramos en
-// la base de datos (ver server/src/data/problemasReales.js), no de algo que
-// un visitante haya escrito; los comentarios (que sí son texto de
-// visitantes) nunca pasan por esta función.
+// katex.renderToString regresa HTML (no JSX), por eso dangerouslySetInnerHTML.
+// Es seguro SOLO porque el enunciado viene de datos que nosotros sembramos
+// (server/src/data/problemasReales.js), no de texto de visitantes; los
+// comentarios (que sí lo son) nunca pasan por aquí.
 function renderFormulasEnLinea(texto, prefijoKey) {
   const partes = texto.split(/(\$[^$]+\$)/g)
   return partes.map((parte, i) => {
@@ -88,9 +71,16 @@ function renderEnunciado(texto) {
 
     const latex = bloque.slice(2, -2)
     const html = katex.renderToString(latex, { throwOnError: false, displayMode: true })
-    return <div key={i} className="my-2 overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />
+    return <div key={i} className="my-3 overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />
   })
 }
+
+// Fórmula decorativa del encabezado (problema de Basilea). Es una constante
+// escrita aquí, no viene de ningún usuario.
+const FORMULA_BASILEA = katex.renderToString(
+  '\\sum_{n=1}^{\\infty} \\frac{1}{n^{2}} = \\frac{\\pi^{2}}{6}',
+  { displayMode: true, throwOnError: false },
+)
 
 const AÑOS = ['2021', '2022', '2023', '2024', '2025', '2026']
 const TEMAS = [
@@ -105,15 +95,10 @@ const TEMAS = [
 const TIPOS = ['Putnam', 'OMMU Primera Ronda', 'OMMU Nacional']
 
 // ---------------------------------------------------------------------------
-// Carpetas (Category): la API regresa una lista PLANA de carpetas, cada una
-// con un campo `parent` (el _id de su carpeta padre, o null si es de nivel
-// superior) — así vive guardado en Mongo (ver server/src/models/Category.js).
-// Para dibujar un árbol en la pantalla, primero hay que reconstruirlo.
-//
-// buildCategoryTree convierte esa lista plana en un árbol de verdad: cada
-// carpeta obtiene un array `children` con sus subcarpetas ya anidadas.
-// También regresa `byId`, un mapa rápido de _id -> carpeta, útil para el
-// siguiente paso.
+// Carpetas (Category): la API regresa una lista PLANA, cada una con un campo
+// `parent` (el _id de su padre, o null si es de nivel superior). Para
+// dibujar un árbol hay que reconstruirlo.
+// ---------------------------------------------------------------------------
 function buildCategoryTree(categorias) {
   const byId = new Map(categorias.map((c) => [c._id, { ...c, children: [] }]))
   const raices = []
@@ -125,10 +110,8 @@ function buildCategoryTree(categorias) {
   return { raices, byId }
 }
 
-// Si seleccionas la carpeta "Interno Axioma", también quieres ver los
-// problemas de "2024" y "2023" adentro — no solo problemas que apunten
-// EXACTAMENTE a "Interno Axioma". Esta función regresa el _id de una
-// carpeta MÁS los _id de todas sus subcarpetas (a cualquier profundidad).
+// Si seleccionas "Putnam", también quieres ver los problemas de sus años.
+// Regresa el _id de una carpeta MÁS los de todas sus subcarpetas.
 function collectDescendantIds(nodo) {
   return nodo.children.reduce(
     (ids, hijo) => [...ids, ...collectDescendantIds(hijo)],
@@ -136,138 +119,182 @@ function collectDescendantIds(nodo) {
   )
 }
 
-// Cuántos problemas viven dentro de una carpeta (contando sus subcarpetas
-// también) — reutiliza collectDescendantIds de arriba, así que "Putnam"
-// cuenta los problemas de TODOS sus años, no solo los que apuntan
-// directamente a "Putnam". Se usa para el numerito debajo de cada
-// FolderCard (ej. "6 problemas").
+// Cuántos problemas viven dentro de una carpeta (contando subcarpetas).
 function contarProblemas(nodo, problemas) {
   const ids = new Set(collectDescendantIds(nodo))
   return problemas.filter((p) => ids.has(p.category)).length
 }
 
-// Colores "estampa" por dificultad — mismo significado de siempre (verde
-// fácil, ámbar media, rojo difícil) pero usando el rojo/dorado de la marca
-// Axioma en vez de un ámbar/rosa genérico.
-const DIFICULTAD_STYLES = {
-  Fácil: 'bg-emerald-500 text-white',
-  Media: `text-brand-900`,
-  Difícil: 'bg-[#B70B0D] text-white',
-}
-const DIFICULTAD_BG = {
-  Media: AXIOMA_GOLD,
+// "Putnam 2025 — Problema B6": `codigo` ya termina en el número después del
+// último guion, sin importar cuántos guiones tenga el prefijo.
+function numeroProblema(problema) {
+  return problema.codigo.split('-').pop()
 }
 
-// Colores de acento por profundidad en el árbol de carpetas — ciclan entre
-// los 3 tonos de la marca para que se note visualmente qué tan anidada
-// está cada carpeta, sin depender solo de la indentación.
-const CATEGORY_ACCENTS = [AXIOMA_RED, AXIOMA_ORANGE, AXIOMA_GOLD]
-
-// El título que se muestra en pantalla: competencia + año + número de
-// problema (ej. "Putnam 2025 — Problema B6"), en vez de la frase
-// descriptiva que trae la base de datos en `problema.titulo`. No hace
-// falta ningún dato nuevo para esto — `codigo` YA termina en el número
-// después del último guion, sin importar cuántos guiones tenga el prefijo
-// ("OMMU-NAC-2026-3" o "PUTNAM-2025-B6" ambos funcionan igual).
 function formatearTitulo(problema) {
-  const numero = problema.codigo.split('-').pop()
-  return `${problema.tipo} ${problema.año} — Problema ${numero}`
+  return `${problema.tipo} ${problema.año} — Problema ${numeroProblema(problema)}`
 }
 
-// Un "chip" de filtro: se ve como una pastilla de color. Por dentro sigue
-// siendo un <input type="checkbox"> real (oculto con sr-only) para que el
-// teclado y los lectores de pantalla lo sigan tratando como una casilla de
-// verificación normal — react-facing className solo decide CÓMO se ve.
-function FilterGroup({ title, options, selected, onToggle }) {
+// Para el buscador: minúsculas y sin acentos, así "algebra" encuentra "Álgebra".
+function normalizarTexto(texto) {
+  return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
+
+// ---------------------------------------------------------------------------
+// Sistema visual compartido
+// ---------------------------------------------------------------------------
+const labelClass = 'text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500'
+const focusRing =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950'
+
+// Aparición de filas: un desplazamiento mínimo, sin escalas ni rotaciones.
+const rowIn = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } },
+}
+
+const inputClass =
+  'w-full border border-neutral-950 bg-white px-3 py-2.5 text-sm text-neutral-950 outline-none placeholder:text-neutral-400 focus:outline-2 focus:outline-neutral-950'
+
+// Botón principal: dorado plano con borde negro; en hover se vuelve blanco.
+const primaryButtonClass = `border border-neutral-950 bg-[#FFB401] px-5 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-neutral-950 transition-colors hover:bg-white disabled:opacity-50 ${focusRing}`
+
+// ---------------------------------------------------------------------------
+// Sidebar de filtros. Por dentro siguen siendo <input type="checkbox"> reales
+// (ocultos con sr-only) para que teclado y lectores de pantalla funcionen;
+// la casilla cuadrada de al lado es solo el dibujo.
+// ---------------------------------------------------------------------------
+function CheckRow({ checked, onChange, label, count }) {
   return (
-    <div className="flex flex-col gap-2">
-      <h3 className="text-sm font-semibold text-brand-900">{title}</h3>
-      <div className="flex flex-wrap gap-2">
-        {options.map((option) => {
-          const activo = selected.includes(option)
-          return (
-            <label key={option} className="cursor-pointer">
-              <input
-                type="checkbox"
-                checked={activo}
-                onChange={() => onToggle(option)}
-                className="peer sr-only"
-              />
-              <span
-                className={`inline-block select-none rounded-full border px-3 py-1 text-xs font-medium transition-all duration-200 active:scale-95 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-900 peer-focus-visible:ring-offset-1 ${
-                  activo
-                    ? 'border-transparent text-white shadow-md'
-                    : 'border-brand-300 bg-white text-brand-600 hover:border-[#E57505] hover:text-[#E57505]'
-                }`}
-                style={activo ? { backgroundImage: AXIOMA_GRADIENT } : undefined}
-              >
-                {option}
-              </span>
-            </label>
-          )
-        })}
+    <label className="group flex cursor-pointer items-center gap-3 py-1.5 text-sm">
+      <input type="checkbox" checked={checked} onChange={onChange} className="peer sr-only" />
+      <span
+        aria-hidden="true"
+        className="h-3.5 w-3.5 shrink-0 border border-neutral-950 transition-colors peer-checked:bg-neutral-950 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-neutral-950"
+      />
+      <span className="flex-1 text-neutral-600 transition-colors group-hover:text-neutral-950 peer-checked:font-medium peer-checked:text-neutral-950">
+        {label}
+      </span>
+      {count !== undefined && (
+        <span className="text-xs tabular-nums text-neutral-400">{count}</span>
+      )}
+    </label>
+  )
+}
+
+function FilterGroup({ title, options, selected, onToggle, counts }) {
+  return (
+    <div className="border-t border-neutral-950 pb-5 pt-3">
+      <h3 className={`${labelClass} mb-2`}>{title}</h3>
+      <div className="flex flex-col">
+        {options.map((option) => (
+          <CheckRow
+            key={option}
+            label={option}
+            checked={selected.includes(option)}
+            onChange={() => onToggle(option)}
+            count={counts?.[option]}
+          />
+        ))}
       </div>
     </div>
   )
 }
 
-// Una fila del árbol de carpetas: se dibuja a sí misma, y luego se dibuja a
-// sí misma otra vez por cada hijo (con depth+1) — así es como un árbol se
-// vuelve una lista de casillas con sangría creciente, sin importar cuántos
-// niveles tenga en realidad. El color de acento y el "punto" relleno vienen
-// de `activo`/`depth`, calculados aquí mismo — no hace falta CSS especial.
-function CategoryTreeNode({ nodo, depth, seleccionadas, onToggle }) {
-  const accent = CATEGORY_ACCENTS[depth % CATEGORY_ACCENTS.length]
-  const activo = seleccionadas.includes(nodo._id)
+// ¿Alguna carpeta de este nodo (o de sus descendientes) está marcada?
+function tieneSeleccionadaDentro(nodo, seleccionadas) {
+  return nodo.children.some(
+    (hijo) => seleccionadas.includes(hijo._id) || tieneSeleccionadaDentro(hijo, seleccionadas),
+  )
+}
+
+// Una fila del árbol de carpetas: se dibuja a sí misma y luego otra vez por
+// cada hijo, dentro de un bloque con una línea guía a la izquierda.
+// Las carpetas con subcarpetas (Putnam → 2021, 2022…) vienen CERRADAS: con
+// muchos concursos, mostrar todos los años a la vez llenaría el sidebar. La
+// flecha las abre/cierra; marcar la casilla filtra sin necesidad de abrirla.
+// Arrancan abiertas solo si ya hay algo marcado adentro (ej. un enlace
+// compartido con ?carpetas=Putnam/2021), para que se vea qué está activo.
+function CategoryTreeNode({ nodo, problemas, seleccionadas, onToggle }) {
+  const tieneHijos = nodo.children.length > 0
+  const [abierto, setAbierto] = useState(() => tieneSeleccionadaDentro(nodo, seleccionadas))
+
   return (
     <div>
-      <label
-        className="group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 pr-2 text-sm text-brand-600 transition-all duration-150 hover:translate-x-1 hover:bg-brand-100"
-        style={{
-          paddingLeft: `${depth * 14 + 8}px`,
-          borderLeft: depth > 0 ? `2px solid ${accent}55` : '2px solid transparent',
-        }}
-      >
-        <input
-          type="checkbox"
-          checked={activo}
-          onChange={() => onToggle(nodo._id)}
-          className="peer sr-only"
-        />
-        <span
-          className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-transform duration-200 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-900 peer-focus-visible:ring-offset-1"
-          style={{
-            borderColor: accent,
-            backgroundColor: activo ? accent : 'transparent',
-            transform: activo ? 'scale(1.15)' : 'scale(1)',
-          }}
-        />
-        {nodo.name}
-      </label>
-      {nodo.children.map((hijo) => (
-        <CategoryTreeNode
-          key={hijo._id}
-          nodo={hijo}
-          depth={depth + 1}
-          seleccionadas={seleccionadas}
-          onToggle={onToggle}
-        />
-      ))}
+      <div className="flex items-center gap-1">
+        {tieneHijos ? (
+          <button
+            type="button"
+            onClick={() => setAbierto((valor) => !valor)}
+            aria-expanded={abierto}
+            aria-label={`${abierto ? 'Ocultar' : 'Mostrar'} subcarpetas de ${nodo.name}`}
+            className={`flex h-6 w-6 shrink-0 items-center justify-center text-neutral-500 transition-colors hover:text-neutral-950 ${focusRing}`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={`h-3.5 w-3.5 transition-transform duration-200 ${abierto ? 'rotate-90' : ''}`}
+              aria-hidden="true"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        ) : (
+          <span className="w-6 shrink-0" aria-hidden="true" />
+        )}
+        <div className="min-w-0 flex-1">
+          <CheckRow
+            label={nodo.name}
+            checked={seleccionadas.includes(nodo._id)}
+            onChange={() => onToggle(nodo._id)}
+            count={contarProblemas(nodo, problemas)}
+          />
+        </div>
+      </div>
+
+      <AnimatePresence initial={false}>
+        {tieneHijos && abierto && (
+          <motion.div
+            key="hijos"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="overflow-hidden"
+          >
+            <div className="ml-3 border-l border-neutral-300 pl-3">
+              {nodo.children.map((hijo) => (
+                <CategoryTreeNode
+                  key={hijo._id}
+                  nodo={hijo}
+                  problemas={problemas}
+                  seleccionadas={seleccionadas}
+                  onToggle={onToggle}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
-function CategoryFilter({ raices, seleccionadas, onToggle }) {
+function CategoryFilter({ raices, problemas, seleccionadas, onToggle }) {
   if (raices.length === 0) return null
   return (
-    <div className="flex flex-col gap-2">
-      <h3 className="text-sm font-semibold text-brand-900">Carpetas</h3>
-      <div className="flex flex-col gap-1">
+    <div className="border-t border-neutral-950 pb-5 pt-3">
+      <h3 className={`${labelClass} mb-2`}>Carpetas</h3>
+      <div className="flex flex-col">
         {raices.map((nodo) => (
           <CategoryTreeNode
             key={nodo._id}
             nodo={nodo}
-            depth={0}
+            problemas={problemas}
             seleccionadas={seleccionadas}
             onToggle={onToggle}
           />
@@ -286,46 +313,52 @@ function ComentarioItem({ comentario, esPropio, onEliminar }) {
   })
   const username = comentario.author?.username || 'Usuario'
   return (
-    <div className="flex gap-3 rounded-xl border border-brand-200 bg-white p-3 shadow-sm">
-      {/* Avatar de iniciales — solo decorativo, no viene de ningún dato
-          nuevo, es la primera letra del username que ya teníamos. */}
+    <div className="flex gap-4 border-b border-neutral-200 py-4">
+      {/* Avatar cuadrado con la inicial — solo decorativo. */}
       <div
         aria-hidden="true"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-        style={{ backgroundImage: `linear-gradient(135deg, ${AXIOMA_ORANGE}, ${AXIOMA_GOLD})` }}
+        className="flex h-8 w-8 shrink-0 items-center justify-center bg-neutral-950 text-sm font-medium text-white"
       >
         {username.charAt(0).toUpperCase()}
       </div>
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex items-start justify-between gap-3">
-          <p className="text-xs font-semibold text-brand-900">
-            {username} <span className="font-normal text-brand-400">· {fecha}</span>
+          <p className="text-xs text-neutral-500">
+            <span className="font-medium text-neutral-950">{username}</span> · {fecha}
           </p>
           {/* Solo el autor ve este botón — el backend también lo exige por su
-              cuenta (ver comments.routes.js), esto es solo para no mostrar un
-              botón que de todos modos fallaría. */}
+              cuenta (ver comments.routes.js). */}
           {esPropio && (
             <button
               type="button"
               onClick={onEliminar}
-              className="shrink-0 text-xs text-rose-500 hover:underline"
+              className={`shrink-0 text-xs text-red-700 underline underline-offset-4 ${focusRing}`}
             >
               Eliminar
             </button>
           )}
         </div>
-        <p className="text-sm text-brand-700">{comentario.body}</p>
+        <p className="whitespace-pre-line break-words text-sm leading-relaxed text-neutral-800">
+          {comentario.body}
+        </p>
       </div>
     </div>
   )
 }
 
-function ProblemaModal({ problema, onClose, auth, onAuthSuccess, onAuthExpired }) {
-  // Arranca en `true` a propósito: este componente se desmonta y se vuelve
-  // a montar cada vez que se cierra el modal y se abre con OTRO problema
-  // (ver más abajo, donde se le pone key={problema._id}), así que "recién
-  // montado" siempre significa "todavía no llegaron los comentarios de
-  // este problema en particular" — no hace falta resetearlo a mano.
+// ---------------------------------------------------------------------------
+// Detalle del problema: panel lateral (entra desde la derecha).
+//
+// Está partido en dos a propósito:
+//  - ProblemaPanel: la "carcasa" (fondo, panel, cabecera con flechas). Se
+//    queda montada al pasar de un problema a otro, así el panel NO se vuelve
+//    a animar cada vez que se presiona "siguiente".
+//  - ProblemaDetalle: enunciado + comentarios + formulario. Se monta de nuevo
+//    con cada problema (key={problema._id}), así que su estado arranca limpio.
+// ---------------------------------------------------------------------------
+function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpired }) {
+  // Arranca en `true` a propósito: "recién montado" siempre significa "aún no
+  // llegan los comentarios de este problema".
   const [comentarios, setComentarios] = useState([])
   const [cargandoComentarios, setCargandoComentarios] = useState(true)
   const [nuevoComentario, setNuevoComentario] = useState('')
@@ -346,17 +379,6 @@ function ProblemaModal({ problema, onClose, auth, onAuthSuccess, onAuthExpired }
     }
   }, [problema._id])
 
-  // Cierra el modal con la tecla Escape, además del click afuera que ya
-  // existía. Estándar de accesibilidad para cualquier modal: alguien
-  // navegando con teclado (o sin mouse) necesita una forma de salir.
-  useEffect(() => {
-    function alPresionarTecla(event) {
-      if (event.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', alPresionarTecla)
-    return () => window.removeEventListener('keydown', alPresionarTecla)
-  }, [onClose])
-
   const handleEliminarComentario = async (commentId) => {
     try {
       await apiFetch(`/api/problems/${problema._id}/comments/${commentId}`, {
@@ -366,8 +388,8 @@ function ProblemaModal({ problema, onClose, auth, onAuthSuccess, onAuthExpired }
       setComentarios((prev) => prev.filter((c) => c._id !== commentId))
     } catch (err) {
       if (err.status === 401) onAuthExpired()
-      // Un 403/404 aquí sería raro (alguien más lo borró en otra pestaña,
-      // por ejemplo) — no vale la pena una UI especial para ese caso.
+      // Un 403/404 aquí sería raro (alguien lo borró en otra pestaña) — no
+      // vale la pena una UI especial para ese caso.
     }
   }
 
@@ -388,9 +410,8 @@ function ProblemaModal({ problema, onClose, auth, onAuthSuccess, onAuthExpired }
       setNuevoComentario('')
     } catch (err) {
       if (err.status === 401) {
-        // El token guardado ya no sirve (expiró o es inválido): cerramos la
-        // sesión localmente para que vuelva a aparecer el formulario de
-        // login en vez de un botón de comentar que siempre falla.
+        // El token guardado ya no sirve: cerramos la sesión localmente para
+        // que vuelva a aparecer el login en vez de un botón que siempre falla.
         onAuthExpired()
       } else {
         setErrorComentario(err.message)
@@ -401,67 +422,51 @@ function ProblemaModal({ problema, onClose, auth, onAuthSuccess, onAuthExpired }
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-900/60 p-4 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 16 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: 16 }}
-        transition={{ duration: 0.25, ease: EASE }}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="titulo-modal-problema"
-        className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-[#FFFBF5] shadow-2xl"
-        onClick={(event) => event.stopPropagation()}
+    <>
+      <div
+        className={`min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-8 sm:py-10 ${
+          expandido ? 'sm:px-14 lg:px-20' : 'sm:px-8'
+        }`}
       >
-        {/* Franja de color: mismo gradiente de marca que el resto de la
-            página, para que el modal se sienta parte del mismo sistema. */}
-        <div className="h-1.5 w-full shrink-0" style={{ backgroundImage: AXIOMA_GRADIENT }} />
+        {/* Al expandir, el panel ocupa toda la pantalla pero el texto solo
+            crece un poco (con tope) y queda en una columna de lectura
+            centrada: si se estira sin límite se vuelve incómodo de leer. */}
+        <div className={expandido ? 'mx-auto max-w-5xl' : ''}>
+          <h3
+            id="titulo-panel-problema"
+            className={`font-display uppercase leading-[1.05] text-neutral-950 ${
+              expandido ? 'text-4xl sm:text-[clamp(3rem,4vw,4rem)]' : 'text-3xl sm:text-5xl'
+            }`}
+          >
+            {formatearTitulo(problema)}
+          </h3>
 
-        <div className="flex min-h-0 flex-1 flex-col p-6">
-          <div className="mb-4 flex items-start justify-between gap-4">
-            <h3 id="titulo-modal-problema" className="text-xl font-semibold text-brand-900">
-              {formatearTitulo(problema)}
-            </h3>
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-brand-400 transition-transform hover:scale-110 hover:text-brand-900"
-              aria-label="Cerrar"
-            >
-              ✕
-            </button>
-          </div>
-          {/* codigo/tipo/año ya no se repiten aquí: formatearTitulo() de
-              arriba ya los dice todos — lo único que faltaba es el tema. */}
-          <p className="mb-4">
-            <span className="rounded-full bg-brand-100 px-2 py-0.5 text-xs text-brand-500">{problema.tema}</span>
+          <p className="mt-5 text-[11px] uppercase tracking-[0.15em] text-neutral-500">
+            {problema.tipo} · {problema.año}
           </p>
+
           {/* div, no <p>: una fórmula en "display mode" se renderiza como un
-              <div>, y un <div> no puede vivir legalmente dentro de un <p> en
-              HTML (el mismo tipo de error que se ve en Contacto.jsx). */}
-          <div className="mb-6 whitespace-pre-line text-brand-700">
+              <div>, y un <div> no puede vivir dentro de un <p> en HTML. */}
+          <div
+            className={`mt-8 whitespace-pre-line leading-relaxed text-neutral-800 ${
+              expandido ? 'text-lg sm:text-[clamp(1.125rem,1.4vw,1.375rem)]' : 'text-lg'
+            }`}
+          >
             {renderEnunciado(problema.enunciado)}
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <h4 className="mb-2 text-sm font-semibold text-brand-900">Comentarios</h4>
+          <div className="mt-12 border-t border-neutral-950 pt-4">
+            <h4 className={labelClass}>Comentarios · {comentarios.length}</h4>
 
             {cargandoComentarios && (
-              <p className="text-sm text-brand-400">Cargando comentarios...</p>
+              <p className="mt-4 text-sm text-neutral-400">Cargando comentarios…</p>
             )}
 
             {!cargandoComentarios && comentarios.length === 0 && (
-              <p className="text-sm text-brand-400">Sé el primero en comentar.</p>
+              <p className="mt-4 text-sm text-neutral-500">Sé el primero en comentar.</p>
             )}
 
-            <div className="flex flex-col gap-2">
+            <div className="mt-2 flex flex-col">
               {comentarios.map((c) => (
                 <ComentarioItem
                   key={c._id}
@@ -472,148 +477,303 @@ function ProblemaModal({ problema, onClose, auth, onAuthSuccess, onAuthExpired }
               ))}
             </div>
           </div>
-
-          <div className="mt-4 shrink-0">
-            {auth ? (
-              <form onSubmit={handleEnviarComentario} className="flex flex-col gap-2">
-                <textarea
-                  value={nuevoComentario}
-                  onChange={(e) => setNuevoComentario(e.target.value)}
-                  placeholder="Escribe un comentario..."
-                  rows={3}
-                  maxLength={2000}
-                  className="rounded-lg border border-brand-300 px-3 py-2 text-sm outline-none transition-colors focus:border-[#E57505] focus:ring-2 focus:ring-[#E57505]/30"
-                />
-                {errorComentario && (
-                  <p className="text-sm text-rose-600">{errorComentario}</p>
-                )}
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-brand-400">
-                    {nuevoComentario.length}/2000
-                  </span>
-                  <button
-                    type="submit"
-                    disabled={enviandoComentario}
-                    className="rounded-lg px-4 py-2 text-sm font-medium text-white shadow-md transition-transform active:scale-95 disabled:opacity-50"
-                    style={{ backgroundImage: AXIOMA_GRADIENT }}
-                  >
-                    {enviandoComentario ? 'Enviando...' : 'Comentar'}
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <AuthForm onAuthSuccess={onAuthSuccess} />
-            )}
-          </div>
         </div>
-      </motion.div>
+      </div>
+
+      <div
+        className={`max-h-[55%] shrink-0 overflow-y-auto overscroll-contain border-t border-neutral-950 bg-white px-5 py-5 ${
+          expandido ? 'sm:px-14 lg:px-20' : 'sm:px-8'
+        }`}
+      >
+        <div className={expandido ? 'mx-auto max-w-5xl' : ''}>
+          {auth ? (
+            <form onSubmit={handleEnviarComentario} className="flex flex-col gap-3">
+              <textarea
+                value={nuevoComentario}
+                onChange={(e) => setNuevoComentario(e.target.value)}
+                placeholder="Escribe un comentario…"
+                rows={3}
+                maxLength={2000}
+                className={`${inputClass} resize-none`}
+              />
+              {errorComentario && <p className="text-sm text-red-700">{errorComentario}</p>}
+              <div className="flex items-center justify-between">
+                <span className="text-xs tabular-nums text-neutral-400">
+                  {nuevoComentario.length}/2000
+                </span>
+                <button type="submit" disabled={enviandoComentario} className={primaryButtonClass}>
+                  {enviandoComentario ? 'Enviando…' : 'Comentar'}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <AuthForm onAuthSuccess={onAuthSuccess} motivo="para comentar" />
+          )}
+        </div>
+      </div>
+    </>
+  )
+}
+
+// Botón cuadrado de la cabecera (← / →).
+function NavButton({ onClick, disabled, label, pressed, children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      aria-pressed={pressed}
+      title={label}
+      className={`flex h-8 w-8 items-center justify-center border border-neutral-950 text-sm transition-colors hover:bg-[#FFB401] disabled:cursor-default disabled:border-neutral-300 disabled:text-neutral-300 disabled:hover:bg-transparent ${focusRing}`}
+    >
+      {children}
+    </button>
+  )
+}
+
+// `contexto` = { posicion, total, anterior, siguiente } — dónde está este
+// problema dentro de la lista que se estaba viendo (resultados filtrados, la
+// carpeta abierta, etc.), para poder ir al de antes / al de después.
+function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess, onAuthExpired }) {
+  const [enlaceCopiado, setEnlaceCopiado] = useState(false)
+  // Opcional: agranda el panel a toda la pantalla y el texto crece con él.
+  // Se mantiene al pasar de un
+  // problema a otro y se reinicia al cerrar el panel.
+  const [expandido, setExpandido] = useState(false)
+  useBloquearScroll()
+
+  // Teclado: Escape cierra (estándar de accesibilidad para cualquier diálogo);
+  // ← / → van al problema anterior / siguiente, salvo que se esté escribiendo
+  // en un campo (ahí las flechas mueven el cursor del texto).
+  useEffect(() => {
+    function alPresionarTecla(event) {
+      if (event.key === 'Escape') {
+        onClose()
+        return
+      }
+      const escribiendo = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)
+      if (escribiendo) return
+      if (event.key === 'ArrowLeft' && contexto.anterior) onIr(contexto.anterior)
+      if (event.key === 'ArrowRight' && contexto.siguiente) onIr(contexto.siguiente)
+    }
+    window.addEventListener('keydown', alPresionarTecla)
+    return () => window.removeEventListener('keydown', alPresionarTecla)
+  }, [onClose, onIr, contexto.anterior, contexto.siguiente])
+
+  const copiarEnlace = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setEnlaceCopiado(true)
+      setTimeout(() => setEnlaceCopiado(false), 1800)
+    } catch {
+      // Sin permiso de portapapeles (ej. página sin https): no hay nada útil
+      // que mostrar, el enlace sigue estando en la barra de direcciones.
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-50 bg-black/50"
+      onClick={onClose}
+    >
+      <motion.aside
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ duration: 0.4, ease: EASE }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-panel-problema"
+        className={`absolute right-0 top-0 flex h-full w-full flex-col border-l border-neutral-950 bg-white transition-[max-width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          expandido ? 'max-w-full' : 'max-w-2xl'
+        }`}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-neutral-950 px-4 py-3 sm:gap-4 sm:px-8">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <NavButton
+              label="Problema anterior (←)"
+              disabled={!contexto.anterior}
+              onClick={() => onIr(contexto.anterior)}
+            >
+              ←
+            </NavButton>
+            <NavButton
+              label="Problema siguiente (→)"
+              disabled={!contexto.siguiente}
+              onClick={() => onIr(contexto.siguiente)}
+            >
+              →
+            </NavButton>
+            <p className={`${labelClass} whitespace-nowrap tabular-nums`}>
+              <span className="text-neutral-950">{contexto.posicion}</span> / {contexto.total}
+              <span className="max-sm:hidden"> · {problema.tema}</span>
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 sm:gap-5">
+            {/* En móvil el panel ya ocupa toda la pantalla: no hace falta. */}
+            <span className="max-md:hidden">
+              <NavButton
+                label={expandido ? 'Contraer panel' : 'Expandir panel'}
+                pressed={expandido}
+                onClick={() => setExpandido((valor) => !valor)}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  {expandido ? (
+                    <>
+                      <polyline points="4 14 10 14 10 20" />
+                      <polyline points="20 10 14 10 14 4" />
+                      <line x1="14" x2="21" y1="10" y2="3" />
+                      <line x1="3" x2="10" y1="21" y2="14" />
+                    </>
+                  ) : (
+                    <>
+                      <polyline points="15 3 21 3 21 9" />
+                      <polyline points="9 21 3 21 3 15" />
+                      <line x1="21" x2="14" y1="3" y2="10" />
+                      <line x1="3" x2="10" y1="21" y2="14" />
+                    </>
+                  )}
+                </svg>
+              </NavButton>
+            </span>
+            <button
+              type="button"
+              onClick={copiarEnlace}
+              className={`text-xs uppercase tracking-[0.2em] text-neutral-600 transition-colors hover:text-neutral-950 ${focusRing}`}
+            >
+              <span aria-live="polite" className="whitespace-nowrap">
+                {enlaceCopiado ? 'Copiado ✓' : (<><span className="sm:hidden">Enlace</span><span className="max-sm:hidden">Copiar enlace</span></>)}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar"
+              className={`text-xs uppercase tracking-[0.2em] text-neutral-600 transition-colors hover:text-neutral-950 ${focusRing}`}
+            >
+              <span className="max-sm:hidden">Cerrar </span>✕
+            </button>
+          </div>
+        </header>
+
+        <ProblemaDetalle
+          key={problema._id}
+          problema={problema}
+          expandido={expandido}
+          auth={auth}
+          onAuthSuccess={onAuthSuccess}
+          onAuthExpired={onAuthExpired}
+        />
+      </motion.aside>
     </motion.div>
   )
 }
 
-// Una tarjeta de la cuadrícula de problemas — reemplaza la fila de tabla
-// que había antes. `tilt` es un pequeño ángulo (en grados) que la deja
-// "ladeada" como una nota pegada en un pizarrón; al pasar el mouse se
-// endereza y se levanta un poco (whileHover), inspirado en las tarjetas de
-// hackthenorth.com.
-function ProblemaCard({ problema, tilt, onOpen }) {
-  const dificultadClass = DIFICULTAD_STYLES[problema.dificultad]
-  const dificultadBg = DIFICULTAD_BG[problema.dificultad]
-
+// ---------------------------------------------------------------------------
+// Filas de índice (estilo Uber): número · nombre · dato · flecha. Al pasar el
+// mouse, un color plano "barre" la fila de izquierda a derecha (un span con
+// scaleX animado por CSS) y la flecha se desliza. Cero sombras, cero curvas.
+// ---------------------------------------------------------------------------
+function ProblemaRow({ problema, onOpen }) {
   return (
     <motion.button
       type="button"
       onClick={() => onOpen(problema)}
-      variants={popIn(tilt)}
-      whileHover={{ rotate: 0, y: -6, scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
-      className="group flex flex-col gap-3 rounded-2xl border border-brand-200 bg-[#FFFBF5] p-5 text-left shadow-md shadow-black/5 transition-shadow duration-200 hover:shadow-xl hover:shadow-brand-900/10"
+      variants={rowIn}
+      className={`group relative grid w-full grid-cols-[3.5rem_minmax(0,1fr)_auto] items-center gap-4 overflow-hidden border-b border-neutral-300 px-2 py-5 text-left sm:grid-cols-[5rem_minmax(0,1fr)_auto] sm:py-6 ${focusRing}`}
     >
-      {/* codigo/tipo/año ya no van aquí como etiquetas sueltas: el título
-          de abajo (formatearTitulo) ya dice competencia + año + número.
-          Lo único que sigue haciendo falta a simple vista es el tema. */}
-      <div className="flex items-start justify-between gap-3">
-        <span className="rounded-full bg-brand-100 px-2.5 py-1 text-[11px] font-medium text-brand-600">
-          {problema.tema}
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 origin-left scale-x-0 bg-neutral-100 transition-transform duration-300 ease-out group-hover:scale-x-100"
+      />
+      <span className="relative font-display text-xl tabular-nums text-neutral-400 transition-colors group-hover:text-neutral-950 sm:text-2xl">
+        {numeroProblema(problema)}
+      </span>
+      <span className="relative min-w-0">
+        <span className="block text-base text-neutral-950 sm:text-lg">
+          {formatearTitulo(problema)}
         </span>
-        <span
-          className={`rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-sm ${dificultadClass}`}
-          style={dificultadBg ? { backgroundColor: dificultadBg } : undefined}
-        >
-          {problema.dificultad}
-        </span>
-      </div>
-
-      <h3 className="text-base font-semibold text-brand-900 transition-colors group-hover:text-[#B70B0D]">
-        {formatearTitulo(problema)}
-      </h3>
-    </motion.button>
-  )
-}
-
-// ---------------------------------------------------------------------------
-// Vista de carpetas, estilo AoPS (artofproblemsolving.com/community/c13_
-// contests): en vez de mostrar los 93 problemas de golpe al entrar a la
-// página, se navega por carpetas — Putnam / OMMU Primera Ronda / OMMU
-// Nacional primero, luego el año adentro de cada una, y solo AL FINAL los
-// problemas de verdad. Es la MISMA jerarquía que ya arma buildCategoryTree
-// para el árbol del sidebar (ver arriba) — esto solo la dibuja distinto:
-// como carpetas para navegar en vez de casillas para filtrar.
-// ---------------------------------------------------------------------------
-
-// Ícono de carpeta dibujado a mano en SVG (nada de emoji) — un rectángulo
-// con una pestaña arriba a la izquierda, el dibujo clásico de "carpeta".
-function FolderIcon({ className, style }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} style={style} fill="currentColor" aria-hidden="true">
-      <path d="M3 6.5C3 5.67 3.67 5 4.5 5H9.5l2 2H19.5c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5h-15C3.67 19 3 18.33 3 17.5v-11z" />
-    </svg>
-  )
-}
-
-// Una carpeta clickeable: nombre + cuántos problemas tiene adentro (contando
-// subcarpetas). Visualmente es a propósito MUY distinta de ProblemaCard
-// (ícono grande y centrado en vez de título+dificultad) para que se sienta
-// de inmediato como "esto te lleva más adentro", no "esto abre un problema".
-function FolderCard({ nodo, count, color, tilt, onOpen }) {
-  return (
-    <motion.button
-      type="button"
-      onClick={() => onOpen(nodo._id)}
-      variants={popIn(tilt)}
-      whileHover={{ rotate: 0, y: -6, scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
-      className="group flex flex-col items-center gap-2 rounded-2xl border border-brand-200 bg-[#FFFBF5] px-5 py-8 text-center shadow-md shadow-black/5 transition-shadow duration-200 hover:shadow-xl hover:shadow-brand-900/10"
-    >
-      <FolderIcon className="h-12 w-12 transition-transform group-hover:scale-110" style={{ color }} />
-      <h3 className="text-lg font-semibold text-brand-900 transition-colors group-hover:text-[#B70B0D]">
-        {nodo.name}
-      </h3>
-      <span className="text-xs text-brand-500">
-        {count} {count === 1 ? 'problema' : 'problemas'}
+        <span className="mt-0.5 block text-xs text-neutral-500">{problema.tema}</span>
+      </span>
+      <span
+        aria-hidden="true"
+        className="relative text-lg transition-transform duration-300 group-hover:translate-x-1"
+      >
+        →
       </span>
     </motion.button>
   )
 }
 
-// Migas de pan ("Inicio / Putnam / 2021") para volver a una carpeta de
-// arriba sin tener que salir por completo. El último tramo (dónde estás
-// parado ahora) no es un botón, los anteriores sí.
+function FolderRow({ nodo, count, index, onOpen }) {
+  return (
+    <motion.button
+      type="button"
+      onClick={() => onOpen(nodo._id)}
+      variants={rowIn}
+      className={`group relative grid w-full grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-4 overflow-hidden border-b border-neutral-300 px-2 py-7 text-left sm:grid-cols-[5rem_minmax(0,1fr)_auto] sm:py-10 ${focusRing}`}
+    >
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 origin-left scale-x-0 bg-[#FFB401] transition-transform duration-300 ease-out group-hover:scale-x-100"
+      />
+      <span className="relative text-sm tabular-nums text-neutral-400 transition-colors group-hover:text-neutral-950">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <span className="relative font-display text-3xl uppercase leading-none text-neutral-950 transition-transform duration-300 group-hover:translate-x-2 sm:text-4xl lg:text-5xl">
+        {nodo.name}
+      </span>
+      <span className="relative flex items-center gap-4 sm:gap-8">
+        <span className="hidden text-sm text-neutral-500 transition-colors group-hover:text-neutral-950 sm:inline">
+          {count} {count === 1 ? 'problema' : 'problemas'}
+        </span>
+        <span
+          aria-hidden="true"
+          className="text-2xl transition-transform duration-300 group-hover:translate-x-2"
+        >
+          →
+        </span>
+      </span>
+    </motion.button>
+  )
+}
+
+// Migas de pan ("Inicio / Putnam / 2021"). El último tramo (dónde estás) no
+// es un botón, los anteriores sí.
 function Breadcrumb({ ruta, onNavigate }) {
   return (
-    <div className="mb-4 flex flex-wrap items-center gap-1.5 text-sm">
+    <nav
+      aria-label="Ruta de carpetas"
+      className="mb-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.2em]"
+    >
       {ruta.map((item, i) => {
         const esUltimo = i === ruta.length - 1
         return (
-          <span key={item._id ?? 'inicio'} className="flex items-center gap-1.5">
-            {i > 0 && <span className="text-brand-300">/</span>}
+          <span key={item._id ?? 'inicio'} className="flex items-center gap-2">
+            {i > 0 && <span className="text-neutral-300">/</span>}
             {esUltimo ? (
-              <span className="font-semibold text-brand-900">{item.name}</span>
+              <span className="text-neutral-950">{item.name}</span>
             ) : (
               <button
                 type="button"
                 onClick={() => onNavigate(item._id)}
-                className="text-brand-500 transition-colors hover:text-[#E57505] hover:underline"
+                className={`text-neutral-500 underline decoration-transparent underline-offset-4 transition-colors hover:text-neutral-950 hover:decoration-neutral-950 ${focusRing}`}
               >
                 {item.name}
               </button>
@@ -621,141 +781,162 @@ function Breadcrumb({ ruta, onNavigate }) {
           </span>
         )
       })}
+    </nav>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Encabezado: cuadrícula matemática de fondo que se "enciende" alrededor del
+// cursor. Es una capa de líneas tenues siempre visible + otra capa de líneas
+// oscuras que solo se ve dentro de un círculo que sigue al mouse (máscara
+// radial controlada por variables CSS --mx / --my; no re-renderiza React).
+// ---------------------------------------------------------------------------
+const GRID_SIZE = '56px 56px'
+const gridLines = (color) =>
+  `linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px)`
+const SPOTLIGHT_MASK = 'radial-gradient(240px circle at var(--mx) var(--my), #000, transparent)'
+
+function GridSpotlight() {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const capa = ref.current
+    const seccion = capa?.parentElement
+    if (!capa || !seccion) return
+
+    const alMover = (event) => {
+      const caja = seccion.getBoundingClientRect()
+      capa.style.setProperty('--mx', `${event.clientX - caja.left}px`)
+      capa.style.setProperty('--my', `${event.clientY - caja.top}px`)
+    }
+    seccion.addEventListener('pointermove', alMover)
+    return () => seccion.removeEventListener('pointermove', alMover)
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0"
+      style={{ '--mx': '-999px', '--my': '-999px' }}
+    >
+      <div
+        className="absolute inset-0"
+        style={{ backgroundImage: gridLines('#ececec'), backgroundSize: GRID_SIZE }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: gridLines('#0a0a0a'),
+          backgroundSize: GRID_SIZE,
+          WebkitMaskImage: SPOTLIGHT_MASK,
+          maskImage: SPOTLIGHT_MASK,
+        }}
+      />
     </div>
   )
 }
 
-// ---------------------------------------------------------------------------
-// Fondo dinámico: paisaje de otoño (referencia visual: hackthenorth.com).
-// Es `fixed` (ligado a la VENTANA, no a la página completa) — por eso no
-// hace falta cubrir todo el alto del contenido: al hacer scroll se queda
-// quieto detrás, como un telón de fondo real, en vez de tener que ser tan
-// alto como los 93 problemas de la cuadrícula.
-//
-// Usa SOLO tonos de la paleta Axioma (rojo/naranja/dorado + un café oscuro
-// para dar profundidad) — nada de verde: así las "hojas" leen como otoño Y
-// la página se mantiene naranja, tal como se pidió.
-//
-// z-index: -z-10 (negativo) manda todo este bloque DETRÁS de cualquier
-// contenido normal de la página sin tener que tocarle el z-index a nada
-// más — así no hace falta cambiar cómo está armado el resto del archivo.
-// pointer-events-none evita que, al cubrir toda la ventana, bloquee clicks
-// en lo que sea que esté "encima".
-// ---------------------------------------------------------------------------
-const AUTUMN_BROWN = '#4a1508'
-const AUTUMN_BROWN_LIGHT = '#7a2e12'
+function Encabezado({ auth, onLogout, listo, totalProblemas, totalTemas, totalConcursos }) {
+  const stats = [
+    { label: 'Problemas', value: totalProblemas },
+    { label: 'Temas', value: totalTemas },
+    { label: 'Concursos', value: totalConcursos },
+  ]
 
-// Manchas borrosas y redondeadas que, apiladas cerca del piso de la
-// ventana, leen como una línea de copas de árboles vista de lejos.
-const TREE_BLOBS = [
-  { left: '-5%', bottom: '-6rem', size: 260, color: AUTUMN_BROWN, opacity: 0.55 },
-  { left: '10%', bottom: '-8rem', size: 320, color: AXIOMA_RED, opacity: 0.45 },
-  { left: '28%', bottom: '-5rem', size: 240, color: AUTUMN_BROWN_LIGHT, opacity: 0.5 },
-  { left: '45%', bottom: '-7rem', size: 300, color: AXIOMA_ORANGE, opacity: 0.4 },
-  { left: '63%', bottom: '-6rem', size: 260, color: AUTUMN_BROWN, opacity: 0.5 },
-  { left: '80%', bottom: '-8rem', size: 320, color: AXIOMA_RED, opacity: 0.45 },
-  { left: '95%', bottom: '-5rem', size: 240, color: AUTUMN_BROWN_LIGHT, opacity: 0.5 },
-]
-
-const LEAF_COLORS = [AXIOMA_RED, AXIOMA_ORANGE, AXIOMA_GOLD, AUTUMN_BROWN_LIGHT]
-const LEAVES = [
-  { left: '4%', delay: 0, duration: 13, size: 18, drift: 40 },
-  { left: '14%', delay: 3, duration: 16, size: 14, drift: 30 },
-  { left: '24%', delay: 6, duration: 12, size: 20, drift: 50 },
-  { left: '36%', delay: 1.5, duration: 15, size: 16, drift: 35 },
-  { left: '48%', delay: 5, duration: 14, size: 18, drift: 45 },
-  { left: '60%', delay: 2, duration: 17, size: 15, drift: 30 },
-  { left: '72%', delay: 7, duration: 13, size: 19, drift: 40 },
-  { left: '82%', delay: 4, duration: 16, size: 14, drift: 35 },
-  { left: '90%', delay: 0.5, duration: 12, size: 17, drift: 42 },
-  { left: '55%', delay: 9, duration: 18, size: 13, drift: 28 },
-].map((hoja, i) => ({ ...hoja, color: LEAF_COLORS[i % LEAF_COLORS.length] }))
-
-// Una hoja cayendo: el mismo truco que FloatingSymbol.jsx (loop infinito
-// con una transición separada por propiedad), pero cayendo de arriba a
-// abajo de la ventana en vez de flotar en un solo punto. Usamos `vh` para
-// `y`: como el contenedor padre es `fixed` (mide exactamente la ventana),
-// esto siempre va de "justo arriba de lo visible" a "justo abajo de lo
-// visible" sin importar en qué parte de la página esté la ventana.
-function FallingLeaf({ left, delay, duration, size, color, drift }) {
   return (
-    <motion.svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      width={size}
-      height={size}
-      className="absolute top-0"
-      style={{ left }}
-      initial={{ y: '-10vh', opacity: 0 }}
-      animate={{
-        y: '115vh',
-        x: [0, drift, -drift * 0.6, 0],
-        rotate: [0, 30, -25, 10, 0],
-        opacity: [0, 1, 1, 0.9, 0],
-      }}
-      transition={{
-        y: { duration, repeat: Infinity, ease: 'linear', delay },
-        x: { duration, repeat: Infinity, ease: 'easeInOut', delay },
-        rotate: { duration: duration * 0.85, repeat: Infinity, ease: 'easeInOut', delay },
-        opacity: { duration, repeat: Infinity, ease: 'linear', delay, times: [0, 0.08, 0.85, 1] },
-      }}
-    >
-      <path d="M12 2C7 6 4 11 4 15a8 8 0 0 0 16 0c0-4-3-9-8-13z" fill={color} />
-      <path d="M12 3v18" stroke="rgba(0,0,0,0.18)" strokeWidth="0.8" />
-    </motion.svg>
+    <section className="relative overflow-hidden border-b border-neutral-950 bg-white pb-14 pt-36 sm:pb-20 sm:pt-44">
+      <GridSpotlight />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-6 top-36 hidden text-4xl text-neutral-300 lg:block xl:right-16"
+        dangerouslySetInnerHTML={{ __html: FORMULA_BASILEA }}
+      />
+
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={staggerContainer(0.08)}
+        className="relative mx-auto max-w-7xl px-4 sm:px-8"
+      >
+        <motion.p variants={rowIn} className={`${labelClass} mb-6`}>
+          Axioma · Colección de competencias
+        </motion.p>
+
+        <motion.h1
+          variants={rowIn}
+          className="text-[clamp(3rem,10.5vw,9.5rem)] leading-[0.88] tracking-tight text-neutral-950"
+        >
+          Archivo de
+          <br />
+          problemas
+        </motion.h1>
+
+        <motion.div
+          variants={rowIn}
+          className="mt-12 flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between"
+        >
+          <p className="max-w-md text-base leading-relaxed text-neutral-600">
+            Explora, filtra y comenta problemas de competencias — cada uno es un hilo abierto para
+            discutir.
+          </p>
+
+          <dl className="flex gap-10 sm:gap-16">
+            {stats.map((stat) => (
+              <div key={stat.label}>
+                <dt className={labelClass}>{stat.label}</dt>
+                <dd className="mt-2 font-display text-5xl leading-none text-neutral-950 sm:text-6xl">
+                  {listo ? <Counter value={stat.value} /> : '—'}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </motion.div>
+
+        {auth && (
+          <motion.p variants={rowIn} className="mt-8 text-xs text-neutral-500">
+            Sesión iniciada como{' '}
+            <strong className="font-medium text-neutral-950">{auth.user.username}</strong> ·{' '}
+            <button
+              type="button"
+              onClick={onLogout}
+              className={`underline underline-offset-4 hover:text-neutral-950 ${focusRing}`}
+            >
+              cerrar sesión
+            </button>
+          </motion.p>
+        )}
+      </motion.div>
+    </section>
   )
 }
 
-function AutumnBackground() {
+// Un mensaje de estado (cargando, vacío, error) con el mismo lenguaje plano.
+function Estado({ children, tono = 'neutro' }) {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      {/* Cielo: crema arriba -> rojo profundo abajo, todo dentro de la
-          paleta de marca de siempre (ver AXIOMA_* arriba) */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `linear-gradient(180deg, #FFF3E2 0%, #FDD9A0 20%, ${AXIOMA_GOLD} 40%, ${AXIOMA_ORANGE} 58%, ${AXIOMA_RED} 76%, ${AUTUMN_BROWN} 100%)`,
-        }}
-      />
+    <div
+      className={`border px-6 py-16 text-center text-sm ${
+        tono === 'error'
+          ? 'border-red-700 text-red-700'
+          : 'border-neutral-300 text-neutral-500'
+      }`}
+    >
+      {children}
+    </div>
+  )
+}
 
-      {/* "Sol" de otoño: un brillo que respira despacio (escala + opacidad
-          en loop) — la parte "dinámica" del cielo, no es una imagen fija */}
-      <motion.div
-        className="absolute -top-40 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-3xl"
-        style={{ background: 'radial-gradient(circle, #FFF3E2cc 0%, transparent 70%)' }}
-        animate={{ opacity: [0.6, 0.9, 0.6], scale: [1, 1.06, 1] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-      />
-
-      {/* Copas de árboles: manchas redondeadas y borrosas formando una
-          línea de bosque cerca del piso de la ventana */}
-      <div className="absolute inset-x-0 bottom-0 h-[60%]">
-        {TREE_BLOBS.map((b, i) => (
-          <div
-            key={i}
-            className="absolute rounded-[46%] blur-md"
-            style={{
-              left: b.left,
-              bottom: b.bottom,
-              width: b.size,
-              height: b.size * 0.75,
-              backgroundColor: b.color,
-              opacity: b.opacity,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Se funde con el crema del contenido: para cuando la vista llega a
-          la cuadrícula de problemas, el fondo ya no compite con el texto */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-[50%]"
-        style={{ background: 'linear-gradient(180deg, transparent 0%, #FAF3EA 100%)' }}
-      />
-
-      {LEAVES.map((hoja, i) => (
-        <FallingLeaf key={i} {...hoja} />
+function Cargando() {
+  return (
+    <div className="border-t border-neutral-950" aria-busy="true" aria-live="polite">
+      {Array.from({ length: 6 }, (_, i) => (
+        <div key={i} className="flex animate-pulse items-center gap-6 border-b border-neutral-200 px-2 py-6">
+          <div className="h-5 w-12 bg-neutral-200" />
+          <div className="h-5 flex-1 bg-neutral-100" />
+          <div className="h-3 w-16 bg-neutral-200" />
+        </div>
       ))}
+      <span className="sr-only">Cargando problemas…</span>
     </div>
   )
 }
@@ -765,20 +946,12 @@ export default function Problemas() {
   const [cargando, setCargando] = useState(true)
   const [errorCarga, setErrorCarga] = useState(null)
 
-  const [años, setAños] = useState([])
-  const [temas, setTemas] = useState([])
-  const [tipos, setTipos] = useState([])
   const [categorias, setCategorias] = useState([])
-  const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([])
-  const [problemaSeleccionado, setProblemaSeleccionado] = useState(null)
-
-  // Qué carpeta se está navegando ahora mismo en la vista tipo AoPS (null
-  // = en la raíz, viendo Putnam / OMMU Primera Ronda / OMMU Nacional).
-  // Esto es INDEPENDIENTE de categoriasSeleccionadas de arriba: ese es el
-  // filtro de casillas del sidebar (puede marcar varias carpetas a la
-  // vez); esto es "en qué carpeta estoy parado ahora" (una sola, como
-  // carpetas de verdad en una computadora).
-  const [carpetaActual, setCarpetaActual] = useState(null)
+  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false) // solo en móvil
+  const [searchParams, setSearchParams] = useSearchParams()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const buscadorRef = useRef(null)
 
   // La sesión es compartida con el resto del sitio (ver src/lib/auth.js):
   // si inicias sesión aquí, el Navbar cambia a "Perfil", y viceversa.
@@ -790,24 +963,125 @@ export default function Problemas() {
       .catch((err) => setErrorCarga(err.message))
       .finally(() => setCargando(false))
 
-    // Las carpetas se piden aparte: si esta llamada falla, preferimos que
-    // la tabla de problemas siga funcionando (solo sin filtro de carpetas)
-    // en vez de tumbar toda la página.
+    // Las carpetas se piden aparte: si esta llamada falla, preferimos que la
+    // lista de problemas siga funcionando (solo sin carpetas).
     apiFetch('/api/categories')
       .then(setCategorias)
       .catch(() => setCategorias([]))
   }, [])
 
-  // Reconstruye el árbol de carpetas cada vez que cambia la lista de
-  // categorías (normalmente solo una vez, al cargar la página).
   const { raices: arbolCategorias, byId: categoriasPorId } = useMemo(
     () => buildCategoryTree(categorias),
     [categorias],
   )
 
-  // "Efectivas" = las carpetas que el usuario marcó, YA expandidas para
-  // incluir todas sus subcarpetas. Esto es lo que realmente se compara
-  // contra problema.category al filtrar.
+  // -------------------------------------------------------------------
+  // Estado en la URL. Filtros, búsqueda, carpeta abierta y problema abierto
+  // viven en la barra de direcciones (?tema=Álgebra&dir=Putnam/2021&p=...),
+  // así el botón "atrás" funciona y cualquier vista se puede compartir.
+  // Las carpetas se escriben por NOMBRE (Putnam/2021) y los problemas por su
+  // código (PUTNAM-2025-B6), no por _id: los _id cambian cada vez que se
+  // vuelve a correr `npm run seed` y los enlaces dejarían de servir.
+  // -------------------------------------------------------------------
+  const { rutaPorId, nodoPorRuta } = useMemo(() => {
+    const rutaPorId = new Map()
+    const nodoPorRuta = new Map()
+    const recorrer = (nodo, prefijo) => {
+      const ruta = prefijo ? `${prefijo}/${nodo.name}` : nodo.name
+      rutaPorId.set(nodo._id, ruta)
+      nodoPorRuta.set(ruta, nodo)
+      nodo.children.forEach((hijo) => recorrer(hijo, ruta))
+    }
+    arbolCategorias.forEach((nodo) => recorrer(nodo, ''))
+    return { rutaPorId, nodoPorRuta }
+  }, [arbolCategorias])
+
+  const años = useMemo(() => searchParams.getAll('anio'), [searchParams])
+  const temas = useMemo(() => searchParams.getAll('tema'), [searchParams])
+  const tipos = useMemo(() => searchParams.getAll('tipo'), [searchParams])
+  const busqueda = searchParams.get('q') ?? ''
+
+  // Carpetas marcadas como FILTRO (casillas, varias a la vez).
+  const categoriasSeleccionadas = useMemo(
+    () =>
+      searchParams
+        .getAll('carpetas')
+        .map((ruta) => nodoPorRuta.get(ruta)?._id)
+        .filter(Boolean),
+    [searchParams, nodoPorRuta],
+  )
+
+  // Carpeta que se está NAVEGANDO ahora (una sola; null = raíz). Es
+  // independiente de las carpetas-filtro de arriba.
+  const dirParam = searchParams.get('dir')
+  const carpetaActual = (dirParam && nodoPorRuta.get(dirParam)?._id) || null
+
+  const codigoAbierto = searchParams.get('p')
+  const problemaSeleccionado = useMemo(
+    () => (codigoAbierto ? (problemas.find((p) => p.codigo === codigoAbierto) ?? null) : null),
+    [codigoAbierto, problemas],
+  )
+
+  // Cambia varios parámetros de la URL de una vez. Un valor vacío/null quita
+  // el parámetro; un arreglo lo repite (?tema=A&tema=B).
+  // replace:true = no agrega una entrada al historial (para filtros y
+  // escritura en el buscador: si no, "atrás" tendría que deshacer cada
+  // casilla una por una).
+  const actualizarParams = (cambios, opciones = {}) =>
+    setSearchParams((prev) => {
+      const siguiente = new URLSearchParams(prev)
+      Object.entries(cambios).forEach(([clave, valor]) => {
+        siguiente.delete(clave)
+        const valores = Array.isArray(valor) ? valor : valor ? [valor] : []
+        valores.forEach((v) => siguiente.append(clave, v))
+      })
+      return siguiente
+    }, opciones)
+
+  const alternarParam = (clave) => (valor) => {
+    const actuales = searchParams.getAll(clave)
+    actualizarParams(
+      { [clave]: actuales.includes(valor) ? actuales.filter((v) => v !== valor) : [...actuales, valor] },
+      { replace: true },
+    )
+  }
+  const alternarCarpetaFiltro = (id) => {
+    const ruta = rutaPorId.get(id)
+    if (ruta) alternarParam('carpetas')(ruta)
+  }
+
+  // Entrar a una carpeta SÍ agrega historial: "atrás" sube un nivel.
+  const setCarpetaActual = (id) => actualizarParams({ dir: id ? rutaPorId.get(id) : null })
+  const setBusqueda = (texto) => actualizarParams({ q: texto }, { replace: true })
+
+  // Abrir un problema agrega historial (y deja una marca en `state`): así
+  // "atrás" cierra el panel. Ir al anterior/siguiente reemplaza en vez de
+  // agregar, para no llenar el historial. Cerrar usa "atrás" si el panel se
+  // abrió desde la lista; si alguien llegó por un enlace directo, "atrás" lo
+  // sacaría de la página, así que solo se quita el parámetro.
+  const abrirProblema = (problema) =>
+    actualizarParams({ p: problema.codigo }, { state: { desdeLista: true } })
+  const irAProblema = (problema) =>
+    actualizarParams({ p: problema.codigo }, { replace: true, state: location.state })
+  const cerrarProblema = () => {
+    if (location.state?.desdeLista) navigate(-1)
+    else actualizarParams({ p: null }, { replace: true })
+  }
+
+  // Atajo "/" para ir directo al buscador (como en GitHub o Google).
+  useEffect(() => {
+    const alPresionar = (event) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) || codigoAbierto) return
+      event.preventDefault()
+      buscadorRef.current?.focus()
+    }
+    window.addEventListener('keydown', alPresionar)
+    return () => window.removeEventListener('keydown', alPresionar)
+  }, [codigoAbierto])
+
+  // "Efectivas" = las carpetas marcadas, YA expandidas con sus subcarpetas.
+  // Es lo que realmente se compara contra problema.category al filtrar.
   const categoriasEfectivas = useMemo(() => {
     const ids = new Set()
     categoriasSeleccionadas.forEach((id) => {
@@ -817,61 +1091,100 @@ export default function Problemas() {
     return ids
   }, [categoriasSeleccionadas, categoriasPorId])
 
-  const toggle = (setter) => (value) =>
-    setter((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
+  // Buscador: se arma un texto normalizado por problema (título, tema, tipo,
+  // año y enunciado) y se exige que aparezcan TODAS las palabras escritas.
+  const indiceBusqueda = useMemo(
+    () =>
+      problemas.map((p) => ({
+        id: p._id,
+        texto: normalizarTexto(`${formatearTitulo(p)} ${p.tema} ${p.tipo} ${p.año} ${p.enunciado}`),
+      })),
+    [problemas],
+  )
+  const idsBusqueda = useMemo(() => {
+    const palabras = normalizarTexto(busqueda).split(/\s+/).filter(Boolean)
+    if (palabras.length === 0) return null
+    return new Set(
+      indiceBusqueda.filter((e) => palabras.every((w) => e.texto.includes(w))).map((e) => e.id),
     )
+  }, [busqueda, indiceBusqueda])
 
   const problemasFiltrados = useMemo(() => {
     return problemas.filter((p) => {
+      if (idsBusqueda && !idsBusqueda.has(p._id)) return false
       if (años.length && !años.includes(p.año)) return false
       if (temas.length && !temas.includes(p.tema)) return false
       if (tipos.length && !tipos.includes(p.tipo)) return false
-      // Igual que los demás filtros: si no se seleccionó ninguna carpeta,
-      // no filtra nada. Si se seleccionó alguna, el problema debe caer
-      // dentro de esa carpeta o de alguna de sus subcarpetas.
+      // Si se marcó alguna carpeta, el problema debe caer dentro de ella o
+      // de alguna de sus subcarpetas.
       if (categoriasSeleccionadas.length && !categoriasEfectivas.has(p.category)) {
         return false
       }
       return true
     })
-  }, [problemas, años, temas, tipos, categoriasSeleccionadas, categoriasEfectivas])
+  }, [problemas, idsBusqueda, años, temas, tipos, categoriasSeleccionadas, categoriasEfectivas])
 
-  // Estadística para el contador animado del encabezado — se calcula sola
-  // a partir de los problemas ya cargados, no es un dato nuevo. (Antes
-  // también había un "éxito promedio" aquí; se quitó por ambiguo — no
-  // queda claro promedio de qué exactamente sin abrir cada problema.)
+  // Estadísticas del encabezado y conteos del sidebar: se calculan solas a
+  // partir de los problemas ya cargados, no son datos nuevos.
   const temasCubiertos = useMemo(() => new Set(problemas.map((p) => p.tema)).size, [problemas])
+  const concursosCubiertos = useMemo(() => new Set(problemas.map((p) => p.tipo)).size, [problemas])
 
-  // Llave que cambia cada vez que cambia algún filtro. Se la damos como
-  // `key` a la cuadrícula de tarjetas: cuando React ve una key distinta,
-  // desmonta la cuadrícula vieja y monta una nueva, lo que hace que la
-  // animación de entrada (staggerContainer) se repita en cada filtrado en
-  // vez de jugarse una sola vez al cargar la página.
+  const conteos = useMemo(() => {
+    const contar = (campo) =>
+      problemas.reduce((acc, p) => ({ ...acc, [p[campo]]: (acc[p[campo]] ?? 0) + 1 }), {})
+    return { años: contar('año'), temas: contar('tema'), tipos: contar('tipo') }
+  }, [problemas])
+
+  // Llave que cambia con cada filtro: al dársela a la lista, React la vuelve a
+  // montar y la animación de entrada se repite en cada filtrado.
   const filtrosKey = useMemo(
     () => JSON.stringify({ años, temas, tipos, categoriasSeleccionadas }),
     [años, temas, tipos, categoriasSeleccionadas],
   )
 
   // -------------------------------------------------------------------
-  // Navegación por carpetas (vista tipo AoPS)
+  // Navegación por carpetas (estilo AoPS)
   // -------------------------------------------------------------------
 
-  // Si hay CUALQUIER filtro del sidebar marcado, ese filtro manda: se ve
-  // la cuadrícula plana de siempre (problemasFiltrados), sin importar en
-  // qué carpeta estén — es lo que uno espera al pedir "todos los de
-  // Álgebra". Las carpetas son solo la pantalla de bienvenida para cuando
-  // TODAVÍA no se pidió ningún filtro.
+  // Si hay CUALQUIER filtro marcado, ese filtro manda: se ve la lista plana
+  // filtrada sin importar en qué carpeta estén. Las carpetas son solo la
+  // pantalla de bienvenida para cuando todavía no se pidió ningún filtro.
+  const hayBusqueda = busqueda.trim().length > 0
   const hayFiltrosActivos =
-    años.length > 0 || temas.length > 0 || tipos.length > 0 || categoriasSeleccionadas.length > 0
+    hayBusqueda ||
+    años.length > 0 ||
+    temas.length > 0 ||
+    tipos.length > 0 ||
+    categoriasSeleccionadas.length > 0
+  const totalFiltros =
+    (hayBusqueda ? 1 : 0) +
+    años.length +
+    temas.length +
+    tipos.length +
+    categoriasSeleccionadas.length
 
-  // El nodo de la carpeta que se está viendo ahora mismo (null si estamos
-  // en la raíz). Es solo una búsqueda en un Map, no hace falta useMemo.
+  const limpiarFiltros = () =>
+    actualizarParams({ anio: [], tema: [], tipo: [], carpetas: [], q: null }, { replace: true })
+
+  // Etiquetas quitables de los filtros activos (van arriba de los resultados).
+  const etiquetasActivas = [
+    ...(hayBusqueda
+      ? [{ key: 'busqueda', label: `“${busqueda.trim()}”`, quitar: () => setBusqueda(null) }]
+      : []),
+    ...años.map((v) => ({ key: `año-${v}`, label: v, quitar: () => alternarParam('anio')(v) })),
+    ...temas.map((v) => ({ key: `tema-${v}`, label: v, quitar: () => alternarParam('tema')(v) })),
+    ...tipos.map((v) => ({ key: `tipo-${v}`, label: v, quitar: () => alternarParam('tipo')(v) })),
+    ...categoriasSeleccionadas.map((id) => ({
+      key: `cat-${id}`,
+      label: categoriasPorId.get(id)?.name ?? 'Carpeta',
+      quitar: () => alternarCarpetaFiltro(id),
+    })),
+  ]
+
   const carpetaAbierta = carpetaActual ? categoriasPorId.get(carpetaActual) : null
 
-  // Si la carpeta abierta tiene hijos, esas son las subcarpetas a
-  // mostrar (un nivel más adentro). Si NO tiene hijos (una hoja, ej.
-  // "2021"), ya no hay más carpetas — ahí es donde viven los problemas.
+  // Si la carpeta abierta tiene hijos, esas son las subcarpetas a mostrar. Si
+  // NO tiene hijos (una hoja, ej. "2021"), ahí es donde viven los problemas.
   const subcarpetas = carpetaAbierta ? carpetaAbierta.children : arbolCategorias
   const esCarpetaHoja = Boolean(carpetaAbierta) && carpetaAbierta.children.length === 0
 
@@ -880,8 +1193,7 @@ export default function Problemas() {
     return problemas.filter((p) => p.category === carpetaActual)
   }, [problemas, carpetaActual, esCarpetaHoja])
 
-  // Migas de pan: sube por los `.parent` de la carpeta actual hasta la
-  // raíz, para poder dibujar "Inicio / Putnam / 2021".
+  // Migas de pan: sube por los `.parent` de la carpeta actual hasta la raíz.
   const rutaCarpeta = useMemo(() => {
     const cadena = []
     let nodo = carpetaAbierta
@@ -892,10 +1204,8 @@ export default function Problemas() {
     return [{ _id: null, name: 'Inicio' }, ...cadena]
   }, [carpetaAbierta, categoriasPorId])
 
-  // Qué se dibuja en el área principal, en una sola variable en vez de
-  // repetir las mismas condiciones varias veces en el JSX de abajo:
-  //  - 'filtros'   -> hay un filtro activo (o no hay categorías todavía,
-  //                   ej. si ese endpoint falló): cuadrícula plana.
+  // Qué se dibuja en el área principal:
+  //  - 'filtros'   -> hay un filtro activo (o no hay carpetas todavía).
   //  - 'carpetas'  -> sin filtros, viendo una lista de carpetas.
   //  - 'problemas' -> sin filtros, adentro de una carpeta hoja.
   const vista =
@@ -905,231 +1215,280 @@ export default function Problemas() {
         ? 'problemas'
         : 'carpetas'
 
+  const tituloVista =
+    vista === 'filtros' ? 'Resultados' : carpetaAbierta ? carpetaAbierta.name : 'Concursos'
+  const cantidadVista =
+    vista === 'filtros'
+      ? problemasFiltrados.length
+      : vista === 'problemas'
+        ? problemasDeCarpeta.length
+        : carpetaAbierta
+          ? contarProblemas(carpetaAbierta, problemas)
+          : problemas.length
+
+  const listo = !cargando && !errorCarga
+
+  // Dónde está el problema abierto dentro de la lista que se estaba viendo
+  // (resultados filtrados o la carpeta abierta), para las flechas
+  // anterior/siguiente del panel. Si se llegó por un enlace directo y no hay
+  // esa lista, se usan los problemas de su misma carpeta.
+  const contextoProblema = useMemo(() => {
+    if (!problemaSeleccionado) return null
+    const listaVista =
+      vista === 'filtros' ? problemasFiltrados : vista === 'problemas' ? problemasDeCarpeta : []
+    const lista = listaVista.some((p) => p._id === problemaSeleccionado._id)
+      ? listaVista
+      : problemas.filter((p) => p.category === problemaSeleccionado.category)
+    const i = lista.findIndex((p) => p._id === problemaSeleccionado._id)
+    return {
+      posicion: i + 1,
+      total: lista.length,
+      anterior: lista[i - 1] ?? null,
+      siguiente: lista[i + 1] ?? null,
+    }
+  }, [problemaSeleccionado, vista, problemasFiltrados, problemasDeCarpeta, problemas])
+
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-      <AutumnBackground />
+    <div className="bg-white">
+      <Encabezado
+        auth={auth}
+        onLogout={handleLogout}
+        listo={listo && problemas.length > 0}
+        totalProblemas={problemas.length}
+        totalTemas={temasCubiertos}
+        totalConcursos={concursosCubiertos}
+      />
 
-      {/* Encabezado: mismo fondo shader animado que el Hero (MeshGradient +
-          símbolos flotantes), a menor escala — así la página de Problemas
-          se siente parte del mismo sitio en vez de una página aparte. */}
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={fadeUp}
-        className="relative mb-12 overflow-hidden rounded-3xl px-6 py-10 text-center shadow-2xl shadow-black/20 sm:px-10"
-        style={{ backgroundColor: AXIOMA_DARK }}
-      >
-        <div className="pointer-events-none absolute inset-0">
-          <MeshGradient
-            className="absolute inset-0 h-full w-full"
-            colors={[AXIOMA_RED, AXIOMA_ORANGE, AXIOMA_GOLD, AXIOMA_DARK]}
-            speed={0.25}
-            distortion={0.7}
-            swirl={0.25}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#120303]/70 via-[#120303]/40 to-[#120303]/85" />
-        </div>
-
-        <FloatingSymbol symbol="∑" className="pointer-events-none absolute left-[8%] top-[18%] text-3xl text-[#FFB401]/40 sm:text-4xl" delay={0} duration={7} rotate={-6} />
-        <FloatingSymbol symbol="π" className="pointer-events-none absolute right-[10%] top-[22%] text-3xl text-[#E57505]/40 sm:text-4xl" delay={0.5} duration={6} rotate={6} />
-        <FloatingSymbol symbol="∞" className="pointer-events-none absolute left-[14%] bottom-[16%] text-2xl text-[#FFB401]/30 sm:text-3xl" delay={0.9} duration={8} rotate={4} />
-        <FloatingSymbol symbol="√" className="pointer-events-none absolute right-[16%] bottom-[18%] text-2xl text-[#E57505]/30 sm:text-3xl" delay={1.2} duration={6.5} rotate={-5} />
-
-        <div className="relative flex flex-col items-center gap-3">
-          <span
-            className="bg-clip-text text-xs font-semibold uppercase tracking-[0.35em] text-transparent"
-            style={{ backgroundImage: AXIOMA_GRADIENT }}
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 pb-32 sm:px-8 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-16">
+        {/* Columna de filtros: en escritorio se queda fija (sticky) con su
+            propio scroll interno, para poder ver sus últimas opciones sin
+            depender de qué tan abajo estés en la lista. En móvil se
+            despliega con un botón. */}
+        <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto lg:pr-3">
+          <button
+            type="button"
+            onClick={() => setFiltrosAbiertos((abierto) => !abierto)}
+            aria-expanded={filtrosAbiertos}
+            className={`flex w-full items-center justify-between border border-neutral-950 px-4 py-3 text-xs uppercase tracking-[0.2em] transition-colors hover:bg-[#FFB401] lg:hidden ${focusRing}`}
           >
-            Colección de problemas
-          </span>
-          <h2 className="text-3xl text-white sm:text-4xl">Archivo de Problemas</h2>
-          <p className="max-w-xl text-sm text-white/70">
-            Explora, filtra y comenta problemas de competencias — cada uno es un hilo abierto para discutir.
-          </p>
+            <span>Filtros{totalFiltros > 0 ? ` (${totalFiltros})` : ''}</span>
+            <span aria-hidden="true">{filtrosAbiertos ? '−' : '+'}</span>
+          </button>
 
-          {auth && (
-            <p className="mt-1 rounded-full bg-white/10 px-4 py-1 text-xs text-white/80 backdrop-blur">
-              Conectado como <strong className="text-white">{auth.user.username}</strong> ·{' '}
-              <button onClick={handleLogout} className="underline underline-offset-2 hover:text-white">
-                cerrar sesión
-              </button>
-            </p>
-          )}
-
-          {!cargando && !errorCarga && problemas.length > 0 && (
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-              <div className="flex flex-col items-center">
-                <Counter value={problemas.length} className="font-display text-2xl text-white sm:text-3xl" />
-                <span className="text-[11px] uppercase tracking-wide text-white/60">Problemas</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Counter value={temasCubiertos} className="font-display text-2xl text-white sm:text-3xl" />
-                <span className="text-[11px] uppercase tracking-wide text-white/60">Temas</span>
-              </div>
+          <aside className={`${filtrosAbiertos ? 'mt-6 block' : 'hidden'} lg:mt-0 lg:block`}>
+            <div className="mb-4 hidden items-baseline justify-between lg:flex">
+              <p className={labelClass}>Filtros</p>
+              {hayFiltrosActivos && (
+                <button
+                  type="button"
+                  onClick={limpiarFiltros}
+                  className={`text-xs text-neutral-600 underline underline-offset-4 hover:text-neutral-950 ${focusRing}`}
+                >
+                  Limpiar ({totalFiltros})
+                </button>
+              )}
             </div>
-          )}
+            <FilterGroup
+              title="Año"
+              options={AÑOS}
+              selected={años}
+              onToggle={alternarParam('anio')}
+              counts={conteos.años}
+            />
+            <FilterGroup
+              title="Tema"
+              options={TEMAS}
+              selected={temas}
+              onToggle={alternarParam('tema')}
+              counts={conteos.temas}
+            />
+            <FilterGroup
+              title="Tipo de concurso"
+              options={TIPOS}
+              selected={tipos}
+              onToggle={alternarParam('tipo')}
+              counts={conteos.tipos}
+            />
+            <CategoryFilter
+              raices={arbolCategorias}
+              problemas={problemas}
+              seleccionadas={categoriasSeleccionadas}
+              onToggle={alternarCarpetaFiltro}
+            />
+          </aside>
         </div>
-      </motion.div>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-[240px_1fr]">
-        {/* Sidebar de filtros — misma estructura y lógica de siempre
-            (Año / Tema / Tipo / Carpetas), solo con look nuevo. Se queda
-            fija (sticky) al hacer scroll por la cuadrícula de problemas.
-
-            md:max-h-[...] + md:overflow-y-auto: sin esto, un sticky más
-            alto que la pantalla (Año + Tema + Tipo + Carpetas junto pueden
-            medir más que el alto visible) queda "pegado" en top-28 sin
-            forma de ver su parte de abajo — hasta que el scroll de toda la
-            página llega al FINAL de la cuadrícula de problemas y recién
-            ahí el sidebar se "despega" y se mueve. Dándole su propio alto
-            máximo + scroll interno, el sidebar se desplaza solo, sin
-            depender de qué tan abajo estés en los problemas. */}
-        <motion.aside
-          initial="hidden"
-          animate="show"
-          variants={fadeUp}
-          className="flex flex-col gap-6 self-start rounded-2xl border border-white/60 bg-[#FFFBF5]/90 p-5 shadow-lg shadow-black/5 backdrop-blur-md md:sticky md:top-28 md:max-h-[calc(100vh-9rem)] md:overflow-y-auto"
-        >
-          <div className="flex items-center gap-2 border-b border-brand-200 pb-3">
-            <span className="font-serif text-lg italic text-[#E57505]">∫</span>
-            <h2 className="font-sans text-sm font-bold tracking-wide text-brand-900">Explorar</h2>
-          </div>
-          <FilterGroup
-            title="Año"
-            options={AÑOS}
-            selected={años}
-            onToggle={toggle(setAños)}
-          />
-          <FilterGroup
-            title="Tema"
-            options={TEMAS}
-            selected={temas}
-            onToggle={toggle(setTemas)}
-          />
-          <FilterGroup
-            title="Tipo de concurso"
-            options={TIPOS}
-            selected={tipos}
-            onToggle={toggle(setTipos)}
-          />
-          <CategoryFilter
-            raices={arbolCategorias}
-            seleccionadas={categoriasSeleccionadas}
-            onToggle={toggle(setCategoriasSeleccionadas)}
-          />
-        </motion.aside>
-
-        {/* Área principal: cuadrícula de tarjetas si hay un filtro activo,
-            o si no, la vista de carpetas estilo AoPS (ver `vista` arriba). */}
+        {/* Área principal */}
         <div className="min-w-0">
-          {cargando && (
-            <div className="flex items-center justify-center rounded-2xl border border-dashed border-brand-300 bg-[#FFFBF5]/95 py-16 text-brand-400">
-              Cargando problemas...
-            </div>
-          )}
+          {cargando && <Cargando />}
 
           {!cargando && errorCarga && (
-            <div className="flex items-center justify-center rounded-2xl border border-dashed border-rose-300 bg-rose-50 px-6 py-16 text-center text-rose-600">
-              No se pudo conectar con el servidor: {errorCarga}
-            </div>
+            <Estado tono="error">No se pudo conectar con el servidor: {errorCarga}</Estado>
           )}
 
-          {/* Migas de pan: solo tienen sentido navegando carpetas, y solo
-              una vez que ya se entró a alguna (rutaCarpeta.length > 1 —
-              en la raíz, rutaCarpeta es nada más [{name:'Inicio'}]). */}
-          {!cargando && !errorCarga && vista !== 'filtros' && rutaCarpeta.length > 1 && (
-            <Breadcrumb ruta={rutaCarpeta} onNavigate={setCarpetaActual} />
-          )}
-
-          {!cargando && !errorCarga && vista === 'filtros' && problemasFiltrados.length === 0 && (
-            <div className="flex items-center justify-center rounded-2xl border border-dashed border-brand-300 bg-[#FFFBF5]/95 py-16 text-brand-400">
-              No hay problemas que coincidan con los filtros.
-            </div>
-          )}
-
-          {!cargando && !errorCarga && vista === 'filtros' && problemasFiltrados.length > 0 && (
-            <motion.div
-              key={filtrosKey}
-              variants={staggerContainer(0.04)}
-              initial="hidden"
-              animate="show"
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              {problemasFiltrados.map((problema, i) => (
-                <ProblemaCard
-                  key={problema._id}
-                  problema={problema}
-                  tilt={i % 2 === 0 ? -1.2 : 1.2}
-                  onOpen={setProblemaSeleccionado}
+          {listo && (
+            <>
+              {/* Buscador: título, tema, tipo, año y enunciado. Escribir en él
+                  cambia la vista a "resultados"; "/" lo enfoca desde
+                  cualquier parte de la página. */}
+              <div className="relative mb-8">
+                <label htmlFor="buscador-problemas" className="sr-only">
+                  Buscar problemas
+                </label>
+                <input
+                  id="buscador-problemas"
+                  ref={buscadorRef}
+                  type="search"
+                  value={busqueda}
+                  onChange={(event) => setBusqueda(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Escape') {
+                      if (busqueda) setBusqueda(null)
+                      event.currentTarget.blur()
+                    }
+                  }}
+                  placeholder="Buscar por tema, año, concurso o palabra del enunciado…"
+                  autoComplete="off"
+                  className={`${inputClass} py-3.5 pr-12 text-base`}
                 />
-              ))}
-            </motion.div>
-          )}
+                {!busqueda && (
+                  <kbd
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 border border-neutral-300 px-1.5 py-0.5 text-[11px] text-neutral-500 sm:block"
+                  >
+                    /
+                  </kbd>
+                )}
+              </div>
 
-          {/* Vista de carpetas: Putnam / OMMU Primera Ronda / OMMU Nacional
-              en la raíz, o las subcarpetas (años) de la que se abrió. */}
-          {!cargando && !errorCarga && vista === 'carpetas' && (
-            <motion.div
-              key={carpetaActual ?? 'raiz'}
-              variants={staggerContainer(0.06)}
-              initial="hidden"
-              animate="show"
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              {subcarpetas.map((nodo, i) => (
-                <FolderCard
-                  key={nodo._id}
-                  nodo={nodo}
-                  count={contarProblemas(nodo, problemas)}
-                  color={CATEGORY_ACCENTS[i % CATEGORY_ACCENTS.length]}
-                  tilt={i % 2 === 0 ? -1.2 : 1.2}
-                  onOpen={setCarpetaActual}
-                />
-              ))}
-            </motion.div>
-          )}
+              {/* Migas de pan: solo tienen sentido navegando carpetas y una
+                  vez que ya se entró a alguna (en la raíz, la ruta es solo
+                  [Inicio]). */}
+              {vista !== 'filtros' && rutaCarpeta.length > 1 && (
+                <Breadcrumb ruta={rutaCarpeta} onNavigate={setCarpetaActual} />
+              )}
 
-          {/* Adentro de una carpeta hoja (ej. "2021"): ya no hay más
-              carpetas, aquí es donde por fin se ven los problemas. */}
-          {!cargando && !errorCarga && vista === 'problemas' && problemasDeCarpeta.length === 0 && (
-            <div className="flex items-center justify-center rounded-2xl border border-dashed border-brand-300 bg-[#FFFBF5]/95 py-16 text-brand-400">
-              Esta carpeta todavía no tiene problemas.
-            </div>
-          )}
+              <div className="flex items-end justify-between gap-6 border-b border-neutral-950 pb-3">
+                <h2 className="text-3xl leading-none text-neutral-950 sm:text-4xl">{tituloVista}</h2>
+                <p className="shrink-0 text-sm tabular-nums text-neutral-500">
+                  {cantidadVista} {cantidadVista === 1 ? 'problema' : 'problemas'}
+                </p>
+              </div>
 
-          {!cargando && !errorCarga && vista === 'problemas' && problemasDeCarpeta.length > 0 && (
-            <motion.div
-              key={carpetaActual}
-              variants={staggerContainer(0.04)}
-              initial="hidden"
-              animate="show"
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              {problemasDeCarpeta.map((problema, i) => (
-                <ProblemaCard
-                  key={problema._id}
-                  problema={problema}
-                  tilt={i % 2 === 0 ? -1.2 : 1.2}
-                  onOpen={setProblemaSeleccionado}
-                />
-              ))}
-            </motion.div>
+              {/* Filtros activos como etiquetas que se pueden quitar. */}
+              {hayFiltrosActivos && (
+                <div className="flex flex-wrap items-center gap-2 pt-4">
+                  {etiquetasActivas.map((etiqueta) => (
+                    <button
+                      key={etiqueta.key}
+                      type="button"
+                      onClick={etiqueta.quitar}
+                      aria-label={`Quitar filtro ${etiqueta.label}`}
+                      className={`inline-flex items-center gap-2 border border-neutral-950 px-3 py-1 text-xs transition-colors hover:bg-[#FFB401] ${focusRing}`}
+                    >
+                      {etiqueta.label}
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={limpiarFiltros}
+                    className={`ml-2 text-xs text-neutral-600 underline underline-offset-4 hover:text-neutral-950 ${focusRing}`}
+                  >
+                    Limpiar todo
+                  </button>
+                </div>
+              )}
+
+              <div className="mt-6">
+                {vista === 'filtros' && problemasFiltrados.length === 0 && (
+                  <Estado>No hay problemas que coincidan con los filtros.</Estado>
+                )}
+
+                {vista === 'filtros' && problemasFiltrados.length > 0 && (
+                  <motion.div
+                    key={filtrosKey}
+                    variants={staggerContainer(0.03)}
+                    initial="hidden"
+                    animate="show"
+                    className="border-t border-neutral-950"
+                  >
+                    {problemasFiltrados.map((problema) => (
+                      <ProblemaRow
+                        key={problema._id}
+                        problema={problema}
+                        onOpen={abrirProblema}
+                      />
+                    ))}
+                  </motion.div>
+                )}
+
+                {/* Lista de carpetas: Putnam / OMMU Primera Ronda / OMMU
+                    Nacional en la raíz, o las subcarpetas (años) de la que
+                    se abrió. */}
+                {vista === 'carpetas' && (
+                  <motion.div
+                    key={carpetaActual ?? 'raiz'}
+                    variants={staggerContainer(0.06)}
+                    initial="hidden"
+                    animate="show"
+                    className="border-t border-neutral-950"
+                  >
+                    {subcarpetas.map((nodo, i) => (
+                      <FolderRow
+                        key={nodo._id}
+                        nodo={nodo}
+                        index={i}
+                        count={contarProblemas(nodo, problemas)}
+                        onOpen={setCarpetaActual}
+                      />
+                    ))}
+                  </motion.div>
+                )}
+
+                {/* Adentro de una carpeta hoja (ej. "2021"): ya no hay más
+                    carpetas, aquí por fin se ven los problemas. */}
+                {vista === 'problemas' && problemasDeCarpeta.length === 0 && (
+                  <Estado>Esta carpeta todavía no tiene problemas.</Estado>
+                )}
+
+                {vista === 'problemas' && problemasDeCarpeta.length > 0 && (
+                  <motion.div
+                    key={carpetaActual}
+                    variants={staggerContainer(0.03)}
+                    initial="hidden"
+                    animate="show"
+                    className="border-t border-neutral-950"
+                  >
+                    {problemasDeCarpeta.map((problema) => (
+                      <ProblemaRow
+                        key={problema._id}
+                        problema={problema}
+                        onOpen={abrirProblema}
+                      />
+                    ))}
+                  </motion.div>
+                )}
+              </div>
+            </>
           )}
         </div>
       </div>
 
       <AnimatePresence>
-        {problemaSeleccionado && (
-          <ProblemaModal
-            key={problemaSeleccionado._id}
+        {problemaSeleccionado && contextoProblema && (
+          <ProblemaPanel
+            key="panel-problema"
             problema={problemaSeleccionado}
-            onClose={() => setProblemaSeleccionado(null)}
+            contexto={contextoProblema}
+            onIr={irAProblema}
+            onClose={cerrarProblema}
             auth={auth}
             onAuthSuccess={handleAuthSuccess}
             onAuthExpired={handleLogout}
           />
         )}
       </AnimatePresence>
-    </section>
+    </div>
   )
 }

@@ -2,13 +2,23 @@ import { useState } from 'react'
 import { apiFetch } from '../lib/api'
 import GoogleButton from './GoogleButton'
 
-const AXIOMA_GRADIENT = 'linear-gradient(135deg, #FFB401 0%, #E57505 45%, #B70B0D 100%)'
-
 // Formulario de inicio de sesión / registro. Se usa en dos lugares: dentro
 // del modal de un problema (justo antes de comentar) y en la página
 // /cuenta a la que lleva el Navbar. Solo habla con la API; quien lo usa
 // decide qué hacer con la sesión en onAuthSuccess (normalmente login() de
 // useAuth).
+//
+// Estilo: plano y sin color de fondo (blanco/negro, sin esquinas
+// redondeadas ni sombras) — el mismo lenguaje que ya usan los demás
+// botones del sitio (Hero, Contacto, Problemas), para que este formulario
+// no se vea como un componente aparte.
+const focusRing = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950'
+
+const inputClass =
+  'w-full border border-neutral-950 bg-white px-3 py-2.5 text-sm text-neutral-950 outline-none placeholder:text-neutral-400 focus:outline-2 focus:outline-neutral-950'
+
+const primaryButtonClass = `border border-neutral-950 bg-[#FFB401] px-5 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-neutral-950 transition-colors hover:bg-white disabled:opacity-50 ${focusRing}`
+
 export default function AuthForm({ onAuthSuccess, motivo = 'para comentar' }) {
   const [modo, setModo] = useState('login') // 'login' | 'signup'
   const [username, setUsername] = useState('')
@@ -49,13 +59,10 @@ export default function AuthForm({ onAuthSuccess, motivo = 'para comentar' }) {
     }
   }
 
-  const inputClass =
-    'rounded-lg border border-brand-300 px-3 py-2 text-sm outline-none transition-colors focus:border-[#E57505] focus:ring-2 focus:ring-[#E57505]/30'
-
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-xl border border-brand-200 bg-white p-4 shadow-sm">
-      <p className="text-sm text-brand-700">
-        {modo === 'login' ? `Inicia sesión ${motivo}.` : `Crea una cuenta ${motivo}.`}
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 border border-neutral-950 bg-white p-5">
+      <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
+        {modo === 'login' ? `Inicia sesión ${motivo}` : `Crea una cuenta ${motivo}`}
       </p>
 
       {modo === 'signup' && (
@@ -93,21 +100,16 @@ export default function AuthForm({ onAuthSuccess, motivo = 'para comentar' }) {
         className={inputClass}
       />
 
-      {error && <p className="text-sm text-rose-600">{error}</p>}
+      {error && <p className="text-sm text-red-700">{error}</p>}
 
       <div className="flex items-center justify-between gap-3">
-        <button
-          type="submit"
-          disabled={enviando}
-          className="rounded-lg px-4 py-2 text-sm font-medium text-white shadow-md transition-transform active:scale-95 disabled:opacity-50"
-          style={{ backgroundImage: AXIOMA_GRADIENT }}
-        >
-          {enviando ? 'Un momento...' : modo === 'login' ? 'Iniciar sesión' : 'Registrarme'}
+        <button type="submit" disabled={enviando} className={primaryButtonClass}>
+          {enviando ? 'Un momento…' : modo === 'login' ? 'Iniciar sesión' : 'Registrarme'}
         </button>
         <button
           type="button"
           onClick={() => setModo(modo === 'login' ? 'signup' : 'login')}
-          className="text-sm text-brand-600 underline hover:text-[#E57505]"
+          className={`text-sm text-neutral-600 underline underline-offset-4 hover:text-neutral-950 ${focusRing}`}
         >
           {modo === 'login' ? 'Crear una cuenta' : 'Ya tengo cuenta'}
         </button>
@@ -115,8 +117,8 @@ export default function AuthForm({ onAuthSuccess, motivo = 'para comentar' }) {
 
       {import.meta.env.VITE_GOOGLE_CLIENT_ID && (
         <>
-          <div className="flex items-center gap-3 text-xs text-brand-400" aria-hidden="true">
-            <span className="h-px flex-1 bg-brand-200" />o<span className="h-px flex-1 bg-brand-200" />
+          <div className="flex items-center gap-3 text-xs text-neutral-400" aria-hidden="true">
+            <span className="h-px flex-1 bg-neutral-300" />o<span className="h-px flex-1 bg-neutral-300" />
           </div>
           <GoogleButton onCredential={handleGoogle} modo={modo} />
         </>

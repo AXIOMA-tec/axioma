@@ -4,6 +4,7 @@ import { MeshGradient } from '@paper-design/shaders-react'
 import FloatingSymbol from '../motion/FloatingSymbol'
 import DrawnCurve from '../motion/DrawnCurve'
 import { EASE, staggerContainer } from '../motion/variants'
+import { UNETE_URL } from '../../lib/contacto'
 
 // Sección Hero (id="inicio")
 // Fondo animado con shaders (@paper-design/shaders-react) usando la
@@ -34,7 +35,7 @@ export default function Hero() {
     <section
       id="inicio"
       data-navbar-tone="light"
-      className="relative flex min-h-screen pb-20 scroll-mt-16 flex-col items-center justify-center gap-10 overflow-hidden bg-[#120303] px-4 pt-16 text-center sm:px-6"
+      className="relative flex h-svh min-h-[600px] scroll-mt-16 flex-col items-center justify-center gap-[clamp(1rem,3svh,2rem)] overflow-hidden bg-[#120303] px-4 pb-20 pt-20 text-center sm:px-6"
     >
       {/* Fondo shader: mesh gradient animado en la paleta Axioma */}
       <div className="pointer-events-none absolute inset-0">
@@ -68,13 +69,13 @@ export default function Hero() {
         className="relative flex flex-col items-center gap-4"
       >
         <span
-          className="bg-clip-text text-xs font-semibold uppercase tracking-[0.35em] text-transparent mt-6 sm:text-sm inline-block"
+          className="inline-block bg-clip-text text-xs font-semibold uppercase tracking-[0.3em] text-transparent sm:text-sm"
           style={{
             backgroundImage:
               'linear-gradient(135deg, #FFB401 0%, #E57505 45%, #B70B0D 100%)',
           }}
         >
-          AXIOMA | Asociación X Interés Olímpico Matemático del Tecnológico de Monterrey
+          Asociación X Interés Olímpico Matemático · Tec de Monterrey
         </span>
 
         <motion.div
@@ -85,13 +86,13 @@ export default function Hero() {
         >
           <motion.div variants={word}>
             <img
-              src="/AXIOMA LOGOS (2).png"
+              src="/axioma-logo-hero.png"
               alt="Axioma"
-              className="h-[300px] w-auto drop-shadow-[0_0_45px_rgba(255,180,1,0.35)] sm:h-[400px] lg:h-[500px]"
+              className="h-auto max-h-[31svh] w-[min(88vw,860px)] object-contain drop-shadow-[0_0_45px_rgba(255,180,1,0.35)]"
             />
           </motion.div>
 
-          <motion.p variants={word} className="max-w-xl text-lg text-white/85 sm:text-xl">
+          <motion.p variants={word} className="max-w-2xl text-base text-white/85 sm:text-lg lg:text-xl">
             Capítulo Estudiantil oficial de la Sociedad Matemática Mexicana (SMM). Un espacio dedicado al entrenamiento de alto rendimiento, la divulgación STEM y la resolución de problemas lógicos de nivel olímpico.
           </motion.p>
         </motion.div>
@@ -99,25 +100,39 @@ export default function Hero() {
 
       {/* Curva paramétrica decorativa que se dibuja al cargar la sección,
           recoloreada a dorado para leerse sobre el fondo oscuro */}
-      <DrawnCurve className="h-24 w-64 text-[#FFB401]/70 sm:h-28 sm:w-80" />
+      <DrawnCurve className="hidden h-20 w-64 text-[#FFB401]/70 [@media(min-height:820px)]:block sm:w-80" />
 
-      <motion.button
-        type="button"
-        onClick={() => navigate('/problemas')}
+      {/* Dos acciones a la vista desde la primera pantalla: "Únete" es la
+          principal (relleno degradado) y "Ver problemas" la secundaria. */}
+      <motion.div
         initial="hidden"
         animate="visible"
         variants={fadeUp}
         transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.97 }}
-        className="relative rounded-full px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-[#B70B0D]/50"
-        style={{
-          background:
-            'linear-gradient(135deg, #FFB401 0%, #E57505 45%, #B70B0D 100%)',
-        }}
+        className="relative flex flex-wrap items-center justify-center gap-3"
       >
-        Ver Problemas
-      </motion.button>
+        {/* Botones planos: rectangulares, color sólido, sin sombras ni
+            degradados (mismo lenguaje que /problemas). Al pasar el mouse
+            invierten el color; la flecha se desliza. */}
+        <a
+          href={UNETE_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="group inline-flex items-center gap-3 border border-[#FFB401] bg-[#FFB401] px-7 py-3.5 text-xs font-medium uppercase tracking-[0.18em] text-[#120303] transition-colors duration-300 hover:border-white hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          Únete
+          <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+            →
+          </span>
+        </a>
+        <button
+          type="button"
+          onClick={() => navigate('/problemas')}
+          className="inline-flex items-center border border-white/60 px-7 py-3.5 text-xs font-medium uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-[#120303] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          Ver problemas
+        </button>
+      </motion.div>
 
       {/* Ícono de flecha animada indicando scroll hacia abajo (clickeable) */}
       <motion.button

@@ -43,14 +43,22 @@ const desktopLinkClass = (isActive) =>
     isActive ? 'opacity-100' : 'opacity-70 hover:opacity-100 focus-visible:opacity-100'
   }`
 
-const MOBILE_LINK_CLASS = `block px-3 py-2 text-sm font-medium transition-colors hover:bg-current/10 ${FOCUS_RING}`
+const mobileLinkClass = (isActive) =>
+  `block px-3 py-2 text-sm font-medium transition-colors hover:bg-current/10 ${FOCUS_RING} ${
+    isActive ? 'bg-current/10' : ''
+  }`
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const activeId = useActiveSection(SECTION_IDS)
+  const seccionVisible = useActiveSection(SECTION_IDS)
+  // Las secciones solo existen en la portada ("/"). En otra ruta (ej.
+  // /problemas) ninguna sección está activa; lo que se marca es la página.
+  const enPortada = location.pathname === '/'
+  const activeId = enPortada ? seccionVisible : null
+  const enProblemas = location.pathname === ROUTE_LINK.path
   const barRef = useRef(null)
   const tone = useNavbarTone(barRef)
   const { auth } = useAuth()
@@ -81,8 +89,13 @@ export default function Navbar() {
   }
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 backdrop-blur transition-[padding,color] duration-300 ${TONE_CLASS[tone]} ${
+      className={`fixed top-0 inset-x-0 z-50 backdrop-blur transition-[padding,color,background-color,box-shadow] duration-300 ${TONE_CLASS[tone]} ${
         isScrolled ? 'py-0' : 'py-1.5'
+      } ${
+        // Sobre secciones claras, al hacer scroll, la barra se rellena: así el
+        // texto de la página que pasa por debajo no se mezcla con los links.
+        // Sobre secciones oscuras (Hero, Contacto) se queda transparente.
+        tone === 'dark' && isScrolled ? 'bg-white/85 shadow-[0_1px_0_0_rgba(15,23,42,0.08)]' : ''
       }`}
     >
       <nav ref={barRef} className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 sm:px-6">
@@ -121,9 +134,17 @@ export default function Navbar() {
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
-              className={desktopLinkClass(false)}
+              aria-current={enProblemas ? 'page' : undefined}
+              className={desktopLinkClass(enProblemas)}
             >
               {ROUTE_LINK.label}
+              {enProblemas && (
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-current"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
             </Link>
           </li>
           <li className="relative">
@@ -143,9 +164,11 @@ export default function Navbar() {
             </a>
           </li>
           <li>
+            {/* Plano, como el resto de los botones del sitio: borde + texto,
+                sin píldora ni relleno de color. */}
             <Link
               to={authLink.path}
-              className={`${FOCUS_RING} rounded-full border border-current px-3 py-1 text-sm font-medium transition-opacity ${
+              className={`${FOCUS_RING} border border-current px-3 py-1 text-sm font-medium transition-opacity ${
                 location.pathname === authLink.path ? 'opacity-100' : 'opacity-70 hover:opacity-100 focus-visible:opacity-100'
               }`}
             >
@@ -181,7 +204,8 @@ export default function Navbar() {
               <a
                 href={`#${link.id}`}
                 onClick={(event) => handleScrollClick(event, link.id)}
-                className={MOBILE_LINK_CLASS}
+                aria-current={activeId === link.id ? 'true' : undefined}
+                className={mobileLinkClass(activeId === link.id)}
               >
                 {link.label}
               </a>
@@ -191,7 +215,8 @@ export default function Navbar() {
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
-              className={MOBILE_LINK_CLASS}
+              aria-current={enProblemas ? 'page' : undefined}
+              className={mobileLinkClass(enProblemas)}
             >
               {ROUTE_LINK.label}
             </Link>
@@ -200,13 +225,19 @@ export default function Navbar() {
             <a
               href={`#${CONTACTO_LINK.id}`}
               onClick={(event) => handleScrollClick(event, CONTACTO_LINK.id)}
-              className={MOBILE_LINK_CLASS}
+              aria-current={activeId === CONTACTO_LINK.id ? 'true' : undefined}
+              className={mobileLinkClass(activeId === CONTACTO_LINK.id)}
             >
               {CONTACTO_LINK.label}
             </a>
           </li>
           <li>
-            <Link to={authLink.path} onClick={() => setIsOpen(false)} className={MOBILE_LINK_CLASS}>
+            <Link
+              to={authLink.path}
+              onClick={() => setIsOpen(false)}
+              aria-current={location.pathname === authLink.path ? 'page' : undefined}
+              className={mobileLinkClass(location.pathname === authLink.path)}
+            >
               {authLink.label}
             </Link>
           </li>
