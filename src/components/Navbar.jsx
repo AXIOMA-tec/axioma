@@ -43,7 +43,12 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const activeId = useActiveSection(SECTION_IDS)
+  const seccionVisible = useActiveSection(SECTION_IDS)
+  // Las secciones solo existen en la portada ("/"). En otra ruta (ej.
+  // /problemas) ninguna sección está activa; lo que se marca es la página.
+  const enPortada = location.pathname === '/'
+  const activeId = enPortada ? seccionVisible : null
+  const enProblemas = location.pathname === ROUTE_LINK.path
   const barRef = useRef(null)
   const tone = useNavbarTone(barRef)
 
@@ -112,9 +117,17 @@ export default function Navbar() {
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
-              className={desktopLinkClass(false)}
+              aria-current={enProblemas ? 'page' : undefined}
+              className={desktopLinkClass(enProblemas)}
             >
               {ROUTE_LINK.label}
+              {enProblemas && (
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-current"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
             </Link>
           </li>
           <li className="relative">
