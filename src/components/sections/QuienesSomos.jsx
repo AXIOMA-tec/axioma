@@ -59,7 +59,7 @@ function MagneticCard() {
                 : '-bottom-4 left-1/4 sm:-bottom-6'
           }`}
         >
-          <p className="text-lg font-bold text-brand-900 sm:text-xl">
+          <p className="font-display text-lg text-brand-900 sm:text-xl">
             <Counter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
           </p>
           <p className="whitespace-nowrap text-[11px] font-medium text-brand-900/60">{stat.label}</p>

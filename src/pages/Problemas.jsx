@@ -1082,7 +1082,7 @@ export default function Problemas() {
           >
             Colección de problemas
           </span>
-          <h2 className="text-3xl font-bold text-white sm:text-4xl">Archivo de Problemas</h2>
+          <h2 className="text-3xl text-white sm:text-4xl">Archivo de Problemas</h2>
           <p className="max-w-xl text-sm text-white/70">
             Explora, filtra y comenta problemas de competencias — cada uno es un hilo abierto para discutir.
           </p>
@@ -1099,11 +1099,11 @@ export default function Problemas() {
           {!cargando && !errorCarga && problemas.length > 0 && (
             <div className="mt-4 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
               <div className="flex flex-col items-center">
-                <Counter value={problemas.length} className="text-2xl font-bold text-white sm:text-3xl" />
+                <Counter value={problemas.length} className="font-display text-2xl text-white sm:text-3xl" />
                 <span className="text-[11px] uppercase tracking-wide text-white/60">Problemas</span>
               </div>
               <div className="flex flex-col items-center">
-                <Counter value={temasCubiertos} className="text-2xl font-bold text-white sm:text-3xl" />
+                <Counter value={temasCubiertos} className="font-display text-2xl text-white sm:text-3xl" />
                 <span className="text-[11px] uppercase tracking-wide text-white/60">Temas</span>
               </div>
             </div>
@@ -1132,7 +1132,7 @@ export default function Problemas() {
         >
           <div className="flex items-center gap-2 border-b border-brand-200 pb-3">
             <span className="font-serif text-lg italic text-[#E57505]">∫</span>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-brand-900">Explorar</h2>
+            <h2 className="font-sans text-sm font-bold tracking-wide text-brand-900">Explorar</h2>
           </div>
           <FilterGroup
             title="Año"

@@ -33,6 +33,7 @@ export default function Hero() {
   return (
     <section
       id="inicio"
+      data-navbar-tone="light"
       className="relative flex min-h-screen pb-20 scroll-mt-16 flex-col items-center justify-center gap-10 overflow-hidden bg-[#120303] px-4 pt-16 text-center sm:px-6"
     >
       {/* Fondo shader: mesh gradient animado en la paleta Axioma */}

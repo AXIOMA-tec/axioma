@@ -47,7 +47,7 @@ export default function Contacto() {
 
       {/* CONTÁCTANOS */}
       <div className="relative text-center">
-        <h2 className="text-4xl font-bold uppercase text-white drop-shadow-[0_0_25px_rgba(229,117,5,0.45)] sm:text-5xl">
+        <h2 className="text-4xl text-white drop-shadow-[0_0_25px_rgba(229,117,5,0.45)] sm:text-5xl">
           Contáctanos
         </h2>
 

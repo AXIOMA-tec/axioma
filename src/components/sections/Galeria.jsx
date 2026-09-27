@@ -94,7 +94,7 @@ function Polaroid({ imagen, offsetClass }) {
           <span className="px-3 text-center">{imagen.alt}</span>
         )}
       </div>
-      <p className="mt-2 truncate font-hand text-base text-brand-900/70">{imagen.alt}</p>
+      <p className="mt-2 truncate text-sm text-brand-900/70">{imagen.alt}</p>
     </motion.button>
   )
 }

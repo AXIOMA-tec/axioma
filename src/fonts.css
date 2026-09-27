@@ -1,0 +1,35 @@
+/*
+  Tipografías de marca de Axioma. Este es el ÚNICO lugar donde se
+  declaran los archivos de fuente (en /public/fonts). Los componentes solo
+  usan las utilidades de Tailwind definidas en @theme (index.css):
+
+    font-display -> Alyssum                     títulos y cifras destacadas
+    font-sans    -> ITC Avant Garde Gothic Std  todo el texto (default del sitio)
+
+  Los font-family son los nombres tipográficos internos de cada archivo
+  (name ID 16), y font-weight es el que declara el propio archivo
+  (OS/2 usWeightClass).
+
+  ITC Avant Garde solo viene en Book (300): font-semibold / font-bold se
+  ven con negrita sintetizada por el navegador. Si consiguen el archivo
+  Demi o Bold, agréguenlo como otro @font-face con la misma familia y su
+  peso real.
+*/
+
+@font-face {
+  font-family: 'Alyssum';
+  src: url('/fonts/Alyssum-Sans.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  /* Solo se usa en títulos: mejor esperar al archivo (pesa ~10 kB y se
+     precarga en index.html) que mostrar un instante la fuente genérica. */
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'ITC Avant Garde Gothic Std';
+  src: url('/fonts/ITCAvantGardeStd-Bk.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}

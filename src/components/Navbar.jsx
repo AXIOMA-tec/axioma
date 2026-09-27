@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useActiveSection } from '../hooks/useActiveSection'
+import { useNavbarTone } from '../hooks/useNavbarTone'
 
 // Links que hacen scroll a una sección del one-pager ("/").
 // Si agregan una sección nueva al one-pager, agréguenla aquí también.
@@ -20,12 +21,31 @@ const CONTACTO_LINK = { id: 'contacto', label: 'Contacto' }
 
 const SECTION_IDS = [...SCROLL_LINKS.map((link) => link.id), CONTACTO_LINK.id]
 
+// El color de todo el Navbar sale del tono de la sección que tiene detrás
+// (ver useNavbarTone): los links heredan ese color con currentColor, así
+// que hover/active/focus funcionan igual en blanco que en negro.
+const TONE_CLASS = {
+  light: 'text-white',
+  dark: 'text-black',
+}
+
+const FOCUS_RING = 'rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current'
+
+const desktopLinkClass = (isActive) =>
+  `relative text-sm font-medium transition-opacity ${FOCUS_RING} ${
+    isActive ? 'opacity-100' : 'opacity-70 hover:opacity-100 focus-visible:opacity-100'
+  }`
+
+const MOBILE_LINK_CLASS = `block px-3 py-2 text-sm font-medium transition-colors hover:bg-current/10 ${FOCUS_RING}`
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const activeId = useActiveSection(SECTION_IDS)
+  const barRef = useRef(null)
+  const tone = useNavbarTone(barRef)
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24)
@@ -50,18 +70,17 @@ export default function Navbar() {
     event.preventDefault()
     goToSection(id)
   }
- {/*border-b border-brand-200 */}
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50  bg-brand-[#FFB401]/90 backdrop-blur transition-[padding] duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 backdrop-blur transition-[padding,color] duration-300 ${TONE_CLASS[tone]} ${
         isScrolled ? 'py-0' : 'py-1.5'
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 sm:px-6">
+      <nav ref={barRef} className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 sm:px-6">
        <a
           href="#inicio"
           onClick={(event) => handleScrollClick(event, 'inicio')}
-          className="flex items-center"
+          className={`flex items-center ${FOCUS_RING}`}
         >
           <img
             src="/AXIOMA LOGOS (3).png"
@@ -76,15 +95,13 @@ export default function Navbar() {
               <a
                 href={`#${link.id}`}
                 onClick={(event) => handleScrollClick(event, link.id)}
-                className={`relative text-sm font-medium transition-colors ${
-                  activeId === link.id ? 'text-brand-900' : 'text-brand-600 hover:text-brand-900'
-                }`}
+                className={desktopLinkClass(activeId === link.id)}
               >
                 {link.label}
                 {activeId === link.id && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-brand-900"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-current"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -95,7 +112,7 @@ export default function Navbar() {
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
-              className="text-sm font-medium text-brand-600 transition-colors hover:text-brand-900"
+              className={desktopLinkClass(false)}
             >
               {ROUTE_LINK.label}
             </Link>
@@ -104,15 +121,13 @@ export default function Navbar() {
             <a
               href={`#${CONTACTO_LINK.id}`}
               onClick={(event) => handleScrollClick(event, CONTACTO_LINK.id)}
-              className={`relative text-sm font-medium transition-colors ${
-                activeId === CONTACTO_LINK.id ? 'text-brand-900' : 'text-brand-600 hover:text-brand-900'
-              }`}
+              className={desktopLinkClass(activeId === CONTACTO_LINK.id)}
             >
               {CONTACTO_LINK.label}
               {activeId === CONTACTO_LINK.id && (
                 <motion.span
                   layoutId="nav-underline"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-brand-[#FFB401]/90"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-current"
                   transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                 />
               )}
@@ -123,7 +138,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="inline-flex items-center justify-center rounded-md p-2 text-brand-700 md:hidden "
+          className={`inline-flex items-center justify-center p-2 md:hidden ${FOCUS_RING}`}
           aria-label="Abrir menú de navegación"
           aria-expanded={isOpen}
         >
@@ -136,15 +151,18 @@ export default function Navbar() {
         </button>
       </nav>
 
-{/* border-t border-brand-200*/}
+      {/* El menú mobile vive dentro del <header>, así que el backdrop-blur
+          del header ya desenfoca lo que queda detrás de él también. No se
+          repite aquí: un backdrop-filter anidado solo vería el header, no
+          la página. */}
       {isOpen && (
-        <ul className="flex flex-col gap-1  bg-brand-[#FFB401]/90 backdrop-blur px-4 pb-4 md:hidden">
+        <ul className="flex flex-col gap-1 px-4 pb-4 md:hidden">
           {SCROLL_LINKS.map((link) => (
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
                 onClick={(event) => handleScrollClick(event, link.id)}
-                className="block rounded-md px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-100"
+                className={MOBILE_LINK_CLASS}
               >
                 {link.label}
               </a>
@@ -154,7 +172,7 @@ export default function Navbar() {
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
-              className="block rounded-md px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-100"
+              className={MOBILE_LINK_CLASS}
             >
               {ROUTE_LINK.label}
             </Link>
@@ -163,7 +181,7 @@ export default function Navbar() {
             <a
               href={`#${CONTACTO_LINK.id}`}
               onClick={(event) => handleScrollClick(event, CONTACTO_LINK.id)}
-              className="block rounded-md px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-100"
+              className={MOBILE_LINK_CLASS}
             >
               {CONTACTO_LINK.label}
             </a>
