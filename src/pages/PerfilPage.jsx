@@ -110,6 +110,11 @@ function PerfilPage() {
             <Link to="/" className={secondaryButtonClass}>
               Volver al inicio
             </Link>
+            {mostrado.isAdmin && (
+              <Link to="/admin/eventos" className={secondaryButtonClass}>
+                Panel de administración
+              </Link>
+            )}
             <button
               type="button"
               onClick={logout}

@@ -80,14 +80,9 @@ export const miembros = [
     email: 'A01286440@tec.mx',
     linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
     github: 'https://github.com/emigzzh',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Luis Daniel González Alcocer', rol: 'Coordinador de Marketing',
+        email: '', linkedin: 'https://www.linkedin.com/in/ludago4499' },
     ],
   },
   {
@@ -98,12 +93,11 @@ export const miembros = [
     email: 'A00845539@tec.mx',
     linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
     github: 'https://github.com/catherinegd7',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Ethiel Favila Alvarado', rol: 'Coordinadora de Investigación',
+        email: '', linkedin: 'https://www.linkedin.com/in/ethiel-favila-alvarado-459ba2358/' },
+      { nombre: 'Elías Perianza Robles', rol: 'Coordinador de Investigación',
+        email: '', linkedin: 'https://www.linkedin.com/in/elias-perianza-robles/' },
     ],
   },
   {
@@ -119,6 +113,22 @@ export const miembros = [
     coordinadores: [
       { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Finanzas',
         email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+    ],
+  },
+  {
+    id: 8,
+    nombre: 'Orlando Gael Cardozo Beltrán',
+    rol: 'Dirección de Responsabilidad Social',
+    foto: null,
+    email: 'A00841016@tec.mx',
+    linkedin: 'https://www.linkedin.com/in/orlando-gael-cardozo-beltr%C3%A1n-884b913b5/',
+    // Sin GitHub: el botón simplemente no aparece.
+    github: '',
+    coordinadores: [
+      { nombre: 'Edgar Axel Pérez Flores', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: 'https://www.linkedin.com/in/edgar-axel-flores' },
+      { nombre: 'Angel Everardo Rodríguez Guevara', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: 'https://www.linkedin.com/in/angelrdzg' },
     ],
   },
 ]

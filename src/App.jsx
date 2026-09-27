@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import CuentaPage from './pages/CuentaPage'
 import PerfilPage from './pages/PerfilPage'
+import AdminEventosPage from './pages/AdminEventosPage'
 import CustomCursor from './components/CustomCursor'
 import AuthProvider from './components/AuthProvider'
 
@@ -31,6 +32,7 @@ function App() {
           />
           <Route path="/cuenta" element={<CuentaPage />} />
           <Route path="/perfil" element={<PerfilPage />} />
+          <Route path="/admin/eventos" element={<AdminEventosPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
