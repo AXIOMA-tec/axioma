@@ -9,6 +9,8 @@ import request from 'supertest'
 import app from '../app.js'
 import Category from '../models/Category.js'
 import Problem from '../models/Problem.js'
+import Comment from '../models/Comment.js'
+import User from '../models/User.js'
 
 // Pequeño helper: crea un problema real en la base de prueba, para tener
 // algo válido sobre lo cual comentar en cada prueba.
@@ -175,5 +177,131 @@ describe('DELETE /api/problems/:id/comments/:commentId', () => {
       .set('Authorization', `Bearer ${token}`)
 
     expect(res.status).toBe(404)
+  })
+})
+
+describe('relaciones: comments -> users y comments -> problems', () => {
+  it('guarda el comentario con author = _id del usuario del token y problem = _id del problema', async () => {
+    const problema = await crearProblemaDePrueba()
+    const token = await crearUsuarioYObtenerToken()
+    const usuario = await User.findOne({ username: 'comentarista' })
+
+    const res = await request(app)
+      .post(`/api/problems/${problema._id}/comments`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ body: 'Relación correcta.' })
+    expect(res.status).toBe(201)
+
+    // Revisamos el documento tal como quedó en la base, no solo la respuesta.
+    const guardado = await Comment.findById(res.body._id).lean()
+    expect(guardado.author.toString()).toBe(usuario._id.toString())
+    expect(guardado.problem.toString()).toBe(problema._id.toString())
+    expect(guardado.createdAt).toBeInstanceOf(Date)
+    // Solo IDs: el username NO se copia dentro del comentario.
+    expect(guardado).not.toHaveProperty('username')
+  })
+
+  it('ignora un author/userId/problem mandado en el body (no se puede suplantar a otra persona)', async () => {
+    const problema = await crearProblemaDePrueba()
+    const otroProblema = await Problem.create({
+      codigo: 'TEST-2', titulo: 'Otro', enunciado: 'Otro.', category: problema.category,
+      año: '2024', tema: 'Álgebra', tipo: 'Interno Axioma', dificultad: 'Fácil',
+    })
+    const tokenVictima = await crearUsuarioYObtenerToken('victima@test.com', 'victima')
+    const tokenAtacante = await crearUsuarioYObtenerToken('atacante@test.com', 'atacante')
+    const victima = await User.findOne({ username: 'victima' })
+    expect(tokenVictima).toBeTypeOf('string')
+
+    const res = await request(app)
+      .post(`/api/problems/${problema._id}/comments`)
+      .set('Authorization', `Bearer ${tokenAtacante}`)
+      .send({
+        body: 'Me hago pasar por otra persona.',
+        author: victima._id.toString(),
+        userId: victima._id.toString(),
+        problem: otroProblema._id.toString(),
+      })
+
+    expect(res.status).toBe(201)
+    expect(res.body.author.username).toBe('atacante')
+    const guardado = await Comment.findById(res.body._id).lean()
+    expect(guardado.author.toString()).not.toBe(victima._id.toString())
+    expect(guardado.problem.toString()).toBe(problema._id.toString())
+  })
+
+  it('al leer, identifica al autor con su username y nunca expone correo ni hash', async () => {
+    const problema = await crearProblemaDePrueba()
+    const token = await crearUsuarioYObtenerToken()
+    await request(app)
+      .post(`/api/problems/${problema._id}/comments`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ body: 'Primero.' })
+    await request(app)
+      .post(`/api/problems/${problema._id}/comments`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ body: 'Segundo.' })
+
+    const res = await request(app).get(`/api/problems/${problema._id}/comments`)
+    expect(res.status).toBe(200)
+    expect(res.body.map((c) => c.body)).toEqual(['Primero.', 'Segundo.'])
+    expect(Object.keys(res.body[0].author).sort()).toEqual(['_id', 'username'])
+    const texto = JSON.stringify(res.body)
+    expect(texto).not.toContain('passwordHash')
+    expect(texto).not.toContain('comentarista@test.com')
+  })
+
+  it('solo regresa los comentarios del problema pedido', async () => {
+    const problema = await crearProblemaDePrueba()
+    const otroProblema = await Problem.create({
+      codigo: 'TEST-2', titulo: 'Otro', enunciado: 'Otro.', category: problema.category,
+      año: '2024', tema: 'Álgebra', tipo: 'Interno Axioma', dificultad: 'Fácil',
+    })
+    const token = await crearUsuarioYObtenerToken()
+    await request(app)
+      .post(`/api/problems/${otroProblema._id}/comments`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ body: 'Es del otro problema.' })
+
+    const res = await request(app).get(`/api/problems/${problema._id}/comments`)
+    expect(res.body).toEqual([])
+  })
+})
+
+describe('validación del problema y del contenido', () => {
+  it('regresa 404 al comentar en un problema que no existe, y no guarda nada', async () => {
+    const token = await crearUsuarioYObtenerToken()
+    const res = await request(app)
+      .post('/api/problems/000000000000000000000000/comments')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ body: 'Hola.' })
+    expect(res.status).toBe(404)
+    expect(await Comment.countDocuments()).toBe(0)
+  })
+
+  it('regresa 400 si el id del problema no tiene forma de ObjectId', async () => {
+    const res = await request(app).get('/api/problems/no-es-un-id/comments')
+    expect(res.status).toBe(400)
+  })
+
+  it('rechaza un body que no es texto', async () => {
+    const problema = await crearProblemaDePrueba()
+    const token = await crearUsuarioYObtenerToken()
+    const res = await request(app)
+      .post(`/api/problems/${problema._id}/comments`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ body: { $gt: '' } })
+    expect(res.status).toBe(400)
+  })
+
+  it('rechaza comentar con el token de una cuenta que ya fue borrada', async () => {
+    const problema = await crearProblemaDePrueba()
+    const token = await crearUsuarioYObtenerToken()
+    await User.deleteMany({})
+    const res = await request(app)
+      .post(`/api/problems/${problema._id}/comments`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ body: 'Fantasma.' })
+    expect(res.status).toBe(401)
+    expect(await Comment.countDocuments()).toBe(0)
   })
 })

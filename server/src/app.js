@@ -66,4 +66,20 @@ app.use('/api/problems/:problemId/comments', commentsRoutes)
 app.use('/api/equipo', miembrosRoutes)
 app.use('/api/eventos', eventosRoutes)
 
+// Manejador de errores final (Express lo reconoce por tener 4 argumentos).
+// Cualquier error que una ruta no atrapó llega aquí, y respondemos JSON
+// ({ error }) como el resto de la API en vez de la página HTML por default.
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  // JSON mal formado en el body, id con forma inválida, etc.: culpa de la
+  // petición, no del servidor. No se loguea: el error de JSON trae el body
+  // crudo adentro, y ese body puede incluir una contraseña.
+  if (err.type === 'entity.parse.failed' || err.name === 'CastError') {
+    return res.status(400).json({ error: 'La petición no es válida.' })
+  }
+  const status = err.status || err.statusCode || 500
+  if (status >= 500) console.error(err.stack || err.message)
+  res.status(status).json({ error: status >= 500 ? 'Error interno del servidor.' : err.message })
+})
+
 export default app

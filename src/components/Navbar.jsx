@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { useNavbarTone } from '../hooks/useNavbarTone'
+import { useAuth } from '../lib/auth'
 
 // Links que hacen scroll a una sección del one-pager ("/").
 // Si agregan una sección nueva al one-pager, agréguenla aquí también.
@@ -18,6 +19,12 @@ const SCROLL_LINKS = [
 const ROUTE_LINK = { path: '/problemas', label: 'Problemas' }
 
 const CONTACTO_LINK = { id: 'contacto', label: 'Contacto' }
+
+// Último link del Navbar: cambia según haya sesión (ver src/lib/auth.js).
+const AUTH_LINKS = {
+  in: { path: '/perfil', label: 'Perfil' },
+  out: { path: '/cuenta', label: 'Iniciar sesión' },
+}
 
 const SECTION_IDS = [...SCROLL_LINKS.map((link) => link.id), CONTACTO_LINK.id]
 
@@ -46,6 +53,8 @@ export default function Navbar() {
   const activeId = useActiveSection(SECTION_IDS)
   const barRef = useRef(null)
   const tone = useNavbarTone(barRef)
+  const { auth } = useAuth()
+  const authLink = auth ? AUTH_LINKS.in : AUTH_LINKS.out
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24)
@@ -133,6 +142,16 @@ export default function Navbar() {
               )}
             </a>
           </li>
+          <li>
+            <Link
+              to={authLink.path}
+              className={`${FOCUS_RING} rounded-full border border-current px-3 py-1 text-sm font-medium transition-opacity ${
+                location.pathname === authLink.path ? 'opacity-100' : 'opacity-70 hover:opacity-100 focus-visible:opacity-100'
+              }`}
+            >
+              {authLink.label}
+            </Link>
+          </li>
         </ul>
 
         <button
@@ -185,6 +204,11 @@ export default function Navbar() {
             >
               {CONTACTO_LINK.label}
             </a>
+          </li>
+          <li>
+            <Link to={authLink.path} onClick={() => setIsOpen(false)} className={MOBILE_LINK_CLASS}>
+              {authLink.label}
+            </Link>
           </li>
         </ul>
       )}
