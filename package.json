@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "server": "nodemon --watch server server/src/server.js",
     "seed": "node server/src/seed.js",
+    "seed:equipo": "node server/src/seedEquipo.js",
     "test": "vitest run"
   },
   "dependencies": {

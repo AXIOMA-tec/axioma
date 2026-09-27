@@ -18,6 +18,7 @@ const MIEMBROS_RESPALDO = [
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
     foto: null,
+    email: 'A00841695@tec.mx',
     linkedin: 'https://www.linkedin.com/in/hugo-a-meza',
     github: 'https://github.com/hugo-meza',
   },
@@ -26,21 +27,26 @@ const MIEMBROS_RESPALDO = [
     nombre: 'Lucero Díaz Ortega',
     rol: 'Vicepresidente',
     foto: null,
+    email: 'A01199346@tec.mx',
     linkedin: 'https://www.linkedin.com/in/lucero-d%C3%ADaz-ortega-98979b354/',
     github: 'https://github.com/Luzdks',
   },
   {
     id: 3,
-    nombre: 'Gil Brandon García Contreras',
+    nombre: 'Gil Brandon Garcia Contreras',
     rol: 'Dirección de Proyectos',
     foto: null,
+    email: 'A01254164@tec.mx',
     linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
     github: 'https://github.com/gil-brandon',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -48,12 +54,15 @@ const MIEMBROS_RESPALDO = [
     nombre: 'Raúl Correa Ocañas',
     rol: 'Dirección de Vinculación',
     foto: null,
+    email: 'A01722401@tec.mx',
     linkedin: 'https://www.linkedin.com/in/rcorreao/',
     github: 'https://github.com/Racoo203',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -61,13 +70,17 @@ const MIEMBROS_RESPALDO = [
     nombre: 'Emilio Alejandro González Huerta',
     rol: 'Dirección de Comunicación',
     foto: null,
+    email: 'A01286440@tec.mx',
     linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
     github: 'https://github.com/emigzzh',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -75,12 +88,15 @@ const MIEMBROS_RESPALDO = [
     nombre: 'Catherine González Díaz',
     rol: 'Dirección de Investigación',
     foto: null,
+    email: 'A00845539@tec.mx',
     linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
     github: 'https://github.com/catherinegd7',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -88,12 +104,14 @@ const MIEMBROS_RESPALDO = [
     nombre: 'Alejandro José Alfaro García',
     rol: 'Dirección de Finanzas',
     foto: null,
+    email: 'A00842460@tec.mx',
     linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
     // Sin GitHub: el botón simplemente no aparece.
     github: '',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Finanzas' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Finanzas',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
 ]
@@ -114,6 +132,12 @@ const iniciales = (nombre) =>
     .toUpperCase()
 
 const ICONOS = {
+  mail: (
+    <>
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </>
+  ),
   linkedin: (
     <>
       <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -131,13 +155,15 @@ const ICONOS = {
 
 function EnlaceSocial({ href, red, nombre }) {
   if (!href) return null
-  const etiqueta = red === 'linkedin' ? 'LinkedIn' : 'GitHub'
+  const etiqueta = { linkedin: 'LinkedIn', github: 'GitHub', mail: 'Correo' }[red]
+  const esCorreo = red === 'mail'
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noreferrer"
+      // El correo se abre en la app de correo; las redes, en pestaña nueva.
+      {...(esCorreo ? {} : { target: '_blank', rel: 'noreferrer' })}
       aria-label={`${etiqueta} de ${nombre}`}
+      title={esCorreo ? href.replace('mailto:', '') : undefined}
       className="flex h-9 w-9 items-center justify-center rounded-full border border-brand-200 bg-brand-50 text-brand-900/70 sm:h-10 sm:w-10 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
     >
       <svg
@@ -196,7 +222,7 @@ function PanelCoordinacion({ director, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
-        className="absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-white shadow-2xl sm:rounded-l-3xl"
+        className="absolute right-0 top-0 flex h-full w-full max-w-2xl flex-col bg-white shadow-2xl sm:rounded-l-3xl"
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex items-start justify-between gap-4 border-b border-brand-200 p-6">
@@ -219,26 +245,67 @@ function PanelCoordinacion({ director, onClose }) {
           </button>
         </header>
 
-        <ul className="flex flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-6">
+        {/* Una tarjeta por coordinador, con la foto como protagonista. Con una
+            sola persona ocupa todo el ancho; con varias, van de dos en dos. */}
+        <ul
+          className={`grid flex-1 content-start gap-4 overflow-y-auto overscroll-contain p-6 ${
+            director.coordinadores.length > 1 ? 'sm:grid-cols-2' : ''
+          }`}
+        >
           {director.coordinadores.map((c, i) => (
             <li
               key={`${c.nombre}-${i}`}
-              className="flex items-center gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-4"
+              className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center"
             >
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-lg text-brand-400">
-                {c.foto ? (
-                  <img src={c.foto} alt={c.nombre} className="h-full w-full object-cover" />
-                ) : (
-                  iniciales(c.nombre)
+              <div className="rounded-full border border-brand-200 bg-white p-1.5">
+                <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-3xl text-brand-400 sm:h-28 sm:w-28">
+                  {c.foto ? (
+                    <img src={c.foto} alt={c.nombre} className="h-full w-full object-cover" />
+                  ) : (
+                    iniciales(c.nombre)
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center gap-2">
+                <p className="font-display text-lg leading-tight tracking-wide text-brand-900">{c.nombre}</p>
+                <p className="rounded-full bg-white px-3 py-1 text-xs font-medium text-brand-900/70 ring-1 ring-brand-200">
+                  {c.rol || 'Coordinación'}
+                </p>
+              </div>
+
+              {/* Contacto: correo (se puede leer y copiar) y LinkedIn. */}
+              <div className="mt-1 flex flex-col items-center gap-2 text-sm">
+                {c.email && (
+                  <a
+                    href={`mailto:${c.email}`}
+                    className="break-all text-brand-900/70 underline decoration-brand-300 underline-offset-4 transition-colors hover:text-brand-900 hover:decoration-brand-900"
+                  >
+                    {c.email}
+                  </a>
                 )}
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-display text-base leading-tight tracking-wide text-brand-900">{c.nombre}</p>
-                <p className="mt-1 text-xs text-brand-900/60">{c.rol || 'Coordinación'}</p>
-              </div>
-              <div className="flex shrink-0 gap-2">
-                <EnlaceSocial href={c.linkedin} red="linkedin" nombre={c.nombre} />
-                <EnlaceSocial href={c.github} red="github" nombre={c.nombre} />
+                {c.linkedin && (
+                  <a
+                    href={c.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-1.5 text-xs font-medium text-brand-900/80 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                      aria-hidden="true"
+                    >
+                      {ICONOS.linkedin}
+                    </svg>
+                    Ver perfil de LinkedIn
+                  </a>
+                )}
               </div>
             </li>
           ))}
@@ -296,6 +363,7 @@ function MemberCard({ miembro, destacado, onAbrir }) {
           más o menos líneas. */}
       <div className="mt-auto flex flex-col items-center gap-3 pt-1">
         <div className="flex gap-2">
+          <EnlaceSocial href={miembro.email ? `mailto:${miembro.email}` : ''} red="mail" nombre={miembro.nombre} />
           <EnlaceSocial href={miembro.linkedin} red="linkedin" nombre={miembro.nombre} />
           <EnlaceSocial href={miembro.github} red="github" nombre={miembro.nombre} />
         </div>

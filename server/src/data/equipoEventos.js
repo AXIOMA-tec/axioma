@@ -12,12 +12,12 @@
 // lista tiene gente. Ejemplo, dentro de la ficha del director:
 //
 //   coordinadores: [
-//     { nombre: 'Nombre Apellido', rol: 'Coordinación de X',
-//       foto: null, linkedin: 'https://...', github: 'https://...' },
+//     { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
+//       email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/...' },
 //   ],
 //
-// Solo `nombre` es obligatorio; `rol`, `foto`, `linkedin` y `github` son
-// opcionales.
+// Solo `nombre` es obligatorio; `rol` (puesto), `email`, `linkedin` y `foto`
+// son opcionales (lo que falte simplemente no se muestra).
 
 export const miembros = [
   {
@@ -25,6 +25,7 @@ export const miembros = [
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
     foto: null,
+    email: 'A00841695@tec.mx',
     linkedin: 'https://www.linkedin.com/in/hugo-a-meza',
     github: 'https://github.com/hugo-meza',
   },
@@ -33,21 +34,26 @@ export const miembros = [
     nombre: 'Lucero Díaz Ortega',
     rol: 'Vicepresidente',
     foto: null,
+    email: 'A01199346@tec.mx',
     linkedin: 'https://www.linkedin.com/in/lucero-d%C3%ADaz-ortega-98979b354/',
     github: 'https://github.com/Luzdks',
   },
   {
     id: 3,
-    nombre: 'Gil Brandon García Contreras',
+    nombre: 'Gil Brandon Garcia Contreras',
     rol: 'Dirección de Proyectos',
     foto: null,
+    email: 'A01254164@tec.mx',
     linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
     github: 'https://github.com/gil-brandon',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Proyectos' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -55,12 +61,15 @@ export const miembros = [
     nombre: 'Raúl Correa Ocañas',
     rol: 'Dirección de Vinculación',
     foto: null,
+    email: 'A01722401@tec.mx',
     linkedin: 'https://www.linkedin.com/in/rcorreao/',
     github: 'https://github.com/Racoo203',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Vinculación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -68,13 +77,17 @@ export const miembros = [
     nombre: 'Emilio Alejandro González Huerta',
     rol: 'Dirección de Comunicación',
     foto: null,
+    email: 'A01286440@tec.mx',
     linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
     github: 'https://github.com/emigzzh',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Comunicación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -82,12 +95,15 @@ export const miembros = [
     nombre: 'Catherine González Díaz',
     rol: 'Dirección de Investigación',
     foto: null,
+    email: 'A00845539@tec.mx',
     linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
     github: 'https://github.com/catherinegd7',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Investigación' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
   {
@@ -95,12 +111,14 @@ export const miembros = [
     nombre: 'Alejandro José Alfaro García',
     rol: 'Dirección de Finanzas',
     foto: null,
+    email: 'A00842460@tec.mx',
     linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
     // Sin GitHub: el botón simplemente no aparece.
     github: '',
     // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinación de Finanzas' },
+      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Finanzas',
+        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
     ],
   },
 ]
