@@ -6,19 +6,24 @@ import { MeshGradient } from '@paper-design/shaders-react'
 import FloatingSymbol from '../components/motion/FloatingSymbol'
 import Counter from '../components/motion/Counter'
 import { EASE, fadeUp, staggerContainer, popIn } from '../components/motion/variants'
+import AuthForm from '../components/AuthForm'
+import { apiFetch } from '../lib/api'
+import { useAuth } from '../lib/auth'
 
 // ---------------------------------------------------------------------------
 // ESQUELETO GENERAL DE ESTE ARCHIVO (para orientarse antes de leer el código
 // real más abajo):
 //
-//   1. Configuración: dirección de la API + helper apiFetch() para hablar
-//      con el backend (fetch + manejo de errores en un solo lugar).
+//   1. Configuración. apiFetch() (hablar con el backend) vive en
+//      src/lib/api.js y la sesión en src/lib/auth.js (useAuth), compartidas
+//      con el Navbar y la página de Perfil.
 //   2. Constantes de filtros (AÑOS, TEMAS, TIPOS) + paleta Axioma reutilizada
 //      del Hero (rojo/naranja/dorado) para el rediseño visual.
 //   3. FilterGroup       -> la lista de opciones de un filtro, ahora como
 //                           "chips" de color en vez de checkboxes planos.
-//   4. AuthInlineForm    -> formulario de login/registro, se muestra dentro
-//                           del modal cuando nadie ha iniciado sesión.
+//   4. (AuthForm         -> formulario de login/registro; ahora vive en
+//                           src/components/AuthForm.jsx y se muestra dentro
+//                           del modal cuando nadie ha iniciado sesión.)
 //   5. ComentarioItem    -> un comentario ya publicado.
 //   6. ProblemaModal     -> el modal de un problema: enunciado + comentarios,
 //                           ahora con animación de entrada/salida.
@@ -38,15 +43,6 @@ import { EASE, fadeUp, staggerContainer, popIn } from '../components/motion/vari
 // y ahora un fondo temático animado).
 // ---------------------------------------------------------------------------
 
-// Dirección del backend. En desarrollo, Vite expone las variables que
-// empiezan con VITE_ dentro de import.meta.env — viene de tu archivo .env.
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000'
-
-// Aquí es donde guardamos la sesión en el navegador para que no se pierda
-// al recargar la página (localStorage sobrevive a un refresh; el estado de
-// React no).
-const AUTH_STORAGE_KEY = 'axioma_auth'
-
 // Misma paleta que ya usa Hero.jsx para el fondo animado — reutilizarla
 // aquí hace que Problemas se sienta parte del mismo sitio, no una página
 // aparte con sus propios colores inventados.
@@ -55,32 +51,6 @@ const AXIOMA_ORANGE = '#E57505'
 const AXIOMA_GOLD = '#FFB401'
 const AXIOMA_DARK = '#120303'
 const AXIOMA_GRADIENT = `linear-gradient(135deg, ${AXIOMA_GOLD} 0%, ${AXIOMA_ORANGE} 45%, ${AXIOMA_RED} 100%)`
-
-// apiFetch centraliza las 3 cosas que se repetirían en cada llamada a la
-// API: mandar el body como JSON, agregar el token de sesión si existe, y
-// convertir una respuesta de error en un Error de JavaScript normal que se
-// pueda atrapar con try/catch.
-async function apiFetch(path, { method = 'GET', body, token } = {}) {
-  const headers = { 'Content-Type': 'application/json' }
-  if (token) headers.Authorization = `Bearer ${token}`
-
-  const res = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-
-  // Intentamos leer JSON incluso en errores, porque el backend manda
-  // { error: '...' } en sus respuestas de error (ver server/src/routes/*).
-  const data = await res.json().catch(() => null)
-
-  if (!res.ok) {
-    const error = new Error(data?.error || 'Error de red inesperado.')
-    error.status = res.status
-    throw error
-  }
-  return data
-}
 
 // Un enunciado es texto normal que PUEDE traer fórmulas metidas entre signos
 // de pesos, como en LaTeX de verdad: "Sea $a>0$, demuestra que...". Hay dos
@@ -304,98 +274,6 @@ function CategoryFilter({ raices, seleccionadas, onToggle }) {
         ))}
       </div>
     </div>
-  )
-}
-
-// Formulario de inicio de sesión / registro. Vive DENTRO del modal en vez de
-// en su propia página: agregar una página nueva significaría tocar App.jsx
-// (que define las rutas), y ese archivo es compartido con el resto del
-// equipo — así que este formulario se muestra en el mismo lugar donde hace
-// falta (justo antes de comentar) sin necesitar una ruta nueva.
-function AuthInlineForm({ onAuthSuccess }) {
-  const [modo, setModo] = useState('login') // 'login' | 'signup'
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [enviando, setEnviando] = useState(false)
-  const [error, setError] = useState(null)
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError(null)
-    setEnviando(true)
-    try {
-      const path = modo === 'login' ? '/api/auth/login' : '/api/auth/signup'
-      const body =
-        modo === 'login' ? { email, password } : { username, email, password }
-      const data = await apiFetch(path, { method: 'POST', body })
-      onAuthSuccess(data) // { token, user } — el componente padre lo guarda
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setEnviando(false)
-    }
-  }
-
-  const inputClass =
-    'rounded-lg border border-brand-300 px-3 py-2 text-sm outline-none transition-colors focus:border-[#E57505] focus:ring-2 focus:ring-[#E57505]/30'
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-xl border border-brand-200 bg-white p-4 shadow-sm">
-      <p className="text-sm text-brand-700">
-        {modo === 'login'
-          ? 'Inicia sesión para comentar.'
-          : 'Crea una cuenta para comentar.'}
-      </p>
-
-      {modo === 'signup' && (
-        <input
-          type="text"
-          placeholder="Nombre de usuario"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          className={inputClass}
-        />
-      )}
-      <input
-        type="email"
-        placeholder="Correo"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className={inputClass}
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        minLength={8}
-        className={inputClass}
-      />
-
-      {error && <p className="text-sm text-rose-600">{error}</p>}
-
-      <div className="flex items-center justify-between gap-3">
-        <button
-          type="submit"
-          disabled={enviando}
-          className="rounded-lg px-4 py-2 text-sm font-medium text-white shadow-md transition-transform active:scale-95 disabled:opacity-50"
-          style={{ backgroundImage: AXIOMA_GRADIENT }}
-        >
-          {enviando ? 'Un momento...' : modo === 'login' ? 'Iniciar sesión' : 'Registrarme'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setModo(modo === 'login' ? 'signup' : 'login')}
-          className="text-sm text-brand-600 underline hover:text-[#E57505]"
-        >
-          {modo === 'login' ? 'Crear una cuenta' : 'Ya tengo cuenta'}
-        </button>
-      </div>
-    </form>
   )
 }
 
@@ -624,7 +502,7 @@ function ProblemaModal({ problema, onClose, auth, onAuthSuccess, onAuthExpired }
                 </div>
               </form>
             ) : (
-              <AuthInlineForm onAuthSuccess={onAuthSuccess} />
+              <AuthForm onAuthSuccess={onAuthSuccess} />
             )}
           </div>
         </div>
@@ -902,17 +780,9 @@ export default function Problemas() {
   // carpetas de verdad en una computadora).
   const [carpetaActual, setCarpetaActual] = useState(null)
 
-  // auth arranca leyendo lo que haya guardado en localStorage, para que si
-  // ya habías iniciado sesión antes, sigas logueado después de recargar la
-  // página. Si no hay nada guardado (o está corrupto), arranca en null.
-  const [auth, setAuth] = useState(() => {
-    try {
-      const guardado = localStorage.getItem(AUTH_STORAGE_KEY)
-      return guardado ? JSON.parse(guardado) : null
-    } catch {
-      return null
-    }
-  })
+  // La sesión es compartida con el resto del sitio (ver src/lib/auth.js):
+  // si inicias sesión aquí, el Navbar cambia a "Perfil", y viceversa.
+  const { auth, login: handleAuthSuccess, logout: handleLogout } = useAuth()
 
   useEffect(() => {
     apiFetch('/api/problems')
@@ -946,16 +816,6 @@ export default function Problemas() {
     })
     return ids
   }, [categoriasSeleccionadas, categoriasPorId])
-
-  const handleAuthSuccess = (data) => {
-    setAuth(data)
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(data))
-  }
-
-  const handleLogout = () => {
-    setAuth(null)
-    localStorage.removeItem(AUTH_STORAGE_KEY)
-  }
 
   const toggle = (setter) => (value) =>
     setter((prev) =>

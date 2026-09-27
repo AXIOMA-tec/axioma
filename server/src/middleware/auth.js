@@ -18,8 +18,10 @@
 // ---------------------------------------------------------------------------
 
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
+import User from '../models/User.js'
 
-export function requireAuth(req, res, next) {
+export async function requireAuth(req, res, next) {
   // El navegador manda el token en un encabezado HTTP así:
   //   Authorization: Bearer eyJhbGciOiJI...
   // Lo separamos de la palabra "Bearer " para quedarnos solo con el token.
@@ -30,17 +32,34 @@ export function requireAuth(req, res, next) {
     return res.status(401).json({ error: 'Necesitas iniciar sesión para hacer esto.' })
   }
 
+  let payload
   try {
     // jwt.verify hace dos cosas a la vez: confirma que el token fue firmado
     // con nuestro JWT_SECRET (o sea, que lo emitimos nosotros y nadie lo
     // inventó) y que no ha expirado. Si algo falla, lanza un error.
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
-
-    // Guardamos el id del usuario en `req` para que la ruta que sigue
-    // (ej. crear un comentario) sepa quién está haciendo la petición.
-    req.userId = payload.sub
-    next()
+    // `algorithms` fija el único algoritmo que aceptamos (el mismo con el
+    // que firma auth.routes.js), para que nadie pueda colar un token con
+    // otro algoritmo.
+    payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] })
   } catch {
     return res.status(401).json({ error: 'Tu sesión no es válida o ya expiró.' })
   }
+
+  // Un token válido solo prueba que ALGUNA VEZ emitimos una sesión para ese
+  // id. Confirmamos que la cuenta siga existiendo, para no aceptar (ni
+  // guardar comentarios de) cuentas que ya fueron borradas.
+  if (!mongoose.isValidObjectId(payload.sub)) {
+    return res.status(401).json({ error: 'Tu sesión no es válida o ya expiró.' })
+  }
+  const user = await User.findById(payload.sub)
+  if (!user) {
+    return res.status(401).json({ error: 'Tu sesión no es válida o ya expiró.' })
+  }
+
+  // Guardamos al usuario en `req` para que la ruta que sigue (ej. crear un
+  // comentario) sepa quién está haciendo la petición. Este id sale del
+  // token firmado, NUNCA del body — así nadie puede hacerse pasar por otro.
+  req.user = user // sin passwordHash (select: false en el modelo)
+  req.userId = user._id.toString()
+  next()
 }

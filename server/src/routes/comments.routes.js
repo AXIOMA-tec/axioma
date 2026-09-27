@@ -8,10 +8,30 @@
 // though the ":problemId" part of the URL is defined one level up.
 
 import { Router } from 'express'
+import mongoose from 'mongoose'
 import Comment from '../models/Comment.js'
+import Problem from '../models/Problem.js'
 import { requireAuth } from '../middleware/auth.js'
 
 const router = Router({ mergeParams: true })
+
+const MAX_LENGTH = 2000
+
+// Corre antes de TODAS las rutas de este archivo: confirma que el
+// :problemId de la URL tenga forma de ObjectId y que ese problema exista de
+// verdad en `problems`. Sin esto, se podrían guardar comentarios colgados
+// de un problema inexistente (el ObjectId "se ve" válido pero no apunta a
+// nada), y un id mal formado tronaría como error 500.
+router.use(async (req, res, next) => {
+  const { problemId } = req.params
+  if (!mongoose.isValidObjectId(problemId)) {
+    return res.status(400).json({ error: 'El id del problema no es válido.' })
+  }
+  if (!(await Problem.exists({ _id: problemId }))) {
+    return res.status(404).json({ error: 'Ese problema no existe.' })
+  }
+  next()
+})
 
 // Público: cualquiera puede LEER los comentarios, con o sin sesión iniciada.
 router.get('/', async (req, res) => {
@@ -25,15 +45,22 @@ router.get('/', async (req, res) => {
 // Protegido: requireAuth corre ANTES que esta función. Si no hay sesión
 // válida, requireAuth ya respondió 401 y esta línea nunca se ejecuta.
 router.post('/', requireAuth, async (req, res) => {
-  const body = (req.body.body || '').trim()
-  if (!body) {
+  // Solo leemos `body` del cuerpo de la petición. Si el frontend manda
+  // además un `author`, `userId` o `problem`, se ignoran: el autor sale del
+  // token (requireAuth) y el problema de la URL ya validada arriba.
+  const raw = req.body?.body
+  if (typeof raw !== 'string' || !raw.trim()) {
     return res.status(400).json({ error: 'El comentario no puede estar vacío.' })
+  }
+  const body = raw.trim()
+  if (body.length > MAX_LENGTH) {
+    return res.status(400).json({ error: `El comentario no puede pasar de ${MAX_LENGTH} caracteres.` })
   }
 
   try {
     const comment = await Comment.create({
       problem: req.params.problemId,
-      author: req.userId, // puesto por requireAuth después de verificar el token
+      author: req.user._id, // puesto por requireAuth después de verificar el token
       body,
     })
 
@@ -62,7 +89,9 @@ router.post('/', requireAuth, async (req, res) => {
 // basta con estar loggeado, requireAuth solo confirma quién eres, esta
 // ruta además confirma que eres tú quien lo escribió.
 router.delete('/:commentId', requireAuth, async (req, res) => {
-  const comment = await Comment.findById(req.params.commentId)
+  const comment = mongoose.isValidObjectId(req.params.commentId)
+    ? await Comment.findById(req.params.commentId)
+    : null
 
   // Si no existe, o existe pero es de OTRO problema, tratamos ambos casos
   // igual (404) -- no hay razón para distinguirlos desde afuera.

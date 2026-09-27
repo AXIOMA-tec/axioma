@@ -50,6 +50,30 @@ localmente:
 problemas y comentarios viejos antes de volver a crearlos (las cuentas de
 usuario NO se borran).
 
+### Iniciar sesión con Google (opcional)
+
+Sin esto todo funciona igual, solo no aparece el botón de Google.
+
+1. En [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+   → **Crear credenciales → ID de cliente de OAuth** → tipo **Aplicación web**.
+   (Si te lo pide, configura antes la pantalla de consentimiento: tipo
+   "Externo", con tu correo como usuario de prueba.)
+2. En **Orígenes autorizados de JavaScript** agrega `http://localhost:5173`
+   (y la URL de producción cuando exista). No hace falta ninguna URI de
+   redirección.
+3. Copia el **ID de cliente** (`….apps.googleusercontent.com`) en tu `.env`
+   en **ambas** variables, `GOOGLE_CLIENT_ID` y `VITE_GOOGLE_CLIENT_ID`, y
+   reinicia `npm run server` y `npm run dev`. El "secreto del cliente" no se
+   usa.
+
+Cómo funciona: el botón de Google le da al frontend un ID token firmado por
+Google; el backend lo verifica (`POST /api/auth/google`, firma + que sea para
+nuestro Client ID + correo verificado), crea la cuenta en `users` si no
+existe (username sacado del correo, sin contraseña, con `googleId`) y
+regresa el mismo tipo de sesión (JWT) que el login con contraseña. Si ya
+existe una cuenta **con contraseña** con ese correo, no se liga
+automáticamente: esa persona debe entrar con su contraseña.
+
 ### Pruebas del backend
 
 ```bash
