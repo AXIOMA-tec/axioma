@@ -40,6 +40,9 @@ export async function apiFetch(path, { method = 'GET', body, token } = {}) {
 export const api = {
   getEquipo: () => fetchJSON('/api/equipo'),
   getProblemas: () => fetchJSON('/api/problemas'),
+  // Solo el total, no la lista completa (ver server/src/routes/problems.routes.js)
+  // — para la cifra de Quiénes Somos, que no necesita el LaTeX de cada problema.
+  getProblemasCount: () => fetchJSON('/api/problems/count'),
   getEventos: () => fetchJSON('/api/eventos'),
   getGaleria: () => fetchJSON('/api/galeria'),
   // Solo para administradores (ver /admin/eventos y /admin/galeria):
