@@ -230,18 +230,23 @@ function PanelCoordinacion({ director, onClose }) {
     ? director.rol.replace('Dirección de', 'Coordinación de')
     : `Equipo de ${director.rol}`
 
-  // Con 1 persona, una sola columna ancha; con 2+ personas, hasta 3 columnas
-  // en pantallas grandes. Nunca full-height: la ventana se ajusta a su
-  // contenido (nada de espacio muerto abajo cuando hay poca gente) y solo
-  // hace scroll interno si algún día un área crece más de lo que cabe.
+  // Con 1 persona, una sola columna ancha. Con 2 o 4, grid parejo de 2
+  // columnas (2x2 con 4: así no queda una fila "coja" con una sola tarjeta
+  // huérfana a la izquierda y espacio vacío a su derecha, que es lo que
+  // pasaba antes al forzar 3 columnas con 4 personas). Con 3, 5, 6+, hasta
+  // 3 columnas en pantallas grandes.
   const numCoordinadores = director.coordinadores.length
   const columnas =
-    numCoordinadores === 1 ? '' : numCoordinadores === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'
+    numCoordinadores === 1
+      ? ''
+      : numCoordinadores === 2 || numCoordinadores === 4
+        ? 'sm:grid-cols-2'
+        : 'sm:grid-cols-2 lg:grid-cols-3'
 
   // Con 3 columnas los nombres largos ("Angel Everardo Rodríguez Guevara")
   // se sentían amontonados en max-w-3xl: la ventana crece un poco más para
   // darle a cada tarjeta el ancho que necesita.
-  const anchoMaximo = numCoordinadores >= 3 ? 'max-w-4xl' : 'max-w-3xl'
+  const anchoMaximo = numCoordinadores === 3 || numCoordinadores >= 5 ? 'max-w-4xl' : 'max-w-3xl'
 
   return (
     <motion.div
