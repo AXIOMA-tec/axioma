@@ -99,10 +99,10 @@ const MIEMBROS_RESPALDO = [
     coordinadores: [
       { nombre: 'Ethiel Favila Alvarado', rol: 'Coordinadora de Investigación',
         email: '', linkedin: 'https://www.linkedin.com/in/ethiel-favila-alvarado-459ba2358/',
-        foto: '/equipo/ethiel-favila.jpg' },
+        github: 'https://github.com/efavilaa', foto: '/equipo/ethiel-favila.jpg' },
       { nombre: 'Elías Perianza Robles', rol: 'Coordinador de Investigación',
         email: '', linkedin: 'https://www.linkedin.com/in/elias-perianza-robles/',
-        foto: '/equipo/elias-perianza.jpg' },
+        github: 'https://github.com/Perianza18', foto: '/equipo/elias-perianza.jpg' },
     ],
   },
   {
