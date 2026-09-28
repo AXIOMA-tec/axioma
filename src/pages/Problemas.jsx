@@ -107,6 +107,10 @@ function buildCategoryTree(categorias) {
     if (papa) papa.children.push(nodo)
     else raices.push(nodo)
   })
+  // Las subcarpetas de una competencia son años (ej. Putnam -> 2025, 2024,
+  // ..., 1985): se ordenan del más nuevo al más viejo, no por el orden en
+  // que se crearon en la base de datos.
+  byId.forEach((nodo) => nodo.children.sort((a, b) => Number(b.name) - Number(a.name)))
   return { raices, byId }
 }
 
