@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
 // problemasReales.js — el contenido real de tres competencias, transcrito de
 // los archivos LaTeX que dio el equipo:
-//   - OMMU Primera Ronda (2024-2026)
-//   - OMMU Concurso Nacional (2024-2026)
+//   - OMUM Primera Ronda (2024-2026)
+//   - OMUM Concurso Nacional (2024-2026)
 //   - Putnam (2021-2025)
 //
 // Este archivo es solo DATOS (sin conexión a Mongo, sin lógica de base de
@@ -60,21 +60,27 @@ export const categorias = [
   { key: 'putnam-2012', name: '2012', parent: 'putnam' },
   { key: 'putnam-2013', name: '2013', parent: 'putnam' },
   { key: 'putnam-2014', name: '2014', parent: 'putnam' },
+  { key: 'putnam-2015', name: '2015', parent: 'putnam' },
+  { key: 'putnam-2016', name: '2016', parent: 'putnam' },
+  { key: 'putnam-2017', name: '2017', parent: 'putnam' },
+  { key: 'putnam-2018', name: '2018', parent: 'putnam' },
+  { key: 'putnam-2019', name: '2019', parent: 'putnam' },
+  { key: 'putnam-2020', name: '2020', parent: 'putnam' },
   { key: 'putnam-2021', name: '2021', parent: 'putnam' },
   { key: 'putnam-2022', name: '2022', parent: 'putnam' },
   { key: 'putnam-2023', name: '2023', parent: 'putnam' },
   { key: 'putnam-2024', name: '2024', parent: 'putnam' },
   { key: 'putnam-2025', name: '2025', parent: 'putnam' },
 
-  { key: 'ommu-pr', name: 'OMMU Primera Ronda', parent: null },
-  { key: 'ommu-pr-2024', name: '2024', parent: 'ommu-pr' },
-  { key: 'ommu-pr-2025', name: '2025', parent: 'ommu-pr' },
-  { key: 'ommu-pr-2026', name: '2026', parent: 'ommu-pr' },
+  { key: 'omum-pr', name: 'OMUM Primera Ronda', parent: null },
+  { key: 'omum-pr-2024', name: '2024', parent: 'omum-pr' },
+  { key: 'omum-pr-2025', name: '2025', parent: 'omum-pr' },
+  { key: 'omum-pr-2026', name: '2026', parent: 'omum-pr' },
 
-  { key: 'ommu-nac', name: 'OMMU Nacional', parent: null },
-  { key: 'ommu-nac-2024', name: '2024', parent: 'ommu-nac' },
-  { key: 'ommu-nac-2025', name: '2025', parent: 'ommu-nac' },
-  { key: 'ommu-nac-2026', name: '2026', parent: 'ommu-nac' },
+  { key: 'omum-nac', name: 'OMUM Nacional', parent: null },
+  { key: 'omum-nac-2024', name: '2024', parent: 'omum-nac' },
+  { key: 'omum-nac-2025', name: '2025', parent: 'omum-nac' },
+  { key: 'omum-nac-2026', name: '2026', parent: 'omum-nac' },
 ]
 
 // posicion = lugar del problema dentro de su ronda/sección (1 = primero).
@@ -90,7 +96,7 @@ function estimarPutnam(posicion) {
   return tabla[posicion - 1]
 }
 
-function estimarOMMU(posicion) {
+function estimarOMUM(posicion) {
   const tabla = [
     { dificultad: 'Media', exito: 48 },
     { dificultad: 'Media', exito: 36 },
@@ -103,61 +109,61 @@ function estimarOMMU(posicion) {
 }
 
 // ===========================================================================
-// OMMU — PRIMERA RONDA
+// OMUM — PRIMERA RONDA
 // ===========================================================================
 
-const ommuPrimeraRonda = [
+const omumPrimeraRonda = [
   // --- 2024 ---
   {
-    codigo: 'OMMU-PR-2024-1',
+    codigo: 'OMUM-PR-2024-1',
     titulo: 'Raíces de la derivada de p²',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(1),
     enunciado: String.raw`Demuestra que si $p(x)$ es un polinomio de grado $n$ con coeficientes reales y $n$ raíces reales distintas, entonces el polinomio $(p^2)'(x)$ tiene $2n-1$ raíces reales distintas.`,
   },
   {
-    codigo: 'OMMU-PR-2024-2',
+    codigo: 'OMUM-PR-2024-2',
     titulo: 'Derivada de det(J+tA)',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sea $A$ una matriz real de $n \times n$, $J$ la matriz de $n \times n$ cuyas entradas son todas $1$, y $f(t) = \det(J+tA)$. Encuentra $f'(0)$.`,
   },
   {
-    codigo: 'OMMU-PR-2024-3',
+    codigo: 'OMUM-PR-2024-3',
     titulo: 'Periodo de un corrimiento binario',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Combinatoria',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(3),
     enunciado: String.raw`Sea $x=(x_1,x_2,\dots,x_n)$ una sucesión de $0$'s y $1$'s. Considera la función $\rho(x)=\rho(x_1,\dots,x_n)=(x_2,\dots,x_n,x_1)$ que desplaza la primera entrada al final. Sean $u=|\{i \mid x_i=1\}|$ y $v=|\{i \mid x_i=0\}|$ la cantidad de unos y ceros en $x$, respectivamente. Dado que $|u-v|=1$, demuestra que $\rho^t(x)=x$ si y solo si $n \mid t$.`,
   },
   {
-    codigo: 'OMMU-PR-2024-4',
+    codigo: 'OMUM-PR-2024-4',
     titulo: 'Conjuntos independientes en un ciclo con cola',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Combinatoria',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(4),
     enunciado: String.raw`Considera una gráfica $G(n,m)$ que se obtiene al identificar un vértice de un ciclo de $n$ aristas con un extremo de un camino de $m$ aristas.
 
 Un conjunto de vértices se considera bueno si no hay dos de ellos que sean vecinos (es decir, no comparten ninguna arista). Sea $f(n,m,k)$ la cantidad de conjuntos buenos de tamaño $k$ en $G(n,m)$. Encuentra $f(n,m,k)$.`,
   },
   {
-    codigo: 'OMMU-PR-2024-5',
+    codigo: 'OMUM-PR-2024-5',
     titulo: 'Funciones con f(f(x)) = x⁴',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Álgebra',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(5),
     enunciado: String.raw`Encuentra todas las funciones $f:(0,\infty)\rightarrow(0,\infty)$ que satisfacen:
 (i) $f(xy)=f(x)f(y)$
 (ii) $f(f(x))=x^4$
@@ -166,117 +172,117 @@ Un conjunto de vértices se considera bueno si no hay dos de ellos que sean veci
 
   // --- 2025 ---
   {
-    codigo: 'OMMU-PR-2025-1',
+    codigo: 'OMUM-PR-2025-1',
     titulo: 'Suma alternante sobre subconjuntos',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Combinatoria',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(1),
     enunciado: String.raw`Sea $n$ un número natural y considera $A_n=\{1,2,\dots,n\}$. Para un subconjunto $B\subset A_n$, sea $S_B=a_r-a_{r-1}+a_{r-2}+\dots+(-1)^{r-1}a_1$ si $B=\{a_r>a_{r-1}>\dots>a_1\}$. Calcula:
 $$\sum_{B\subset A_n}S_B$$`,
   },
   {
-    codigo: 'OMMU-PR-2025-2',
+    codigo: 'OMUM-PR-2025-2',
     titulo: 'Convergencia de una suma sobre potencias de primo',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sea $A=\{n\in\mathbb{N} \mid n \text{ es una potencia de primo compuesta}\}$. Sea $f(n)$ el promedio de los divisores de $n$. Demuestra que la siguiente suma converge:
 $$\sum_{n\in A}\frac{1}{f(n)}$$
 Nota: Un número compuesto es aquel que puede expresarse como el producto de dos números mayores que uno. Una potencia de primo es el resultado de multiplicar un mismo número primo por sí mismo varias veces (por ejemplo, $2^3=2\times2\times2$).`,
   },
   {
-    codigo: 'OMMU-PR-2025-3',
+    codigo: 'OMUM-PR-2025-3',
     titulo: 'Matrices sin raíces de x² + px + q',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(3),
     enunciado: String.raw`Sean $p,q\in\mathbb{R}$ tales que para todo número real $x\in\mathbb{R}$, $x^2+px+q\neq 0$. Si $n$ es un entero positivo impar, demuestra que para toda matriz cuadrada $X$ de $n\times n$ con entradas reales:
 $$X^2+pX+qI_n\neq O_n$$
 Nota: $I_n$ representa la matriz identidad de orden $n$, es decir, una matriz cuadrada de tamaño $n\times n$ con unos en la diagonal principal y ceros en el resto. $O_n$ representa la matriz de $n\times n$ cuyas entradas son todas cero.`,
   },
   {
-    codigo: 'OMMU-PR-2025-4',
+    codigo: 'OMUM-PR-2025-4',
     titulo: 'Curva tangente a círculos desde una elipse',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Geometría',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(4),
     enunciado: String.raw`Sea $\Gamma$ una elipse con focos $A$ y $B$. Para cada punto $P\in\Gamma$ se traza un círculo $C(P)$ con centro en $P$ que pasa por el punto $B$. Demuestra que existe una curva cerrada que es tangente a todos los círculos $C(P)$ y que el área encerrada por esta curva es al menos cuatro veces el área de la elipse $\Gamma$.`,
   },
   {
-    codigo: 'OMMU-PR-2025-5',
+    codigo: 'OMUM-PR-2025-5',
     titulo: 'Cota de una integral usando la derivada',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(5),
     enunciado: String.raw`Sea $f:[0,1]\rightarrow\mathbb{R}$ una función continua en $[0,1]$ y diferenciable en $(0,1)$ tal que existe $a\in(0,1]$ que satisface $\int_0^a f(x)dx=0$. Demuestra que:
 $$\left| \int_0^1 f(x)dx \right| \leq \frac{1-a}{2}\sup_{0<x<1}|f'(x)|$$`,
   },
 
   // --- 2026 ---
   {
-    codigo: 'OMMU-PR-2026-1',
+    codigo: 'OMUM-PR-2026-1',
     titulo: 'Concurrencia de rectas con pendiente recíproca',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Geometría',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(1),
     enunciado: String.raw`Sea $ABC$ un triángulo en el plano cartesiano tal que ninguno de sus lados es paralelo a los ejes coordenados. Sean $L$, $M$ y $N$ los puntos medios de los lados $BC$, $CA$ y $AB$, respectivamente. Por cada punto medio, se traza una línea cuya pendiente es el recíproco de la pendiente del lado correspondiente. Demuestra que estas tres líneas son concurrentes.
 Nota: El recíproco de $m$ es $1/m$.`,
   },
   {
-    codigo: 'OMMU-PR-2026-2',
+    codigo: 'OMUM-PR-2026-2',
     titulo: 'Punto donde P′/P iguala una suma de recíprocos',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sea $P(x)$ un polinomio con coeficientes reales que no tiene raíces en $(a,b)\subset\mathbb{R}$. Demuestra que existe $\alpha\in(a,b)$ tal que:
 $$\frac{P'(\alpha)}{P(\alpha)}=\frac{1}{a-\alpha}+\frac{1}{b-\alpha}$$
 Nota: Aquí $P'$ representa la derivada del polinomio.`,
   },
   {
-    codigo: 'OMMU-PR-2026-3',
+    codigo: 'OMUM-PR-2026-3',
     titulo: 'Determinante de una matriz de senos',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(3),
     enunciado: String.raw`Calcula el determinante de la matriz $A$ de tamaño $2026\times 2026$ cuyas entradas están dadas por la expresión $A_{i,j}=\sin(2026i+j)$ donde $1\le i\le 2026$ y $0\le j\le 2025$.`,
   },
   {
-    codigo: 'OMMU-PR-2026-4',
+    codigo: 'OMUM-PR-2026-4',
     titulo: 'Pares y tripletas que dan la identidad en un grupo',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Álgebra',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(4),
     enunciado: String.raw`Sea $G$ un grupo finito de orden $2n$ con elemento identidad $e$. Considera $R$ y $B$ como dos subconjuntos disjuntos de $G$ tales que $G=R\cup B$ con $|R|=|B|=n$.
 a) Demuestra que $|\{(x,y)\in R^2 \mid xy=e\}|=|\{(x,y)\in B^2 \mid xy=e\}|$.
 b) Proporciona un contraejemplo que demuestre que el enunciado análogo para tripletas es falso; es decir, que en general $|\{(x,y,z)\in R^3 \mid xyz=e\}|\neq|\{(x,y,z)\in B^3 \mid xyz=e\}|$.
 Nota: Un grupo es un conjunto $G$ con una operación asociativa $\cdot:G\times G\rightarrow G$, con identidad $e$ y con inversos.`,
   },
   {
-    codigo: 'OMMU-PR-2026-5',
+    codigo: 'OMUM-PR-2026-5',
     titulo: 'Límite del valor esperado de la valuación p-ádica',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Probabilidad',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(5),
     enunciado: String.raw`Sea $p$ un número primo fijo. Para cada entero positivo $n$, sea $X_n$ una variable aleatoria uniforme en el conjunto $\{1,2,\dots,n\}$. Definimos $V_p(m)$ como el exponente de $p$ en la factorización prima de $m$. Demuestra que el siguiente límite existe y encuentra su valor:
 $$\lim_{n\rightarrow\infty}\mathbb{E}[V_p(X_n)]$$
 Nota: Recuerda que para una variable aleatoria discreta $Y$ que toma valores enteros positivos, tenemos $\mathbb{E}(Y)=\sum_{k=1}^{\infty}k\cdot P(Y=k)$.`,
@@ -284,135 +290,135 @@ Nota: Recuerda que para una variable aleatoria discreta $Y$ que toma valores ent
 ]
 
 // ===========================================================================
-// OMMU — CONCURSO NACIONAL
+// OMUM — CONCURSO NACIONAL
 // ===========================================================================
 
-const ommuNacional = [
+const omumNacional = [
   // --- 2024 ---
   {
-    codigo: 'OMMU-NAC-2024-1',
+    codigo: 'OMUM-NAC-2024-1',
     titulo: 'La ecuación x⁴ = p + 9y⁴',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Teoría de Números',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(1),
     enunciado: String.raw`Sean $x, y, p$ enteros positivos que satisfacen la ecuación $x^4=p+9y^4$ donde $p$ es un número primo. Demuestra que $\frac{p^2-1}{3}$ es un cuadrado perfecto y un múltiplo de $16$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-2',
+    codigo: 'OMUM-NAC-2024-2',
     titulo: 'Un polinomio que lleva A a B',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sean $A$ y $B$ dos matrices cuadradas con entradas complejas tales que $A+B=AB$, $A=A^*$ y $A$ tiene todos sus valores propios distintos. Demuestra que existe un polinomio $P$ con coeficientes complejos tal que $P(A)=B$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-3',
+    codigo: 'OMUM-NAC-2024-3',
     titulo: 'Valores cercanos de una función multiplicativa',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Teoría de Números',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(3),
     enunciado: String.raw`Considera una función multiplicativa $f$ de los enteros positivos al disco unitario centrado en el origen, es decir, $f:\mathbb{Z}^+\rightarrow D^2\subseteq\mathbb{C}$ tal que $f(mn)=f(m)f(n)$. Demuestra que para todo $\epsilon>0$ y todo entero $k>0$ existen $k$ enteros positivos distintos $a_1,a_2,\dots,a_k$ tales que $\operatorname{mcd}(a_1,a_2,\dots,a_k)=k$ y $d(f(a_i),f(a_j))<\epsilon$ para todos $i, j=1,\dots,k$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-4',
+    codigo: 'OMUM-NAC-2024-4',
     titulo: 'Límite de la raíz i-ésima de una entrada de Bⁱ',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(4),
     enunciado: String.raw`Dado $b>0$ considera la siguiente matriz:
 $$B=\begin{pmatrix}b&b^2\\ b^2&b^3\end{pmatrix}$$
 Denota por $e_i$ la entrada superior izquierda de $B^i$. Demuestra que el siguiente límite existe y calcula su valor:
 $$\lim_{i\rightarrow\infty}\sqrt[i]{e_i}$$`,
   },
   {
-    codigo: 'OMMU-NAC-2024-5',
+    codigo: 'OMUM-NAC-2024-5',
     titulo: 'Permutación que evita sumas cero',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(5),
     enunciado: String.raw`Considera dos sucesiones finitas de números reales $a_1,a_2,\dots,a_n$ y $b_1,b_2,\dots,b_n$. Sean $\alpha(x)=|\{i \mid a_i=x\}|$ y $\beta(x)=|\{i \mid b_i=-x\}|$. Demuestra que existe una permutación $\sigma\in S_n$ (el grupo simétrico de $n$ elementos) tal que $a_{\sigma(i)}+b_i\neq 0$ para todo $i=1,\dots,n$ si y solo si $\alpha(x)+\beta(x)\le n$ para todo $x\in\mathbb{R}$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-6',
+    codigo: 'OMUM-NAC-2024-6',
     titulo: 'Cota para (p²)″ en términos de (p′)²',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(6),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(6),
     enunciado: String.raw`Sea $p$ un polinomio mónico con todas sus raíces reales distintas. Demuestra que existe $K$ tal que $(p(x)^2)''\le K(p'(x))^2$.`,
   },
 
   // --- 2025 ---
   {
-    codigo: 'OMMU-NAC-2025-1',
+    codigo: 'OMUM-NAC-2025-1',
     titulo: 'Integral con simetría en 25 y 81',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(1),
     enunciado: String.raw`Encuentra el valor de la integral (Día 1):
 $$\int_{25}^{81}\frac{\sin(x)}{x\left(\sin(x)+\sin\left(\frac{2025}{x}\right)\right)}dx$$`,
   },
   {
-    codigo: 'OMMU-NAC-2025-2',
+    codigo: 'OMUM-NAC-2025-2',
     titulo: 'Ventiladores cíclicos y botones de fila-columna',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(2),
     enunciado: String.raw`(Día 1) Considera una cuadrícula de $n\times n$ ventiladores, donde cada ventilador tiene $2025$ velocidades. La velocidad más baja corresponde al estado "apagado". Cada ventilador puede cambiar su velocidad a la siguiente más alta, y desde la velocidad máxima pasa al estado "apagado"; es decir, el cambio de velocidades ocurre de forma cíclica. Hay un control remoto con botones también dispuestos en una cuadrícula de $n\times n$. Cuando se presiona un botón, todos los ventiladores en la misma fila y columna que ese botón aumentan su velocidad en uno (siguiendo el ciclo descrito). Determina la cantidad de valores $n\le 2025$ para los cuales es posible pasar del estado donde todos los ventiladores están apagados a un estado donde todos están encendidos a la misma velocidad (para cada una de las $2025$ velocidades posibles).`,
   },
   {
-    codigo: 'OMMU-NAC-2025-3',
+    codigo: 'OMUM-NAC-2025-3',
     titulo: 'Grupo de matrices simétricas con valores propios ±1',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(3),
     enunciado: String.raw`(Día 1) Sea $G$ un grupo de matrices simétricas de $n\times n$ con entradas reales. Supón que para todo elemento en $G$, sus valores propios son $1$ o $-1$. Demuestra que el tamaño de $G$ es $2^k$ para algún $k\le n$.`,
   },
   {
-    codigo: 'OMMU-NAC-2025-4',
+    codigo: 'OMUM-NAC-2025-4',
     titulo: 'Hexágono regular a partir de triángulos equiláteros',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Geometría',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(4),
     enunciado: String.raw`(Día 2) Se construyen triángulos equiláteros externamente sobre los lados de un hexágono que tiene un centro de simetría. Los vértices de estos triángulos que no pertenecen al hexágono inicial forman un nuevo hexágono. Demuestra que los puntos medios de los lados de este nuevo hexágono son vértices de un hexágono regular.`,
   },
   {
-    codigo: 'OMMU-NAC-2025-5',
+    codigo: 'OMUM-NAC-2025-5',
     titulo: 'Camino hamiltoniano de suma cero',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(5),
     enunciado: String.raw`(Día 2) Cada arista de una gráfica completa con $101$ vértices está etiquetada con $1$ o $-1$. Se sabe que el valor absoluto de la suma de los números asignados a las aristas es menor que $150$. Demuestra que la gráfica contiene un camino que visita todos los vértices exactamente una vez, tal que la suma de los valores de dicho camino es cero.`,
   },
   {
-    codigo: 'OMMU-NAC-2025-6',
+    codigo: 'OMUM-NAC-2025-6',
     titulo: 'Límite de una sucesión recursiva entre √n',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(6),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(6),
     enunciado: String.raw`(Día 2) Considera la sucesión $(a_n)$ definida por la relación:
 $$a_n=\frac{a_{n-1}+\sqrt{a_{n-1}^2+4}}{2}, \quad a_1=1$$
 Demuestra que $b_n=\frac{a_n}{\sqrt{n}}$ converge y calcula su valor en el límite cuando $n\rightarrow\infty$.`,
@@ -420,13 +426,13 @@ Demuestra que $b_n=\frac{a_n}{\sqrt{n}}$ converge y calcula su valor en el lími
 
   // --- 2026 ---
   {
-    codigo: 'OMMU-NAC-2026-1',
+    codigo: 'OMUM-NAC-2026-1',
     titulo: 'Longitud mínima de un ciclo con relación tipo trenza',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Álgebra',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(1),
     enunciado: String.raw`(Día 1) Sean $\alpha$ y $\beta$ dos permutaciones de $n$ elementos, con $n>3$, tales que:
 a) Para cualquier $x$, si $\alpha(x)=x$ entonces $\beta(x)\neq x$, es decir, $\alpha$ y $\beta$ no tienen puntos fijos en común.
 b) $\alpha$ y $\beta$ satisfacen la siguiente relación: $\alpha\cdot\beta^{-1}\cdot\alpha^{-1}\cdot\beta\cdot\alpha\cdot\beta^{-1}\cdot\alpha\cdot\beta\cdot\alpha^{-1}\cdot\beta^{-1}=1$.
@@ -434,57 +440,57 @@ c) $\alpha$ consiste en un solo ciclo de longitud $k$ con $k<n$.
 Demuestra que $k\ge 2n/3$.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-2',
+    codigo: 'OMUM-NAC-2026-2',
     titulo: 'Desigualdad entre grados y una función en los vértices',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(2),
     enunciado: String.raw`(Día 1) Sea $G=(V,E)$ una gráfica conexa, donde $V$ es el conjunto de vértices y $E$ es el conjunto de aristas. Sea $d_i$ el grado del vértice $i\in V$. Sea también $f:V\rightarrow\mathbb{R}^+$ una función que satisface $f(i)f(j)\ge 1$, para todo $i\sim j$, donde $i\sim j$ significa que los vértices $i$ y $j$ son adyacentes.
 a) Demuestra que $\sum_{i\in V}f(i)\ge\sum_{e=\{i,j\}}\frac{2}{\sqrt{d_id_j}}$.
 b) Determina todas las gráficas $G$ y funciones $f$ para las cuales se alcanza la igualdad.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-3',
+    codigo: 'OMUM-NAC-2026-3',
     titulo: 'Grado mínimo de un polinomio separador',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Geometría',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(3),
     enunciado: String.raw`(Día 1) En el plano, hay $2025$ puntos azules y $2026$ puntos rojos en posición general. Determina el menor entero $d$ con la siguiente propiedad: para cualquier distribución de estos puntos, existe un polinomio $P(x,y)\in\mathbb{R}[x,y]$ de grado a lo más $d$ tal que $P(R)<0$ para todo punto rojo $R$, y $P(A)>0$ para todo punto azul $A$.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-4',
+    codigo: 'OMUM-NAC-2026-4',
     titulo: 'Determinante y valores z_i distintos',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(4),
     enunciado: String.raw`(Día 2) Sean $z_1,z_2,\dots, z_{1013}$ números complejos. Considera la matriz $A$ de tamaño $2026\times 2026$. Para cada $i=1,\dots, 1013$, la fila $2i-1$ de la matriz está dada por: $(1,z_i,z_i^2,\dots,z_i^{2025})$ y la fila $2i$ está dada por: $(0,1,2z_i,3z_i^2,\dots,2025z_i^{2024})$. Demuestra que $\det(A)$ es distinto de cero si y solo si todos los $z_i$ son distintos.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-5',
+    codigo: 'OMUM-NAC-2026-5',
     titulo: 'Asíntotas de la raíz máxima de q_d',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(5),
     enunciado: String.raw`(Día 2) Sea $p(x)$ un polinomio mónico de grado $n$, con $n$ par, que tiene $n$ raíces reales positivas distintas. Para cada $d>0$, define $q_d(x)=\frac{1}{d}x^{n+1}-p(x)$, y sea $\lambda_{\max}(d)$ la mayor raíz real de $q_d$.
 a) Demuestra que existen números reales $\alpha$ y $L\neq 0$ tales que $\lim_{d\rightarrow\infty}\frac{\lambda_{\max}(d)}{d^\alpha}=L$, y determina $\alpha$ y $L$.
 b) Demuestra que existen números reales $\beta$ y $M\neq 0$ tales que $\lim_{d\rightarrow 0^+}\frac{\lambda_{\max}(d)}{d^\beta}=M$, y determina $\beta$ y $M$.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-6',
+    codigo: 'OMUM-NAC-2026-6',
     titulo: 'Movimientos mínimos para vaciar fichas módulo 2026',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(6),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(6),
     enunciado: String.raw`(Día 2) Sea $N$ un múltiplo de $2025^2-1$. Supón que los números $1, 2, \dots, 2026$ tienen $N$ fichas cada uno. Un movimiento consiste en remover fichas de los números $x_1,x_2,\dots,x_n$ (no necesariamente distintos) tales que:
 a) $x_1+x_2+\dots+x_n\equiv 0 \pmod{2026}$, y
 b) $x_{i_1}+x_{i_2}+\dots+x_{i_r}\not\equiv 0 \pmod{2026}$ para cualquier subconjunto propio $\{i_1,i_2,\dots,i_r\}\subsetneq\{1,2,\dots,n\}$.
@@ -1163,6 +1169,290 @@ En cualquier punto del juego, el conjunto $S$ de elementos previamente elegidos 
 Ahora sea $G$ el grupo de matrices invertibles de $n\times n$ con entradas en $\mathbb{Z}/p\mathbb{Z}$. Si $p>2$, entonces $Z(S)$ siempre contendrá la matriz escalar $-1$ de orden 2, así que la victoria de Keeta está garantizada (una estrategia ganadora explícita es responder a cualquier movimiento $g$ con el movimiento $-g$). Si $p=2$, establecemos la existencia de $g \in G$ tal que $Z(\{g\})$ tiene orden impar usando la existencia de un polinomio irreducible $P(x)$ de grado $n$ sobre $\mathbb{Z}/p\mathbb{Z}$. Construimos una matriz de $n\times n$ sobre $\mathbb{Z}/p\mathbb{Z}$ con polinomio característico $P(x)$ tomando la matriz compañera de $P(x)$: escribe $P(x) = x^n+P_{n-1}x^{n-1}+\cdots+P_0$ y define $$ g = \begin{pmatrix} 0 & 0 & \cdots & 0 & -P_0 \\ 1 & 0 & \cdots & 0 & -P_1 \\ 0 & 1 & \cdots & 0 & -P_2 \\ \vdots & \vdots & \ddots & \vdots & \vdots \\ 0 & 0 & \cdots & 1 & -P_{n-1} \end{pmatrix}. $$ En particular, $\det(g) = (-1)^nP_0 \neq 0$, así que $g \in G$. Sobre una clausura algebraica de $\mathbb{Z}/p\mathbb{Z}$, $g$ se vuelve diagonalizable con valores propios distintos, así que cualquier matriz que conmute con $g$ también debe ser diagonalizable, y por lo tanto de orden impar. En particular, $Z(\{g\})$ tiene orden impar, así que Patniss tiene una estrategia ganadora. Por lo tanto, $$ \boxed{\text{Patniss gana si } p=2 \text{; Keeta gana si } p>2}. $$`),
 ]
 
+const putnam2015 = [
+  putnam('PUTNAM-2015-A2', 2015, 'A', 2, 'Factor primo impar de una recursión lineal a_n=4a_{n-1}−a_{n-2}', 'Teoría de Números',
+    String.raw`Sea $a_0=1$, $a_1=2$, y $a_n=4a_{n-1}-a_{n-2}$ para $n\geq 2$. Encuentra un factor primo impar de $a_{2015}$.`,
+    String.raw`Una respuesta posible es $181$. Por inducción, tenemos $a_n = ((2+\sqrt{3})^n+(2-\sqrt{3})^n)/2 = (\alpha^n+\beta^n)/2$ para todo $n$, donde $\alpha = 2+\sqrt{3}$ y $\beta = 2-\sqrt{3}$. Observa que si $k$ es un entero positivo impar y $a_n \neq 0$, entonces $$ \frac{a_{kn}}{a_n} = \frac{\alpha^{kn}+\beta^{kn}}{\alpha^n+\beta^n} = \alpha^{(k-1)n}-\alpha^{(k-2)n}\beta^n+\cdots-\alpha^n\beta^{(k-2)n}+\beta^{(k-1)n}. $$ Esta expresión es racional (porque $a_n$ y $a_{kn}$ son enteros) y de la forma $a+b\sqrt{3}$ para algunos enteros $a,b$ por las expresiones de $\alpha,\beta$; se sigue que debe ser un entero, así que $a_{kn}$ es divisible entre $a_n$. Aplicando esto a $n=5$ y $k=403$, encontramos que $a_{2015}$ es divisible entre $a_5 = 362$ y por lo tanto entre $\boxed{181}$.`),
+  putnam('PUTNAM-2015-A3', 2015, 'A', 3, 'Logaritmo base 2 de un producto doble de raíces de la unidad', 'Teoría de Números',
+    String.raw`Calcula $$ \log_2\left(\prod_{a=1}^{2015}\prod_{b=1}^{2015}(1+e^{2\pi i a b/2015})\right). $$ Aquí $i$ es la unidad imaginaria (es decir, $i^2=-1$).`,
+    String.raw`La respuesta es $13725$. Primero afirmamos que si $n$ es impar, entonces $\prod_{b=1}^n (1+e^{2\pi i ab/n}) = 2^{\gcd(a,n)}$. Para verlo, escribe $d=\gcd(a,n)$ y $a=da_1$, $n=dn_1$ con $\gcd(a_1,n_1)=1$. Entonces $a_1, 2a_1,\dots,n_1a_1$ módulo $n_1$ es una permutación de $1,2,\dots,n_1$ módulo $n_1$, así que, para $\omega=e^{2\pi i/n_1}$, $\omega^{a_1},\omega^{2a_1},\dots,\omega^{n_1a_1}$ es una permutación de $\omega,\omega^2,\ldots,\omega^{n_1}$; se sigue que $$ \prod_{b=1}^{n_1} (1+e^{2\pi i ab/n}) = \prod_{b=1}^{n_1} (1+e^{2\pi i a_1 b/n_1}) = \prod_{b=1}^{n_1} (1+\omega^b). $$ Como las raíces de $z^{n_1}-1$ son $\omega,\omega^2,\ldots,\omega^{n_1}$, se sigue que $z^{n_1}-1 = \prod_{b=1}^{n_1} (z-\omega^b)$. Sustituyendo $z=-1$ y usando que $n_1$ es impar da $\prod_{b=1}^{n_1}(1+\omega^b) = 2$. Finalmente, $\prod_{b=1}^n (1+e^{2\pi i ab/n}) = \left(\prod_{b=1}^{n_1}(1+e^{2\pi i ab/n})\right)^d = 2^d$, lo cual demuestra la afirmación.
+
+De la afirmación, encontramos que $$ \log_2\left(\prod_{a=1}^{2015}\prod_{b=1}^{2015}(1+e^{2\pi i ab/2015})\right) = \sum_{a=1}^{2015} \log_2\left(\prod_{b=1}^{2015}(1+e^{2\pi i ab/2015})\right) = \sum_{a=1}^{2015} \gcd(a,2015). $$ Ahora, para cada divisor $d$ de 2015, hay $\phi(2015/d)$ enteros entre 1 y 2015 inclusive cuyo mcd con 2015 es $d$. Así, $$ \sum_{a=1}^{2015} \gcd(a,2015) = \sum_{d\mid 2015} d\cdot\phi(2015/d). $$ Factorizamos $2015=pqr$ con $p=5$, $q=13$, $r=31$, y calculamos que $$ \sum_{d\mid pqr} d\cdot\phi(pqr/d) = (2p-1)(2q-1)(2r-1) $$ (sumando las ocho contribuciones correspondientes a cada divisor de $pqr$). Cuando $(p,q,r)=(5,13,31)$, esto es igual a $\boxed{13725}$.`),
+  putnam('PUTNAM-2015-A4', 2015, 'A', 4, 'Cota inferior óptima L=4/7 para una suma binaria ponderada', 'Análisis',
+    String.raw`Para cada número real $x$, sea $$ f(x) = \sum_{n\in S_x} \frac{1}{2^n}, $$ donde $S_x$ es el conjunto de enteros positivos $n$ para los cuales $\lfloor nx \rfloor$ es par. ¿Cuál es el mayor número real $L$ tal que $f(x) \geq L$ para todo $x \in [0,1)$?`,
+    String.raw`La respuesta es $L = 4/7$. Para $S \subset \mathbb{N}$, sea $F(S) = \sum_{n\in S} 1/2^n$, de modo que $f(x) = F(S_x)$. Observa que para $T=\{1,4,7,10,\ldots\}$, tenemos $F(T)=4/7$.
+
+Primero mostramos, por contradicción, que para cualquier $x \in [0,1)$, $f(x) \geq 4/7$. Como cada término de la serie geométrica $\sum_n 1/2^n$ es igual a la suma de todos los términos siguientes, si $S,S'$ son subconjuntos distintos de $\mathbb{N}$ y el menor entero positivo en uno de $S,S'$ pero no en el otro está en $S$, entonces $F(S) \geq F(S')$. Supón $f(x) < 4/7$; entonces el menor entero en uno de $S_x, T$ pero no en el otro está en $T$. Ahora $1 \in S_x$ para cualquier $x \in [0,1)$, y concluimos que hay tres enteros consecutivos $n,n+1,n+2$ que no están en $S_x$: es decir, $\lfloor nx\rfloor$, $\lfloor(n+1)x\rfloor$, $\lfloor(n+2)x\rfloor$ son todos impares. Como la diferencia entre términos consecutivos de $nx$, $(n+1)x$, $(n+2)x$ es $x<1$, concluimos que $\lfloor nx\rfloor = \lfloor(n+1)x\rfloor = \lfloor(n+2)x\rfloor$, así que $x<1/2$. Pero entonces $2 \in S_x$, así que $f(x) \geq 3/4$, contradiciendo nuestra suposición.
+
+Falta mostrar que $4/7$ es la mayor cota inferior para $f(x)$, $x\in[0,1)$. Para cualquier $n$, elige $x=2/3-\epsilon$ con $0<\epsilon<1/(9n)$; entonces para $1\leq k\leq n$ se puede verificar que $$ \lfloor(3k-2)x\rfloor = 2k-2, \qquad \lfloor(3k-1)x\rfloor = 2k-1, \qquad \lfloor 3kx\rfloor = 2k-1. $$ Se sigue que $S_x$ es un subconjunto de $S=\{1,4,7,\ldots,3n-2,3n+1,3n+2,3n+3,\ldots\}$, así que $$ f(x)=F(S_x) \leq F(S) = \left(\frac{1}{2}+\frac{1}{2^4}+\cdots+\frac{1}{2^{3n+1}}\right)+\frac{1}{2^{3n+1}}. $$ Esta última expresión tiende a $4/7$ cuando $n\to\infty$, así que ningún número mayor que $4/7$ puede ser cota inferior de $f(x)$ para todo $x\in[0,1)$. Por lo tanto, $\boxed{L=\frac{4}{7}}$.`),
+  putnam('PUTNAM-2015-B1', 2015, 'B', 1, "Al menos dos ceros de f+6f'+12f''+8f''' dado 5 ceros de f", 'Análisis',
+    String.raw`Sea $f$ una función tres veces diferenciable (definida en $\mathbb{R}$ y con valores reales) tal que $f$ tiene al menos cinco ceros reales distintos. Demuestra que $f + 6f' + 12f'' + 8f'''$ tiene al menos dos ceros reales distintos.`,
+    String.raw`Sea $g(x) = e^{x/2} f(x)$. Entonces $g$ tiene al menos 5 ceros reales distintos, y aplicando repetidamente el teorema de Rolle, $g', g'', g'''$ tienen al menos $4,3,2$ ceros reales distintos, respectivamente. Pero $$ g'''(x) = \frac{1}{8} e^{x/2} \left(f(x) + 6f'(x) + 12f''(x) + 8f'''(x)\right), $$ y $e^{x/2}$ nunca es cero, así que obtenemos el resultado deseado.`),
+  putnam('PUTNAM-2015-B2', 2015, 'B', 2, '42015 aparece en la secuencia de sumas de tríos consecutivos', 'Teoría de Números',
+    String.raw`Dada la lista de enteros positivos $1,2,3,4,\dots$, toma los primeros tres números $1,2,3$ y su suma $6$, y elimina los cuatro números de la lista. Repite con los tres números restantes más pequeños $4,5,7$ y su suma $16$. Continúa así, eliminando los tres números restantes más pequeños y su suma, y considera la sucesión de sumas producida: $6, 16, 27, 36, \dots$. Demuestra o refuta que hay algún número en la sucesión cuya representación en base 10 termina en $2015$.`,
+    String.raw`Demostraremos que 42015 es tal número en la sucesión. Etiqueta la sucesión de sumas $s_0, s_1, \dots$, y sean $a_n, b_n, c_n$ los sumandos de $s_n$ en orden ascendente. Se puede probar por inducción que, para cada entero no negativo $n$: (a) la secuencia $a_{3n}, b_{3n}, c_{3n}, a_{3n+1}, b_{3n+1}, c_{3n+1}, a_{3n+2}, b_{3n+2}, c_{3n+2}$ se obtiene de la secuencia $10n+1, \dots, 10n+10$ eliminando uno de $10n+5, 10n+6, 10n+7$; y (b) se tiene $s_{3n} = 30n+6$, $s_{3n+1} \in \{30n+15, 30n+16, 30n+17\}$, $s_{3n+2} = 30n+27$. Estas afirmaciones se verifican por inducción, partiendo del caso base $n=0,1,2$ (donde $(a,b,c,s)$ es $(1,2,3,6)$, $(4,5,7,16)$, $(8,9,10,27)$) y observando que cada paso implica el siguiente.
+
+Para producir un valor de $n$ para el cual $s_n \equiv 2015 \pmod{10000}$, tomamos $n=3m+1$ para algún entero no negativo $m$ tal que $s_{3m+1}=30m+15$. También necesitamos $30m \equiv 2000 \pmod{10000}$, es decir, $m \equiv 400 \pmod{1000}$. Tomando $m=1400$, aseguramos que $m \equiv 2 \pmod 3$, lo cual garantiza que $s_{3m+1}=30m+15$; esto da $$ s_n = 30m+15 = \boxed{42015}, $$ como se quería.`),
+  putnam('PUTNAM-2015-B4', 2015, 'B', 4, 'Suma sobre triples triangulares (a,b,c) de 2^a/(3^b 5^c)', 'Teoría de Números',
+    String.raw`Sea $T$ el conjunto de todas las ternas $(a,b,c)$ de enteros positivos para las cuales existen triángulos con lados $a,b,c$. Expresa $$ \sum_{(a,b,c)\in T} \frac{2^a}{3^b5^c} $$ como un número racional en su forma más simple.`,
+    String.raw`La respuesta es $17/21$. Para $b,c$ fijos, hay un triángulo de lados $a,b,c$ si y solo si $|b-c|<a<b+c$. Se sigue que la suma buscada es $$ S = \sum_{b,c} \frac{1}{3^b5^c}\left(\sum_{a=|b-c|+1}^{b+c-1} 2^a\right) = \sum_{b,c} \frac{2^{b+c}-2^{|b-c|+1}}{3^b5^c}. $$ Escribimos esto como $S=S_1+S_2$, donde $S_1$ suma sobre enteros positivos $b,c$ con $b\leq c$ y $S_2$ sobre $b>c$. Entonces $$ S_1 = \sum_{b=1}^\infty \sum_{c=b}^\infty \frac{2^{b+c}-2^{c-b+1}}{3^b5^c} = \sum_{b=1}^\infty \left(\left(\frac{2}{3}\right)^b-\frac{2}{6^b}\right)\frac{5}{3}\left(\frac{2}{5}\right)^b = \sum_{b=1}^\infty \left(\frac{5}{3}\left(\frac{4}{15}\right)^b - \frac{10}{3}\left(\frac{1}{15}\right)^b\right) = \frac{85}{231}. $$ De manera similar, $$ S_2 = \sum_{c=1}^\infty \sum_{b=c+1}^\infty \frac{2^{b+c}-2^{b-c+1}}{3^b5^c} = \sum_{c=1}^\infty \left(2\left(\frac{4}{15}\right)^c - 4\left(\frac{1}{15}\right)^c\right) = \frac{34}{77}. $$ Concluimos que $S = S_1+S_2 = \boxed{\frac{17}{21}}$.`),
+  putnam('PUTNAM-2015-B5', 2015, 'B', 5, 'Invariante P_{n+5}−P_{n+4}−P_{n+3}+P_n=4 en permutaciones acotadas', 'Combinatoria',
+    String.raw`Sea $P_n$ el número de permutaciones $\pi$ de $\{1,2,\dots,n\}$ tales que $$ |i-j|=1 \implies |\pi(i)-\pi(j)| \leq 2 $$ para todos $i,j$ en $\{1,2,\dots,n\}$. Demuestra que, para $n \geq 2$, la cantidad $$ P_{n+5} - P_{n+4} - P_{n+3} + P_n $$ no depende de $n$, y encuentra su valor.`,
+    String.raw`La respuesta es $\boxed{4}$. Supongamos $n \geq 3$ por el momento. Escribimos las permutaciones $\pi$ contadas por $P_n$ como secuencias $\pi(1),\pi(2),\ldots,\pi(n)$. Sea $U_n$ el número de permutaciones contadas por $P_n$ que terminan en $n-1,n$; sea $V_n$ el número que termina en $n,n-1$; sea $W_n$ el número que comienza en $n-1$ y termina en $n-2,n$; sea $T_n$ el número que termina en $n-2,n$ pero no comienza en $n-1$; y sea $S_n$ el número que tiene $n-1,n$ consecutivos en ese orden, pero no al principio ni al final. Es claro que toda permutación $\pi$ contada por $P_n$ está en exactamente uno de los conjuntos contados por $U_n, V_n, W_n, T_n, S_n$, o es el reverso de tal permutación. Por lo tanto, $$ P_n = 2(U_n+V_n+W_n+T_n+S_n). $$ Examinando cómo cada elemento de los conjuntos contados por $U_{n+1}, V_{n+1}, W_{n+1}, T_{n+1}, S_{n+1}$ se puede obtener de un elemento (único) de uno de los conjuntos contados por $U_n, V_n, W_n, T_n, S_n$ insertando adecuadamente el elemento $n+1$, obtenemos las relaciones de recurrencia $$ U_{n+1}=U_n+W_n+T_n, \quad V_{n+1}=U_n, \quad W_{n+1}=W_n, \quad T_{n+1}=V_n, \quad S_{n+1}=S_n+V_n. $$ También es claro que $W_n=1$ para todo $n$.
+
+Aunque hemos supuesto $n \geq 3$, es sencillo extrapolar las sucesiones $P_n,U_n,V_n,W_n,T_n,S_n$ hasta $n=2$ preservando las identidades anteriores. Aplicando estas recurrencias repetidamente, para todo $n \geq 2$ se obtiene, tras varios pasos algebraicos, $$ P_{n+5} = P_{n+4}+P_{n+3}-P_n+4, $$ como se quería.`),
+  putnam('PUTNAM-2015-B6', 2015, 'B', 6, 'Suma alternante de A(k)/k converge a π²/16', 'Teoría de Números',
+    String.raw`Para cada entero positivo $k$, sea $A(k)$ el número de divisores impares de $k$ en el intervalo $[1, \sqrt{2k})$. Evalúa $$ \sum_{k=1}^\infty (-1)^{k-1} \frac{A(k)}{k}. $$`,
+    String.raw`(de artofproblemsolving.com) Demostraremos que la suma converge a $\pi^2/16$. Observa primero que la suma no converge absolutamente, así que no somos libres de reordenarla arbitrariamente; de hecho, el criterio usual de series alternantes tampoco aplica directamente, porque los valores absolutos de los términos no decrecen a 0, así que incluso la convergencia de la suma debe establecerse a mano.
+
+Dejando esto de lado por un momento, observa que los elementos del conjunto contado por $A(k)$ son los enteros positivos impares $d$ para los cuales $m=k/d$ también es entero y $d<\sqrt{2dm}$; si escribimos $d=2\ell-1$, la condición sobre $m$ se reduce a $m \geq \ell$. En otras palabras, la suma original es igual a $$ S_1 := \sum_{k=1}^\infty \sum_{\ell \geq 1,\, m \geq \ell,\, k=m(2\ell-1)} \frac{(-1)^{m-1}}{m(2\ell-1)}, $$ y quisiéramos reordenarla como $$ S_2 := \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \sum_{m=\ell}^\infty \frac{(-1)^{m-1}}{m}, $$ en la cual ambas sumas convergen por el criterio de series alternantes. De hecho, se cumple algo más fuerte: $$ \left| \sum_{m=\ell}^\infty \frac{(-1)^{m-1}}{m} \right| < \frac{1}{\ell}, $$ así que la suma exterior converge absolutamente. En particular, $S_2$ es el límite de las sumas truncadas $$ S_{2,n} = \sum_{\ell(2\ell-1) \leq n} \frac{1}{2\ell-1} \sum_{m=\ell}^\infty \frac{(-1)^{m-1}}{m}. $$ Para ver que $S_1$ converge al mismo valor que $S_2$, se puede mostrar que la diferencia entre $S_{2,n}$ y la suma truncada correspondiente de $S_1$ está acotada en valor absoluto por $\sum_{\ell(2\ell-1)\leq n} \frac{1}{n}$, cuyo número de sumandos es a lo más $\sqrt{n}$; así, esa diferencia está acotada por $1/\sqrt{n}$ y converge a cero cuando $n\to\infty$. Es decir, $S_1$ converge y es igual a $S_2$.
+
+Nos concentramos entonces en calcular $S_2$. Comenzamos escribiendo $$ S_2 = \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \sum_{m=\ell}^\infty (-1)^{m-1} \int_0^1 t^{m-1}\,dt. $$ El siguiente paso es intercambiar la suma interior con la integral; esto se justifica mediante el teorema de convergencia monótona de Lebesgue. Así, $$ S_2 = \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \int_0^1 \left(\sum_{m=\ell}^\infty (-1)^{m-1} t^{m-1}\right)\,dt = \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \int_0^1 \frac{(-t)^{\ell-1}}{1+t}\,dt. $$ Como la suma exterior converge absolutamente, podemos intercambiarla libremente con la integral: $$ S_2 = \int_0^1 \left(\sum_{\ell=1}^\infty \frac{1}{2\ell-1} \frac{(-t)^{\ell-1}}{1+t}\right)dt = \int_0^1 \frac{1}{\sqrt{t}(1+t)} \left(\sum_{\ell=1}^\infty \frac{(-1)^{\ell-1} t^{\ell-1/2}}{2\ell-1}\right) dt = \int_0^1 \frac{\arctan(\sqrt{t})}{\sqrt{t}(1+t)}\,dt. $$ Sustituyendo $u=\sqrt{t}$, $$ S_2 = \int_0^1 \frac{2}{1+u^2}\arctan(u)\,du = \arctan(1)^2 - \arctan(0)^2 = \boxed{\frac{\pi^2}{16}}. $$`),
+]
+
+const putnam2016 = [
+  putnam('PUTNAM-2016-A1', 2016, 'A', 1, 'Menor j para que p^(j)(k) sea divisible entre 2016', 'Teoría de Números',
+    String.raw`Encuentra el menor entero positivo $j$ tal que, para todo polinomio $p(x)$ con coeficientes enteros y todo entero $k$, el entero $$ p^{(j)}(k) = \left.\frac{d^j}{dx^j}p(x)\right|_{x=k} $$ (la $j$-ésima derivada de $p(x)$ en $k$) es divisible entre 2016.`,
+    String.raw`La respuesta es $j=8$. Primero supón que $j$ satisface la condición dada. Para $p(x)=x^j$, tenemos $p^{(j)}(x)=j!$, así que $j!$ debe ser divisible entre 2016. Como 2016 es divisible entre $2^5$ y $7!$ no lo es, se sigue que $j \geq 8$. Recíprocamente, afirmamos que $j=8$ funciona. En efecto, sea $p(x)=\sum_{m=0}^n a_m x^m$ un polinomio con coeficientes enteros; entonces, para cualquier entero $k$, $$ p^{(8)}(k) = \sum_{m=8}^n m(m-1)\cdots(m-7)a_m k^{m-8} = \sum_{m=8}^n \binom{m}{8} 8! \, a_m k^{m-8} $$ es divisible entre $8! = 20 \cdot 2016$, así que $p^{(8)}(k)$ es divisible entre 2016. Por lo tanto, $\boxed{j=8}$.`),
+  putnam('PUTNAM-2016-A2', 2016, 'A', 2, 'Límite de M(n)/n para el mayor m con C(m,n−1)>C(m−1,n)', 'Análisis',
+    String.raw`Dado un entero positivo $n$, sea $M(n)$ el mayor entero $m$ tal que $$ \binom{m}{n-1} > \binom{m-1}{n}. $$ Evalúa $$ \lim_{n \to \infty} \frac{M(n)}{n}. $$`,
+    String.raw`La respuesta es $\frac{3+\sqrt{5}}{2}$. Observa que para $m>n+1$, ambos coeficientes binomiales son no nulos y su razón es $$ \binom{m}{n-1}\Big/\binom{m-1}{n} = \frac{mn}{(m-n+1)(m-n)}. $$ Así, la condición $\binom{m}{n-1}>\binom{m-1}{n}$ equivale a $(m-n+1)(m-n)-mn<0$. El lado izquierdo de esta desigualdad es una función cuadrática de $m$ con raíces $$ \alpha(n) = \frac{3n-1+\sqrt{5n^2-2n+1}}{2}, \qquad \beta(n) = \frac{3n-1-\sqrt{5n^2-2n+1}}{2}, $$ ambas reales ya que $5n^2-2n+1 = 4n^2+(n-1)^2 > 0$; se sigue que $m$ satisface la desigualdad dada si y solo si $\beta(n)<m<\alpha(n)$. (Observa que, como $\alpha(n)-\beta(n)=\sqrt{5n^2-2n+1}>1$, siempre hay algún entero $m$ entre $\beta(n)$ y $\alpha(n)$.) Concluimos que $M(n)$ es el mayor entero estrictamente menor que $\alpha(n)$, y así $\alpha(n)-1 \leq M(n) < \alpha(n)$. Ahora $$ \lim_{n\to\infty} \frac{\alpha(n)}{n} = \lim_{n\to\infty} \frac{3-\frac{1}{n}+\sqrt{5-\frac{2}{n}+\frac{1}{n^2}}}{2} = \frac{3+\sqrt{5}}{2}, $$ y de manera similar $\lim_{n\to\infty}\frac{\alpha(n)-1}{n}=\frac{3+\sqrt{5}}{2}$, así que por el teorema del sándwich, $$ \lim_{n\to\infty} \frac{M(n)}{n} = \boxed{\frac{3+\sqrt{5}}{2}}. $$`),
+  putnam('PUTNAM-2016-A3', 2016, 'A', 3, 'Integral de f dado f(x)+f(1−1/x)=arctan(x)', 'Análisis',
+    String.raw`Supón que $f$ es una función de $\mathbb{R}$ a $\mathbb{R}$ tal que $$ f(x) + f\left(1-\frac{1}{x}\right) = \arctan x $$ para todo real $x \neq 0$. (Como es usual, $y=\arctan x$ significa $-\pi/2 < y < \pi/2$ y $\tan y = x$.) Encuentra $$ \int_0^1 f(x)\,dx. $$`,
+    String.raw`La ecuación funcional dada, junto con la misma ecuación pero reemplazando $x$ por $\frac{x-1}{x}$ y por $\frac{1}{1-x}$ respectivamente, da: $$ f(x) + f\left(1-\frac{1}{x}\right) = \arctan(x), $$ $$ f\left(\frac{x-1}{x}\right) + f\left(\frac{1}{1-x}\right) = \arctan\left(\frac{x-1}{x}\right), $$ $$ f\left(\frac{1}{1-x}\right) + f(x) = \arctan\left(\frac{1}{1-x}\right). $$ Sumando la primera y la tercera y restando la segunda: $$ 2f(x) = \arctan(x) + \arctan\left(\frac{1}{1-x}\right) - \arctan\left(\frac{x-1}{x}\right). $$ Ahora, $\arctan(t)+\arctan(1/t)$ es igual a $\pi/2$ si $t>0$ y $-\pi/2$ si $t<0$; se sigue que, para $x \in (0,1)$, $$ 2(f(x)+f(1-x)) = \left(\arctan(x)+\arctan(1/x)\right) + \left(\arctan(1-x)+\arctan\left(\frac{1}{1-x}\right)\right) - \left(\arctan\left(\frac{x-1}{x}\right)+\arctan\left(\frac{x}{x-1}\right)\right) = \frac{\pi}{2}+\frac{\pi}{2}+\frac{\pi}{2} = \frac{3\pi}{2}. $$ Así, $$ 4\int_0^1 f(x)\,dx = 2\int_0^1 (f(x)+f(1-x))\,dx = \frac{3\pi}{2}, $$ y finalmente $$ \int_0^1 f(x)\,dx = \boxed{\frac{3\pi}{8}}. $$`),
+  putnam('PUTNAM-2016-A4', 2016, 'A', 4, 'Mínimo de fichas mn para teselar un rectángulo (2m−1)×(2n−1)', 'Combinatoria',
+    String.raw`Considera una región rectangular de $(2m-1) \times (2n-1)$, donde $m$ y $n$ son enteros con $m, n \geq 4$. Esta región se va a teselar usando fichas de dos tipos mostrados en una figura (las líneas punteadas dividen las fichas en cuadrados de $1\times 1$). Las fichas se pueden rotar y reflejar, siempre que sus lados queden paralelos a los lados de la región; deben caber dentro de la región y cubrirla por completo sin traslaparse. ¿Cuál es el número mínimo de fichas necesarias para cubrir la región?`,
+    String.raw`El número mínimo de fichas es $mn$. Para ver que se necesitan al menos tantas, etiqueta las casillas $(i,j)$ con $1\leq i\leq 2m-1$ y $1\leq j\leq 2n-1$, y colorea de rojo cada casilla con $i,j$ ambos impares; entonces ninguna ficha puede cubrir más de una casilla roja, y hay $mn$ casillas rojas.
+
+Falta mostrar que se puede cubrir cualquier rectángulo $(2m-1)\times(2n-1)$ con $mn$ fichas cuando $m,n\geq 4$. Primero observa que se puede teselar cualquier rectángulo $2\times(2k-1)$ con $k\geq 3$ usando $k$ fichas: una del primer tipo, luego $k-2$ del segundo tipo, y finalmente una del primer tipo. Así, si podemos cubrir un cuadrado $7\times 7$ con 16 fichas, entonces podemos cubrir el rectángulo general $(2m-1)\times(2n-1)$, descomponiéndolo en un cuadrado $7\times 7$ en la esquina inferior izquierda, junto con $m-4$ rectángulos $2\times 7$ a la derecha del cuadrado, y $n-4$ rectángulos $(2m-1)\times 2$ arriba, y teselando cada uno de estos por separado, para un total de $16+4(m-4)+m(n-4) = mn$ fichas.
+
+Para cubrir el cuadrado $7\times 7$, observa que la teselación debe consistir de 15 fichas del primer tipo y 1 del segundo tipo, y que cualquier rectángulo $2\times 3$ se puede cubrir con 2 fichas del primer tipo. Así, podemos construir una cobertura adecuada cubriendo todo excepto la casilla central con ocho rectángulos $2\times 3$, de modo que la casilla central se pueda unir a uno de estos rectángulos para formar una figura que se cubre con dos fichas. Existen muchas soluciones posibles de este tipo. Por lo tanto, el mínimo buscado es $$ \boxed{mn}. $$`),
+  putnam('PUTNAM-2016-A6', 2016, 'A', 6, 'Menor constante C=5/6 para ∫|P| en cúbicos con raíz en [0,1]', 'Álgebra',
+    String.raw`Encuentra la menor constante $C$ tal que, para todo polinomio real $P(x)$ de grado 3 que tiene una raíz en el intervalo $[0,1]$, $$ \int_0^1 \left| P(x) \right|\,dx \leq C \max_{x \in [0,1]} \left| P(x) \right|. $$`,
+    String.raw`Demostramos que el menor valor de $C$ es $\boxed{5/6}$ (basado en una sugerencia de Daniel Kane). Primero reducimos al caso en que $P$ es no negativo en $[0,1]$ y $P(0)=0$. Para lograr esto, supón que un valor dado de $C$ satisface la desigualdad para tal $P$. Para $P$ general, divide el intervalo $[0,1]$ en subintervalos $I_1,\dots,I_k$ en las raíces de $P$. Escribe $\ell(I_i)$ para la longitud de $I_i$; como cada intervalo está acotado por una raíz de $P$, podemos hacer un cambio lineal de variable para ver que $$ \int_{I_i} |P(x)|\,dx \leq C\, \ell(I_i) \max_{x \in I_i} |P(x)| \quad (i=1,\dots,k). $$ Sumando sobre $i$ se obtiene la desigualdad deseada.
+
+Supón ahora que $P$ toma valores no negativos en $[0,1]$, $P(0)=0$, y $\max_{x\in[0,1]} P(x) = 1$. Escribe $P(x)=ax^3+bx^2+cx$ para algunos $a,b,c \in \mathbb{R}$; entonces $$ \int_0^1 P(x)\,dx = \frac{1}{4}a+\frac{1}{3}b+\frac{1}{2}c = \frac{2}{3}\left(\frac{1}{8}a+\frac{1}{4}b+\frac{1}{2}c\right) + \frac{1}{6}(a+b+c) = \frac{2}{3}P\left(\frac{1}{2}\right) + \frac{1}{6}P(1) \leq \frac{2}{3}+\frac{1}{6} = \frac{5}{6}. $$ En consecuencia, la desigualdad original se cumple con $C=5/6$.
+
+Para demostrar que este valor es óptimo, basta exhibir un polinomio $P$ como el anterior con $\int_0^1 P(x)\,dx = 5/6$; verificamos que $$ P(x) = 4x^3-8x^2+5x $$ tiene esta propiedad. Es evidente que $\int_0^1 P(x)\,dx=5/6$. Como $P'(x)=(2x-1)(6x-5)$ y $$ P(0)=0, \quad P\left(\frac{1}{2}\right)=1, \quad P\left(\frac{5}{6}\right)=\frac{25}{27}, \quad P(1)=1, $$ se sigue que $P$ crece de 0 en $x=0$ a 1 en $x=1/2$, luego decrece a un valor positivo en $x=5/6$, y luego crece a 1 en $x=1$. Por lo tanto $P$ tiene la forma requerida.`),
+  putnam('PUTNAM-2016-B1', 2016, 'B', 1, 'Suma de una sucesión x_{n+1}=ln(e^{x_n}−x_n)', 'Análisis',
+    String.raw`Sea $x_0,x_1,x_2,\dots$ la sucesión tal que $x_0=1$ y, para $n \geq 0$, $$ x_{n+1} = \ln(e^{x_n} - x_n) $$ (como es usual, $\ln$ es el logaritmo natural). Demuestra que la serie infinita $$ x_0 + x_1 + x_2 + \cdots $$ converge, y encuentra su suma.`,
+    String.raw`Observa que la función $e^x-x$ es estrictamente creciente para $x>0$ (porque su derivada es $e^x-1$, positiva porque $e^x$ es estrictamente creciente), y su valor en 0 es 1. Por inducción en $n$, vemos que $x_n>0$ para todo $n$.
+
+Exponenciando la ecuación que define $x_{n+1}$, obtenemos $$ x_n = e^{x_n} - e^{x_{n+1}}. $$ Usamos esta ecuación repetidamente para obtener información cada vez más precisa sobre la sucesión $\{x_n\}$: como $x_n>0$, tenemos $e^{x_n}>e^{x_{n+1}}$, así que $x_n>x_{n+1}$; como la sucesión $\{x_n\}$ es decreciente y acotada por debajo por 0, converge a algún límite $L$; tomando límites en la ecuación se obtiene $L=e^L-e^L$, de donde $L=0$; y, como $L=0$, la sucesión $\{e^{x_n}\}$ converge a 1.
+
+Ahora tenemos una suma telescópica: $$ x_0+\cdots+x_n = (e^{x_0}-e^{x_1})+\cdots+(e^{x_n}-e^{x_{n+1}}) = e^{x_0}-e^{x_{n+1}} = e-e^{x_{n+1}}. $$ Tomando límites, vemos que la suma $x_0+x_1+\cdots$ converge al valor $\boxed{e-1}$.`),
+  putnam('PUTNAM-2016-B2', 2016, 'B', 2, 'Exponente α y constante β para el conteo de enteros "squarish"', 'Teoría de Números',
+    String.raw`Define un entero positivo $n$ como "squarish" si $n$ mismo es un cuadrado perfecto, o si la distancia de $n$ al cuadrado perfecto más cercano es un cuadrado perfecto. Por ejemplo, 2016 es squarish, porque el cuadrado perfecto más cercano a 2016 es $45^2=2025$ y $2025-2016=9$ es un cuadrado perfecto. (De los enteros positivos entre 1 y 10, solo 6 y 7 no son squarish.) Para un entero positivo $N$, sea $S(N)$ el número de enteros squarish entre 1 y $N$, inclusive. Encuentra constantes positivas $\alpha$ y $\beta$ tales que $$ \lim_{N \to \infty} \frac{S(N)}{N^\alpha} = \beta, $$ o demuestra que tales constantes no existen.`,
+    String.raw`Demostramos que el límite existe para $\alpha=\frac{3}{4}$, $\beta=\frac{4}{3}$. Para cualquier entero positivo dado $n$, los enteros más cercanos a $n^2$ que a cualquier otro cuadrado perfecto son los del intervalo $[n^2-n-1, n^2+n]$. El número de enteros squarish en este intervalo es $1+\lfloor\sqrt{n-1}\rfloor+\lfloor\sqrt{n}\rfloor$. A grandes rasgos, esto significa que $$ S(N) \sim \int_0^{\sqrt{N}} 2\sqrt{x}\,dx = \frac{4}{3}N^{3/4}. $$ Para hacer esto preciso, usamos las cotas $x-1 \leq \lfloor x \rfloor \leq x$, y las estimaciones de sumas de Riemann superior e inferior para la integral de $\sqrt{x}$, para obtener cotas superior e inferior en $S(N)$: $$ S(N) \geq \sum_{n=1}^{\lfloor \sqrt{N} \rfloor - 1} (2\sqrt{n-1}-1) \geq \int_0^{\lfloor \sqrt{N} \rfloor - 2} 2\sqrt{x}\,dx - \sqrt{N} \geq \frac{4}{3}(\sqrt{N}-3)^{3/2} - \sqrt{N}, $$ $$ S(N) \leq \sum_{n=1}^{\lceil \sqrt{N} \rceil} (2\sqrt{n}+1) \leq \int_0^{\lceil \sqrt{N}\rceil+1} 2\sqrt{x}\,dx + \sqrt{N}+1 \leq \frac{4}{3}(\sqrt{N}+2)^{3/2}+\sqrt{N}+1. $$ Ambas cotas, divididas entre $N^{3/4}$, tienden a $4/3$ cuando $N\to\infty$, lo cual confirma que $$ \lim_{N\to\infty} \frac{S(N)}{N^{3/4}} = \boxed{\frac{4}{3}}. $$`),
+  putnam('PUTNAM-2016-B4', 2016, 'B', 4, 'Valor esperado de det(A−A^t) para una matriz aleatoria 0/1', 'Combinatoria',
+    String.raw`Sea $A$ una matriz de $2n \times 2n$, con entradas elegidas independientemente al azar. Cada entrada se elige como 0 o 1, cada una con probabilidad $1/2$. Encuentra el valor esperado de $\det(A-A^t)$ (como función de $n$), donde $A^t$ es la transpuesta de $A$.`,
+    String.raw`El valor esperado es igual a $$ \boxed{\frac{(2n)!}{4^n n!}}. $$ Escribe el determinante de $A-A^t$ como la suma sobre permutaciones $\sigma$ de $\{1,\dots,2n\}$ del producto $$ \operatorname{sgn}(\sigma) \prod_{i=1}^{2n} (A-A^t)_{i \sigma(i)} = \operatorname{sgn}(\sigma) \prod_{i=1}^{2n} (A_{i \sigma(i)} - A_{\sigma(i) i}); $$ entonces el valor esperado del determinante es la suma sobre $\sigma$ del valor esperado de este producto, que denotamos $E_\sigma$.
+
+Observa que si partimos $\{1,\dots,2n\}$ en órbitas de la acción de $\sigma$, y partimos los factores del producto de acuerdo con esto, ninguna entrada de $A$ aparece en más de uno de estos factores; en consecuencia, estos factores son variables aleatorias independientes, y podemos calcular $E_\sigma$ como el producto de los valores esperados de los factores individuales.
+
+Es claro que cualquier órbita de tamaño 1 produce el factor cero, así que el valor esperado del factor correspondiente es cero. Para una órbita de tamaño $m \geq 3$, el factor correspondiente contiene $2m$ entradas distintas de la matriz, así que de nuevo podemos calcular el valor esperado del factor como producto de los valores esperados de los términos individuales $A_{i\sigma(i)}-A_{\sigma(i)i}$; pero la distribución de este término es simétrica respecto a 0, así que su valor esperado es 0.
+
+Concluimos que $E_\sigma=0$ a menos que $\sigma$ actúe con $n$ órbitas de tamaño 2. Para calcular $E_\sigma$ en este caso, supón sin pérdida de generalidad que las órbitas de $\sigma$ son $\{1,2\},\dots,\{2n-1,2n\}$; observa que $\operatorname{sgn}(\sigma)=(-1)^n$. Entonces $E_\sigma$ es el valor esperado de $\prod_{i=1}^n -(A_{(2i-1)2i}-A_{2i(2i-1)})^2$, que es $(-1)^n$ veces la $n$-ésima potencia del valor esperado de $(A_{12}-A_{21})^2$. Como $A_{12}-A_{21}$ toma los valores $-1,0,1$ con probabilidades $\frac{1}{4},\frac{1}{2},\frac{1}{4}$, su cuadrado toma los valores $0,1$ con probabilidades $\frac{1}{2},\frac{1}{2}$; concluimos que $$ E_\sigma = 2^{-n}. $$ Las permutaciones $\sigma$ de esta forma corresponden a particiones no ordenadas de $\{1,\dots,2n\}$ en $n$ conjuntos de tamaño 2, así que hay $$ \frac{(2n)!}{n!(2!)^n} $$ tales permutaciones. Combinando todo esto se obtiene el resultado afirmado.`),
+  putnam('PUTNAM-2016-B5', 2016, 'B', 5, 'Funciones f con (f(x))²≤f(y)≤(f(x))³ dado x²≤y≤x³', 'Análisis',
+    String.raw`Encuentra todas las funciones $f$ del intervalo $(1, \infty)$ a $(1, \infty)$ con la siguiente propiedad: si $x,y \in (1, \infty)$ y $x^2 \leq y \leq x^3$, entonces $(f(x))^2 \leq f(y) \leq (f(x))^3$.`,
+    String.raw`Es claro que, para cualquier $c>0$, la función $f(x)=x^c$ tiene la propiedad deseada; demostraremos que, recíprocamente, cualquier función con esta propiedad tiene esta forma para algún $c$.
+
+Define la función $g:(0,\infty)\to(0,\infty)$ dada por $g(x)=\log f(e^x)$; esta función tiene la propiedad de que si $x,y\in(0,\infty)$ y $2x\leq y\leq 3x$, entonces $2g(x)\leq g(y)\leq 3g(x)$. Bastará mostrar que existe $c>0$ tal que $g(x)=cx$ para todo $x>0$.
+
+De manera similar, define $h:\mathbb{R}\to\mathbb{R}$ dada por $h(x)=\log g(e^x)$; esta función tiene la propiedad de que si $x,y\in\mathbb{R}$ y $x+\log 2 \leq y \leq x+\log 3$, entonces $h(x)+\log 2 \leq h(y) \leq h(x)+\log 3$. Bastará mostrar que existe $c$ tal que $h(x)=x+c$ para todo $x\in\mathbb{R}$ (pues entonces $g(x)=e^cx$ para todo $x>0$).
+
+Intercambiando los papeles de $x$ y $y$, podemos reformular la condición sobre $h$ así: si $x-\log 3 \leq y \leq x-\log 2$, entonces $h(x)-\log 3 \leq h(y) \leq h(x)-\log 2$. Esto da los casos $a+b=0,1$ de la siguiente afirmación, que se establece por inducción completa en $a+b$: para cualesquiera enteros no negativos $a,b$, para todos $x,y\in\mathbb{R}$ tales que $$ x+a\log 2-b\log 3 \leq y \leq x+a\log 3-b\log 2, $$ se tiene $$ h(x)+a\log 2-b\log 3 \leq h(y) \leq h(x)+a\log 3-b\log 2. $$ El paso inductivo se verifica dividiendo el intervalo mediante un punto intermedio adecuado y aplicando la hipótesis de inducción dos veces.
+
+Ahora fija $x,y\in\mathbb{R}$ con $x\leq y$. Como $\log 2$ y $\log 3$ son linealmente independientes sobre $\mathbb{Q}$, las partes fraccionarias de los múltiplos enteros no negativos de $\log 3/\log 2$ son densas en $[0,1)$ (un resultado debido a Kronecker). En particular, para cualquier $\epsilon>0$ y cualquier $N>0$, podemos encontrar enteros $a,b>N$ tales que $$ y-x < a\log 3-b\log 2 < y-x+\epsilon $$ y, para $N$ suficientemente grande, también $a\log 2-b\log 3 < y-x$. Se sigue que $h(y)\leq h(x)+a\log 2-b\log 3 < y-x+\epsilon$; como $\epsilon>0$ es arbitrario, $h(y)-h(x)\leq y-x$. Un argumento similar da $h(y)-h(x)\geq y-x$, así que $h(y)-h(x)=y-x$, es decir, $h(y)-y=h(x)-x$. En otras palabras, la función $x\mapsto h(x)-x$ es constante, como se quería. Por lo tanto, $$ \boxed{f(x)=x^c \text{ para algún } c>0}. $$`),
+  putnam('PUTNAM-2016-B6', 2016, 'B', 6, 'Suma doble alternante con potencias de 2 igual a 1', 'Análisis',
+    String.raw`Evalúa $$ \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k} \sum_{n=0}^\infty \frac{1}{k2^n + 1}. $$`,
+    String.raw`Sea $S$ la suma buscada. Demostraremos que $S=\boxed{1}$. Escribe $$ \sum_{n=0}^\infty \frac{1}{k2^n+1} = \frac{1}{k+1} + \sum_{n=1}^\infty \frac{1}{k2^n+1}; $$ entonces podemos escribir $S=S_1+S_2$ donde $$ S_1 = \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k(k+1)}, \qquad S_2 = \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k} \sum_{n=1}^\infty \frac{1}{k2^n+1}. $$ El reordenamiento es válido porque tanto $S_1$ como $S_2$ convergen absolutamente en $k$, por comparación con $\sum 1/k^2$.
+
+Para calcular $S_1$, observa que $$ \sum_{k=1}^N \frac{(-1)^{k-1}}{k(k+1)} = \sum_{k=1}^N (-1)^{k-1}\left(\frac{1}{k}-\frac{1}{k+1}\right) = -1+\frac{(-1)^N}{N+1}+2\sum_{k=1}^N \frac{(-1)^{k-1}}{k} $$ converge a $2\ln 2-1$ cuando $N\to\infty$, así que $S_1=2\ln 2-1$.
+
+Para calcular $S_2$, escribe $\frac{1}{k2^n+1}$ como la serie geométrica $\sum_{m=0}^\infty \frac{(-1)^m}{k^{m+1}2^{mn+n}}$, de donde $$ S_2 = \sum_{k=1}^\infty \sum_{n=1}^\infty \sum_{m=0}^\infty \frac{(-1)^{k+m-1}}{k^{m+2}2^{mn+n}}. $$ Esta suma triple converge absolutamente (se puede acotar por $\sum_k 2/k^2 < \infty$), así que podemos reordenarla para obtener $$ S_2 = \sum_{m=0}^\infty (-1)^m \left(\sum_{n=1}^\infty \frac{1}{2^{mn+n}}\right)\left(\sum_{k=1}^\infty \frac{(-1)^{k-1}}{k^{m+2}}\right). $$ La suma en $n$ es la serie geométrica $\frac{1}{2^{m+1}-1}$. Si llamamos $S_3$ a la suma en $k$, entonces, separando los términos pares de $\sum_k 1/k^{m+2}$, se obtiene $$ S_3 = \left(1-\frac{1}{2^{m+1}}\right)\sum_{k=1}^\infty \frac{1}{k^{m+2}}. $$ Se sigue que $$ S_2 = \sum_{m=0}^\infty \frac{(-1)^m}{2^{m+1}}\sum_{k=1}^\infty \frac{1}{k^{m+2}} = \sum_{k=1}^\infty \frac{1}{2k^2}\sum_{m=0}^\infty \left(-\frac{1}{2k}\right)^m = \sum_{k=1}^\infty \frac{1}{k(2k+1)} = 2\sum_{k=1}^\infty\left(\frac{1}{2k}-\frac{1}{2k+1}\right) = 2(1-\ln 2). $$ Finalmente, $S = S_1+S_2 = \boxed{1}$.`),
+]
+
+const putnam2017 = [
+  putnam('PUTNAM-2017-A1', 2017, 'A', 1, 'Enteros que no están en el conjunto S generado por 2, n², (n+5)²', 'Teoría de Números',
+    String.raw`Sea $S$ el menor conjunto de enteros positivos tal que (a) $2$ está en $S$, (b) $n$ está en $S$ siempre que $n^2$ está en $S$, y (c) $(n+5)^2$ está en $S$ siempre que $n$ está en $S$. ¿Qué enteros positivos no están en $S$? (El conjunto $S$ es "menor" en el sentido de que $S$ está contenido en cualquier otro conjunto con estas propiedades.)`,
+    String.raw`Afirmamos que los enteros positivos que no están en $S$ son $1$ y todos los múltiplos de $5$. Si $S$ consiste de todos los demás números naturales, entonces $S$ satisface las condiciones dadas: observa que los únicos cuadrados perfectos que no están en $S$ son $1$ y los números de la forma $(5k)^2$ para algún entero positivo $k$, y de esto se sigue fácilmente que (b) y (c) se cumplen.
+
+Ahora supón que $T$ es otro conjunto de enteros positivos que satisface (a), (b), y (c). De (b) y (c) se sigue que si $n \in T$ entonces $n+5 \in T$, así que $T$ satisface la siguiente propiedad: (d) si $n\in T$, entonces $n+5k \in T$ para todo $k \geq 0$.
+
+Entonces deben estar en $T$, con las implicaciones etiquetadas por las condiciones (b) a (d): $$ 2 \xRightarrow{c} 49 \xRightarrow{c} 54^2 \xRightarrow{d} 56^2 \xRightarrow{b} 56 \xRightarrow{d} 121 \xRightarrow{b} 11, $$ $$ 11 \xRightarrow{d} 16 \xRightarrow{b} 4 \xRightarrow{d} 9 \xRightarrow{b} 3, \qquad 16 \xRightarrow{d} 36 \xRightarrow{b} 6. $$ Como $2,3,4,6 \in T$, por (d) tenemos $S \subseteq T$, así que $S$ es el menor. Por lo tanto, $$ \boxed{1 \text{ y todos los múltiplos de } 5 \text{ no están en } S}. $$`),
+  putnam('PUTNAM-2017-A6', 2017, 'A', 6, 'Coloreados de aristas de un icosaedro con dos iguales y una distinta por cara', 'Combinatoria',
+    String.raw`Las 30 aristas de un icosaedro regular se distinguen etiquetándolas $1,2,\dots,30$. ¿De cuántas formas distintas se puede pintar cada arista de rojo, blanco o azul de modo que cada una de las 20 caras triangulares del icosaedro tenga dos aristas del mismo color y una tercera de un color distinto?`,
+    String.raw`El número de tales coloreados es $2^{20}3^{10} = \boxed{61917364224}$. Identifica los tres colores rojo, blanco y azul con (en algún orden) los elementos del campo $\mathbb{F}_3$ de tres elementos (el anillo de enteros módulo 3). El conjunto de coloreados se puede identificar entonces con el espacio vectorial $\mathbb{F}_3^E$ generado por el conjunto $E$ de aristas. Sea $F$ el conjunto de caras, y sea $\mathbb{F}_3^F$ el espacio vectorial sobre la base $F$; podemos definir entonces una transformación lineal $T: \mathbb{F}_3^E \to \mathbb{F}_3^F$ que envía un coloreado al vector cuya componente correspondiente a una cara dada es igual a la suma de las tres aristas de esa cara. Los coloreados que queremos contar son aquellos cuyas imágenes bajo $T$ no tienen componentes nulas.
+
+Mostramos ahora que $T$ es sobreyectiva. Sea $\Gamma$ el grafo dual del icosaedro, es decir, $\Gamma$ tiene conjunto de vértices $F$, y dos elementos de $F$ son adyacentes en $\Gamma$ si comparten una arista en el icosaedro. El grafo $\Gamma$ admite un camino hamiltoniano, es decir, existe un orden $f_1,\dots,f_{20}$ de las caras tal que dos caras consecutivas cualesquiera son adyacentes en $\Gamma$ (por ejemplo, con $f_1,\dots,f_5$ las cinco caras que comparten un vértice del icosaedro y $f_{16},\dots,f_{20}$ las cinco que comparten el vértice antípoda). Para $i=1,\dots,19$, sea $e_i$ la arista común de $f_i$ y $f_{i+1}$; estas son claramente todas distintas. Prescribiendo componentes para $e_1,\dots,e_{19}$ una por una y fijando las demás en cero, podemos construir un elemento de $\mathbb{F}_3^E$ cuya imagen bajo $T$ coincide con cualquier vector dado de $\mathbb{F}_3^F$ en las componentes de $f_1,\dots,f_{19}$. Los vectores de $\mathbb{F}_3^F$ obtenidos así forman un subespacio de dimensión 19; este subespacio también se puede describir como los vectores para los cuales las componentes de $f_1,\dots,f_{19}$ suman lo mismo que las de $f_2,\dots,f_{20}$.
+
+Mediante una reflexión especular, podemos construir un segundo camino hamiltoniano $g_1,\dots,g_{20}$ con la propiedad de que $g_1=f_1$, $g_2=f_5$, $g_3=f_4$, $g_4=f_3$, $g_5=f_2$. Repitiendo la construcción anterior, obtenemos un subespacio de dimensión 19 distinto de $\mathbb{F}_3^F$ contenido en la imagen de $T$. Esto implica que $T$ es sobreyectiva, como se afirmó.
+
+Como $T$ es un homomorfismo sobreyectivo de un espacio vectorial de dimensión 30 a uno de dimensión 20, tiene un núcleo de dimensión 10. Cada uno de los $2^{20}$ elementos de $\mathbb{F}_3^F$ sin componentes nulas es entonces la imagen de exactamente $3^{10}$ coloreados de la forma deseada, lo cual da el resultado.`),
+  putnam('PUTNAM-2017-B2', 2017, 'B', 2, 'Menor a en una expresión de N como suma de 2017 consecutivos únicamente', 'Teoría de Números',
+    String.raw`Supón que un entero positivo $N$ se puede expresar como la suma de $k$ enteros positivos consecutivos $$ N = a + (a+1) + (a+2) + \cdots + (a+k-1) $$ para $k=2017$ pero para ningún otro valor de $k>1$. Considerando todos los enteros positivos $N$ con esta propiedad, ¿cuál es el menor entero positivo $a$ que ocurre en alguna de estas expresiones?`,
+    String.raw`Demostramos que el menor valor de $a$ es $\boxed{16}$. Observa que la expresión para $N$ se puede reescribir como $k(2a+k-1)/2$, así que $2N=k(2a+k-1)$. En esta expresión, $k>1$ por hipótesis; $k<2a+k-1$ porque $a>1$; y claramente $k$ y $2a+k-1$ tienen paridad opuesta. Recíprocamente, para cualquier factorización $2N=mn$ con $1<m<n$ y $m,n$ de paridad opuesta, obtenemos una expresión de $N$ de la forma deseada tomando $k=m$, $a=(n+1-m)/2$.
+
+Observa ahora que 2017 es primo (esto se puede verificar por división de prueba entre los primos hasta 43, ya que $2017<45^2$). Para que $2N=2017(2a+2016)$ no tenga otra expresión de la forma especificada, debe ocurrir que $2a+2016$ no tenga ningún divisor impar mayor que 1, es decir, $2a+2016$ debe ser una potencia de 2. Esto ocurre primero cuando $2a+2016=2048$, lo cual da el resultado afirmado.`),
+  putnam('PUTNAM-2017-B4', 2017, 'B', 4, 'Suma alternante de ln(4k+j)/(4k+j) igual a (ln 2)²', 'Análisis',
+    String.raw`Evalúa la suma $$ \sum_{k=0}^\infty \left( 3\cdot\frac{\ln(4k+2)}{4k+2} - \frac{\ln(4k+3)}{4k+3} - \frac{\ln(4k+4)}{4k+4} - \frac{\ln(4k+5)}{4k+5} \right). $$`,
+    String.raw`Demostramos que la suma es igual a $\boxed{(\log 2)^2}$; escribimos $\log x$ para el logaritmo natural de $x$. Observa que, de las dos expresiones de la suma original, la primera es absolutamente convergente (los sumandos decaen como $\log(x)/x^2$), así que debemos ser cuidadosos al reordenar los términos.
+
+Define $a_k = \frac{\log k}{k} - \frac{\log(k+1)}{k+1}$. La suma infinita $\sum_{k=1}^\infty a_k$ converge a 0, ya que $\sum_{k=1}^n a_k$ telescopa a $-\frac{\log(n+1)}{n+1}$, lo cual converge a 0 cuando $n\to\infty$. Observa que $a_k>0$ para $k\geq 3$ ya que $\frac{\log x}{x}$ es decreciente para $x>e$, así que la convergencia de $\sum a_k$ es absoluta.
+
+Escribe $S$ para la suma buscada. Como $3a_{4k+2}+2a_{4k+3}+a_{4k+4} = (a_{4k+2}+a_{4k+4})+2(a_{4k+2}+a_{4k+3})$, tenemos $$ S = \sum_{k=0}^\infty (3a_{4k+2}+2a_{4k+3}+a_{4k+4}) = \sum_{k=1}^\infty a_{2k} + \sum_{k=0}^\infty 2(a_{4k+2}+a_{4k+3}), $$ donde podemos reordenar los términos de la suma infinita ya que $\sum a_k$ converge absolutamente. Ahora, $$ 2(a_{4k+2}+a_{4k+3}) = \frac{\log(4k+2)}{2k+1}-\frac{\log(4k+4)}{2k+2} = a_{2k+1}+(\log 2)\left(\frac{1}{2k+1}-\frac{1}{2k+2}\right), $$ y sumando sobre $k$ se obtiene $$ \sum_{k=0}^\infty 2(a_{4k+2}+a_{4k+3}) = \sum_{k=0}^\infty a_{2k+1} + (\log 2)\sum_{k=1}^\infty \frac{(-1)^{k+1}}{k} = \sum_{k=0}^\infty a_{2k+1} + (\log 2)^2. $$ Finalmente, $$ S = \sum_{k=1}^\infty a_{2k} + \sum_{k=0}^\infty a_{2k+1} + (\log 2)^2 = \sum_{k=1}^\infty a_k + (\log 2)^2 = \boxed{(\log 2)^2}. $$`),
+  putnam('PUTNAM-2017-B5', 2017, 'B', 5, 'Triángulo (9,8,7) con exactamente dos "igualadores" de área y perímetro', 'Geometría',
+    String.raw`Una recta en el plano de un triángulo $T$ se llama igualador si divide a $T$ en dos regiones de área igual y perímetro igual. Encuentra enteros positivos $a>b>c$, con $a$ lo más pequeño posible, tales que exista un triángulo con lados $a, b, c$ que tenga exactamente dos igualadores distintos.`,
+    String.raw`Los enteros buscados son $\boxed{(a,b,c) = (9,8,7)}$. Supón que tenemos un triángulo $T=\triangle ABC$ con $BC=a$, $CA=b$, $AB=c$ y $a>b>c$. Di que una recta es un igualador de área si divide a $T$ en dos regiones de área igual. Una recta que interseca $T$ debe intersecar dos de los tres lados de $T$. Considera primero una recta que interseca los segmentos $AB$ en $X$ y $BC$ en $Y$, y sean $BX=x$, $BY=y$. Esta recta es un igualador de área si y solo si $xy\sin B = \frac{1}{2}ac\sin B$, es decir, $2xy=ac$. Como $x\leq c$ y $y\leq a$, los igualadores de área corresponden a valores de $x,y$ con $xy=ac/2$ y $x\in[c/2,c]$. Tal igualador de área también es un igualador (de perímetro) si y solo si $p/2=x+y$, donde $p=a+b+c$ es el perímetro de $T$. Si escribimos $f(x)=x+ac/(2x)$, queremos resolver $f(x)=p/2$ para $x\in[c/2,c]$; como $f$ es convexa, $f(c/2)=a+c/2>p/2$, y $f(c)=a/2+c<p/2$, hay exactamente una solución en $[c/2,c]$. De manera similar, para igualadores que intersecan $T$ en los lados $AB$ y $AC$, resolvemos $g(x)=p/2$ con $g(x)=x+bc/(2x)$, $x\in[c/2,c]$; como $g$ es convexa y $g(c/2)<p/2$, $g(c)<p/2$, no hay soluciones ahí.
+
+Se sigue que si $T$ tiene exactamente dos igualadores, debe tener exactamente uno intersecando $T$ en los lados $AC$ y $BC$. Aquí queremos resolver $h(x)=p/2$ con $h(x)=x+ab/(2x)$, $x\in[a/2,a]$. Ahora $h$ es convexa y $h(a/2)>p/2$, $h(a)>p/2$; así, $h(x)=p/2$ tiene exactamente una solución en $[a/2,a]$ si y solo si existe $x_0\in[a/2,a]$ con $h'(x_0)=0$ y $h(x_0)=p/2$. La primera condición da $x_0=\sqrt{ab/2}$, y la segunda da $8ab=p^2$. Observa que $\sqrt{ab/2}$ está en $[a/2,a]$ ya que $a>b$ y $a<b+c<2b$.
+
+Concluimos que $T$ tiene dos igualadores si y solo si $8ab=(a+b+c)^2$. Observa que $(a,b,c)=(9,8,7)$ funciona. Afirmamos que esta es la única posibilidad cuando $a>b>c$ son enteros y $a\leq 9$: los únicos $(a,b)$ enteros con $2\leq b<a\leq 9$ para los cuales $8ab$ es un cuadrado perfecto son $(4,2),(6,3),(8,4),(9,2),(9,8)$, y las primeras cuatro posibilidades no producen triángulos porque no satisfacen $a<2b$. Esto da el resultado afirmado.`),
+  putnam('PUTNAM-2017-B6', 2017, 'B', 6, 'Conteo de 64-tuplas distintas con suma ponderada divisible entre 2017', 'Teoría de Números',
+    String.raw`Encuentra el número de 64-tuplas ordenadas $(x_0,x_1,\dots,x_{63})$ tales que $x_0,x_1,\dots,x_{63}$ son elementos distintos de $\{1,2,\dots,2017\}$ y $$ x_0 + x_1 + 2x_2 + 3x_3 + \cdots + 63x_{63} $$ es divisible entre 2017.`,
+    String.raw`El conteo buscado es $$ \boxed{\frac{2016!}{1953!} - 63!\cdot 2016}, $$ el cual se calcula usando el principio de inclusión-exclusión. Como en A2, usamos que 2017 es primo, lo cual permite hacer álgebra lineal sobre el campo $\mathbb{F}_{2017}$: en particular, toda ecuación lineal homogénea no nula en $n$ variables sobre $\mathbb{F}_{2017}$ tiene exactamente $2017^{n-1}$ soluciones.
+
+Para cada partición $\pi$ de $\{0,\dots,63\}$ en bloques, contamos, mediante inclusión-exclusión sobre el retículo de particiones, cuántas 64-tuplas de $\mathbb{F}_{2017}$ satisfacen tanto la condición de suma ponderada divisible entre 2017 como la restricción de que las coordenadas en un mismo bloque de $\pi$ sean iguales. Usando los coeficientes $c_0=1$, $c_i=i$ para $i>1$ (que suman $1+\frac{63\cdot 64}{2}=2017$), se verifica que el número de soluciones para una partición $\pi$ con $|\pi|$ bloques es $2017^{|\pi|-1}$, salvo para la partición trivial de un solo bloque, donde es $2017^{|\pi|}$ en lugar de $2017^{|\pi|-1}$.
+
+Aplicando inclusión-exclusión sobre el retículo de particiones (con los coeficientes de Möbius correspondientes, denotados $\mu_\pi$), el conteo buscado se puede escribir como $$ \frac{2016!}{1953!} + 2016\,\mu_{\pi_1}, $$ donde $\pi_1$ es la partición trivial (todo en un solo bloque). Un argumento independiente (aplicando la misma inclusión-exclusión al conteo de 64-tuplas distintas en un conjunto arbitrario de tamaño $|A|$, y comparando coeficientes del término lineal en $|A|$) muestra que $\mu_{\pi_1} = -63!$. Sustituyendo, se obtiene el resultado afirmado.`),
+]
+
+const putnam2018 = [
+  putnam('PUTNAM-2018-A1', 2018, 'A', 1, 'Pares (a,b) con 1/a+1/b=3/2018', 'Teoría de Números',
+    String.raw`Encuentra todos los pares ordenados $(a,b)$ de enteros positivos para los cuales $$ \frac{1}{a}+\frac{1}{b} = \frac{3}{2018}. $$`,
+    String.raw`Despejando denominadores y reagrupando, vemos que la ecuación dada equivale a $$ (3a-2018)(3b-2018) = 2018^2. $$ Cada uno de los factores es congruente con $1 \pmod 3$. Hay 6 divisores positivos de $2018^2 = 2^2\cdot 1009^2$ congruentes con $1 \pmod 3$: $1$, $2^2$, $1009$, $2^2\cdot 1009$, $1009^2$, $2^2\cdot 1009^2$. Estos dan los 6 pares posibles: $$ \boxed{(a,b) \in \{(673,1358114), (674,340033), (1009,2018), (2018,1009), (340033,674), (1358114,673)\}}. $$ En cuanto a los divisores negativos, los congruentes con $1 \pmod 3$ son $-2, -2\cdot 1009, -2\cdot 1009^2$; sin embargo, todos estos llevan a pares donde $a\leq 0$ o $b\leq 0$.`),
+  putnam('PUTNAM-2018-A2', 2018, 'A', 2, 'Determinante de una matriz de intersección de subconjuntos no vacíos', 'Teoría de Números',
+    String.raw`Sean $S_1, S_2, \dots, S_{2^n-1}$ los subconjuntos no vacíos de $\{1,2,\dots,n\}$ en algún orden, y sea $M$ la matriz de $(2^n-1)\times(2^n-1)$ cuya entrada $(i,j)$ es $$ m_{ij} = \begin{cases} 0 & \text{si } S_i \cap S_j = \emptyset, \\ 1 & \text{en otro caso.} \end{cases} $$ Calcula el determinante de $M$.`,
+    String.raw`La respuesta es $\boxed{1 \text{ si } n=1,\ -1 \text{ si } n>1}$. Escribe $M_n$ para una matriz de $(2^n-1)\times(2^n-1)$ de esta forma, y observa que $\det M_n$ no depende del orden de los subconjuntos: intercambiar dos subconjuntos tiene el efecto de intercambiar dos filas y luego dos columnas en $M_n$, lo cual no cambia el determinante.
+
+Claramente $\det M_1 = 1$. Afirmamos que, para $n>1$, $\det M_n = -(\det M_{n-1})^2$, de donde el resultado se sigue por inducción. Sean $S_1',\ldots,S_{2^{n-1}-1}'$ los subconjuntos no vacíos de $\{1,\ldots,n-1\}$ en algún orden, con matriz resultante $M_{n-1}$. Ordena los subconjuntos no vacíos $S_1,\ldots,S_{2^n-1}$ de $\{1,\ldots,n\}$ de modo que los primeros $2^{n-1}-1$ sean los $S_i'$, los siguientes $2^{n-1}-1$ sean los $S_i' \cup \{n\}$, y el último sea $\{n\}$. Con este orden, $M_n$ tiene una estructura de bloques: dos bloques iguales a $M_{n-1}$, una columna y fila final correspondientes a $\{n\}$ (que interseca a todos los demás subconjuntos), y ceros donde $S_i'$ y $S_j' \cup \{n\}$ son disjuntos.
+
+Restando la fila y columna finales de las filas y columnas correspondientes a los conjuntos $S_i' \cup \{n\}$ (lo cual no cambia el determinante), y luego eliminando la fila y columna final (ya reducida a un 1 aislado), se obtiene la matriz de bloques $$ \begin{pmatrix} M_{n-1} & 0 \\ M_{n-1} & M_{n-1} \end{pmatrix} $$ tras intercambiar las primeras $2^{n-1}-1$ filas con las últimas $2^{n-1}-1$ filas, lo cual introduce un factor global de $(-1)^{(2^{n-1}-1)^2}=-1$. El determinante de esta matriz de bloques (triangular por bloques) es $(\det M_{n-1})^2$. Así, $\det M_n = -(\det M_{n-1})^2$, como se quería.`),
+  putnam('PUTNAM-2018-A3', 2018, 'A', 3, 'Máximo de ∑cos(3x_i) dado ∑cos(x_i)=0 para 10 términos', 'Trigonometría',
+    String.raw`Determina el mayor valor posible de $\sum_{i=1}^{10} \cos(3x_i)$ para números reales $x_1,x_2,\dots,x_{10}$ que satisfacen $\sum_{i=1}^{10} \cos(x_i) = 0$.`,
+    String.raw`El valor máximo es $\boxed{480/49}$. Como $\cos(3x_i) = 4\cos(x_i)^3-3\cos(x_i)$, es equivalente maximizar $4\sum_{i=1}^{10} y_i^3$ para $y_1,\dots,y_{10}\in[-1,1]$ con $\sum_{i=1}^{10} y_i=0$; este dominio es compacto, así que el máximo existe. Por conveniencia, establecemos algo un poco más general: maximizamos $4\sum_{i=1}^n y_i^3$ para $y_1,\dots,y_n\in[-1,1]$ con $\sum_{i=1}^n y_i=0$, donde $n$ puede ser cualquier entero par no negativo hasta 10, y mostramos que el máximo se alcanza en $n=10$.
+
+Primero estudiamos el efecto de variar $y_i$ y $y_j$ manteniendo fija su suma $s$: la función $y \mapsto y^3+(s-y)^3$ tiene segunda derivada constante $6s$, así que es siempre convexa o siempre cóncava. En consecuencia, si $(y_1,\dots,y_n)$ alcanza el máximo, entonces para cualesquiera dos índices $i<j$, al menos una de las siguientes debe cumplirse: uno de $y_i,y_j$ es extremo (igual a 1 o $-1$); $y_i=y_j<0$; o $y_i=-y_j$. En el último caso, podemos descartar $y_i$ y $y_j$ y reducir a un caso con $n$ menor; así que podemos suponer que esto no ocurre. En este caso, todos los valores no extremos son iguales a algún valor común $y<0$, y además no podemos tener tanto 1 como $-1$ presentes; no podemos omitir el 1, pues de lo contrario la condición de suma cero no se puede lograr. Así, solo aparecen los términos 1 y $y$, con multiplicidades positivas $a$ y $b$ que suman $n$.
+
+Como $a+b=n$ y $a+by=0$, podemos despejar $y=-a/b$; entonces $$ 4\sum_{i=1}^n y_i^3 = a+by^3 = 4a\left(1-\frac{a^2}{b^2}\right). $$ Como $y>-1$, debemos tener $a<b$. Para $a$ fijo, la función objetivo crece conforme $b$ crece, así que el caso óptimo debe ocurrir cuando $a+b=10$. Los pares posibles $(a,b)$ en ese caso son $(1,9),(2,8),(3,7),(4,6)$; calculando la función objetivo para estos valores se obtiene, respectivamente, $\frac{32}{9}, \frac{15}{2}, \frac{480}{49}, \frac{80}{9}$, dando $\boxed{480/49}$ como el valor máximo.`),
+  putnam('PUTNAM-2018-B1', 2018, 'B', 1, 'Vector v que rompe la partición equilibrada de una malla 3×101', 'Combinatoria',
+    String.raw`Sea $\mathcal{P}$ el conjunto de vectores definido por $$ \mathcal{P} = \left\{ \begin{pmatrix} a \\ b \end{pmatrix} \,\middle|\, 0 \leq a \leq 2,\ 0 \leq b \leq 100,\ a,b \in \mathbb{Z} \right\}. $$ Encuentra todos los $\mathbf{v} \in \mathcal{P}$ tales que el conjunto $\mathcal{P} \setminus \{\mathbf{v}\}$, obtenido al omitir el vector $\mathbf{v}$ de $\mathcal{P}$, se puede partir en dos conjuntos de igual tamaño e igual suma.`,
+    String.raw`La respuesta es $\boxed{(1,b) \text{ con } 0 \leq b \leq 100 \text{ y } b \text{ par}}$. (Por conveniencia tipográfica, escribimos tuplas en vez de vectores columna.)
+
+Primero mostramos que si $\mathcal{P} \setminus \{\mathbf{v}\}$ se puede partir en subconjuntos $S_1$ y $S_2$ de igual tamaño e igual suma, entonces $\mathbf{v}$ debe tener la forma $(1,b)$ con $b$ par. Para un conjunto finito no vacío $S$ de vectores en $\mathbb{Z}^2$, sea $\Sigma(S)$ la suma de los vectores de $S$. Como las coordenadas $x$ y $y$ promedio en $\mathcal{P}$ son $1$ y $50$ respectivamente, y hay $3\cdot 101$ elementos en $\mathcal{P}$, tenemos $$ \Sigma(\mathcal{P}) = 303\cdot(1,50) = (303,15150). $$ Por otro lado, $$ \Sigma(\mathcal{P}) = \mathbf{v}+\Sigma(S_1)+\Sigma(S_2) = \mathbf{v}+2\Sigma(S_1). $$ Por consideraciones de paridad, las entradas de $\mathbf{v}$ deben ser impar y par, respectivamente, así que $\mathbf{v}$ tiene la forma afirmada.
+
+Ahora supón $\mathbf{v}=(1,b)$ con $b$ par. Observa que $\mathcal{P}\setminus\{(1,50)\}$ se puede partir en 151 parejas de vectores distintos $(x,y)$ y $(2-x,100-y)$, cada una sumando $(2,100)$. Con un ajuste cuidadoso de tres de estas parejas cerca de $b$ (para evitar coincidencias en el caso especial $b=50$), se puede asignar la mitad de las parejas restantes a $S_1$ y la mitad a $S_2$, completando así una partición de $\mathcal{P}\setminus\{\mathbf{v}\}$ en dos conjuntos con el mismo tamaño y la misma suma.`),
+  putnam('PUTNAM-2018-B3', 2018, 'B', 3, 'n=2^(2^ℓ) para ℓ=1,2,4,8 satisface n|2^n, n−1|2^n−1, n−2|2^n−2', 'Teoría de Números',
+    String.raw`Encuentra todos los enteros positivos $n<10^{100}$ para los cuales simultáneamente $n$ divide a $2^n$, $n-1$ divide a $2^n-1$, y $n-2$ divide a $2^n-2$.`,
+    String.raw`Los valores de $n$ con esta propiedad son $\boxed{2^{2^\ell} \text{ para } \ell=1,2,4,8}$. Primero, $n$ divide a $2^n$ si y solo si $n$ es una potencia de 2; escribimos entonces $n=2^m$, y como $n<10^{100}<2^{340}$, tenemos $1\leq m\leq 340$ (el caso $m=0$ no funciona porque para $n=1$, $n-1=0$ no divide a $2^n-1=1$).
+
+Ahora, módulo $n-1=2^m-1$, las potencias de 2 ciclan con periodo $m$; en consecuencia, $n-1$ divide a $2^n-1$ si y solo si $m$ divide a $n=2^m$, lo cual ocurre si y solo si $m$ es una potencia de 2. Escribimos $m=2^\ell$; como $2^\ell<340<512$, tenemos $\ell<9$ (el caso $\ell=0$ no funciona porque para $n=2$, $n-2=0$ no divide a $2^n-2=2$, así que $1\leq \ell \leq 8$).
+
+Finalmente, $n-2=2^m-2$ divide a $2^n-2$ si y solo si $2^{m-1}-1$ divide a $2^{n-1}-1$, lo cual (por la misma lógica) ocurre si y solo si $m-1$ divide a $n-1$, es decir, si $2^\ell-1$ divide a $2^m-1$, lo cual a su vez ocurre si y solo si $\ell$ divide a $m=2^\ell$, es decir, si y solo si $\ell$ es una potencia de 2. Los valores permitidos por la cota $\ell<9$ son $\ell=1,2,4,8$; para estos valores, $m\leq 2^8=256$ y $n=2^m \leq 2^{256} < 10^{100}$, así que las soluciones listadas sí satisfacen la desigualdad original.`),
+  putnam('PUTNAM-2018-B6', 2018, 'B', 6, 'Cota superior para sucesiones de longitud 2018 con suma 3860', 'Combinatoria',
+    String.raw`Sea $S$ el conjunto de sucesiones de longitud 2018 cuyos términos están en el conjunto $\{1,2,3,4,5,6,10\}$ y suman 3860. Demuestra que la cardinalidad de $S$ es a lo más $$ 2^{3860} \cdot \left(\frac{2018}{2048}\right)^{2018}. $$`,
+    String.raw`(por Manjul Bhargava) Sea $a(k,n)$ el número de sucesiones de longitud $k$ tomadas del conjunto $\{1,2,3,4,5,6,10\}$ con suma $n$. Demostramos, por inducción doble en $n+k$ y $n-k$, que $$ a(k,n) < 2^n \left(\frac{2018}{2048}\right)^k. $$ La afirmación es claramente cierta cuando $n-k\leq 0$, en particular en el caso base $n=k=1$.
+
+Clasificamos las sucesiones contadas por $a(k,n)$ según su último término ($1,2,3,4,5,6$ o $10$); quitando el último término se obtiene una sucesión contada por $a(k-1,n-1), a(k-1,n-2), \ldots, a(k-1,n-6), a(k-1,n-10)$, respectivamente. Por lo tanto, $$ a(k,n) = a(k-1,n-1)+\cdots+a(k-1,n-6)+a(k-1,n-10) $$ $$ < (2^{n-1}+\cdots+2^{n-6}+2^{n-10})\left(\frac{2018}{2048}\right)^{k-1} = 2^n\left(\frac{1}{2}+\cdots+\frac{1}{64}+\frac{1}{1024}\right)\left(\frac{2018}{2048}\right)^{k-1} $$ $$ = 2^n\left(\frac{1009}{1024}\right)\left(\frac{2018}{2048}\right)^{k-1} = 2^n\left(\frac{2018}{2048}\right)^k, $$ donde usamos directamente la hipótesis de inducción para obtener la desigualdad de la segunda línea. El caso $k=2018$, $n=3860$ da el resultado deseado: $$ |S| = a(2018,3860) < \boxed{2^{3860}\left(\frac{2018}{2048}\right)^{2018}}. $$`),
+]
+
+const putnam2019 = [
+  putnam('PUTNAM-2019-A1', 2019, 'A', 1, 'Valores de A³+B³+C³−3ABC: todos salvo ≡3,6 mod 9', 'Teoría de Números',
+    String.raw`Determina todos los valores posibles de la expresión $$ A^3+B^3+C^3-3ABC $$ donde $A, B, C$ son enteros no negativos.`,
+    String.raw`La respuesta es $\boxed{\text{todos los enteros no negativos no congruentes con } 3 \text{ o } 6 \pmod 9}$. Sea $X$ la expresión dada; primero mostramos que podemos lograr cada uno de los valores afirmados. Escribe $B=A+b$ y $C=A+c$, de modo que $$ X = (b^2-bc+c^2)(3A+b+c). $$ Tomando $(b,c)=(0,1)$ o $(b,c)=(1,1)$, obtenemos respectivamente $X=3A+1$ y $X=3A+2$; en consecuencia, al variar $A$, logramos todo entero no negativo no divisible entre 3. Tomando $(b,c)=(1,2)$, obtenemos $X=9A+9$; así, al variar $A$, logramos todo entero positivo divisible entre 9. También podemos lograr $X=0$ tomando $(b,c)=(0,0)$.
+
+En la otra dirección, $X$ siempre es no negativo: basta aplicar la desigualdad entre la media aritmética y la media geométrica, o escribir $b^2-bc+c^2 = (b-c/2)^2+3c^2/4$ para ver que es no negativo. Solo falta mostrar que si $X$ es múltiplo de 3, entonces es múltiplo de 9. Observa que $3A+b+c \equiv b+c \pmod 3$ y $b^2-bc+c^2 \equiv (b+c)^2 \pmod 3$; en consecuencia, si $X$ es divisible entre 3, entonces $b+c$ debe ser divisible entre 3, así que cada factor de $X=(b^2-bc+c^2)(3A+b+c)$ es divisible entre 3, y por lo tanto $X$ es divisible entre 9. Esto demuestra la afirmación.`),
+  putnam('PUTNAM-2019-A2', 2019, 'A', 2, 'Ángulo α=π/2 dado IG paralelo a AB y β=2arctan(1/3)', 'Geometría',
+    String.raw`En el triángulo $\triangle ABC$, sea $G$ el centroide, y sea $I$ el centro de la circunferencia inscrita. Sean $\alpha$ y $\beta$ los ángulos en los vértices $A$ y $B$, respectivamente. Supón que el segmento $IG$ es paralelo a $AB$ y que $\beta = 2\tan^{-1}(1/3)$. Encuentra $\alpha$.`,
+    String.raw`Sean $M$ y $D$ el punto medio de $AB$ y el pie de la altura desde $C$ a $AB$, respectivamente, y sea $r$ el inradio de $\triangle ABC$. Como $C,G,M$ son colineales con $CM=3GM$, la distancia de $C$ a la recta $AB$ es 3 veces la distancia de $G$ a $AB$, y esta última es $r$ ya que $IG \parallel AB$; por lo tanto la altura $CD$ mide $3r$. Por la fórmula del ángulo doble para la tangente, $\frac{CD}{DB}=\tan\beta=\frac{3}{4}$, así que $DB=4r$. Sea $E$ el punto donde la circunferencia inscrita toca a $AB$; entonces $EB = r/\tan(\beta/2) = 3r$. Se sigue que $ED=r$, por lo que la circunferencia inscrita es tangente a la altura $CD$. Esto implica que $D=A$, que $ABC$ es un triángulo rectángulo, y que $\alpha = \boxed{\frac{\pi}{2}}$.`),
+  putnam('PUTNAM-2019-A3', 2019, 'A', 3, 'Constante óptima M=2019^(−1/2019) para el promedio de raíces', 'Números Complejos',
+    String.raw`Dados números reales $b_0, b_1, \dots, b_{2019}$ con $b_{2019} \neq 0$, sean $z_1,z_2,\dots,z_{2019}$ las raíces en el plano complejo del polinomio $$ P(z) = \sum_{k=0}^{2019} b_k z^k. $$ Sea $\mu = (|z_1|+\cdots+|z_{2019}|)/2019$ el promedio de las distancias de $z_1,z_2,\dots,z_{2019}$ al origen. Determina la mayor constante $M$ tal que $\mu \geq M$ para todas las elecciones de $b_0,b_1,\dots,b_{2019}$ que satisfacen $$ 1 \leq b_0 < b_1 < b_2 < \cdots < b_{2019} \leq 2019. $$`,
+    String.raw`La respuesta es $M = \boxed{2019^{-1/2019}}$. Para cualesquiera elecciones de $b_0,\ldots,b_{2019}$ como se especifica, por AM-GM, $$ \mu \geq |z_1\cdots z_{2019}|^{1/2019} = |b_0/b_{2019}|^{1/2019} \geq 2019^{-1/2019}. $$ Para ver que esto es óptimo, considera $b_0,\ldots,b_{2019}$ dados por $b_k = 2019^{k/2019}$ para todo $k$. Entonces $$ P(z/2019^{1/2019}) = \sum_{k=0}^{2019} z^k = \frac{z^{2020}-1}{z-1} $$ tiene todas sus raíces sobre el círculo unitario. Se sigue que todas las raíces de $P(z)$ tienen módulo $2019^{-1/2019}$, así que $\mu = 2019^{-1/2019}$ en este caso.`),
+  putnam('PUTNAM-2019-A5', 2019, 'A', 5, 'Mayor n=(p−1)/2 tal que (x−1)^n divide a q(x) en F_p[x]', 'Teoría de Números',
+    String.raw`Sea $p$ un primo impar, y sea $\mathbb{F}_p$ el campo de los enteros módulo $p$. Sea $\mathbb{F}_p[x]$ el anillo de polinomios sobre $\mathbb{F}_p$, y sea $q(x) \in \mathbb{F}_p[x]$ dado por $$ q(x) = \sum_{k=1}^{p-1} a_k x^k, $$ donde $$ a_k = k^{(p-1)/2} \bmod p. $$ Encuentra el mayor entero no negativo $n$ tal que $(x-1)^n$ divide a $q(x)$ en $\mathbb{F}_p[x]$.`,
+    String.raw`La respuesta es $\boxed{\frac{p-1}{2}}$. Define el operador $D = x\frac{d}{dx}$, donde $\frac{d}{dx}$ indica la derivación formal de polinomios. Para $n$ como en el enunciado, tenemos $q(x)=(x-1)^n r(x)$ para algún polinomio $r(x)$ en $\mathbb{F}_p$ no divisible entre $x-1$. Para $m=0,\dots,n$, por la regla del producto, $$ (D^m q)(x) \equiv n^m x^m (x-1)^{n-m} r(x) \pmod{(x-1)^{n-m+1}}. $$ Como $r(1) \neq 0$ y $n \not\equiv 0 \pmod p$ (porque $n \leq \deg(q) = p-1$), podemos identificar $n$ como el menor entero no negativo para el cual $(D^n q)(1) \neq 0$.
+
+Ahora observa que $q = D^{(p-1)/2} s$ para $$ s(x) = 1+x+\cdots+x^{p-1} = \frac{x^p-1}{x-1} = (x-1)^{p-1} $$ ya que $(x-1)^p=x^p-1$ en $\mathbb{F}_p[x]$. Por la misma lógica anterior, $(D^n s)(1)=0$ para $n=0,\dots,p-2$ pero no para $n=p-1$. Esto implica el resultado afirmado.`),
+  putnam('PUTNAM-2019-B1', 2019, 'B', 1, 'Conteo 5n+1 de cuadrados con vértices en potencias de 2', 'Combinatoria',
+    String.raw`Denota por $\mathbb{Z}^2$ el conjunto de todos los puntos $(x,y)$ del plano con coordenadas enteras. Para cada entero $n \geq 0$, sea $P_n$ el subconjunto de $\mathbb{Z}^2$ que consiste del punto $(0,0)$ junto con todos los puntos $(x,y)$ tales que $x^2+y^2=2^k$ para algún entero $k \leq n$. Determina, como función de $n$, el número de subconjuntos de cuatro puntos de $P_n$ que son los vértices de un cuadrado.`,
+    String.raw`La respuesta es $\boxed{5n+1}$. Primero determinamos el conjunto $P_n$. Sea $Q_n$ el conjunto de puntos de $\mathbb{Z}^2$ de la forma $(0,\pm 2^k)$ o $(\pm 2^k,0)$ para algún $k\leq n$. Sea $R_n$ el conjunto de puntos de $\mathbb{Z}^2$ de la forma $(\pm 2^k,\pm 2^k)$ para algún $k\leq n$ (con los signos elegidos independientemente). Se demuestra por inducción en $n$ que $$ P_n = \{(0,0)\} \cup Q_{\lfloor n/2\rfloor} \cup R_{\lfloor (n-1)/2\rfloor}, $$ usando que si $(x,y)\in P_n$, entonces $x^2+y^2\equiv 0\pmod 4$, y como todo cuadrado perfecto es congruente con 0 o 1 módulo 4, $x$ y $y$ deben ser ambos pares, así que $(x/2,y/2)\in P_{n-2}$.
+
+Identificamos ahora todos los cuadrados con vértices en $P_n$, considerando pares de vértices opuestos $(a,b)$ y $(c,d)$: si $(a,b)=(0,0)$, el otro vértice opuesto puede ser cualquier elemento de $P_n$ fuera de $P_0$, dando $4n$ cuadrados de este tipo. Si ambos vértices opuestos están en algún $Q_k$, hay exactamente un cuadrado para cada $k=0,\dots,\lfloor n/2\rfloor$ (con vértices $(0,2^k),(0,-2^k),(2^k,0),(-2^k,0)$), dando $\lfloor n/2\rfloor+1$; se puede descartar cualquier otro caso usando la desigualdad del triángulo. Si ambos están en algún $R_k$, hay exactamente un cuadrado para cada $k=0,\dots,\lfloor (n-1)/2\rfloor$, dando $\lfloor (n+1)/2\rfloor$ (este caso se reduce al anterior rotando $\pi/4$ y reescalando por $\sqrt{2}$). Finalmente, no puede haber un cuadrado con un vértice opuesto en $Q_k$ y el otro en $R_k$, ya que los vértices restantes resultarían imposibles.
+
+Sumando, obtenemos $$ 4n + \left(\left\lfloor \frac{n}{2}\right\rfloor+1\right) + \left\lfloor \frac{n+1}{2}\right\rfloor = \boxed{5n+1} $$ cuadrados, lo cual demuestra la afirmación.`),
+  putnam('PUTNAM-2019-B2', 2019, 'B', 2, 'Límite de a_n/n³ para una suma telescópica trigonométrica', 'Trigonometría',
+    String.raw`Para todo $n \geq 1$, sea $$ a_n = \sum_{k=1}^{n-1} \frac{\sin\left(\frac{(2k-1)\pi}{2n}\right)}{\cos^2\left(\frac{(k-1)\pi}{2n}\right)\cos^2\left(\frac{k\pi}{2n}\right)}. $$ Determina $$ \lim_{n \to \infty} \frac{a_n}{n^3}. $$`,
+    String.raw`La respuesta es $\boxed{\frac{8}{\pi^3}}$. Por las identidades de ángulo doble y suma-producto para el coseno, $$ 2\cos^2\left(\frac{(k-1)\pi}{2n}\right) - 2\cos^2\left(\frac{k\pi}{2n}\right) = \cos\left(\frac{(k-1)\pi}{n}\right) - \cos\left(\frac{k\pi}{n}\right) = 2\sin\left(\frac{(2k-1)\pi}{2n}\right)\sin\left(\frac{\pi}{2n}\right), $$ así que el sumando de $a_n$ se puede escribir como $$ \frac{1}{\sin\left(\frac{\pi}{2n}\right)}\left(-\frac{1}{\cos^2\left(\frac{(k-1)\pi}{2n}\right)}+\frac{1}{\cos^2\left(\frac{k\pi}{2n}\right)}\right). $$ Así, la suma telescopa y encontramos que $$ a_n = \frac{1}{\sin\left(\frac{\pi}{2n}\right)}\left(-1+\frac{1}{\cos^2\left(\frac{(n-1)\pi}{2n}\right)}\right) = -\frac{1}{\sin\left(\frac{\pi}{2n}\right)}+\frac{1}{\sin^3\left(\frac{\pi}{2n}\right)}. $$ Finalmente, como $\lim_{x\to 0}\frac{\sin x}{x}=1$, tenemos $\lim_{n\to\infty}\left(n\sin\frac{\pi}{2n}\right)=\frac{\pi}{2}$, y por lo tanto $$ \lim_{n\to\infty} \frac{a_n}{n^3} = \boxed{\frac{8}{\pi^3}}. $$`),
+  putnam('PUTNAM-2019-B4', 2019, 'B', 4, 'Valor mínimo m(f)=2ln2−1/2 independiente de f para EDPs dadas', 'Análisis',
+    String.raw`Sea $\mathcal{F}$ el conjunto de funciones $f(x,y)$ dos veces continuamente diferenciables para $x \geq 1$, $y \geq 1$ que satisfacen las siguientes dos ecuaciones (los subíndices denotan derivadas parciales): $$ xf_x + yf_y = xy\ln(xy), \qquad x^2f_{xx}+y^2f_{yy} = xy. $$ Para cada $f \in \mathcal{F}$, sea $$ m(f) = \min_{s\geq 1}\left(f(s+1,s+1)-f(s+1,s)-f(s,s+1)+f(s,s)\right). $$ Determina $m(f)$, y demuestra que no depende de la elección de $f$.`,
+    String.raw`Calculamos que $m(f) = \boxed{2\ln 2 - \frac{1}{2}}$. Etiqueta las ecuaciones dadas (1) y (2). Considerando la combinación $x\frac{\partial}{\partial x}(1)+y\frac{\partial}{\partial y}(1)-(1)-(2)$ se obtiene la ecuación $2xyf_{xy}=xy\ln(xy)+xy$, de donde $$ f_{xy} = \frac{1}{2}(\ln(x)+\ln(y)+1). $$ Ahora observamos que $$ f(s+1,s+1)-f(s+1,s)-f(s,s+1)+f(s,s) = \int_s^{s+1}\int_s^{s+1} f_{xy}\,dy\,dx = \frac{1}{2}\int_s^{s+1}\int_s^{s+1} (\ln(x)+\ln(y)+1)\,dy\,dx = \frac{1}{2}+\int_s^{s+1}\ln(x)\,dx. $$ Como $\ln(x)$ es creciente, $\int_s^{s+1}\ln(x)\,dx$ es una función creciente de $s$, así que se minimiza sobre $s\in[1,\infty)$ en $s=1$. Concluimos que $$ m(f) = \frac{1}{2}+\int_1^2 \ln(x)\,dx = \boxed{2\ln 2-\frac{1}{2}}, $$ independientemente de $f$.`),
+  putnam('PUTNAM-2019-B5', 2019, 'B', 5, 'p(2019)=F_2019−F_1010 para un polinomio que interpola Fibonacci impares', 'Teoría de Números',
+    String.raw`Sea $F_m$ el $m$-ésimo número de Fibonacci, definido por $F_1=F_2=1$ y $F_m=F_{m-1}+F_{m-2}$ para todo $m\geq 3$. Sea $p(x)$ el polinomio de grado 1008 tal que $p(2n+1)=F_{2n+1}$ para $n=0,1,2,\dots,1008$. Encuentra enteros $j$ y $k$ tales que $p(2019)=F_j-F_k$.`,
+    String.raw`Demostramos que $\boxed{(j,k)=(2019,1010)}$ es una solución válida. Más generalmente, sea $p(x)$ el polinomio de grado $N$ tal que $p(2n+1)=F_{2n+1}$ para $0\leq n\leq N$; mostraremos que $p(2N+3)=F_{2N+3}-F_{N+2}$.
+
+Define una sucesión de polinomios $p_0(x),\ldots,p_N(x)$ por $p_0(x)=p(x)$ y $p_k(x)=p_{k-1}(x)-p_{k-1}(x+2)$ para $k\geq 1$. Por inducción en $k$, se tiene que $p_k(2n+1)=F_{2n+1+k}$ para $0\leq n\leq N-k$, y que $p_k$ tiene grado a lo más $N-k$ para $k\geq 1$; así, $p_N(x)=F_{N+1}$, ya que $p_N(1)=F_{N+1}$ y $p_N$ es constante.
+
+Afirmamos que, para $0\leq k\leq N$, $p_{N-k}(2k+3)=\sum_{j=0}^k F_{N+1+j}$. Esto se demuestra por inducción en $k$: en el paso inductivo, $$ p_{N-k}(2k+3) = p_{N-k}(2k+1)+p_{N-k+1}(2k+1) = F_{N+1+k}+\sum_{j=0}^{k-1} F_{N+1+j}. $$ Así, tomando $k=N$, obtenemos $p(2N+3)=p_0(2N+3)=\sum_{j=0}^N F_{N+1+j}$.
+
+Una inducción adicional muestra que $\sum_{j=1}^m F_j = F_{m+2}-1$, así que $p(2N+3)=F_{2N+3}-F_{N+2}$, como se afirmó. En el caso $N=1008$, obtenemos $p(2019)=F_{2019}-F_{1010}$.`),
+  putnam('PUTNAM-2019-B6', 2019, 'B', 6, 'Existencia de un conjunto S perfecto en Z^n para todo n', 'Combinatoria',
+    String.raw`Sea $\mathbb{Z}^n$ la red entera en $\mathbb{R}^n$. Dos puntos de $\mathbb{Z}^n$ se llaman vecinos si difieren en exactamente 1 en una coordenada y son iguales en las demás. ¿Para qué enteros $n \geq 1$ existe un conjunto de puntos $S \subset \mathbb{Z}^n$ que satisface las siguientes dos condiciones? (1) Si $p$ está en $S$, entonces ninguno de los vecinos de $p$ está en $S$. (2) Si $p \in \mathbb{Z}^n$ no está en $S$, entonces exactamente uno de los vecinos de $p$ está en $S$.`,
+    String.raw`Tal conjunto existe para $\boxed{\text{todo } n}$. Para construir un ejemplo, define la función $f: \mathbb{Z}^n \to \mathbb{Z}/(2n+1)\mathbb{Z}$ por $$ f(x_1,\dots,x_n) = x_1+2x_2+\cdots+nx_n \pmod{2n+1}, $$ y sea $S$ la preimagen de 0.
+
+Para verificar la condición (1), observa que si $p\in S$ y $q$ es un vecino de $p$ que difiere solo en la coordenada $i$, entonces $$ f(q) = f(p)\pm i \equiv \pm i \pmod{2n+1}, $$ así que $q \notin S$ (ya que $1\leq i\leq n$ no puede dar $\pm i \equiv 0 \pmod{2n+1}$).
+
+Para verificar la condición (2), observa que si $p\in\mathbb{Z}^n$ no está en $S$, entonces existe una única elección de $i\in\{1,\dots,n\}$ tal que $f(p)$ es congruente con $+i$ o $-i$ módulo $2n+1$. El único vecino $q$ de $p$ en $S$ se obtiene entonces restando 1 de, o sumando 1 a, la $i$-ésima coordenada de $p$.`),
+]
+
+const putnam2020 = [
+  putnam('PUTNAM-2020-A1', 2020, 'A', 1, "508536 enteros divisibles por 2020 con dígitos 1's seguidos de 0's", 'Teoría de Números',
+    String.raw`¿Cuántos enteros positivos $N$ satisfacen las tres condiciones siguientes? (i) $N$ es divisible entre 2020. (ii) $N$ tiene a lo más 2020 dígitos decimales. (iii) Los dígitos decimales de $N$ son una cadena de unos consecutivos seguida de una cadena de ceros consecutivos.`,
+    String.raw`Los valores de $N$ que satisfacen (ii) y (iii) son precisamente los números de la forma $N=(10^a-10^b)/9$ para $0\leq b<a\leq 2020$; esta expresión representa el entero con $a$ dígitos que comienza con una cadena de unos y termina con $b$ ceros. Un valor $N$ de esta forma es divisible entre $2020=2^2\cdot 5\cdot 101$ si y solo si $10^b(10^{a-b}-1)$ es divisible entre cada uno de $3^2$, $2^2\cdot 5$, y $101$. La divisibilidad entre $3^2$ es trivial ya que $10\equiv 1\pmod 9$. Como $10^{a-b}-1$ es impar, la divisibilidad entre $2^2\cdot 5$ ocurre si y solo si $b\geq 2$. Finalmente, como $10^2\equiv -1\pmod{101}$, vemos que $10^{a-b}$ es congruente con $10$, $-1$, $-10$, o $1\pmod{101}$ según si $a-b$ es congruente con $1$, $2$, $3$, o $0\pmod 4$; así, $10^{a-b}-1$ es divisible entre 101 si y solo si $a-b$ es divisible entre 4.
+
+Se sigue que necesitamos contar los pares $(a,b)$ con $2\leq b<a\leq 2020$ y $4\mid a-b$. Para cada $b$ dado, hay $\lfloor\frac{2020-b}{4}\rfloor$ valores posibles de $a$. La respuesta es entonces $$ 4(504+503+\cdots+1)-504 = 504\cdot 1009 = \boxed{508536}. $$`),
+  putnam('PUTNAM-2020-A2', 2020, 'A', 2, 'Evaluación de una suma binomial doble igual a 4^k', 'Análisis',
+    String.raw`Sea $k$ un entero no negativo. Evalúa $$ \sum_{j=0}^k 2^{k-j}\binom{k+j}{j}. $$`,
+    String.raw`La respuesta es $\boxed{4^k}$. Sea $S_k$ la suma dada. Separando cada término mediante la identidad de Pascal y reindexando cuidadosamente las sumas resultantes, se obtiene la relación $$ S_k = 2S_{k-1}+\frac{S_k}{2}, $$ así que $S_k = 4S_{k-1}$. Como $S_0=1$, se sigue que $S_k = \boxed{4^k}$ para todo $k$.`),
+  putnam('PUTNAM-2020-A4', 2020, 'A', 4, 'Límite w(N)/N=1/e para casillas blancas restantes en un proceso aleatorio', 'Combinatoria',
+    String.raw`Considera una franja horizontal de $N+2$ casillas en la cual la primera y la última son negras y las $N$ casillas restantes son blancas. Elige una casilla blanca de manera uniforme al azar, elige uno de sus dos vecinos con igual probabilidad, y colorea de negro a ese vecino si aún no lo es. Repite este proceso hasta que todas las casillas blancas restantes tengan solo vecinos negros. Sea $w(N)$ el número esperado de casillas blancas restantes. Encuentra $$ \lim_{N \to \infty} \frac{w(N)}{N}. $$`,
+    String.raw`La respuesta es $\boxed{1/e}$. Se establece primero una recurrencia para $w(N)$: numerando las casillas de 1 a $N+2$ de izquierda a derecha, se calcula la probabilidad de que cada casilla sea la primera en colorearse de negro, y se observa que, una vez que la primera casilla $i$ cambia de color, la franja se divide en dos sistemas independientes de tamaños $i-2$ y $N+1-i$ (cada uno con extremos negros y el resto blanco), cuyo número esperado de casillas blancas restantes es $w(i-2)+w(N+1-i)$. Combinando esto con las probabilidades de cada $i$, y simplificando, se obtiene la recurrencia $$ w(N) = w(N-1)+\frac{w(N-2)}{N-1}. $$ Se demuestra por inducción que $$ w(N) = (N+1)\sum_{k=0}^{N+1} \frac{(-1)^k}{k!} \qquad (N\geq 0), $$ verificando el caso base ($w(0)=0$, $w(1)=1$) y el paso inductivo directamente a partir de la recurrencia. Finalmente, $$ \lim_{N\to\infty} \frac{w(N)}{N} = \lim_{N\to\infty} \frac{w(N)}{N+1} = \sum_{k=0}^\infty \frac{(-1)^k}{k!} = \boxed{\frac{1}{e}}. $$`),
+  putnam('PUTNAM-2020-A5', 2020, 'A', 5, 'Mayor n con a_n=2020 para representaciones en sumas de Fibonacci', 'Teoría de Números',
+    String.raw`Sea $a_n$ el número de conjuntos $S$ de enteros positivos para los cuales $$ \sum_{k \in S} F_k = n, $$ donde la sucesión de Fibonacci $(F_k)_{k\geq 1}$ satisface $F_{k+2}=F_{k+1}+F_k$ y comienza $F_1=1, F_2=1, F_3=2, F_4=3$. Encuentra el mayor entero $n$ tal que $a_n=2020$.`,
+    String.raw`La respuesta es $n=\boxed{F_{4040}-1}$. Usamos libremente la identidad $$ F_1+F_2+\cdots+F_{m-2} = F_m-1 \qquad (*) $$ (que se sigue por inducción sencilla en $m$), junto con los valores calculados directamente $a_1=a_2=2$, $a_3=a_4=3$.
+
+Extendemos la definición de $a_n$ fijando $a_0=1$. Un primer hecho clave: para $m>0$ y $F_m\leq n<F_{m+1}$, $$ a_n = a_{n-F_m}+a_{F_{m+1}-n-1}. \qquad (**) $$ Esto se ve considerando un conjunto $S$ con $\sum_{k\in S}F_k=n$: si $m\in S$, entonces $S\setminus\{m\}$ da una representación de $n-F_m$ (reversible, ya que $n-F_m<F_{m-1}\leq F_m$); si $m\notin S$, entonces $\{1,\dots,m-1\}\setminus S$ da una representación de $F_{m+1}-n-1$ (también reversible).
+
+Usando $(**)$ y una inducción en $m$, se demuestra que para $m\geq 2$, $$ a_{F_m} = a_{F_{m+1}-1} = \left\lfloor \frac{m+2}{2} \right\rfloor. $$ En particular, $a_n = 2020$ para $n=F_{4040}-1$.
+
+Falta mostrar que $n=F_{4040}-1$ es el mayor tal valor, es decir, que para $F_m\leq n<F_{m+1}$, $a_n \geq a_{F_m}$ (de donde, para $n>F_{4040}-1$, se tendría $a_n \geq a_{F_{4040}}=2021$). Esto también se demuestra por inducción en $m$, usando $(**)$ y separando en casos según si $\max\{n-F_m, F_{m+1}-n-1\}$ es mayor o menor que $F_{m-2}$, en cada caso acotando $a_n$ por debajo usando la hipótesis de inducción sobre valores anteriores de la sucesión $a$. Esto completa la demostración.`),
+  putnam('PUTNAM-2020-A6', 2020, 'A', 6, 'Constante óptima M=π/4 para una suma de senos ponderada', 'Trigonometría',
+    String.raw`Para un entero positivo $N$, sea $f_N$ la función definida por $$ f_N(x) = \sum_{n=0}^N \frac{N+1/2-n}{(N+1)(2n+1)} \sin((2n+1)x). $$ Determina la menor constante $M$ tal que $f_N(x) \leq M$ para todo $N$ y todo real $x$.`,
+    String.raw`La menor constante $M$ es $\boxed{\pi/4}$. Comenzamos reescribiendo $$ f_N(x) = \sum_{n=0}^N \frac{1}{2}\left(\frac{2}{2n+1}-\frac{1}{N+1}\right)\sin((2n+1)x). \qquad (\star) $$ Usando la fórmula cerrada para $\sum_{n=0}^N \sin((2n+1)x)$ (una suma telescópica de exponenciales complejas que da $\frac{1-\cos((2N+2)x)}{2\sin(x)} \geq 0$ cuando $\sin(x)>0$), se puede comparar $(\star)$ para $N$ y $N+1$ y mostrar que, para $x\in(0,\pi)$, la sucesión $\{f_N(x)\}_N$ es no decreciente.
+
+Reescribiendo $(\star)$ como $$ f_N(x) = \sum_{n=0}^N \frac{\sin((2n+1)x)}{2n+1} - \frac{1-\cos((2N+2)x)}{4(N+1)\sin(x)}, $$ y observando que el último término tiende a 0 cuando $N\to\infty$, concluimos que $\lim_{N\to\infty} f_N(x)$ es la suma de la serie de Fourier $$ \sum_{n=0}^\infty \frac{\sin((2n+1)x)}{2n+1}, $$ la cual converge, para $x\in(0,\pi)$, a la "onda cuadrada" que vale $\pi/4$ en ese intervalo. Como $\{f_N(x)\}$ es no decreciente en $(0,\pi)$ con este límite $\pi/4$, y por simetría ($f_N(x+2\pi)=f_N(x)$, $f_N(-x)=-f_N(x)$) el comportamiento en el resto de la recta se reduce a este caso, concluimos que $f_N(x)\leq M$ se cumple para $M=\pi/4$ pero no para ningún $M$ menor, como se quería.`),
+  putnam('PUTNAM-2020-B1', 2020, 'B', 1, 'S≡1990 (mod 2020) para una suma alternante por dígitos binarios', 'Teoría de Números',
+    String.raw`Para un entero positivo $n$, define $d(n)$ como la suma de los dígitos de $n$ en base 2 (por ejemplo, $d(13)=1+1+0+1=3$). Sea $$ S = \sum_{k=1}^{2020} (-1)^{d(k)} k^3. $$ Determina $S$ módulo 2020.`,
+    String.raw`Observa que $$ (1-x)(1-x^2)(1-x^4)\cdots(1-x^{1024}) = \sum_{k=0}^{2047} (-1)^{d(k)} x^k $$ y $$ x^{2016}(1-x)(1-x^2)\cdots(1-x^{16}) = \sum_{k=2016}^{2047} (-1)^{d(k)} x^k. $$ Aplicando el operador $x\frac{d}{dx}$ a ambos lados de estas dos ecuaciones tres veces, y luego evaluando en $x=1$, se muestra que $$ \sum_{k=0}^{2047} (-1)^{d(k)}k^3 = \sum_{k=2016}^{2047} (-1)^{d(k)}k^3 = 0, $$ y por lo tanto $$ \sum_{k=1}^{2015} (-1)^{d(k)}k^3 = 0. $$ Así, podemos escribir $$ S = \sum_{k=2016}^{2020} (-1)^{d(k)}k^3 = \sum_{k=0}^4 (-1)^{d(k)}(k+2016)^3 \equiv (-4)^3+(-1)(-3)^3+(-1)(-2)^3+(1)(-1)^3 = -64+27+8-1 = -30 \equiv \boxed{1990} \pmod{2020}. $$`),
+  putnam('PUTNAM-2020-B2', 2020, 'B', 2, 'Alice gana el juego de fichas si n o k es impar', 'Teoría de Números',
+    String.raw`Sean $k$ y $n$ enteros con $1 \leq k < n$. Alice y Bob juegan un juego con $k$ fichas en una fila de $n$ agujeros. Al inicio del juego, las fichas ocupan los $k$ agujeros más a la izquierda. Un movimiento legal consiste en mover una sola ficha a cualquier agujero vacío que esté más a la derecha. Los jugadores alternan turnos, comenzando Alice. El juego termina cuando las fichas están en los $k$ agujeros más a la derecha, así que quien deba jugar entonces no puede moverse y pierde. ¿Para qué valores de $n$ y $k$ tiene Alice una estrategia ganadora?`,
+    String.raw`Llamamos a este juego, con $n$ agujeros y $k$ fichas, el juego $(n,k)$. Mostraremos que Alice tiene una estrategia ganadora en el juego $(n,k)$ $\boxed{\text{si y solo si al menos uno de } n, k \text{ es impar}}$; en caso contrario, Bob tiene la estrategia ganadora.
+
+Reducimos la primera afirmación a la segunda así: si $n$ y $k$ son ambos impares, Alice puede mover la última ficha al último agujero, dejando ese agujero (y la ficha) totalmente fuera de juego, reduciendo el juego $(n,k)$ al juego $(n-1,k-1)$, donde ahora Alice tiene la estrategia ganadora por la segunda afirmación. De manera similar, si $n$ es impar pero $k$ es par, Alice puede mover la primera ficha al agujero $k+1$, reduciendo a $(n-1,k)$; y si $n$ es par pero $k$ es impar, Alice puede mover la primera ficha al último agujero, reduciendo a $(n-2,k-1)$.
+
+Ahora suponemos que $n$ y $k$ son ambos pares y describimos una estrategia ganadora para Bob. Subdivide los $n$ agujeros en $n/2$ parejas disjuntas de agujeros adyacentes. Llama buena a una configuración de $k$ fichas si, para cada pareja, ambos o ninguno de sus agujeros está ocupado; observa que la posición inicial es buena. Bob puede asegurar que, después de cada uno de sus movimientos, deja a Alice con una configuración buena: dada una configuración buena, Alice debe mover una ficha de una pareja ocupada a un agujero de una pareja desocupada; entonces Bob puede mover la otra ficha de la primera pareja al agujero restante de la segunda pareja, resultando en otra configuración buena. En particular, esto asegura que Bob siempre tiene un movimiento disponible. Como el juego debe terminar, esta es una estrategia ganadora para Bob.`),
+  putnam('PUTNAM-2020-B3', 2020, 'B', 3, 'Esperanza f(δ)=1−ln(δ) del primer índice bajo δ', 'Probabilidad',
+    String.raw`Sea $x_0=1$, y sea $\delta$ una constante con $0<\delta<1$. Iterativamente, para $n=0,1,2,\dots$, se elige un punto $x_{n+1}$ uniformemente del intervalo $[0,x_n]$. Sea $Z$ el menor valor de $n$ para el cual $x_n<\delta$. Encuentra el valor esperado de $Z$, como función de $\delta$.`,
+    String.raw`Sea $f(\delta)$ el valor esperado buscado de $Z$. Demostramos que $f(\delta) = \boxed{1-\log(\delta)}$, donde $\log$ denota el logaritmo natural.
+
+Para $c\in[0,1]$, sea $g(\delta,c)$ el valor esperado de $Z$ dado que $x_1=c$, de modo que $f(\delta) = \int_0^1 g(\delta,c)\,dc$. Claramente $g(\delta,c)=1$ si $c<\delta$. Por otro lado, si $c\geq\delta$, entonces $g(\delta,c)$ es 1 más el valor esperado que tendría $Z$ si usáramos la condición inicial $x_0=c$ en vez de $x_0=1$; reescalando el intervalo $[0,c]$ linealmente a $[0,1]$ (lo cual envía $\delta$ a $\delta/c$), ese valor esperado es $f(\delta/c)$. Es decir, para $c\geq\delta$, $g(\delta,c)=1+f(\delta/c)$. Se sigue que $$ f(\delta) = \int_0^1 g(\delta,c)\,dc = \delta+\int_\delta^1 (1+f(\delta/c))\,dc = 1+\int_\delta^1 f(\delta/c)\,dc. $$ Define $h:[1,\infty)\to\mathbb{R}$ por $h(x)=f(1/x)$; entonces $$ h(x) = 1+\int_{1/x}^1 h(cx)\,dc = 1+\frac{1}{x}\int_1^x h(c)\,dc. $$ Reescribiendo esto como $xh(x)-x=\int_1^x h(c)\,dc$ y derivando respecto a $x$ se obtiene $h(x)+xh'(x)-1=h(x)$, de donde $h'(x)=1/x$ y así $h(x)=\log(x)+C$ para alguna constante $C$. Como $h(1)=f(1)=1$, concluimos $C=1$, $h(x)=1+\log(x)$, y finalmente $$ f(\delta) = \boxed{1-\log(\delta)}. $$`),
+  putnam('PUTNAM-2020-B4', 2020, 'B', 4, 'Promedio M(2020)=1/4040 de 1/q(v) sobre caminatas aleatorias', 'Probabilidad',
+    String.raw`Sea $n$ un entero positivo, y sea $V_n$ el conjunto de $(2n+1)$-tuplas enteras $\mathbf{v}=(s_0,s_1,\cdots,s_{2n-1},s_{2n})$ para las cuales $s_0=s_{2n}=0$ y $|s_j-s_{j-1}|=1$ para $j=1,2,\cdots,2n$. Define $$ q(\mathbf{v}) = 1+\sum_{j=1}^{2n-1} 3^{s_j}, $$ y sea $M(n)$ el promedio de $\frac{1}{q(\mathbf{v})}$ sobre todos los $\mathbf{v}\in V_n$. Evalúa $M(2020)$.`,
+    String.raw`La respuesta es $\boxed{\frac{1}{4040}}$. Mostraremos el siguiente hecho más general: para cualquier número $a\neq 0$, definiendo $q(\mathbf{v})=1+\sum_{j=1}^{2n-1}a^{s_j}$, el promedio de $\frac{1}{q(\mathbf{v})}$ sobre todo $\mathbf{v}\in V_n$ es igual a $\frac{1}{2n}$, independientemente de $a$.
+
+Identifica $V_n$ con el conjunto $W_n$ de $(2n)$-tuplas $\mathbf{w}=(w_1,\ldots,w_{2n})$ con $n$ entradas iguales a $+1$ y $n$ iguales a $-1$, mediante $s_j=\sum_{i=1}^j w_i$. Define el mapeo cíclico $\phi(w_1,\ldots,w_{2n})=(w_2,\ldots,w_{2n},w_1)$; $W_n$ se descompone en órbitas disjuntas bajo $\phi$. Se puede mostrar que, para cualquier $\mathbf{w}\in W_n$, el promedio de $\frac{1}{q(f(\phi^k(\mathbf{w})))}$ sobre $k=1,\ldots,2n$ es $\frac{1}{2n}$: escribiendo $s_j$ periódicamente (con periodo $2n$, ya que $\sum_i w_i=0$), se calcula que $$ q(f(\phi^k(\mathbf{w}))) = a^{-s_k}\sum_{j=1}^{2n} a^{s_j}, $$ y por lo tanto $$ \sum_{k=1}^{2n} \frac{1}{q(f(\phi^k(\mathbf{w})))} = \sum_{k=1}^{2n} \frac{a^{s_k}}{\sum_{j=1}^{2n}a^{s_j}} = 1. $$ Como $V_n$ es una unión disjunta de las imágenes de estas órbitas, el promedio global de $\frac{1}{q(\mathbf{v})}$ sobre $\mathbf{v}\in V_n$ es también $\frac{1}{2n}$. Tomando $n=2020$, obtenemos $M(2020) = \boxed{\frac{1}{4040}}$.`),
+]
+
 const putnam2021 = [
   putnam('PUTNAM-2021-A1', 2021, 'A', 1, 'Saltos mínimos de un saltamontes a (2021, 2021)', 'Teoría de Números', String.raw`Un saltamontes comienza en el origen en el plano coordenado y realiza una secuencia de saltos. Cada salto tiene longitud 5, y después de cada salto el saltamontes se encuentra en un punto cuyas coordenadas son ambas enteros; por lo tanto, hay 12 ubicaciones posibles para el saltamontes después del primer salto. ¿Cuál es el número mínimo de saltos necesarios para que el saltamontes alcance el punto $(2021, 2021)$?`),
   putnam('PUTNAM-2021-A2', 2021, 'A', 2, 'Límite de g(x)/x definida por un límite en r', 'Análisis', String.raw`Para cada número real positivo $x$, sea $g(x) = \lim_{r\to 0} \left((x+1)^{r+1} - x^{r+1}\right)^{\frac{1}{r}}$. Encuentra $\lim_{x\to\infty} \frac{g(x)}{x}$.`),
@@ -1239,8 +1529,8 @@ const putnam2025 = [
 ]
 
 export const problemas = [
-  ...ommuPrimeraRonda,
-  ...ommuNacional,
+  ...omumPrimeraRonda,
+  ...omumNacional,
   ...putnam1985,
   ...putnam1986,
   ...putnam1987,
@@ -1271,6 +1561,12 @@ export const problemas = [
   ...putnam2012,
   ...putnam2013,
   ...putnam2014,
+  ...putnam2015,
+  ...putnam2016,
+  ...putnam2017,
+  ...putnam2018,
+  ...putnam2019,
+  ...putnam2020,
   ...putnam2021,
   ...putnam2022,
   ...putnam2023,

@@ -92,7 +92,7 @@ const TEMAS = [
   'Probabilidad',
   'Teoría de Números',
 ]
-const TIPOS = ['Putnam', 'OMMU Primera Ronda', 'OMMU Nacional']
+const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional']
 
 // ---------------------------------------------------------------------------
 // Carpetas (Category): la API regresa una lista PLANA, cada una con un campo
@@ -107,6 +107,10 @@ function buildCategoryTree(categorias) {
     if (papa) papa.children.push(nodo)
     else raices.push(nodo)
   })
+  // Las subcarpetas de una competencia son años (ej. Putnam -> 2025, 2024,
+  // ..., 1985): se ordenan del más nuevo al más viejo, no por el orden en
+  // que se crearon en la base de datos.
+  byId.forEach((nodo) => nodo.children.sort((a, b) => Number(b.name) - Number(a.name)))
   return { raices, byId }
 }
 
@@ -1423,7 +1427,7 @@ export default function Problemas() {
                   </motion.div>
                 )}
 
-                {/* Lista de carpetas: Putnam / OMMU Primera Ronda / OMMU
+                {/* Lista de carpetas: Putnam / OMUM Primera Ronda / OMUM
                     Nacional en la raíz, o las subcarpetas (años) de la que
                     se abrió. */}
                 {vista === 'carpetas' && (
