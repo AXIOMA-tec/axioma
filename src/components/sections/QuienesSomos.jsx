@@ -53,8 +53,9 @@ const STATS = [
     // Real, no una meta ni un número inventado: es justo lo que hay hoy en
     // server/src/data/problemasReales.js (Putnam, OMMU Primera Ronda y OMMU
     // Nacional). Si agregan más problemas ahí, actualicen este número —
-    // ver TODO al inicio del archivo.
-    value: 93,
+    // ver TODO al inicio del archivo. (Última cuenta: 156, verificada
+    // cargando el archivo con Node y leyendo problemas.length — no a ojo.)
+    value: 156,
     prefix: '',
     suffix: '',
     label: 'Problemas en el archivo',
