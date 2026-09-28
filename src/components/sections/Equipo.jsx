@@ -234,12 +234,14 @@ function PanelCoordinacion({ director, onClose }) {
   // en pantallas grandes. Nunca full-height: la ventana se ajusta a su
   // contenido (nada de espacio muerto abajo cuando hay poca gente) y solo
   // hace scroll interno si algún día un área crece más de lo que cabe.
+  const numCoordinadores = director.coordinadores.length
   const columnas =
-    director.coordinadores.length === 1
-      ? ''
-      : director.coordinadores.length === 2
-        ? 'sm:grid-cols-2'
-        : 'sm:grid-cols-2 lg:grid-cols-3'
+    numCoordinadores === 1 ? '' : numCoordinadores === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'
+
+  // Con 3 columnas los nombres largos ("Angel Everardo Rodríguez Guevara")
+  // se sentían amontonados en max-w-3xl: la ventana crece un poco más para
+  // darle a cada tarjeta el ancho que necesita.
+  const anchoMaximo = numCoordinadores >= 3 ? 'max-w-4xl' : 'max-w-3xl'
 
   return (
     <motion.div
@@ -258,7 +260,7 @@ function PanelCoordinacion({ director, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
-        className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+        className={`flex max-h-[85vh] w-full flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ${anchoMaximo}`}
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex shrink-0 items-start justify-between gap-4 border-b border-brand-200 p-6">
@@ -294,7 +296,7 @@ function PanelCoordinacion({ director, onClose }) {
             <motion.li
               key={`${c.nombre}-${i}`}
               variants={fadeUp}
-              className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center"
+              className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-5 text-center sm:p-6"
             >
               <div className="rounded-full border border-brand-200 bg-white p-1.5">
                 <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-3xl text-brand-400 sm:h-28 sm:w-28">
@@ -307,7 +309,7 @@ function PanelCoordinacion({ director, onClose }) {
               </div>
 
               <div className="flex flex-col items-center gap-2">
-                <p className="font-display text-lg leading-tight tracking-wide text-brand-900">{c.nombre}</p>
+                <p className="font-display text-base leading-tight tracking-wide text-brand-900 sm:text-lg">{c.nombre}</p>
                 <p className="rounded-full bg-white px-3 py-1 text-xs font-medium text-brand-900/70 ring-1 ring-brand-200">
                   {c.rol || 'Coordinación'}
                 </p>
