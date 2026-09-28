@@ -16,7 +16,7 @@ const router = Router()
 // Campos que un admin puede mandar desde el formulario. Whitelist a
 // propósito: así nadie puede colar `id` o `_id` en el body y pisar otro
 // documento.
-const CAMPOS_EDITABLES = ['tipo', 'titulo', 'fecha', 'lugar', 'alt', 'src', 'link']
+const CAMPOS_EDITABLES = ['tipo', 'titulo', 'fecha', 'lugar', 'alt', 'src', 'link', 'orden']
 
 function limpiarBody(body) {
   const limpio = {}
@@ -39,9 +39,13 @@ router.post('/', requireAuth, requireAdmin, async (req, res) => {
 
   // El `id` numérico es solo para que el orden por defecto (ver GET) sea
   // estable; nadie lo captura a mano. Un evento nuevo se lleva el
-  // siguiente número disponible.
+  // siguiente número disponible, y por default también ese mismo número
+  // como `orden` (mismo patrón que Foto.js en galeria.js): así nace al
+  // final de la fila y el botón subir/bajar del panel puede moverlo, en vez
+  // de quedar empatado en 0 con todos los eventos viejos.
   const ultimo = await Evento.findOne().sort('-id')
-  const evento = await Evento.create({ ...datos, id: (ultimo?.id ?? 0) + 1 })
+  const siguienteId = (ultimo?.id ?? 0) + 1
+  const evento = await Evento.create({ ...datos, id: siguienteId, orden: datos.orden ?? siguienteId })
   res.status(201).json(evento)
 })
 

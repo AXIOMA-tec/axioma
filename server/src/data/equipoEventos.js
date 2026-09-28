@@ -19,9 +19,17 @@
 // Solo `nombre` es obligatorio; `rol` (puesto), `email`, `linkedin` y `foto`
 // son opcionales (lo que falte simplemente no se muestra).
 
+// `orden` controla en qué posición aparece cada quien (la API los pide
+// ordenados por esto, luego por `id` si empatara): sin este campo, Mongo
+// siempre los regresaba por `id`, sin importar el orden del arreglo de aquí
+// abajo. Los directores sin coordinadores (Gil, Raúl, Alejandro) van juntos
+// a propósito: sus tarjetas no llevan el botón "Ver coordinación", así que
+// puestos junto a los que sí lo tienen, la fila los estiraba parejo y les
+// dejaba un hueco en blanco abajo (ver PanelCoordinacion/MemberCard).
 export const miembros = [
   {
     id: 1,
+    orden: 1,
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
     foto: '/equipo/hugo-meza.jpg',
@@ -31,6 +39,7 @@ export const miembros = [
   },
   {
     id: 2,
+    orden: 2,
     nombre: 'Lucero Díaz Ortega',
     rol: 'Vicepresidente',
     foto: '/equipo/lucero-diaz.jpg',
@@ -40,40 +49,38 @@ export const miembros = [
   },
   {
     id: 3,
+    orden: 3,
     nombre: 'Gil Brandon Garcia Contreras',
     rol: 'Dirección de Proyectos',
     foto: '/equipo/gil-garcia.jpg',
     email: 'A01254164@tec.mx',
     linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
     github: 'https://github.com/gil-brandon',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
-    coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-    ],
   },
   {
     id: 4,
+    orden: 4,
     nombre: 'Raúl Correa Ocañas',
     rol: 'Dirección de Vinculación',
     foto: '/equipo/raul-correa.jpg',
     email: 'A01722401@tec.mx',
     linkedin: 'https://www.linkedin.com/in/rcorreao/',
     github: 'https://github.com/Racoo203',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
-    coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-    ],
+  },
+  {
+    id: 7,
+    orden: 5,
+    nombre: 'Alejandro José Alfaro García',
+    rol: 'Dirección de Finanzas',
+    foto: null,
+    email: 'A00842460@tec.mx',
+    linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
+    // Sin GitHub: el botón simplemente no aparece.
+    github: '',
   },
   {
     id: 5,
+    orden: 6,
     nombre: 'Emilio Alejandro González Huerta',
     rol: 'Dirección de Comunicación',
     foto: '/equipo/emilio-gonzalez.jpg',
@@ -97,6 +104,7 @@ export const miembros = [
   },
   {
     id: 6,
+    orden: 7,
     nombre: 'Catherine González Díaz',
     rol: 'Dirección de Investigación',
     foto: '/equipo/catherine-gonzalez.jpg',
@@ -113,22 +121,8 @@ export const miembros = [
     ],
   },
   {
-    id: 7,
-    nombre: 'Alejandro José Alfaro García',
-    rol: 'Dirección de Finanzas',
-    foto: null,
-    email: 'A00842460@tec.mx',
-    linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
-    // Sin GitHub: el botón simplemente no aparece.
-    github: '',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
-    coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Finanzas',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-    ],
-  },
-  {
     id: 8,
+    orden: 8,
     nombre: 'Orlando Gael Cardozo Beltrán',
     rol: 'Dirección de Responsabilidad Social',
     foto: '/equipo/orlando-cardozo.jpg',

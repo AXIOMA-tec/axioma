@@ -12,9 +12,17 @@ import { useBloquearScroll } from '../../hooks/useBloquearScroll'
 // MIEMBROS_RESPALDO se usa solo si la API no responde (backend dormido,
 // sin conexión, etc.), para que la sección nunca se vea vacía.
 
+// Orden: los directores sin coordinadores (Gil, Raúl, Alejandro) van juntos
+// a propósito, en vez de en el lugar que les tocaría por id. Sus tarjetas no
+// llevan el botón "Ver coordinación", así que puestos junto a los que sí lo
+// tienen, la fila los estiraba parejo y les dejaba un hueco en blanco abajo
+// (ver PanelCoordinacion/MemberCard). El `orden` es solo para que coincida
+// con equipoEventos.js — aquí no se usa para ordenar, el arreglo ya va en
+// el orden en que se debe mostrar.
 const MIEMBROS_RESPALDO = [
   {
     id: 1,
+    orden: 1,
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
     foto: '/equipo/hugo-meza.jpg',
@@ -24,6 +32,7 @@ const MIEMBROS_RESPALDO = [
   },
   {
     id: 2,
+    orden: 2,
     nombre: 'Lucero Díaz Ortega',
     rol: 'Vicepresidente',
     foto: '/equipo/lucero-diaz.jpg',
@@ -33,40 +42,38 @@ const MIEMBROS_RESPALDO = [
   },
   {
     id: 3,
+    orden: 3,
     nombre: 'Gil Brandon Garcia Contreras',
     rol: 'Dirección de Proyectos',
     foto: '/equipo/gil-garcia.jpg',
     email: 'A01254164@tec.mx',
     linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
     github: 'https://github.com/gil-brandon',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
-    coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Proyectos',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-    ],
   },
   {
     id: 4,
+    orden: 4,
     nombre: 'Raúl Correa Ocañas',
     rol: 'Dirección de Vinculación',
     foto: '/equipo/raul-correa.jpg',
     email: 'A01722401@tec.mx',
     linkedin: 'https://www.linkedin.com/in/rcorreao/',
     github: 'https://github.com/Racoo203',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
-    coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Vinculación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-    ],
+  },
+  {
+    id: 7,
+    orden: 5,
+    nombre: 'Alejandro José Alfaro García',
+    rol: 'Dirección de Finanzas',
+    foto: null,
+    email: 'A00842460@tec.mx',
+    linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
+    // Sin GitHub: el botón simplemente no aparece.
+    github: '',
   },
   {
     id: 5,
+    orden: 6,
     nombre: 'Emilio Alejandro González Huerta',
     rol: 'Dirección de Comunicación',
     foto: '/equipo/emilio-gonzalez.jpg',
@@ -90,6 +97,7 @@ const MIEMBROS_RESPALDO = [
   },
   {
     id: 6,
+    orden: 7,
     nombre: 'Catherine González Díaz',
     rol: 'Dirección de Investigación',
     foto: '/equipo/catherine-gonzalez.jpg',
@@ -106,22 +114,8 @@ const MIEMBROS_RESPALDO = [
     ],
   },
   {
-    id: 7,
-    nombre: 'Alejandro José Alfaro García',
-    rol: 'Dirección de Finanzas',
-    foto: null,
-    email: 'A00842460@tec.mx',
-    linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
-    // Sin GitHub: el botón simplemente no aparece.
-    github: '',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
-    coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Finanzas',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-    ],
-  },
-  {
     id: 8,
+    orden: 8,
     nombre: 'Orlando Gael Cardozo Beltrán',
     rol: 'Dirección de Responsabilidad Social',
     foto: '/equipo/orlando-cardozo.jpg',
@@ -304,7 +298,7 @@ function PanelCoordinacion({ director, onClose }) {
               className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-5 text-center sm:p-6"
             >
               <div className="rounded-full border border-brand-200 bg-white p-1.5">
-                <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-3xl text-brand-400 sm:h-28 sm:w-28">
+                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-3xl text-brand-400 sm:h-32 sm:w-32">
                   {c.foto ? (
                     <img src={c.foto} alt={c.nombre} className="h-full w-full object-cover" />
                   ) : (
@@ -358,7 +352,7 @@ function MemberCard({ miembro, destacado, onAbrir }) {
       <div className="rounded-full border border-brand-200 p-1.5 transition-colors duration-300 group-hover:border-brand-900">
         <div
           className={`flex items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-brand-400 ${
-            destacado ? 'h-20 w-20 text-2xl sm:h-28 sm:w-28 sm:text-3xl lg:h-36 lg:w-36 lg:text-4xl' : 'h-20 w-20 text-2xl sm:h-28 sm:w-28 sm:text-3xl'
+            destacado ? 'h-24 w-24 text-2xl sm:h-32 sm:w-32 sm:text-3xl lg:h-40 lg:w-40 lg:text-4xl' : 'h-24 w-24 text-2xl sm:h-32 sm:w-32 sm:text-3xl'
           }`}
         >
           {miembro.foto ? (

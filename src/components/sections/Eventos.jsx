@@ -211,7 +211,16 @@ function EventCarousel({ eventos }) {
 }
 
 export default function Eventos() {
-  const { data: eventos } = useApiData(api.getEventos, EVENTOS_RESPALDO)
+  const { data: eventosApi } = useApiData(api.getEventos, EVENTOS_RESPALDO)
+
+  // Próximos siempre antes que pasados: la base de datos los ordena por
+  // `orden` y luego por `id`, así que un evento nuevo (que siempre nace con
+  // el id más alto) terminaba mostrándose hasta el final, incluso después de
+  // eventos ya pasados. Dentro de cada grupo se respeta ese mismo orden.
+  const eventos = [
+    ...eventosApi.filter((e) => e.tipo === 'proximo'),
+    ...eventosApi.filter((e) => e.tipo !== 'proximo'),
+  ]
 
   return (
     <section id="eventos" className="scroll-mt-16 bg-white">
