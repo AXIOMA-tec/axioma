@@ -155,6 +155,17 @@ function numeroProblema(problema) {
   return problema.codigo.split('-').pop()
 }
 
+// El número grande al inicio de cada fila (ver ProblemaRow). Para Putnam/OMUM
+// esto es lo mismo que numeroProblema ("A1", "B6": ya es corto). Pero en HMMT
+// ese número trae pegado el nombre de la ronda (ALGNT10, GUTS36...), que es
+// demasiado largo para esa columna angosta y se encima con el título de al
+// lado — ahí basta el número solo, porque la ronda completa ya aparece en el
+// título (ver formatearTitulo).
+function numeroIndice(problema) {
+  const numero = numeroProblema(problema)
+  return problema.tipo === 'HMMT' ? numero.replace(/^[A-Z]+/, '') : numero
+}
+
 function formatearTitulo(problema) {
   return `${problema.tipo} ${problema.año} — Problema ${numeroProblema(problema)}`
 }
@@ -727,7 +738,7 @@ function ProblemaRow({ problema, onOpen }) {
         className="absolute inset-0 origin-left scale-x-0 bg-neutral-100 transition-transform duration-300 ease-out group-hover:scale-x-100"
       />
       <span className="relative font-display text-xl tabular-nums text-neutral-400 transition-colors group-hover:text-neutral-950 sm:text-2xl">
-        {numeroProblema(problema)}
+        {numeroIndice(problema)}
       </span>
       <span className="relative min-w-0">
         <span className="block text-base text-neutral-950 sm:text-lg">
