@@ -440,6 +440,50 @@ function MemberCard({ miembro, destacado, onAbrir }) {
   )
 }
 
+// Tarjeta horizontal para Asesores: foto del mismo tamaño que un director
+// normal (no se agranda), pero el layout es foto-a-la-izquierda /
+// texto-a-la-derecha en vez de apilado y centrado — así una tarjeta tan
+// ancha como la de Hugo/Lucero no deja espacio vacío alrededor de un
+// contenido chico, sin necesidad de agrandar nada.
+function AsesorCard({ miembro }) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.3, ease: EASE }}
+      className="group flex w-full items-center gap-5 rounded-2xl border border-brand-200 bg-white p-5 text-left shadow-md transition-shadow duration-300 hover:shadow-xl sm:w-[calc(50%-12px)] sm:gap-6 sm:p-7"
+    >
+      <div className="shrink-0 rounded-full border border-brand-200 p-1.5 transition-colors duration-300 group-hover:border-brand-900">
+        <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-2xl text-brand-400 sm:h-28 sm:w-28 sm:text-3xl">
+          {miembro.foto ? (
+            <img
+              src={miembro.foto}
+              alt={miembro.nombre}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          ) : (
+            iniciales(miembro.nombre)
+          )}
+        </div>
+      </div>
+
+      <div className="flex min-w-0 flex-col items-start gap-2">
+        <h3 className="font-display text-lg leading-tight tracking-wide text-brand-900 sm:text-xl">
+          {miembro.nombre}
+        </h3>
+        <p className="rounded-full bg-brand-100 px-3 py-1 text-[11px] font-medium text-brand-900/70 sm:text-xs">
+          {miembro.rol}
+        </p>
+        <div className="mt-1 flex gap-2">
+          <EnlaceSocial href={miembro.email ? `mailto:${miembro.email}` : ''} red="mail" nombre={miembro.nombre} />
+          <EnlaceSocial href={miembro.linkedin} red="linkedin" nombre={miembro.nombre} />
+          <EnlaceSocial href={miembro.github} red="github" nombre={miembro.nombre} />
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 export default function Equipo() {
   const { data: miembros } = useApiData(api.getEquipo, MIEMBROS_RESPALDO)
   const [directorAbierto, setDirectorAbierto] = useState(null)
@@ -485,7 +529,7 @@ export default function Equipo() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {asesores.map((miembro) => (
-              <MemberCard key={miembro.id} miembro={miembro} destacado={false} onAbrir={setDirectorAbierto} />
+              <AsesorCard key={miembro.id} miembro={miembro} />
             ))}
           </div>
         </motion.div>
