@@ -133,6 +133,30 @@ const MIEMBROS_RESPALDO = [
         email: '', linkedin: '', github: 'https://github.com/Andres210212' },
     ],
   },
+  // Asesores: van al final a propósito, con `esAsesor: true` — el
+  // componente de abajo les pone su propio encabezado ("Asesores")
+  // separado de los directores, porque guían al club pero no son parte de
+  // su jerarquía estudiantil.
+  {
+    id: 9,
+    orden: 9,
+    nombre: 'Manuel Alejandro Ucan Puc',
+    rol: 'Asesor',
+    foto: '/equipo/manuel-ucan.jpg',
+    email: '',
+    linkedin: 'https://www.linkedin.com/in/alejandro-ucan-puc/',
+    esAsesor: true,
+  },
+  {
+    id: 10,
+    orden: 10,
+    nombre: 'Lilia Alanís López',
+    rol: 'Asesora',
+    foto: '/equipo/lilia-alanis.jpg',
+    email: '',
+    linkedin: 'https://www.linkedin.com/in/liliaalanislopez/',
+    esAsesor: true,
+  },
 ]
 
 // Diseño: tarjetas suaves y rectas (mismo lenguaje que Quiénes Somos y
@@ -421,6 +445,14 @@ export default function Equipo() {
   const [directorAbierto, setDirectorAbierto] = useState(null)
   const cerrarPanel = useCallback(() => setDirectorAbierto(null), [])
 
+  // Los asesores (esAsesor: true) van aparte, con su propio encabezado al
+  // final — guían al club pero no son parte de la jerarquía estudiantil
+  // (presidencia → direcciones → coordinaciones), así que mezclarlos en la
+  // misma fila mandaría el mensaje equivocado sobre dónde "quedan" en el
+  // organigrama.
+  const directores = miembros.filter((m) => !m.esAsesor)
+  const asesores = miembros.filter((m) => m.esAsesor)
+
   return (
     <section
       id="equipo"
@@ -436,7 +468,7 @@ export default function Equipo() {
         variants={staggerContainer(0.08)}
         {...revealProps}
       >
-        {miembros.map((miembro, indice) => (
+        {directores.map((miembro, indice) => (
           <MemberCard
             key={miembro.id}
             miembro={miembro}
@@ -445,6 +477,19 @@ export default function Equipo() {
           />
         ))}
       </motion.div>
+
+      {asesores.length > 0 && (
+        <motion.div variants={staggerContainer(0.08)} {...revealProps} className="mt-16">
+          <p className="mb-6 text-center text-xs font-medium uppercase tracking-[0.2em] text-brand-500">
+            Asesores
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+            {asesores.map((miembro) => (
+              <MemberCard key={miembro.id} miembro={miembro} destacado={false} onAbrir={setDirectorAbierto} />
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       <AnimatePresence>
         {directorAbierto && (

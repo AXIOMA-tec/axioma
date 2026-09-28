@@ -25,6 +25,10 @@ const miembroSchema = new mongoose.Schema({
   github: { type: String, default: '' },
   orden: { type: Number, default: 0 },
   coordinadores: { type: [coordinadorSchema], default: [] },
+  // Asesores (profesores/staff que guían al club, no forman parte de la
+  // jerarquía estudiantil) van al final de la sección Equipo, bajo su
+  // propio encabezado — ver Equipo.jsx.
+  esAsesor: { type: Boolean, default: false },
 })
 
 export default mongoose.model('Miembro', miembroSchema)

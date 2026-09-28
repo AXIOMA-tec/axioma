@@ -140,6 +140,29 @@ export const miembros = [
         email: '', linkedin: '', github: 'https://github.com/Andres210212' },
     ],
   },
+  // Asesores: van al final a propósito, con `esAsesor: true` — Equipo.jsx
+  // les pone su propio encabezado ("Asesores") separado de los directores,
+  // porque guían al club pero no son parte de su jerarquía estudiantil.
+  {
+    id: 9,
+    orden: 9,
+    nombre: 'Manuel Alejandro Ucan Puc',
+    rol: 'Asesor',
+    foto: '/equipo/manuel-ucan.jpg',
+    email: '',
+    linkedin: 'https://www.linkedin.com/in/alejandro-ucan-puc/',
+    esAsesor: true,
+  },
+  {
+    id: 10,
+    orden: 10,
+    nombre: 'Lilia Alanís López',
+    rol: 'Asesora',
+    foto: '/equipo/lilia-alanis.jpg',
+    email: '',
+    linkedin: 'https://www.linkedin.com/in/liliaalanislopez/',
+    esAsesor: true,
+  },
 ]
 
 export const eventos = [
