@@ -1,0 +1,162 @@
+import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { MeshGradient } from '@paper-design/shaders-react'
+import FloatingSymbol from '../motion/FloatingSymbol'
+import DrawnCurve from '../motion/DrawnCurve'
+import { EASE, staggerContainer } from '../motion/variants'
+import { UNETE_URL } from '../../lib/contacto'
+
+// Sección Hero (id="inicio")
+// Fondo animado con shaders (@paper-design/shaders-react) usando la
+// paleta de marca Axioma: rojo profundo #B70B0D, naranja #E57505 y
+// amarillo dorado #FFB401.
+// Encima del fondo: símbolos matemáticos flotantes, curva paramétrica
+// decorativa y entrada del texto en stagger (features de la v2).
+// TODO equipo: ajustar copy si cambia el mensaje.
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
+}
+
+const word = {
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
+}
+
+export default function Hero() {
+  const navigate = useNavigate()
+
+  const scrollToQuienesSomos = () => {
+    document.getElementById('quienes-somos')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  return (
+    <section
+      id="inicio"
+      data-navbar-tone="light"
+      className="relative flex h-svh min-h-[600px] scroll-mt-16 flex-col items-center justify-center gap-[clamp(1rem,3svh,2rem)] overflow-hidden bg-[#120303] px-4 pb-20 pt-20 text-center sm:px-6"
+    >
+      {/* Fondo shader: mesh gradient animado en la paleta Axioma */}
+      <div className="pointer-events-none absolute inset-0">
+        <MeshGradient
+          className="absolute inset-0 h-full w-full"
+          colors={['#B70B0D', '#E57505', '#FFB401', '#120303']}
+          speed={0.3}
+          distortion={0.85}
+          swirl={0.3}
+          grainMixer={0.05}
+          grainOverlay={0.05}
+        />
+        {/* Overlay oscuro para mantener contraste y legibilidad del texto */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#120303]/75 via-[#120303]/35 to-[#120303]/85" />
+      </div>
+
+      {/* Símbolos matemáticos flotando sobre el shader, recoloreados en
+          dorado/naranja translúcido para que se lean sobre el fondo oscuro */}
+      <FloatingSymbol symbol="π" className="pointer-events-none absolute left-[10%] top-[22%] text-4xl text-[#FFB401]/40 sm:text-5xl" delay={0} duration={7} rotate={-8} />
+      <FloatingSymbol symbol="∑" className="pointer-events-none absolute right-[12%] top-[18%] text-5xl text-[#E57505]/40 sm:text-6xl" delay={0.4} duration={6} rotate={6} />
+      <FloatingSymbol symbol="∞" className="pointer-events-none absolute left-[16%] bottom-[24%] text-4xl text-[#FFB401]/40 sm:text-5xl" delay={0.8} duration={8} rotate={4} />
+      <FloatingSymbol symbol="√" className="pointer-events-none absolute right-[18%] bottom-[20%] text-4xl text-[#E57505]/40 sm:text-5xl" delay={1.2} duration={6.5} rotate={-5} />
+      <FloatingSymbol symbol="∫" className="pointer-events-none absolute left-[6%] top-[52%] text-3xl text-[#FFB401]/30 sm:text-4xl" delay={0.6} duration={9} rotate={10} />
+      <FloatingSymbol symbol="θ" className="pointer-events-none absolute right-[7%] top-[55%] text-3xl text-[#E57505]/30 sm:text-4xl" delay={1} duration={7.5} rotate={-10} />
+
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+        className="relative flex flex-col items-center gap-4"
+      >
+        <span
+          className="inline-block bg-clip-text text-xs font-semibold uppercase tracking-[0.3em] text-transparent sm:text-sm"
+          style={{
+            backgroundImage:
+              'linear-gradient(135deg, #FFB401 0%, #E57505 45%, #B70B0D 100%)',
+          }}
+        >
+          Asociación X Interés Olímpico Matemático · Tec de Monterrey
+        </span>
+
+        <motion.div
+          className="flex flex-col items-center gap-4"
+          variants={staggerContainer(0.15)}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.div variants={word}>
+            <img
+              src="/axioma-logo-hero.png"
+              alt="Axioma"
+              className="h-auto max-h-[31svh] w-[min(88vw,860px)] object-contain drop-shadow-[0_0_45px_rgba(255,180,1,0.35)]"
+            />
+          </motion.div>
+
+          <motion.p variants={word} className="max-w-2xl text-base text-white/85 sm:text-lg lg:text-xl">
+            Capítulo Estudiantil oficial de la Sociedad Matemática Mexicana (SMM). Un espacio dedicado al entrenamiento de alto rendimiento, la divulgación STEM y la resolución de problemas lógicos de nivel olímpico.
+          </motion.p>
+        </motion.div>
+      </motion.div>
+
+      {/* Curva paramétrica decorativa que se dibuja al cargar la sección,
+          recoloreada a dorado para leerse sobre el fondo oscuro */}
+      <DrawnCurve className="hidden h-20 w-64 text-[#FFB401]/70 [@media(min-height:820px)]:block sm:w-80" />
+
+      {/* Dos acciones a la vista desde la primera pantalla: "Únete" es la
+          principal (relleno degradado) y "Ver problemas" la secundaria. */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
+        className="relative flex flex-wrap items-center justify-center gap-3"
+      >
+        {/* Botones planos: rectangulares, color sólido, sin sombras ni
+            degradados (mismo lenguaje que /problemas). Al pasar el mouse
+            invierten el color; la flecha se desliza. */}
+        <a
+          href={UNETE_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="group inline-flex items-center gap-3 border border-[#FFB401] bg-[#FFB401] px-7 py-3.5 text-xs font-medium uppercase tracking-[0.18em] text-[#120303] transition-colors duration-300 hover:border-white hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          Únete
+          <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+            →
+          </span>
+        </a>
+        <button
+          type="button"
+          onClick={() => navigate('/problemas')}
+          className="inline-flex items-center border border-white/60 px-7 py-3.5 text-xs font-medium uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-[#120303] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          Ver problemas
+        </button>
+      </motion.div>
+
+      {/* Ícono de flecha animada indicando scroll hacia abajo (clickeable) */}
+      <motion.button
+        type="button"
+        onClick={scrollToQuienesSomos}
+        aria-label="Ir a la siguiente sección"
+        className="absolute bottom-8 text-[#FFB401] hover:text-[#E57505]"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-6 w-6"
+        >
+          <path d="M12 5v14" />
+          <path d="m19 12-7 7-7-7" />
+        </svg>
+      </motion.button>
+    </section>
+  )
+}
