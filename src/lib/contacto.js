@@ -3,10 +3,7 @@
 
 export const CORREO = 'axioma.mty@servicios.tec.mx'
 
-// TODO equipo: poner el link real. Dos formatos válidos:
-//   número:  https://wa.me/52XXXXXXXXXX   (con lada, sin + ni espacios)
-//   grupo:   https://chat.whatsapp.com/CODIGO_DE_INVITACION
-export const WHATSAPP_URL = 'https://wa.me/52XXXXXXXXXX'
+export const WHATSAPP_URL = 'https://chat.whatsapp.com/JrQJcOJdYd5FCJMrQx64ma?mode=gi_t'
 
 export const INSTAGRAM_URL = 'https://www.instagram.com/axioma.mty'
 
