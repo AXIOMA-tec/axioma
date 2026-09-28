@@ -151,7 +151,7 @@ function FormularioEvento({ valorInicial, onGuardar, onCancelar, guardando }) {
   )
 }
 
-function FilaEvento({ evento, onEditar, onBorrar }) {
+function FilaEvento({ evento, esPrimera, esUltima, onEditar, onBorrar, onMover }) {
   return (
     <li className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-brand-200 bg-white p-4">
       <div className="flex min-w-0 items-center gap-4">
@@ -166,12 +166,31 @@ function FilaEvento({ evento, onEditar, onBorrar }) {
           <p className="truncate font-semibold text-brand-900">{evento.titulo}</p>
           <p className="truncate text-sm text-brand-900/60">
             {evento.fecha}
-            {evento.lugar ? ` · ${evento.lugar}` : ''} ·{' '}
-            {evento.tipo === 'proximo' ? 'Próximo' : 'Pasado'}
+            {evento.lugar ? ` · ${evento.lugar}` : ''}
           </p>
         </div>
       </div>
-      <div className="flex shrink-0 gap-2">
+      <div className="flex shrink-0 items-center gap-2">
+        <button
+          type="button"
+          onClick={() => onMover(evento, -1)}
+          disabled={esPrimera}
+          aria-label="Mover antes"
+          title="Mover antes"
+          className={secondaryButtonClass}
+        >
+          ↑
+        </button>
+        <button
+          type="button"
+          onClick={() => onMover(evento, 1)}
+          disabled={esUltima}
+          aria-label="Mover después"
+          title="Mover después"
+          className={secondaryButtonClass}
+        >
+          ↓
+        </button>
         <button type="button" onClick={() => onEditar(evento)} className={secondaryButtonClass}>
           Editar
         </button>
@@ -184,6 +203,32 @@ function FilaEvento({ evento, onEditar, onBorrar }) {
         </button>
       </div>
     </li>
+  )
+}
+
+// Una lista de eventos del mismo tipo (Próximos o Pasados), con sus propios
+// botones de subir/bajar: mover un evento solo cambia su posición dentro de
+// su grupo, igual que se ven separados en la portada (ver Eventos.jsx) —
+// así "subir" siempre hace lo que se espera, sin saltar de un grupo a otro.
+function GrupoEventos({ titulo, eventos, onEditar, onBorrar, onMover }) {
+  if (eventos.length === 0) return null
+  return (
+    <div className="flex flex-col gap-3">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-brand-500">{titulo}</h3>
+      <ul className="flex flex-col gap-3">
+        {eventos.map((evento, indice) => (
+          <FilaEvento
+            key={evento._id}
+            evento={evento}
+            esPrimera={indice === 0}
+            esUltima={indice === eventos.length - 1}
+            onEditar={onEditar}
+            onBorrar={onBorrar}
+            onMover={onMover}
+          />
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -242,6 +287,24 @@ function AdminEventosPage() {
     cargarEventos()
   }
 
+  // Intercambia el "orden" de un evento con su vecino DENTRO DEL MISMO
+  // GRUPO (próximo o pasado), para subirlo o bajarlo una posición — mismo
+  // patrón que "mover" en AdminGaleriaPage.jsx.
+  const mover = async (evento, direccion) => {
+    const delGrupo = eventos.filter((e) => e.tipo === evento.tipo)
+    const indice = delGrupo.findIndex((e) => e._id === evento._id)
+    const vecino = delGrupo[indice + direccion]
+    if (!vecino) return
+    await Promise.all([
+      api.actualizarEvento(evento._id, { orden: vecino.orden }, auth.token),
+      api.actualizarEvento(vecino._id, { orden: evento.orden }, auth.token),
+    ])
+    cargarEventos()
+  }
+
+  const proximos = eventos.filter((e) => e.tipo === 'proximo')
+  const pasados = eventos.filter((e) => e.tipo !== 'proximo')
+
   return (
     <>
       <Navbar />
@@ -282,11 +345,10 @@ function AdminEventosPage() {
               <p className="text-sm text-brand-500">Todavía no hay eventos.</p>
             )}
 
-            <ul className="flex flex-col gap-3">
-              {eventos.map((evento) => (
-                <FilaEvento key={evento._id} evento={evento} onEditar={setEditando} onBorrar={borrar} />
-              ))}
-            </ul>
+            <div className="flex flex-col gap-8">
+              <GrupoEventos titulo="Próximos" eventos={proximos} onEditar={setEditando} onBorrar={borrar} onMover={mover} />
+              <GrupoEventos titulo="Pasados" eventos={pasados} onEditar={setEditando} onBorrar={borrar} onMover={mover} />
+            </div>
           </div>
         </div>
       </main>
