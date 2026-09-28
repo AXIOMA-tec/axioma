@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import Hero from '../components/sections/Hero'
 import QuienesSomos from '../components/sections/QuienesSomos'
 import Equipo from '../components/sections/Equipo'
+import AxiomaCurioso from '../components/sections/AxiomaCurioso'
 import Galeria from '../components/sections/Galeria'
 import Eventos from '../components/sections/Eventos'
 import Contacto from '../components/sections/Contacto'
@@ -30,6 +31,7 @@ function HomePage() {
         <Hero />
         <QuienesSomos />
         <Equipo />
+        <AxiomaCurioso />
         <Eventos />
         <Galeria />
         <Contacto />

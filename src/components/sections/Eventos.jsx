@@ -231,20 +231,30 @@ export default function Eventos() {
         />
 
         {/* Destacado fijo: el programa recurrente, no es un evento con
-            fecha única así que va aparte de la lista. */}
+            fecha única así que va aparte de la lista. El ícono era un
+            emoji 📐 en un círculo suave — mismo problema que tenían los
+            axiomas: la plantilla "feature card" genérica. Ahora es un sello
+            plano de color sólido (sin esquinas redondeadas, sombra dura),
+            derecho, con un ícono de líneas de verdad en vez de emoji, y
+            "repetir" como símbolo porque es justo lo que es: un evento
+            semanal. */}
         <motion.div
           variants={fadeUp}
           {...revealProps}
           className="mb-12 flex flex-col items-center gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center shadow-sm sm:flex-row sm:text-left"
         >
-          <motion.span
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-100 text-2xl"
-            animate={{ rotate: [0, -8, 8, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          <span
             aria-hidden="true"
+            style={{ backgroundColor: '#FFB401', boxShadow: '4px 4px 0 0 rgba(15, 23, 42, 0.15)' }}
+            className="flex h-12 w-12 shrink-0 items-center justify-center text-brand-900"
           >
-            📐
-          </motion.span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+              <path d="m17 2 4 4-4 4" />
+              <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+              <path d="m7 22-4-4 4-4" />
+              <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+            </svg>
+          </span>
           <div>
             <h3 className="font-display text-lg tracking-wide text-brand-900">Cursos de matemáticas — todos los sábados</h3>
             <p className="text-sm text-brand-900/60">

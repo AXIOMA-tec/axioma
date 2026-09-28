@@ -132,10 +132,10 @@ function Visor({ imagenes, indice, onIr, onClose }) {
       role="dialog"
       aria-modal="true"
       aria-label="Visor de fotos"
-      className="fixed inset-0 z-[60] flex flex-col bg-brand-900/90 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[60] flex cursor-pointer flex-col bg-brand-900/90 p-4 backdrop-blur-sm sm:p-8"
       onClick={onClose}
     >
-      <div className="flex items-center justify-between text-white" onClick={(e) => e.stopPropagation()}>
+      <div className="cursor-boundary flex items-center justify-between text-white" onClick={(e) => e.stopPropagation()}>
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] tabular-nums">
           {numero(indice)} / {numero(imagenes.length - 1)}
         </p>
@@ -156,7 +156,7 @@ function Visor({ imagenes, indice, onIr, onClose }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: EASE }}
           style={{ aspectRatio: imagen.ratio }}
-          className="flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-2xl bg-brand-100 shadow-2xl"
+          className="cursor-boundary flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-2xl bg-brand-100 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <Contenido imagen={imagen} />
@@ -164,7 +164,7 @@ function Visor({ imagenes, indice, onIr, onClose }) {
       </div>
 
       <div
-        className="flex items-center justify-between gap-6 text-white"
+        className="cursor-boundary flex items-center justify-between gap-6 text-white"
         onClick={(e) => e.stopPropagation()}
       >
         <p className="max-w-xl text-sm text-white/80">{imagen.alt}</p>
