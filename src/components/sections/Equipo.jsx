@@ -248,7 +248,7 @@ function PanelCoordinacion({ director, onClose }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-brand-900/50 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[60] flex cursor-pointer items-center justify-center bg-brand-900/50 p-4 backdrop-blur-sm sm:p-8"
       onClick={onClose}
     >
       <motion.div
@@ -259,7 +259,7 @@ function PanelCoordinacion({ director, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
-        className={`flex max-h-[85vh] w-full flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ${anchoMaximo}`}
+        className={`cursor-boundary flex max-h-[85vh] w-full flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ${anchoMaximo}`}
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex shrink-0 items-start justify-between gap-4 border-b border-brand-200 p-6">
