@@ -187,11 +187,16 @@ export default function Galeria() {
   const seccionRef = useRef(null)
 
   // 0 cuando la sección empieza a entrar por abajo, 1 cuando su borde
-  // inferior llega al fondo de la pantalla (ya se ve completa): las filas
-  // terminan su recorrido justo cuando se ve toda la galería.
+  // SUPERIOR llega arriba de la pantalla (ya se scrolleó toda, incluido el
+  // header y el padding) — así las filas se siguen moviendo mientras la
+  // galería sigue a la vista, en vez de congelarse a medio scroll. Antes
+  // el final era 'end end' (borde inferior toca el fondo de la pantalla),
+  // que pasa mucho antes de que la sección termine de verse — por eso se
+  // sentía que las fotos dejaban de moverse aunque todavía faltaba
+  // bastante por scrollear.
   const { scrollYProgress } = useScroll({
     target: seccionRef,
-    offset: ['start end', 'end end'],
+    offset: ['start end', 'end start'],
   })
 
   // Dos grupos que NO se repiten entre sí (pares en una fila, impares en la

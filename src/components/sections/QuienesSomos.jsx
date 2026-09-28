@@ -1,8 +1,9 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import Counter from '../motion/Counter'
 import { fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants'
+import { api } from '../../lib/api'
 
 // Sección Quiénes Somos (id="quienes-somos")
 // TODO equipo: reemplazar el texto de misión/visión, la imagen grupal
@@ -50,12 +51,13 @@ const STATS = [
   },
   {
     id: 3,
-    // Real, no una meta ni un número inventado: es justo lo que hay hoy en
-    // server/src/data/problemasReales.js (Putnam, OMUM Primera Ronda y OMUM
-    // Nacional). Si agregan más problemas ahí, actualicen este número —
-    // ver TODO al inicio del archivo. (Última cuenta: 156, verificada
-    // cargando el archivo con Node y leyendo problemas.length — no a ojo.)
-    value: 156,
+    // El valor real (cuántos problemas hay) YA NO se escribe aquí a mano:
+    // cambiaba cada vez que alguien agregaba problemas (93 -> 156 -> 197...)
+    // y siempre quedaba desactualizado. Ahora QuienesSomos() lo pide a
+    // GET /api/problems/count y lo mete en este campo en tiempo real (ver
+    // abajo) — este `value` es solo el número que se ve un instante
+    // mientras esa petición todavía no responde.
+    value: 197,
     prefix: '',
     suffix: '',
     label: 'Problemas en el archivo',
@@ -173,6 +175,30 @@ function CifraBanda({ stat }) {
 }
 
 export default function QuienesSomos() {
+  // Arranca en el `value` de STATS (el último número contado a mano) y se
+  // actualiza solo apenas responde la API — así nunca se ve en blanco/0, y
+  // si la API no responde (backend dormido) se queda con ese número en vez
+  // de romperse. No se usa useApiData aquí porque ese hook espera un
+  // arreglo (equipo, eventos...); esto es un solo número.
+  const [totalProblemas, setTotalProblemas] = useState(
+    STATS.find((s) => s.id === 3)?.value,
+  )
+
+  useEffect(() => {
+    let activo = true
+    api
+      .getProblemasCount()
+      .then(({ count }) => {
+        if (activo && count > 0) setTotalProblemas(count)
+      })
+      .catch(() => {}) // se queda con el número de respaldo
+    return () => {
+      activo = false
+    }
+  }, [])
+
+  const stats = STATS.map((stat) => (stat.id === 3 ? { ...stat, value: totalProblemas } : stat))
+
   return (
     <section id="quienes-somos" className="scroll-mt-16 bg-white">
       <motion.div
@@ -221,7 +247,7 @@ export default function QuienesSomos() {
         className="bg-brand-900 px-4 py-16 sm:px-6 sm:py-20"
       >
         <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-3 sm:gap-0">
-          {STATS.map((stat) => (
+          {stats.map((stat) => (
             <CifraBanda key={stat.id} stat={stat} />
           ))}
         </div>
