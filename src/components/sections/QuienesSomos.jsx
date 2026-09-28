@@ -12,6 +12,15 @@ import { fadeUp, popIn, revealProps, staggerContainer } from '../motion/variants
 // ambos párrafos igual) y la imagen grupal a la derecha; para cerrar, las
 // cifras en una banda oscura de borde a borde.
 
+// Mismo trío rojo/naranja/dorado que Hero, Contacto y AxiomaCurioso — aquí
+// dosificado en el ícono de cada cifra (fondo oscuro se queda igual, a
+// propósito: no tocar), para que la franja no se sienta apagada/genérica
+// y quede claro que las tres cifras son "de la misma familia" que el resto
+// del sitio.
+const DORADO = '#FFB401'
+const NARANJA = '#E57505'
+const ROJO = '#B70B0D'
+
 const STATS = [
   {
     id: 1,
@@ -19,6 +28,7 @@ const STATS = [
     prefix: '',
     suffix: '',
     label: 'Fundado en',
+    color: DORADO,
     // Calendario
     icono: <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" />,
   },
@@ -28,6 +38,7 @@ const STATS = [
     prefix: '+',
     suffix: '',
     label: 'Miembros de la comunidad',
+    color: NARANJA,
     // Personas
     icono: (
       <>
@@ -48,6 +59,7 @@ const STATS = [
     suffix: '',
     label: 'Problemas en el archivo',
     href: '/problemas',
+    color: ROJO,
     // Documento
     icono: (
       <>
@@ -116,11 +128,21 @@ function CifraBanda({ stat }) {
     <Envoltura
       to={stat.href}
       variants={fadeUp}
+      whileHover={{ y: -4, transition: { duration: 0.25, ease: 'easeOut' } }}
+      style={{ '--acento': stat.color, '--acento-suave': `${stat.color}26` }}
       className={`group flex flex-col items-center gap-4 text-center sm:border-l sm:border-white/15 sm:first:border-l-0 ${
-        stat.href ? 'transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white' : ''
+        stat.href ? 'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white' : ''
       }`}
     >
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
+      {/* El ícono nace con el color de marca (dorado/naranja/rojo, uno por
+          cifra) en vez del blanco apagado de antes, y al pasar el mouse se
+          rellena de ese color y gira un poco — un empujoncito interactivo
+          para que la franja no se sienta solo un letrero estático, aunque
+          esta cifra en particular no lleve a ningún lado. Las dos variables
+          CSS (arriba) hacen que tanto el estado normal como el :hover sean
+          clases de Tailwind de verdad, y no un `style` inline que ganaría
+          siempre y dejaría al hover sin efecto.*/}
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--acento-suave)] text-[var(--acento)] transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-6 group-hover:bg-[var(--acento)] group-hover:text-white">
         <svg
           viewBox="0 0 24 24"
           fill="none"
