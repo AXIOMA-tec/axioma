@@ -1,14 +1,15 @@
 import mongoose from 'mongoose'
 
 // Coordinadores de un director (1 a 4 normalmente). Van dentro de la ficha del
-// director: no son miembros aparte. Datos: nombre, puesto (rol), correo y
-// LinkedIn (+ foto opcional). Solo `nombre` es obligatorio.
+// director: no son miembros aparte. Datos: nombre, puesto (rol), correo,
+// LinkedIn y GitHub (+ foto), todos opcionales salvo `nombre`.
 const coordinadorSchema = new mongoose.Schema(
   {
     nombre: { type: String, required: true },
     rol: { type: String, default: '' },
     email: { type: String, default: '' },
     linkedin: { type: String, default: '' },
+    github: { type: String, default: '' },
     foto: { type: String, default: null },
   },
   { _id: false },

@@ -71,18 +71,21 @@ function Foto({ imagen, indice, onOpen }) {
   )
 }
 
-// Fila que se desplaza en horizontal según el progreso del scroll.
-// Las fotos se repiten para que la fila siempre sea más ancha que la
+// Fila que se desplaza en horizontal según el progreso del scroll. Recibe
+// pares { imagen, indiceGlobal }: `indiceGlobal` es la posición real de esa
+// foto en el arreglo completo (no en esta fila), así el número que se ve y
+// la foto que abre el visor son siempre la misma, sin importar en qué fila
+// esté. Las fotos se repiten para que la fila siempre sea más ancha que la
 // pantalla, por grande que sea el monitor.
-function Fila({ imagenes, progreso, desde, hasta, onOpen }) {
+function Fila({ items, progreso, desde, hasta, onOpen }) {
   const reducirMovimiento = useReducedMotion()
   const x = useTransform(progreso, [0, 1], reducirMovimiento ? [desde, desde] : [desde, hasta])
-  const lista = [...imagenes, ...imagenes]
+  const lista = [...items, ...items]
 
   return (
     <motion.div style={{ x }} className="flex w-max gap-4 will-change-transform sm:gap-6">
-      {lista.map((imagen, i) => (
-        <Foto key={`${imagen.id}-${i}`} imagen={imagen} indice={imagenes.indexOf(imagen)} onOpen={onOpen} />
+      {lista.map(({ imagen, indiceGlobal }, i) => (
+        <Foto key={`${imagen.id}-${i}`} imagen={imagen} indice={indiceGlobal} onOpen={onOpen} />
       ))}
     </motion.div>
   )
@@ -191,9 +194,15 @@ export default function Galeria() {
     offset: ['start end', 'end end'],
   })
 
-  // Segunda fila con otro orden, para que no se vean pares idénticos.
-  const mitad = Math.ceil(imagenes.length / 2)
-  const invertidas = [...imagenes.slice(mitad), ...imagenes.slice(0, mitad)]
+  // Dos grupos que NO se repiten entre sí (pares en una fila, impares en la
+  // otra): así, aunque cada fila se mueva por separado, nunca muestran la
+  // misma foto — antes las dos filas eran las mismas 6 fotos nada más
+  // reacomodadas, y por eso se sentían iguales. Cada foto guarda su
+  // `indiceGlobal` (posición real en `imagenes`) para que el número y el
+  // visor siempre correspondan a la foto correcta.
+  const conIndice = imagenes.map((imagen, indiceGlobal) => ({ imagen, indiceGlobal }))
+  const filaA = conIndice.filter((_, i) => i % 2 === 0)
+  const filaB = conIndice.filter((_, i) => i % 2 === 1)
 
   return (
     <section id="galeria" ref={seccionRef} className="scroll-mt-16 overflow-x-clip py-24">
@@ -206,8 +215,10 @@ export default function Galeria() {
 
       {/* Filas de borde a borde: fuera del contenedor con max-width. */}
       <div className="flex flex-col gap-4 pl-4 sm:gap-6 sm:pl-8">
-        <Fila imagenes={imagenes} progreso={scrollYProgress} desde="0%" hasta="-30%" onOpen={setAbierta} />
-        <Fila imagenes={invertidas} progreso={scrollYProgress} desde="-30%" hasta="0%" onOpen={setAbierta} />
+        <Fila items={filaA} progreso={scrollYProgress} desde="0%" hasta="-30%" onOpen={setAbierta} />
+        {filaB.length > 0 && (
+          <Fila items={filaB} progreso={scrollYProgress} desde="-30%" hasta="0%" onOpen={setAbierta} />
+        )}
       </div>
 
       <AnimatePresence>
