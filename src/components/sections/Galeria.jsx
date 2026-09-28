@@ -8,14 +8,17 @@ import {
 } from 'framer-motion'
 import { EASE } from '../motion/variants'
 import { useBloquearScroll } from '../../hooks/useBloquearScroll'
+import { useApiData } from '../../hooks/useApiData'
+import { api } from '../../lib/api'
 import SectionHeader from '../SectionHeader'
 
 // Sección Galería (id="galeria")
-// TODO equipo: reemplazar el array IMAGENES con fotos reales de eventos,
-// sesiones de resolución de problemas, competencias, etc.
+// Las fotos vienen de la API (server/ + MongoDB), igual que Equipo y
+// Eventos — se agregan y editan desde /admin/galeria, sin tocar código.
+// IMAGENES_RESPALDO se usa solo si la API no responde.
 // `ratio` es la proporción (ancho / alto) de cada foto: mezclar verticales
-// y horizontales es lo que le da ritmo a las filas. Con fotos reales,
-// pongan la proporción real de cada una.
+// y horizontales es lo que le da ritmo a las filas; se calcula solo al
+// subir la imagen en el panel de administración.
 //
 // Diseño: dos filas de fotos de borde a borde de la pantalla que se
 // deslizan en sentidos opuestos según se hace scroll (sin espacios
@@ -23,7 +26,7 @@ import SectionHeader from '../SectionHeader'
 // Mismo lenguaje suave que Equipo y Quiénes Somos: esquinas redondeadas,
 // bordes claros y sombra leve.
 
-const IMAGENES = [
+const IMAGENES_RESPALDO = [
   { id: 1, src: null, ratio: 4 / 5, alt: 'Sesión semanal de resolución de problemas de Axioma' },
   { id: 2, src: null, ratio: 3 / 2, alt: 'Equipo de Axioma en una competencia interuniversitaria' },
   { id: 3, src: null, ratio: 1, alt: 'Taller de introducción a la combinatoria' },
@@ -68,18 +71,21 @@ function Foto({ imagen, indice, onOpen }) {
   )
 }
 
-// Fila que se desplaza en horizontal según el progreso del scroll.
-// Las fotos se repiten para que la fila siempre sea más ancha que la
+// Fila que se desplaza en horizontal según el progreso del scroll. Recibe
+// pares { imagen, indiceGlobal }: `indiceGlobal` es la posición real de esa
+// foto en el arreglo completo (no en esta fila), así el número que se ve y
+// la foto que abre el visor son siempre la misma, sin importar en qué fila
+// esté. Las fotos se repiten para que la fila siempre sea más ancha que la
 // pantalla, por grande que sea el monitor.
-function Fila({ imagenes, progreso, desde, hasta, onOpen }) {
+function Fila({ items, progreso, desde, hasta, onOpen }) {
   const reducirMovimiento = useReducedMotion()
   const x = useTransform(progreso, [0, 1], reducirMovimiento ? [desde, desde] : [desde, hasta])
-  const lista = [...imagenes, ...imagenes]
+  const lista = [...items, ...items]
 
   return (
     <motion.div style={{ x }} className="flex w-max gap-4 will-change-transform sm:gap-6">
-      {lista.map((imagen, i) => (
-        <Foto key={`${imagen.id}-${i}`} imagen={imagen} indice={imagenes.indexOf(imagen)} onOpen={onOpen} />
+      {lista.map(({ imagen, indiceGlobal }, i) => (
+        <Foto key={`${imagen.id}-${i}`} imagen={imagen} indice={indiceGlobal} onOpen={onOpen} />
       ))}
     </motion.div>
   )
@@ -101,11 +107,11 @@ function BotonVisor({ onClick, disabled, label, children }) {
 }
 
 // Visor a pantalla completa con flechas y teclado.
-function Visor({ indice, onIr, onClose }) {
+function Visor({ imagenes, indice, onIr, onClose }) {
   useBloquearScroll()
-  const imagen = IMAGENES[indice]
+  const imagen = imagenes[indice]
   const anterior = indice > 0 ? indice - 1 : null
-  const siguiente = indice < IMAGENES.length - 1 ? indice + 1 : null
+  const siguiente = indice < imagenes.length - 1 ? indice + 1 : null
 
   useEffect(() => {
     const alPresionar = (event) => {
@@ -131,7 +137,7 @@ function Visor({ indice, onIr, onClose }) {
     >
       <div className="flex items-center justify-between text-white" onClick={(e) => e.stopPropagation()}>
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] tabular-nums">
-          {numero(indice)} / {numero(IMAGENES.length - 1)}
+          {numero(indice)} / {numero(imagenes.length - 1)}
         </p>
         <button
           type="button"
@@ -176,6 +182,7 @@ function Visor({ indice, onIr, onClose }) {
 }
 
 export default function Galeria() {
+  const { data: imagenes } = useApiData(api.getGaleria, IMAGENES_RESPALDO)
   const [abierta, setAbierta] = useState(null)
   const seccionRef = useRef(null)
 
@@ -187,8 +194,15 @@ export default function Galeria() {
     offset: ['start end', 'end end'],
   })
 
-  // Segunda fila con otro orden, para que no se vean pares idénticos.
-  const invertidas = [...IMAGENES.slice(3), ...IMAGENES.slice(0, 3)]
+  // Dos grupos que NO se repiten entre sí (pares en una fila, impares en la
+  // otra): así, aunque cada fila se mueva por separado, nunca muestran la
+  // misma foto — antes las dos filas eran las mismas 6 fotos nada más
+  // reacomodadas, y por eso se sentían iguales. Cada foto guarda su
+  // `indiceGlobal` (posición real en `imagenes`) para que el número y el
+  // visor siempre correspondan a la foto correcta.
+  const conIndice = imagenes.map((imagen, indiceGlobal) => ({ imagen, indiceGlobal }))
+  const filaA = conIndice.filter((_, i) => i % 2 === 0)
+  const filaB = conIndice.filter((_, i) => i % 2 === 1)
 
   return (
     <section id="galeria" ref={seccionRef} className="scroll-mt-16 overflow-x-clip py-24">
@@ -201,13 +215,15 @@ export default function Galeria() {
 
       {/* Filas de borde a borde: fuera del contenedor con max-width. */}
       <div className="flex flex-col gap-4 pl-4 sm:gap-6 sm:pl-8">
-        <Fila imagenes={IMAGENES} progreso={scrollYProgress} desde="0%" hasta="-30%" onOpen={setAbierta} />
-        <Fila imagenes={invertidas} progreso={scrollYProgress} desde="-30%" hasta="0%" onOpen={setAbierta} />
+        <Fila items={filaA} progreso={scrollYProgress} desde="0%" hasta="-30%" onOpen={setAbierta} />
+        {filaB.length > 0 && (
+          <Fila items={filaB} progreso={scrollYProgress} desde="-30%" hasta="0%" onOpen={setAbierta} />
+        )}
       </div>
 
       <AnimatePresence>
         {abierta !== null && (
-          <Visor key="visor" indice={abierta} onIr={setAbierta} onClose={() => setAbierta(null)} />
+          <Visor key="visor" imagenes={imagenes} indice={abierta} onIr={setAbierta} onClose={() => setAbierta(null)} />
         )}
       </AnimatePresence>
     </section>

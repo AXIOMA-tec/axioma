@@ -41,4 +41,16 @@ export const api = {
   getEquipo: () => fetchJSON('/api/equipo'),
   getProblemas: () => fetchJSON('/api/problemas'),
   getEventos: () => fetchJSON('/api/eventos'),
+  getGaleria: () => fetchJSON('/api/galeria'),
+  // Solo para administradores (ver /admin/eventos y /admin/galeria):
+  // requieren el token de sesión, y el servidor rechaza a quien no tenga
+  // isAdmin.
+  crearEvento: (datos, token) => apiFetch('/api/eventos', { method: 'POST', body: datos, token }),
+  actualizarEvento: (id, datos, token) =>
+    apiFetch(`/api/eventos/${id}`, { method: 'PATCH', body: datos, token }),
+  borrarEvento: (id, token) => apiFetch(`/api/eventos/${id}`, { method: 'DELETE', token }),
+  crearFoto: (datos, token) => apiFetch('/api/galeria', { method: 'POST', body: datos, token }),
+  actualizarFoto: (id, datos, token) =>
+    apiFetch(`/api/galeria/${id}`, { method: 'PATCH', body: datos, token }),
+  borrarFoto: (id, token) => apiFetch(`/api/galeria/${id}`, { method: 'DELETE', token }),
 }

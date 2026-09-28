@@ -17,7 +17,7 @@ const MIEMBROS_RESPALDO = [
     id: 1,
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
-    foto: null,
+    foto: '/equipo/hugo-meza.jpg',
     email: 'A00841695@tec.mx',
     linkedin: 'https://www.linkedin.com/in/hugo-a-meza',
     github: 'https://github.com/hugo-meza',
@@ -26,7 +26,7 @@ const MIEMBROS_RESPALDO = [
     id: 2,
     nombre: 'Lucero Díaz Ortega',
     rol: 'Vicepresidente',
-    foto: null,
+    foto: '/equipo/lucero-diaz.jpg',
     email: 'A01199346@tec.mx',
     linkedin: 'https://www.linkedin.com/in/lucero-d%C3%ADaz-ortega-98979b354/',
     github: 'https://github.com/Luzdks',
@@ -35,7 +35,7 @@ const MIEMBROS_RESPALDO = [
     id: 3,
     nombre: 'Gil Brandon Garcia Contreras',
     rol: 'Dirección de Proyectos',
-    foto: null,
+    foto: '/equipo/gil-garcia.jpg',
     email: 'A01254164@tec.mx',
     linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
     github: 'https://github.com/gil-brandon',
@@ -53,7 +53,7 @@ const MIEMBROS_RESPALDO = [
     id: 4,
     nombre: 'Raúl Correa Ocañas',
     rol: 'Dirección de Vinculación',
-    foto: null,
+    foto: '/equipo/raul-correa.jpg',
     email: 'A01722401@tec.mx',
     linkedin: 'https://www.linkedin.com/in/rcorreao/',
     github: 'https://github.com/Racoo203',
@@ -69,34 +69,40 @@ const MIEMBROS_RESPALDO = [
     id: 5,
     nombre: 'Emilio Alejandro González Huerta',
     rol: 'Dirección de Comunicación',
-    foto: null,
+    foto: '/equipo/emilio-gonzalez.jpg',
     email: 'A01286440@tec.mx',
     linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
     github: 'https://github.com/emigzzh',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Comunicación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Luis Daniel González Alcocer', rol: 'Coordinador de Marketing',
+        email: '', linkedin: 'https://www.linkedin.com/in/ludago4499',
+        foto: '/equipo/luis-gonzalez.jpg' },
+      { nombre: 'Diana Marlene Tovar Martínez', rol: 'Coordinadora de Marketing',
+        email: '', linkedin: 'https://mx.linkedin.com/in/diana-marlene-tovar-mart%C3%ADnez-01a8233b3',
+        foto: '/equipo/diana-tovar.jpg' },
+      { nombre: 'Victoria Beltrán Aguilar', rol: 'Coordinadora de Marketing',
+        email: '', linkedin: 'https://www.linkedin.com/in/victoria-beltran-aguilar/',
+        foto: '/equipo/victoria-beltran.jpg' },
+      { nombre: 'Paola Mireles Ochoa', rol: 'Coordinadora de Marketing',
+        email: '', linkedin: 'https://www.linkedin.com/in/paola-mireles-ochoa-6161a7338/',
+        foto: '/equipo/paola-mireles.jpg' },
     ],
   },
   {
     id: 6,
     nombre: 'Catherine González Díaz',
     rol: 'Dirección de Investigación',
-    foto: null,
+    foto: '/equipo/catherine-gonzalez.jpg',
     email: 'A00845539@tec.mx',
     linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
     github: 'https://github.com/catherinegd7',
-    // Placeholders: reemplazar por los coordinadores reales (ver la plantilla arriba).
     coordinadores: [
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
-      { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Investigación',
-        email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+      { nombre: 'Ethiel Favila Alvarado', rol: 'Coordinadora de Investigación',
+        email: '', linkedin: 'https://www.linkedin.com/in/ethiel-favila-alvarado-459ba2358/',
+        foto: '/equipo/ethiel-favila.jpg' },
+      { nombre: 'Elías Perianza Robles', rol: 'Coordinador de Investigación',
+        email: '', linkedin: 'https://www.linkedin.com/in/elias-perianza-robles/',
+        foto: '/equipo/elias-perianza.jpg' },
     ],
   },
   {
@@ -112,6 +118,25 @@ const MIEMBROS_RESPALDO = [
     coordinadores: [
       { nombre: 'Nombre Apellido', rol: 'Coordinador(a) de Finanzas',
         email: 'A00000000@tec.mx', linkedin: 'https://www.linkedin.com/in/placeholder' },
+    ],
+  },
+  {
+    id: 8,
+    nombre: 'Orlando Gael Cardozo Beltrán',
+    rol: 'Dirección de Responsabilidad Social',
+    foto: '/equipo/orlando-cardozo.jpg',
+    email: 'A00841016@tec.mx',
+    linkedin: 'https://www.linkedin.com/in/orlando-gael-cardozo-beltr%C3%A1n-884b913b5/',
+    // Sin GitHub: el botón simplemente no aparece.
+    github: '',
+    coordinadores: [
+      { nombre: 'Edgar Axel Pérez Flores', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: 'https://www.linkedin.com/in/edgar-axel-flores',
+        foto: '/equipo/edgar-perez.jpg' },
+      { nombre: 'Angel Everardo Rodríguez Guevara', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: 'https://www.linkedin.com/in/angelrdzg' },
+      { nombre: 'Andres Saul Perez Martinez', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: '', github: 'https://github.com/Andres210212' },
     ],
   },
 ]
@@ -205,27 +230,40 @@ function PanelCoordinacion({ director, onClose }) {
     ? director.rol.replace('Dirección de', 'Coordinación de')
     : `Equipo de ${director.rol}`
 
+  // Con 1 persona, una sola columna ancha; con 2+ personas, hasta 3 columnas
+  // en pantallas grandes. Nunca full-height: la ventana se ajusta a su
+  // contenido (nada de espacio muerto abajo cuando hay poca gente) y solo
+  // hace scroll interno si algún día un área crece más de lo que cabe.
+  const numCoordinadores = director.coordinadores.length
+  const columnas =
+    numCoordinadores === 1 ? '' : numCoordinadores === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'
+
+  // Con 3 columnas los nombres largos ("Angel Everardo Rodríguez Guevara")
+  // se sentían amontonados en max-w-3xl: la ventana crece un poco más para
+  // darle a cada tarjeta el ancho que necesita.
+  const anchoMaximo = numCoordinadores >= 3 ? 'max-w-4xl' : 'max-w-3xl'
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[60] bg-brand-900/50 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-brand-900/50 p-4 backdrop-blur-sm sm:p-8"
       onClick={onClose}
     >
-      <motion.aside
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ duration: 0.4, ease: EASE }}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.97, y: 8 }}
+        transition={{ duration: 0.35, ease: EASE }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
-        className="absolute right-0 top-0 flex h-full w-full max-w-2xl flex-col bg-white shadow-2xl sm:rounded-l-3xl"
+        className={`flex max-h-[85vh] w-full flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ${anchoMaximo}`}
         onClick={(event) => event.stopPropagation()}
       >
-        <header className="flex items-start justify-between gap-4 border-b border-brand-200 p-6">
+        <header className="flex shrink-0 items-start justify-between gap-4 border-b border-brand-200 p-6">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand-900/50">
               Dirige {director.nombre}
@@ -245,17 +283,20 @@ function PanelCoordinacion({ director, onClose }) {
           </button>
         </header>
 
-        {/* Una tarjeta por coordinador, con la foto como protagonista. Con una
-            sola persona ocupa todo el ancho; con varias, van de dos en dos. */}
-        <ul
-          className={`grid flex-1 content-start gap-4 overflow-y-auto overscroll-contain p-6 ${
-            director.coordinadores.length > 1 ? 'sm:grid-cols-2' : ''
-          }`}
+        {/* Una tarjeta por coordinador, con la foto como protagonista.
+            Entran con un ligero escalonado, para que el reflector se sienta
+            vivo aunque solo haya 1 o 2 personas. */}
+        <motion.ul
+          variants={staggerContainer(0.06)}
+          initial="hidden"
+          animate="show"
+          className={`grid gap-4 overflow-y-auto overscroll-contain p-6 ${columnas}`}
         >
           {director.coordinadores.map((c, i) => (
-            <li
+            <motion.li
               key={`${c.nombre}-${i}`}
-              className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center"
+              variants={fadeUp}
+              className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-5 text-center sm:p-6"
             >
               <div className="rounded-full border border-brand-200 bg-white p-1.5">
                 <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-3xl text-brand-400 sm:h-28 sm:w-28">
@@ -268,13 +309,13 @@ function PanelCoordinacion({ director, onClose }) {
               </div>
 
               <div className="flex flex-col items-center gap-2">
-                <p className="font-display text-lg leading-tight tracking-wide text-brand-900">{c.nombre}</p>
+                <p className="font-display text-base leading-tight tracking-wide text-brand-900 sm:text-lg">{c.nombre}</p>
                 <p className="rounded-full bg-white px-3 py-1 text-xs font-medium text-brand-900/70 ring-1 ring-brand-200">
                   {c.rol || 'Coordinación'}
                 </p>
               </div>
 
-              {/* Contacto: correo (se puede leer y copiar) y LinkedIn. */}
+              {/* Contacto: correo (se puede leer y copiar), LinkedIn y GitHub. */}
               <div className="mt-1 flex flex-col items-center gap-2 text-sm">
                 {c.email && (
                   <a
@@ -284,33 +325,15 @@ function PanelCoordinacion({ director, onClose }) {
                     {c.email}
                   </a>
                 )}
-                {c.linkedin && (
-                  <a
-                    href={c.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-1.5 text-xs font-medium text-brand-900/80 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
-                      aria-hidden="true"
-                    >
-                      {ICONOS.linkedin}
-                    </svg>
-                    Ver perfil de LinkedIn
-                  </a>
-                )}
+                <div className="flex gap-2">
+                  <EnlaceSocial href={c.linkedin} red="linkedin" nombre={c.nombre} />
+                  <EnlaceSocial href={c.github} red="github" nombre={c.nombre} />
+                </div>
               </div>
-            </li>
+            </motion.li>
           ))}
-        </ul>
-      </motion.aside>
+        </motion.ul>
+      </motion.div>
     </motion.div>
   )
 }

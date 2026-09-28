@@ -63,3 +63,16 @@ export async function requireAuth(req, res, next) {
   req.userId = user._id.toString()
   next()
 }
+
+// requireAdmin — va DESPUÉS de requireAuth en la cadena de una ruta (ej.
+// router.post('/', requireAuth, requireAdmin, handler)): requireAuth ya
+// dejó a la persona en req.user, esto solo revisa que además sea admin.
+// Devuelve 403 (Forbidden: sabemos quién eres, pero no puedes) en vez de
+// 401 (Unauthorized: no sabemos quién eres), que es lo que ya mandó
+// requireAuth si ni siquiera había sesión.
+export function requireAdmin(req, res, next) {
+  if (!req.user?.isAdmin) {
+    return res.status(403).json({ error: 'Necesitas ser administrador para hacer esto.' })
+  }
+  next()
+}

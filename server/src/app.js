@@ -19,6 +19,7 @@ import problemsRoutes from './routes/problems.routes.js'
 import commentsRoutes from './routes/comments.routes.js'
 import miembrosRoutes from './routes/miembros.js'
 import eventosRoutes from './routes/eventos.js'
+import galeriaRoutes from './routes/galeria.js'
 
 const app = express()
 
@@ -65,6 +66,7 @@ app.use('/api/problems', problemsRoutes)
 app.use('/api/problems/:problemId/comments', commentsRoutes)
 app.use('/api/equipo', miembrosRoutes)
 app.use('/api/eventos', eventosRoutes)
+app.use('/api/galeria', galeriaRoutes)
 
 // Manejador de errores final (Express lo reconoce por tener 4 argumentos).
 // Cualquier error que una ruta no atrapó llega aquí, y respondemos JSON

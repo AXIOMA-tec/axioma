@@ -81,6 +81,15 @@ const userSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+
+    // Quién puede entrar al panel de administración (/admin/eventos).
+    // Nadie se puede volver admin por la API (no hay ruta para esto a
+    // propósito, así nadie se autopromueve): se pone en `true` a mano,
+    // directo en MongoDB Atlas, para la primera cuenta de cada generación.
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true, // agrega automáticamente createdAt y updatedAt
@@ -106,6 +115,7 @@ userSchema.methods.toPublic = function toPublic() {
     email: this.email,
     createdAt: this.createdAt,
     conGoogle: Boolean(this.googleId),
+    isAdmin: this.isAdmin,
   }
 }
 
