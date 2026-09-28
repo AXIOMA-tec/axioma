@@ -63,9 +63,29 @@ function renderFormulasEnLinea(texto, prefijoKey) {
   })
 }
 
+// Algunos problemas (ej. HMMT) traen un diagrama: una imagen en formato Markdown
+// metida en medio del enunciado o la solución, como "![texto alternativo](url)".
+// Se reconoce como un bloque más, igual que "$$...$$", y se dibuja como <img>
+// en vez de mandarla a KaTeX.
+const IMAGEN_REGEX = /^!\[([^\]]*)\]\(([^)]+)\)$/
+
 function renderEnunciado(texto) {
-  const bloques = texto.split(/(\$\$[\s\S]+?\$\$)/g)
+  const bloques = texto.split(/(\$\$[\s\S]+?\$\$|!\[[^\]]*\]\([^)]+\))/g)
   return bloques.map((bloque, i) => {
+    const esImagen = IMAGEN_REGEX.test(bloque)
+    if (esImagen) {
+      const [, alt, src] = bloque.match(IMAGEN_REGEX)
+      return (
+        <img
+          key={i}
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="my-4 max-w-full border border-neutral-200"
+        />
+      )
+    }
+
     const esDisplay = bloque.startsWith('$$') && bloque.endsWith('$$') && bloque.length > 4
     if (!esDisplay) return renderFormulasEnLinea(bloque, i)
 
@@ -92,7 +112,7 @@ const TEMAS = [
   'Probabilidad',
   'Teoría de Números',
 ]
-const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional']
+const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional', 'HMMT']
 
 // ---------------------------------------------------------------------------
 // Carpetas (Category): la API regresa una lista PLANA, cada una con un campo
