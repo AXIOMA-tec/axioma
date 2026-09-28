@@ -30,6 +30,11 @@ const problemSchema = new mongoose.Schema(
     // como string normal.
     enunciado: { type: String, required: true },
 
+    // Solución oficial, si existe. No es obligatoria ni se muestra todavía
+    // en la UI (Problemas.jsx no la lee) — guardarla ahora evita perder ese
+    // contenido para cuando exista un botón "ver solución".
+    solucion: { type: String },
+
     // A qué carpeta (Category) pertenece este problema.
     category: {
       type: mongoose.Schema.Types.ObjectId,
