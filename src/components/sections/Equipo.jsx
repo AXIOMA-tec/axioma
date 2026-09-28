@@ -17,7 +17,7 @@ const MIEMBROS_RESPALDO = [
     id: 1,
     nombre: 'Hugo André Meza Fierros',
     rol: 'Presidente',
-    foto: null,
+    foto: '/equipo/hugo-meza.jpg',
     email: 'A00841695@tec.mx',
     linkedin: 'https://www.linkedin.com/in/hugo-a-meza',
     github: 'https://github.com/hugo-meza',
@@ -26,7 +26,7 @@ const MIEMBROS_RESPALDO = [
     id: 2,
     nombre: 'Lucero Díaz Ortega',
     rol: 'Vicepresidente',
-    foto: null,
+    foto: '/equipo/lucero-diaz.jpg',
     email: 'A01199346@tec.mx',
     linkedin: 'https://www.linkedin.com/in/lucero-d%C3%ADaz-ortega-98979b354/',
     github: 'https://github.com/Luzdks',
@@ -35,7 +35,7 @@ const MIEMBROS_RESPALDO = [
     id: 3,
     nombre: 'Gil Brandon Garcia Contreras',
     rol: 'Dirección de Proyectos',
-    foto: null,
+    foto: '/equipo/gil-garcia.jpg',
     email: 'A01254164@tec.mx',
     linkedin: 'https://www.linkedin.com/in/gil-brandon-garc%C3%ADa-contreras',
     github: 'https://github.com/gil-brandon',
@@ -53,7 +53,7 @@ const MIEMBROS_RESPALDO = [
     id: 4,
     nombre: 'Raúl Correa Ocañas',
     rol: 'Dirección de Vinculación',
-    foto: null,
+    foto: '/equipo/raul-correa.jpg',
     email: 'A01722401@tec.mx',
     linkedin: 'https://www.linkedin.com/in/rcorreao/',
     github: 'https://github.com/Racoo203',
@@ -69,28 +69,40 @@ const MIEMBROS_RESPALDO = [
     id: 5,
     nombre: 'Emilio Alejandro González Huerta',
     rol: 'Dirección de Comunicación',
-    foto: null,
+    foto: '/equipo/emilio-gonzalez.jpg',
     email: 'A01286440@tec.mx',
     linkedin: 'https://www.linkedin.com/in/emiliogzzh/',
     github: 'https://github.com/emigzzh',
     coordinadores: [
       { nombre: 'Luis Daniel González Alcocer', rol: 'Coordinador de Marketing',
-        email: '', linkedin: 'https://www.linkedin.com/in/ludago4499' },
+        email: '', linkedin: 'https://www.linkedin.com/in/ludago4499',
+        foto: '/equipo/luis-gonzalez.jpg' },
+      { nombre: 'Diana Marlene Tovar Martínez', rol: 'Coordinadora de Marketing',
+        email: '', linkedin: 'https://mx.linkedin.com/in/diana-marlene-tovar-mart%C3%ADnez-01a8233b3',
+        foto: '/equipo/diana-tovar.jpg' },
+      { nombre: 'Victoria Beltrán Aguilar', rol: 'Coordinadora de Marketing',
+        email: '', linkedin: 'https://www.linkedin.com/in/victoria-beltran-aguilar/',
+        foto: '/equipo/victoria-beltran.jpg' },
+      { nombre: 'Paola Mireles Ochoa', rol: 'Coordinadora de Marketing',
+        email: '', linkedin: 'https://www.linkedin.com/in/paola-mireles-ochoa-6161a7338/',
+        foto: '/equipo/paola-mireles.jpg' },
     ],
   },
   {
     id: 6,
     nombre: 'Catherine González Díaz',
     rol: 'Dirección de Investigación',
-    foto: null,
+    foto: '/equipo/catherine-gonzalez.jpg',
     email: 'A00845539@tec.mx',
     linkedin: 'https://www.linkedin.com/in/catherine-gonz%C3%A1lez-d%C3%ADaz-9a93a7281',
     github: 'https://github.com/catherinegd7',
     coordinadores: [
       { nombre: 'Ethiel Favila Alvarado', rol: 'Coordinadora de Investigación',
-        email: '', linkedin: 'https://www.linkedin.com/in/ethiel-favila-alvarado-459ba2358/' },
+        email: '', linkedin: 'https://www.linkedin.com/in/ethiel-favila-alvarado-459ba2358/',
+        foto: '/equipo/ethiel-favila.jpg' },
       { nombre: 'Elías Perianza Robles', rol: 'Coordinador de Investigación',
-        email: '', linkedin: 'https://www.linkedin.com/in/elias-perianza-robles/' },
+        email: '', linkedin: 'https://www.linkedin.com/in/elias-perianza-robles/',
+        foto: '/equipo/elias-perianza.jpg' },
     ],
   },
   {
@@ -112,16 +124,19 @@ const MIEMBROS_RESPALDO = [
     id: 8,
     nombre: 'Orlando Gael Cardozo Beltrán',
     rol: 'Dirección de Responsabilidad Social',
-    foto: null,
+    foto: '/equipo/orlando-cardozo.jpg',
     email: 'A00841016@tec.mx',
     linkedin: 'https://www.linkedin.com/in/orlando-gael-cardozo-beltr%C3%A1n-884b913b5/',
     // Sin GitHub: el botón simplemente no aparece.
     github: '',
     coordinadores: [
       { nombre: 'Edgar Axel Pérez Flores', rol: 'Coordinador de Responsabilidad Social',
-        email: '', linkedin: 'https://www.linkedin.com/in/edgar-axel-flores' },
+        email: '', linkedin: 'https://www.linkedin.com/in/edgar-axel-flores',
+        foto: '/equipo/edgar-perez.jpg' },
       { nombre: 'Angel Everardo Rodríguez Guevara', rol: 'Coordinador de Responsabilidad Social',
         email: '', linkedin: 'https://www.linkedin.com/in/angelrdzg' },
+      { nombre: 'Andres Saul Perez Martinez', rol: 'Coordinador de Responsabilidad Social',
+        email: '', linkedin: '', github: 'https://github.com/Andres210212' },
     ],
   },
 ]
@@ -298,7 +313,7 @@ function PanelCoordinacion({ director, onClose }) {
                 </p>
               </div>
 
-              {/* Contacto: correo (se puede leer y copiar) y LinkedIn. */}
+              {/* Contacto: correo (se puede leer y copiar), LinkedIn y GitHub. */}
               <div className="mt-1 flex flex-col items-center gap-2 text-sm">
                 {c.email && (
                   <a
@@ -308,28 +323,10 @@ function PanelCoordinacion({ director, onClose }) {
                     {c.email}
                   </a>
                 )}
-                {c.linkedin && (
-                  <a
-                    href={c.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-1.5 text-xs font-medium text-brand-900/80 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
-                      aria-hidden="true"
-                    >
-                      {ICONOS.linkedin}
-                    </svg>
-                    Ver perfil de LinkedIn
-                  </a>
-                )}
+                <div className="flex gap-2">
+                  <EnlaceSocial href={c.linkedin} red="linkedin" nombre={c.nombre} />
+                  <EnlaceSocial href={c.github} red="github" nombre={c.nombre} />
+                </div>
               </div>
             </motion.li>
           ))}
