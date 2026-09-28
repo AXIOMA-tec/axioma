@@ -165,45 +165,11 @@ export const miembros = [
   },
 ]
 
-export const eventos = [
-  {
-    id: 1,
-    tipo: 'proximo',
-    titulo: 'Entrenamiento',
-    fecha: '29 de agosto',
-    lugar: 'A3-109 · 11:00–15:00',
-    alt: 'Póster de entrenamiento de matemáticas, 29 de agosto en A3-109',
-    src: null,
-    link: null,
-  },
-  {
-    id: 2,
-    tipo: 'proximo',
-    titulo: 'Integration Bee 2026',
-    fecha: '31 de agosto – 2 de septiembre',
-    lugar: 'Organizado por SEIQ',
-    alt: 'Póster de Integration Bee 2026, Tec de Monterrey',
-    src: null,
-    link: null,
-  },
-  {
-    id: 3,
-    tipo: 'proximo',
-    titulo: 'Simposium Axioma',
-    fecha: 'Fecha por confirmar',
-    lugar: '',
-    alt: 'Simposium de matemáticas de Axioma',
-    src: null,
-    link: null,
-  },
-  {
-    id: 4,
-    tipo: 'pasado',
-    titulo: 'Concurso Putnam',
-    fecha: 'Diciembre 2025',
-    lugar: '',
-    alt: 'Concurso Putnam, edición 2025',
-    src: null,
-    link: null,
-  },
-]
+// NO hay un arreglo `eventos` aquí a propósito. Antes había uno, con datos
+// de prueba viejos — nadie lo tocaba porque los eventos reales se agregan
+// y editan por completo desde /admin/eventos, directo a la base de datos.
+// Ese arreglo, olvidado, terminó siendo la causa de que un
+// `npm run seed:equipo` "inocente" (solo para agregar gente al equipo)
+// borrara los eventos reales sin avisar: seed.js/seedEquipo.js ya NO tocan
+// la colección Evento en absoluto. Si en algún momento hace falta
+// re-sembrar eventos de cero, créalos a mano desde el panel de admin.

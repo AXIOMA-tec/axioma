@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // seed.js — run once with `npm run seed` to fill the database with the real
 // problem set from server/src/data/problemasReales.js (Putnam 2021-2025,
-// OMMU Primera Ronda 2024-2026, OMMU Nacional 2024-2026 — 93 problems).
+// OMUM Primera Ronda 2024-2026, OMUM Nacional 2024-2026 — 93 problems).
 //
 // This replaces the original 5 hand-typed placeholder problems entirely,
 // now that real content exists. Safe to run again later: it clears the old
@@ -19,9 +19,8 @@ import Category from './models/Category.js'
 import Problem from './models/Problem.js'
 import Comment from './models/Comment.js'
 import Miembro from './models/Miembro.js'
-import Evento from './models/Evento.js'
 import { categorias, problemas } from './data/problemasReales.js'
-import { miembros, eventos } from './data/equipoEventos.js'
+import { miembros } from './data/equipoEventos.js'
 
 async function seed() {
   await mongoose.connect(process.env.MONGO_URI)
@@ -54,12 +53,13 @@ async function seed() {
 
   console.log(`Listo: ${categorias.length} categorías y ${problemas.length} problemas creados.`)
 
-  // Equipo y Eventos: mismo trato, datos separados en equipoEventos.js
-  // (ver ese archivo para actualizar nombres/eventos).
-  await Promise.all([Miembro.deleteMany({}), Evento.deleteMany({})])
+  // Equipo: mismo trato, datos en equipoEventos.js. Los EVENTOS ya NO se
+  // tocan aquí — se manejan por completo desde /admin/eventos, y borrarlos
+  // en cada seed se llevó datos reales sin que nadie lo notara (ver el
+  // comentario en seedEquipo.js para la historia completa).
+  await Miembro.deleteMany({})
   await Miembro.insertMany(miembros)
-  await Evento.insertMany(eventos)
-  console.log(`Listo: ${miembros.length} miembros y ${eventos.length} eventos creados.`)
+  console.log(`Listo: ${miembros.length} miembros creados.`)
 
   await mongoose.disconnect()
   process.exit(0)
