@@ -92,7 +92,7 @@ const TEMAS = [
   'Probabilidad',
   'Teoría de Números',
 ]
-const TIPOS = ['Putnam', 'OMMU Primera Ronda', 'OMMU Nacional']
+const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional']
 
 // ---------------------------------------------------------------------------
 // Carpetas (Category): la API regresa una lista PLANA, cada una con un campo
@@ -1423,7 +1423,7 @@ export default function Problemas() {
                   </motion.div>
                 )}
 
-                {/* Lista de carpetas: Putnam / OMMU Primera Ronda / OMMU
+                {/* Lista de carpetas: Putnam / OMUM Primera Ronda / OMUM
                     Nacional en la raíz, o las subcarpetas (años) de la que
                     se abrió. */}
                 {vista === 'carpetas' && (

@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // seed.js — run once with `npm run seed` to fill the database with the real
 // problem set from server/src/data/problemasReales.js (Putnam 2021-2025,
-// OMMU Primera Ronda 2024-2026, OMMU Nacional 2024-2026 — 93 problems).
+// OMUM Primera Ronda 2024-2026, OMUM Nacional 2024-2026 — 93 problems).
 //
 // This replaces the original 5 hand-typed placeholder problems entirely,
 // now that real content exists. Safe to run again later: it clears the old

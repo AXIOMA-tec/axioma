@@ -51,7 +51,7 @@ const STATS = [
   {
     id: 3,
     // Real, no una meta ni un número inventado: es justo lo que hay hoy en
-    // server/src/data/problemasReales.js (Putnam, OMMU Primera Ronda y OMMU
+    // server/src/data/problemasReales.js (Putnam, OMUM Primera Ronda y OMUM
     // Nacional). Si agregan más problemas ahí, actualicen este número —
     // ver TODO al inicio del archivo. (Última cuenta: 156, verificada
     // cargando el archivo con Node y leyendo problemas.length — no a ojo.)

@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
 // problemasReales.js — el contenido real de tres competencias, transcrito de
 // los archivos LaTeX que dio el equipo:
-//   - OMMU Primera Ronda (2024-2026)
-//   - OMMU Concurso Nacional (2024-2026)
+//   - OMUM Primera Ronda (2024-2026)
+//   - OMUM Concurso Nacional (2024-2026)
 //   - Putnam (2021-2025)
 //
 // Este archivo es solo DATOS (sin conexión a Mongo, sin lógica de base de
@@ -66,15 +66,15 @@ export const categorias = [
   { key: 'putnam-2024', name: '2024', parent: 'putnam' },
   { key: 'putnam-2025', name: '2025', parent: 'putnam' },
 
-  { key: 'ommu-pr', name: 'OMMU Primera Ronda', parent: null },
-  { key: 'ommu-pr-2024', name: '2024', parent: 'ommu-pr' },
-  { key: 'ommu-pr-2025', name: '2025', parent: 'ommu-pr' },
-  { key: 'ommu-pr-2026', name: '2026', parent: 'ommu-pr' },
+  { key: 'omum-pr', name: 'OMUM Primera Ronda', parent: null },
+  { key: 'omum-pr-2024', name: '2024', parent: 'omum-pr' },
+  { key: 'omum-pr-2025', name: '2025', parent: 'omum-pr' },
+  { key: 'omum-pr-2026', name: '2026', parent: 'omum-pr' },
 
-  { key: 'ommu-nac', name: 'OMMU Nacional', parent: null },
-  { key: 'ommu-nac-2024', name: '2024', parent: 'ommu-nac' },
-  { key: 'ommu-nac-2025', name: '2025', parent: 'ommu-nac' },
-  { key: 'ommu-nac-2026', name: '2026', parent: 'ommu-nac' },
+  { key: 'omum-nac', name: 'OMUM Nacional', parent: null },
+  { key: 'omum-nac-2024', name: '2024', parent: 'omum-nac' },
+  { key: 'omum-nac-2025', name: '2025', parent: 'omum-nac' },
+  { key: 'omum-nac-2026', name: '2026', parent: 'omum-nac' },
 ]
 
 // posicion = lugar del problema dentro de su ronda/sección (1 = primero).
@@ -90,7 +90,7 @@ function estimarPutnam(posicion) {
   return tabla[posicion - 1]
 }
 
-function estimarOMMU(posicion) {
+function estimarOMUM(posicion) {
   const tabla = [
     { dificultad: 'Media', exito: 48 },
     { dificultad: 'Media', exito: 36 },
@@ -103,61 +103,61 @@ function estimarOMMU(posicion) {
 }
 
 // ===========================================================================
-// OMMU — PRIMERA RONDA
+// OMUM — PRIMERA RONDA
 // ===========================================================================
 
-const ommuPrimeraRonda = [
+const omumPrimeraRonda = [
   // --- 2024 ---
   {
-    codigo: 'OMMU-PR-2024-1',
+    codigo: 'OMUM-PR-2024-1',
     titulo: 'Raíces de la derivada de p²',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(1),
     enunciado: String.raw`Demuestra que si $p(x)$ es un polinomio de grado $n$ con coeficientes reales y $n$ raíces reales distintas, entonces el polinomio $(p^2)'(x)$ tiene $2n-1$ raíces reales distintas.`,
   },
   {
-    codigo: 'OMMU-PR-2024-2',
+    codigo: 'OMUM-PR-2024-2',
     titulo: 'Derivada de det(J+tA)',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sea $A$ una matriz real de $n \times n$, $J$ la matriz de $n \times n$ cuyas entradas son todas $1$, y $f(t) = \det(J+tA)$. Encuentra $f'(0)$.`,
   },
   {
-    codigo: 'OMMU-PR-2024-3',
+    codigo: 'OMUM-PR-2024-3',
     titulo: 'Periodo de un corrimiento binario',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Combinatoria',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(3),
     enunciado: String.raw`Sea $x=(x_1,x_2,\dots,x_n)$ una sucesión de $0$'s y $1$'s. Considera la función $\rho(x)=\rho(x_1,\dots,x_n)=(x_2,\dots,x_n,x_1)$ que desplaza la primera entrada al final. Sean $u=|\{i \mid x_i=1\}|$ y $v=|\{i \mid x_i=0\}|$ la cantidad de unos y ceros en $x$, respectivamente. Dado que $|u-v|=1$, demuestra que $\rho^t(x)=x$ si y solo si $n \mid t$.`,
   },
   {
-    codigo: 'OMMU-PR-2024-4',
+    codigo: 'OMUM-PR-2024-4',
     titulo: 'Conjuntos independientes en un ciclo con cola',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Combinatoria',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(4),
     enunciado: String.raw`Considera una gráfica $G(n,m)$ que se obtiene al identificar un vértice de un ciclo de $n$ aristas con un extremo de un camino de $m$ aristas.
 
 Un conjunto de vértices se considera bueno si no hay dos de ellos que sean vecinos (es decir, no comparten ninguna arista). Sea $f(n,m,k)$ la cantidad de conjuntos buenos de tamaño $k$ en $G(n,m)$. Encuentra $f(n,m,k)$.`,
   },
   {
-    codigo: 'OMMU-PR-2024-5',
+    codigo: 'OMUM-PR-2024-5',
     titulo: 'Funciones con f(f(x)) = x⁴',
-    categoriaKey: 'ommu-pr-2024',
+    categoriaKey: 'omum-pr-2024',
     año: '2024',
     tema: 'Álgebra',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(5),
     enunciado: String.raw`Encuentra todas las funciones $f:(0,\infty)\rightarrow(0,\infty)$ que satisfacen:
 (i) $f(xy)=f(x)f(y)$
 (ii) $f(f(x))=x^4$
@@ -166,117 +166,117 @@ Un conjunto de vértices se considera bueno si no hay dos de ellos que sean veci
 
   // --- 2025 ---
   {
-    codigo: 'OMMU-PR-2025-1',
+    codigo: 'OMUM-PR-2025-1',
     titulo: 'Suma alternante sobre subconjuntos',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Combinatoria',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(1),
     enunciado: String.raw`Sea $n$ un número natural y considera $A_n=\{1,2,\dots,n\}$. Para un subconjunto $B\subset A_n$, sea $S_B=a_r-a_{r-1}+a_{r-2}+\dots+(-1)^{r-1}a_1$ si $B=\{a_r>a_{r-1}>\dots>a_1\}$. Calcula:
 $$\sum_{B\subset A_n}S_B$$`,
   },
   {
-    codigo: 'OMMU-PR-2025-2',
+    codigo: 'OMUM-PR-2025-2',
     titulo: 'Convergencia de una suma sobre potencias de primo',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sea $A=\{n\in\mathbb{N} \mid n \text{ es una potencia de primo compuesta}\}$. Sea $f(n)$ el promedio de los divisores de $n$. Demuestra que la siguiente suma converge:
 $$\sum_{n\in A}\frac{1}{f(n)}$$
 Nota: Un número compuesto es aquel que puede expresarse como el producto de dos números mayores que uno. Una potencia de primo es el resultado de multiplicar un mismo número primo por sí mismo varias veces (por ejemplo, $2^3=2\times2\times2$).`,
   },
   {
-    codigo: 'OMMU-PR-2025-3',
+    codigo: 'OMUM-PR-2025-3',
     titulo: 'Matrices sin raíces de x² + px + q',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(3),
     enunciado: String.raw`Sean $p,q\in\mathbb{R}$ tales que para todo número real $x\in\mathbb{R}$, $x^2+px+q\neq 0$. Si $n$ es un entero positivo impar, demuestra que para toda matriz cuadrada $X$ de $n\times n$ con entradas reales:
 $$X^2+pX+qI_n\neq O_n$$
 Nota: $I_n$ representa la matriz identidad de orden $n$, es decir, una matriz cuadrada de tamaño $n\times n$ con unos en la diagonal principal y ceros en el resto. $O_n$ representa la matriz de $n\times n$ cuyas entradas son todas cero.`,
   },
   {
-    codigo: 'OMMU-PR-2025-4',
+    codigo: 'OMUM-PR-2025-4',
     titulo: 'Curva tangente a círculos desde una elipse',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Geometría',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(4),
     enunciado: String.raw`Sea $\Gamma$ una elipse con focos $A$ y $B$. Para cada punto $P\in\Gamma$ se traza un círculo $C(P)$ con centro en $P$ que pasa por el punto $B$. Demuestra que existe una curva cerrada que es tangente a todos los círculos $C(P)$ y que el área encerrada por esta curva es al menos cuatro veces el área de la elipse $\Gamma$.`,
   },
   {
-    codigo: 'OMMU-PR-2025-5',
+    codigo: 'OMUM-PR-2025-5',
     titulo: 'Cota de una integral usando la derivada',
-    categoriaKey: 'ommu-pr-2025',
+    categoriaKey: 'omum-pr-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(5),
     enunciado: String.raw`Sea $f:[0,1]\rightarrow\mathbb{R}$ una función continua en $[0,1]$ y diferenciable en $(0,1)$ tal que existe $a\in(0,1]$ que satisface $\int_0^a f(x)dx=0$. Demuestra que:
 $$\left| \int_0^1 f(x)dx \right| \leq \frac{1-a}{2}\sup_{0<x<1}|f'(x)|$$`,
   },
 
   // --- 2026 ---
   {
-    codigo: 'OMMU-PR-2026-1',
+    codigo: 'OMUM-PR-2026-1',
     titulo: 'Concurrencia de rectas con pendiente recíproca',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Geometría',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(1),
     enunciado: String.raw`Sea $ABC$ un triángulo en el plano cartesiano tal que ninguno de sus lados es paralelo a los ejes coordenados. Sean $L$, $M$ y $N$ los puntos medios de los lados $BC$, $CA$ y $AB$, respectivamente. Por cada punto medio, se traza una línea cuya pendiente es el recíproco de la pendiente del lado correspondiente. Demuestra que estas tres líneas son concurrentes.
 Nota: El recíproco de $m$ es $1/m$.`,
   },
   {
-    codigo: 'OMMU-PR-2026-2',
+    codigo: 'OMUM-PR-2026-2',
     titulo: 'Punto donde P′/P iguala una suma de recíprocos',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Análisis',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sea $P(x)$ un polinomio con coeficientes reales que no tiene raíces en $(a,b)\subset\mathbb{R}$. Demuestra que existe $\alpha\in(a,b)$ tal que:
 $$\frac{P'(\alpha)}{P(\alpha)}=\frac{1}{a-\alpha}+\frac{1}{b-\alpha}$$
 Nota: Aquí $P'$ representa la derivada del polinomio.`,
   },
   {
-    codigo: 'OMMU-PR-2026-3',
+    codigo: 'OMUM-PR-2026-3',
     titulo: 'Determinante de una matriz de senos',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(3),
     enunciado: String.raw`Calcula el determinante de la matriz $A$ de tamaño $2026\times 2026$ cuyas entradas están dadas por la expresión $A_{i,j}=\sin(2026i+j)$ donde $1\le i\le 2026$ y $0\le j\le 2025$.`,
   },
   {
-    codigo: 'OMMU-PR-2026-4',
+    codigo: 'OMUM-PR-2026-4',
     titulo: 'Pares y tripletas que dan la identidad en un grupo',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Álgebra',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(4),
     enunciado: String.raw`Sea $G$ un grupo finito de orden $2n$ con elemento identidad $e$. Considera $R$ y $B$ como dos subconjuntos disjuntos de $G$ tales que $G=R\cup B$ con $|R|=|B|=n$.
 a) Demuestra que $|\{(x,y)\in R^2 \mid xy=e\}|=|\{(x,y)\in B^2 \mid xy=e\}|$.
 b) Proporciona un contraejemplo que demuestre que el enunciado análogo para tripletas es falso; es decir, que en general $|\{(x,y,z)\in R^3 \mid xyz=e\}|\neq|\{(x,y,z)\in B^3 \mid xyz=e\}|$.
 Nota: Un grupo es un conjunto $G$ con una operación asociativa $\cdot:G\times G\rightarrow G$, con identidad $e$ y con inversos.`,
   },
   {
-    codigo: 'OMMU-PR-2026-5',
+    codigo: 'OMUM-PR-2026-5',
     titulo: 'Límite del valor esperado de la valuación p-ádica',
-    categoriaKey: 'ommu-pr-2026',
+    categoriaKey: 'omum-pr-2026',
     año: '2026',
     tema: 'Probabilidad',
-    tipo: 'OMMU Primera Ronda',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Primera Ronda',
+    ...estimarOMUM(5),
     enunciado: String.raw`Sea $p$ un número primo fijo. Para cada entero positivo $n$, sea $X_n$ una variable aleatoria uniforme en el conjunto $\{1,2,\dots,n\}$. Definimos $V_p(m)$ como el exponente de $p$ en la factorización prima de $m$. Demuestra que el siguiente límite existe y encuentra su valor:
 $$\lim_{n\rightarrow\infty}\mathbb{E}[V_p(X_n)]$$
 Nota: Recuerda que para una variable aleatoria discreta $Y$ que toma valores enteros positivos, tenemos $\mathbb{E}(Y)=\sum_{k=1}^{\infty}k\cdot P(Y=k)$.`,
@@ -284,135 +284,135 @@ Nota: Recuerda que para una variable aleatoria discreta $Y$ que toma valores ent
 ]
 
 // ===========================================================================
-// OMMU — CONCURSO NACIONAL
+// OMUM — CONCURSO NACIONAL
 // ===========================================================================
 
-const ommuNacional = [
+const omumNacional = [
   // --- 2024 ---
   {
-    codigo: 'OMMU-NAC-2024-1',
+    codigo: 'OMUM-NAC-2024-1',
     titulo: 'La ecuación x⁴ = p + 9y⁴',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Teoría de Números',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(1),
     enunciado: String.raw`Sean $x, y, p$ enteros positivos que satisfacen la ecuación $x^4=p+9y^4$ donde $p$ es un número primo. Demuestra que $\frac{p^2-1}{3}$ es un cuadrado perfecto y un múltiplo de $16$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-2',
+    codigo: 'OMUM-NAC-2024-2',
     titulo: 'Un polinomio que lleva A a B',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(2),
     enunciado: String.raw`Sean $A$ y $B$ dos matrices cuadradas con entradas complejas tales que $A+B=AB$, $A=A^*$ y $A$ tiene todos sus valores propios distintos. Demuestra que existe un polinomio $P$ con coeficientes complejos tal que $P(A)=B$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-3',
+    codigo: 'OMUM-NAC-2024-3',
     titulo: 'Valores cercanos de una función multiplicativa',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Teoría de Números',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(3),
     enunciado: String.raw`Considera una función multiplicativa $f$ de los enteros positivos al disco unitario centrado en el origen, es decir, $f:\mathbb{Z}^+\rightarrow D^2\subseteq\mathbb{C}$ tal que $f(mn)=f(m)f(n)$. Demuestra que para todo $\epsilon>0$ y todo entero $k>0$ existen $k$ enteros positivos distintos $a_1,a_2,\dots,a_k$ tales que $\operatorname{mcd}(a_1,a_2,\dots,a_k)=k$ y $d(f(a_i),f(a_j))<\epsilon$ para todos $i, j=1,\dots,k$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-4',
+    codigo: 'OMUM-NAC-2024-4',
     titulo: 'Límite de la raíz i-ésima de una entrada de Bⁱ',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(4),
     enunciado: String.raw`Dado $b>0$ considera la siguiente matriz:
 $$B=\begin{pmatrix}b&b^2\\ b^2&b^3\end{pmatrix}$$
 Denota por $e_i$ la entrada superior izquierda de $B^i$. Demuestra que el siguiente límite existe y calcula su valor:
 $$\lim_{i\rightarrow\infty}\sqrt[i]{e_i}$$`,
   },
   {
-    codigo: 'OMMU-NAC-2024-5',
+    codigo: 'OMUM-NAC-2024-5',
     titulo: 'Permutación que evita sumas cero',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(5),
     enunciado: String.raw`Considera dos sucesiones finitas de números reales $a_1,a_2,\dots,a_n$ y $b_1,b_2,\dots,b_n$. Sean $\alpha(x)=|\{i \mid a_i=x\}|$ y $\beta(x)=|\{i \mid b_i=-x\}|$. Demuestra que existe una permutación $\sigma\in S_n$ (el grupo simétrico de $n$ elementos) tal que $a_{\sigma(i)}+b_i\neq 0$ para todo $i=1,\dots,n$ si y solo si $\alpha(x)+\beta(x)\le n$ para todo $x\in\mathbb{R}$.`,
   },
   {
-    codigo: 'OMMU-NAC-2024-6',
+    codigo: 'OMUM-NAC-2024-6',
     titulo: 'Cota para (p²)″ en términos de (p′)²',
-    categoriaKey: 'ommu-nac-2024',
+    categoriaKey: 'omum-nac-2024',
     año: '2024',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(6),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(6),
     enunciado: String.raw`Sea $p$ un polinomio mónico con todas sus raíces reales distintas. Demuestra que existe $K$ tal que $(p(x)^2)''\le K(p'(x))^2$.`,
   },
 
   // --- 2025 ---
   {
-    codigo: 'OMMU-NAC-2025-1',
+    codigo: 'OMUM-NAC-2025-1',
     titulo: 'Integral con simetría en 25 y 81',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(1),
     enunciado: String.raw`Encuentra el valor de la integral (Día 1):
 $$\int_{25}^{81}\frac{\sin(x)}{x\left(\sin(x)+\sin\left(\frac{2025}{x}\right)\right)}dx$$`,
   },
   {
-    codigo: 'OMMU-NAC-2025-2',
+    codigo: 'OMUM-NAC-2025-2',
     titulo: 'Ventiladores cíclicos y botones de fila-columna',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(2),
     enunciado: String.raw`(Día 1) Considera una cuadrícula de $n\times n$ ventiladores, donde cada ventilador tiene $2025$ velocidades. La velocidad más baja corresponde al estado "apagado". Cada ventilador puede cambiar su velocidad a la siguiente más alta, y desde la velocidad máxima pasa al estado "apagado"; es decir, el cambio de velocidades ocurre de forma cíclica. Hay un control remoto con botones también dispuestos en una cuadrícula de $n\times n$. Cuando se presiona un botón, todos los ventiladores en la misma fila y columna que ese botón aumentan su velocidad en uno (siguiendo el ciclo descrito). Determina la cantidad de valores $n\le 2025$ para los cuales es posible pasar del estado donde todos los ventiladores están apagados a un estado donde todos están encendidos a la misma velocidad (para cada una de las $2025$ velocidades posibles).`,
   },
   {
-    codigo: 'OMMU-NAC-2025-3',
+    codigo: 'OMUM-NAC-2025-3',
     titulo: 'Grupo de matrices simétricas con valores propios ±1',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(3),
     enunciado: String.raw`(Día 1) Sea $G$ un grupo de matrices simétricas de $n\times n$ con entradas reales. Supón que para todo elemento en $G$, sus valores propios son $1$ o $-1$. Demuestra que el tamaño de $G$ es $2^k$ para algún $k\le n$.`,
   },
   {
-    codigo: 'OMMU-NAC-2025-4',
+    codigo: 'OMUM-NAC-2025-4',
     titulo: 'Hexágono regular a partir de triángulos equiláteros',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Geometría',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(4),
     enunciado: String.raw`(Día 2) Se construyen triángulos equiláteros externamente sobre los lados de un hexágono que tiene un centro de simetría. Los vértices de estos triángulos que no pertenecen al hexágono inicial forman un nuevo hexágono. Demuestra que los puntos medios de los lados de este nuevo hexágono son vértices de un hexágono regular.`,
   },
   {
-    codigo: 'OMMU-NAC-2025-5',
+    codigo: 'OMUM-NAC-2025-5',
     titulo: 'Camino hamiltoniano de suma cero',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(5),
     enunciado: String.raw`(Día 2) Cada arista de una gráfica completa con $101$ vértices está etiquetada con $1$ o $-1$. Se sabe que el valor absoluto de la suma de los números asignados a las aristas es menor que $150$. Demuestra que la gráfica contiene un camino que visita todos los vértices exactamente una vez, tal que la suma de los valores de dicho camino es cero.`,
   },
   {
-    codigo: 'OMMU-NAC-2025-6',
+    codigo: 'OMUM-NAC-2025-6',
     titulo: 'Límite de una sucesión recursiva entre √n',
-    categoriaKey: 'ommu-nac-2025',
+    categoriaKey: 'omum-nac-2025',
     año: '2025',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(6),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(6),
     enunciado: String.raw`(Día 2) Considera la sucesión $(a_n)$ definida por la relación:
 $$a_n=\frac{a_{n-1}+\sqrt{a_{n-1}^2+4}}{2}, \quad a_1=1$$
 Demuestra que $b_n=\frac{a_n}{\sqrt{n}}$ converge y calcula su valor en el límite cuando $n\rightarrow\infty$.`,
@@ -420,13 +420,13 @@ Demuestra que $b_n=\frac{a_n}{\sqrt{n}}$ converge y calcula su valor en el lími
 
   // --- 2026 ---
   {
-    codigo: 'OMMU-NAC-2026-1',
+    codigo: 'OMUM-NAC-2026-1',
     titulo: 'Longitud mínima de un ciclo con relación tipo trenza',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Álgebra',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(1),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(1),
     enunciado: String.raw`(Día 1) Sean $\alpha$ y $\beta$ dos permutaciones de $n$ elementos, con $n>3$, tales que:
 a) Para cualquier $x$, si $\alpha(x)=x$ entonces $\beta(x)\neq x$, es decir, $\alpha$ y $\beta$ no tienen puntos fijos en común.
 b) $\alpha$ y $\beta$ satisfacen la siguiente relación: $\alpha\cdot\beta^{-1}\cdot\alpha^{-1}\cdot\beta\cdot\alpha\cdot\beta^{-1}\cdot\alpha\cdot\beta\cdot\alpha^{-1}\cdot\beta^{-1}=1$.
@@ -434,57 +434,57 @@ c) $\alpha$ consiste en un solo ciclo de longitud $k$ con $k<n$.
 Demuestra que $k\ge 2n/3$.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-2',
+    codigo: 'OMUM-NAC-2026-2',
     titulo: 'Desigualdad entre grados y una función en los vértices',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(2),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(2),
     enunciado: String.raw`(Día 1) Sea $G=(V,E)$ una gráfica conexa, donde $V$ es el conjunto de vértices y $E$ es el conjunto de aristas. Sea $d_i$ el grado del vértice $i\in V$. Sea también $f:V\rightarrow\mathbb{R}^+$ una función que satisface $f(i)f(j)\ge 1$, para todo $i\sim j$, donde $i\sim j$ significa que los vértices $i$ y $j$ son adyacentes.
 a) Demuestra que $\sum_{i\in V}f(i)\ge\sum_{e=\{i,j\}}\frac{2}{\sqrt{d_id_j}}$.
 b) Determina todas las gráficas $G$ y funciones $f$ para las cuales se alcanza la igualdad.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-3',
+    codigo: 'OMUM-NAC-2026-3',
     titulo: 'Grado mínimo de un polinomio separador',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Geometría',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(3),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(3),
     enunciado: String.raw`(Día 1) En el plano, hay $2025$ puntos azules y $2026$ puntos rojos en posición general. Determina el menor entero $d$ con la siguiente propiedad: para cualquier distribución de estos puntos, existe un polinomio $P(x,y)\in\mathbb{R}[x,y]$ de grado a lo más $d$ tal que $P(R)<0$ para todo punto rojo $R$, y $P(A)>0$ para todo punto azul $A$.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-4',
+    codigo: 'OMUM-NAC-2026-4',
     titulo: 'Determinante y valores z_i distintos',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Álgebra Lineal',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(4),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(4),
     enunciado: String.raw`(Día 2) Sean $z_1,z_2,\dots, z_{1013}$ números complejos. Considera la matriz $A$ de tamaño $2026\times 2026$. Para cada $i=1,\dots, 1013$, la fila $2i-1$ de la matriz está dada por: $(1,z_i,z_i^2,\dots,z_i^{2025})$ y la fila $2i$ está dada por: $(0,1,2z_i,3z_i^2,\dots,2025z_i^{2024})$. Demuestra que $\det(A)$ es distinto de cero si y solo si todos los $z_i$ son distintos.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-5',
+    codigo: 'OMUM-NAC-2026-5',
     titulo: 'Asíntotas de la raíz máxima de q_d',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Análisis',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(5),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(5),
     enunciado: String.raw`(Día 2) Sea $p(x)$ un polinomio mónico de grado $n$, con $n$ par, que tiene $n$ raíces reales positivas distintas. Para cada $d>0$, define $q_d(x)=\frac{1}{d}x^{n+1}-p(x)$, y sea $\lambda_{\max}(d)$ la mayor raíz real de $q_d$.
 a) Demuestra que existen números reales $\alpha$ y $L\neq 0$ tales que $\lim_{d\rightarrow\infty}\frac{\lambda_{\max}(d)}{d^\alpha}=L$, y determina $\alpha$ y $L$.
 b) Demuestra que existen números reales $\beta$ y $M\neq 0$ tales que $\lim_{d\rightarrow 0^+}\frac{\lambda_{\max}(d)}{d^\beta}=M$, y determina $\beta$ y $M$.`,
   },
   {
-    codigo: 'OMMU-NAC-2026-6',
+    codigo: 'OMUM-NAC-2026-6',
     titulo: 'Movimientos mínimos para vaciar fichas módulo 2026',
-    categoriaKey: 'ommu-nac-2026',
+    categoriaKey: 'omum-nac-2026',
     año: '2026',
     tema: 'Combinatoria',
-    tipo: 'OMMU Nacional',
-    ...estimarOMMU(6),
+    tipo: 'OMUM Nacional',
+    ...estimarOMUM(6),
     enunciado: String.raw`(Día 2) Sea $N$ un múltiplo de $2025^2-1$. Supón que los números $1, 2, \dots, 2026$ tienen $N$ fichas cada uno. Un movimiento consiste en remover fichas de los números $x_1,x_2,\dots,x_n$ (no necesariamente distintos) tales que:
 a) $x_1+x_2+\dots+x_n\equiv 0 \pmod{2026}$, y
 b) $x_{i_1}+x_{i_2}+\dots+x_{i_r}\not\equiv 0 \pmod{2026}$ para cualquier subconjunto propio $\{i_1,i_2,\dots,i_r\}\subsetneq\{1,2,\dots,n\}$.
@@ -1239,8 +1239,8 @@ const putnam2025 = [
 ]
 
 export const problemas = [
-  ...ommuPrimeraRonda,
-  ...ommuNacional,
+  ...omumPrimeraRonda,
+  ...omumNacional,
   ...putnam1985,
   ...putnam1986,
   ...putnam1987,
