@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /cuenta
+Disallow: /perfil
+Disallow: /admin
+Disallow: /admin/eventos
+Disallow: /admin/galeria
+
+Sitemap: https://axioma-five-brown.vercel.app/sitemap.xml
