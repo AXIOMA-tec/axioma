@@ -13,6 +13,7 @@ import AuthProvider from './components/AuthProvider'
 // Problemas trae KaTeX (pesado): se descarga solo cuando alguien entra a
 // /problemas, así la portada abre más rápido.
 const ProblemasPage = lazy(() => import('./pages/ProblemasPage'))
+const RecursosPage = lazy(() => import('./pages/RecursosPage'))
 
 // Este archivo solo define las rutas (+ chrome global como el cursor).
 // No agreguen contenido de página aquí: el one-pager vive en
@@ -30,6 +31,14 @@ function App() {
             element={
               <Suspense fallback={<div className="min-h-screen bg-white" />}>
                 <ProblemasPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/recursos"
+            element={
+              <Suspense fallback={<div className="min-h-screen bg-white" />}>
+                <RecursosPage />
               </Suspense>
             }
           />

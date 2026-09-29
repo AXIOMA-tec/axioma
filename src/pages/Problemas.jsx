@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useBloquearScroll } from '../hooks/useBloquearScroll'
 import Counter from '../components/motion/Counter'
 import { EASE, staggerContainer } from '../components/motion/variants'
@@ -957,6 +957,12 @@ function Encabezado({ auth, onLogout, listo, totalProblemas, totalTemas, totalCo
   )
 }
 
+// Cuántos se ven aquí antes de mandar a "Ver todos" — con subidas
+// semanales, en un año ya son 52 tarjetas: mostrar todas amontonaría el
+// tope de la página. El resto vive en /recursos (ver RecursosPage.jsx),
+// agrupado por año como una carpeta por año.
+const RECURSOS_VISIBLES = 6
+
 // Documentos descargables (PDFs de exámenes semanales, material de
 // asesores) — se agregan desde /admin/recursos. A diferencia de los
 // problemas de la lista de abajo, esto es un archivo completo para
@@ -965,12 +971,27 @@ function Encabezado({ auth, onLogout, listo, totalProblemas, totalTemas, totalCo
 // ninguno, la sección no se muestra — no tiene caso un encabezado vacío.
 function Recursos({ recursos }) {
   if (recursos.length === 0) return null
+  // El GET los manda ordenados ascendente (orden, id) — los últimos del
+  // arreglo son los más nuevos, por eso .slice(-N).reverse() en vez de
+  // simplemente los primeros N.
+  const recientes = [...recursos].slice(-RECURSOS_VISIBLES).reverse()
+  const hayMas = recursos.length > RECURSOS_VISIBLES
   return (
     <section className="border-b border-neutral-950 bg-white">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
-        <p className={`${labelClass} mb-6`}>Recursos</p>
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <p className={labelClass}>Recursos</p>
+          {hayMas && (
+            <Link
+              to="/recursos"
+              className={`text-xs uppercase tracking-[0.2em] text-neutral-600 underline underline-offset-4 hover:text-neutral-950 ${focusRing}`}
+            >
+              Ver todos ({recursos.length}) →
+            </Link>
+          )}
+        </div>
         <ul className="flex flex-wrap gap-4">
-          {recursos.map((recurso) => (
+          {recientes.map((recurso) => (
             <li key={recurso._id}>
               <a
                 href={recurso.archivo}
