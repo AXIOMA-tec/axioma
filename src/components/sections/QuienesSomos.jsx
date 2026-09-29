@@ -216,23 +216,25 @@ export default function QuienesSomos() {
             >
               ¿Qué es Axioma?
             </motion.h2>
-            {/* Propósito y visión oficiales, tal como quedaron registrados en
-                el Anexo 3 de LiFE (Grupos Estudiantiles) — no son texto de
-                relleno. */}
+            {/* Propósito y visión oficiales, basados en el Anexo 3 de LiFE
+                (Grupos Estudiantiles) — no son texto de relleno, pero sí
+                reescritos más directo: la redacción original sonaba a
+                genérico corporativo ("ecosistema formal y sostenible",
+                frases larguísimas con dos puntos), no como algo que
+                escribiría el club. Sin dos puntos ni guion largo a
+                propósito, para que no suene a texto de IA. */}
             <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
-              Axioma es el club de matemáticas del Tec de Monterrey. Nuestro
-              propósito es crear un ecosistema formal y sostenible para el
-              desarrollo del talento matemático en la institución: ser el
-              punto de unión para estudiantes apasionados por la resolución de
-              problemas, la docencia y las competencias, canalizando su
-              potencial para elevar el prestigio académico del Tec y generar
-              un impacto social positivo a través de la educación.
+              Axioma es el club de matemáticas del Tec de Monterrey. Es el
+              punto de encuentro para estudiantes apasionados por resolver
+              problemas, enseñar y competir. Formamos talento matemático de
+              forma seria y constante, para elevar el prestigio académico
+              del Tec y dejar un impacto real a través de la educación.
             </motion.p>
             <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
-              Nuestra visión es ser la principal cuna de talento matemático
-              del Tecnológico de Monterrey, reconocida por liderar en
-              competencias nacionales y por nuestro compromiso activo de
-              formar a los próximos talentos de la región.
+              Queremos ser la principal cuna de talento matemático del
+              Tecnológico de Monterrey, reconocidos por liderar en
+              competencias nacionales y por formar activamente a los
+              próximos talentos de la región.
             </motion.p>
           </motion.div>
 
