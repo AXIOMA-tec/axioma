@@ -6,6 +6,7 @@ import PerfilPage from './pages/PerfilPage'
 import AdminPage from './pages/AdminPage'
 import AdminEventosPage from './pages/AdminEventosPage'
 import AdminGaleriaPage from './pages/AdminGaleriaPage'
+import AdminRecursosPage from './pages/AdminRecursosPage'
 import CustomCursor from './components/CustomCursor'
 import AuthProvider from './components/AuthProvider'
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/eventos" element={<AdminEventosPage />} />
           <Route path="/admin/galeria" element={<AdminGaleriaPage />} />
+          <Route path="/admin/recursos" element={<AdminRecursosPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

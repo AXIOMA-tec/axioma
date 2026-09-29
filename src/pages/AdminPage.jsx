@@ -17,6 +17,11 @@ const SECCIONES = [
     titulo: 'Galería',
     descripcion: 'Subir, editar y borrar las fotos de la sección Galería.',
   },
+  {
+    to: '/admin/recursos',
+    titulo: 'Recursos',
+    descripcion: 'Subir PDFs y otros documentos descargables — exámenes semanales, material de asesores.',
+  },
 ]
 
 function AdminPage() {

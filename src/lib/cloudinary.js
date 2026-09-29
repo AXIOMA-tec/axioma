@@ -43,3 +43,29 @@ export async function subirImagen(archivo) {
   }
   return data.secure_url
 }
+
+// Sube cualquier archivo (PDF, imagen, lo que sea) para los Recursos
+// descargables de /problemas. A diferencia de subirImagen, usa el endpoint
+// "auto" de Cloudinary en vez de "image": ese es el que acepta PDFs y otros
+// archivos que no son imagen (con /image/upload, un PDF se rechaza).
+export async function subirArchivo(archivo) {
+  if (!cloudinaryConfigurado) {
+    throw new Error('Cloudinary no está configurado (ver src/lib/cloudinary.js).')
+  }
+
+  const formData = new FormData()
+  formData.append('file', archivo)
+  formData.append('upload_preset', UPLOAD_PRESET)
+  formData.append('folder', 'axioma/recursos')
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
+    method: 'POST',
+    body: formData,
+  })
+  const data = await res.json().catch(() => null)
+
+  if (!res.ok) {
+    throw new Error(data?.error?.message || 'No se pudo subir el archivo.')
+  }
+  return data.secure_url
+}

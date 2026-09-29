@@ -957,6 +957,45 @@ function Encabezado({ auth, onLogout, listo, totalProblemas, totalTemas, totalCo
   )
 }
 
+// Documentos descargables (PDFs de exámenes semanales, material de
+// asesores) — se agregan desde /admin/recursos. A diferencia de los
+// problemas de la lista de abajo, esto es un archivo completo para
+// descargar, no algo que se pueda buscar/filtrar/comentar por separado
+// (ver el modelo Recurso.js para la explicación completa). Si no hay
+// ninguno, la sección no se muestra — no tiene caso un encabezado vacío.
+function Recursos({ recursos }) {
+  if (recursos.length === 0) return null
+  return (
+    <section className="border-b border-neutral-950 bg-white">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+        <p className={`${labelClass} mb-6`}>Recursos</p>
+        <ul className="flex flex-wrap gap-4">
+          {recursos.map((recurso) => (
+            <li key={recurso._id}>
+              <a
+                href={recurso.archivo}
+                target="_blank"
+                rel="noreferrer"
+                className={`group flex max-w-xs items-center gap-4 border border-neutral-950 px-5 py-4 transition-colors hover:bg-[#FFB401] ${focusRing}`}
+              >
+                <span aria-hidden="true" className="text-2xl">↓</span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium text-neutral-950">{recurso.titulo}</span>
+                  {recurso.descripcion && (
+                    <span className="block truncate text-xs text-neutral-500 group-hover:text-neutral-800">
+                      {recurso.descripcion}
+                    </span>
+                  )}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
 // Un mensaje de estado (cargando, vacío, error) con el mismo lenguaje plano.
 function Estado({ children, tono = 'neutro' }) {
   return (
@@ -993,6 +1032,10 @@ export default function Problemas() {
   const [errorCarga, setErrorCarga] = useState(null)
 
   const [categorias, setCategorias] = useState([])
+  // Documentos descargables (PDFs de exámenes, material de asesores) — ver
+  // /admin/recursos. Independiente de los problemas: si falla, la sección
+  // simplemente no se muestra, en vez de romper el archivo de problemas.
+  const [recursos, setRecursos] = useState([])
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false) // solo en móvil
   const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
@@ -1014,6 +1057,10 @@ export default function Problemas() {
     apiFetch('/api/categories')
       .then(setCategorias)
       .catch(() => setCategorias([]))
+
+    apiFetch('/api/recursos')
+      .then(setRecursos)
+      .catch(() => setRecursos([]))
   }, [])
 
   const { raices: arbolCategorias, byId: categoriasPorId } = useMemo(
@@ -1304,6 +1351,8 @@ export default function Problemas() {
         totalTemas={temasCubiertos}
         totalConcursos={concursosCubiertos}
       />
+
+      <Recursos recursos={recursos} />
 
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 pb-32 sm:px-8 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-16">
         {/* Columna de filtros: en escritorio se queda fija (sticky) con su
