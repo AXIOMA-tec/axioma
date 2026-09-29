@@ -81,6 +81,9 @@ export const categorias = [
   { key: 'omum-nac-2024', name: '2024', parent: 'omum-nac' },
   { key: 'omum-nac-2025', name: '2025', parent: 'omum-nac' },
   { key: 'omum-nac-2026', name: '2026', parent: 'omum-nac' },
+
+  { key: 'hmmt', name: 'HMMT', parent: null },
+  { key: 'hmmt-2025', name: '2025', parent: 'hmmt' },
 ]
 
 // posicion = lugar del problema dentro de su ronda/sección (1 = primero).
@@ -1764,6 +1767,1267 @@ const putnam2025 = [
   putnam('PUTNAM-2025-B6', 2025, 'B', 6, 'Máxima constante r para un crecimiento tipo g(g(n))^r', 'Análisis', String.raw`Sea $\mathbb{N} = \{1, 2, 3, \dots\}$. Encuentra la constante real más grande tal que existe una función $g: \mathbb{N} \to \mathbb{N}$ tal que $g(n+1) - g(n) \ge (g(g(n)))^r$ para todo $n \in \mathbb{N}$.`),
 ]
 
+
+// ===========================================================================
+// HMMT (Harvard-MIT Mathematics Tournament) — Febrero
+// ===========================================================================
+
+// posicion = número del problema dentro de su ronda (1 = primero).
+// ALGNT/COMB/GEO son "rondas de materia" de 10 problemas cada una; TEAM es la
+// ronda por equipos (10 problemas, algunos de demostración); GUTS es la ronda
+// de velocidad (36 problemas repartidos en 9 tandas de 4, con dificultad
+// creciente por tanda).
+function estimarHmmtIndividual(posicion) {
+  const tabla = [
+    { dificultad: 'Fácil', exito: 75 },
+    { dificultad: 'Fácil', exito: 62 },
+    { dificultad: 'Media', exito: 50 },
+    { dificultad: 'Media', exito: 40 },
+    { dificultad: 'Media', exito: 31 },
+    { dificultad: 'Media', exito: 23 },
+    { dificultad: 'Difícil', exito: 16 },
+    { dificultad: 'Difícil', exito: 11 },
+    { dificultad: 'Difícil', exito: 7 },
+    { dificultad: 'Difícil', exito: 4 },
+  ]
+  return tabla[posicion - 1]
+}
+
+function estimarHmmtTeam(posicion) {
+  const tabla = [
+    { dificultad: 'Media', exito: 55 },
+    { dificultad: 'Media', exito: 44 },
+    { dificultad: 'Media', exito: 35 },
+    { dificultad: 'Difícil', exito: 27 },
+    { dificultad: 'Difícil', exito: 20 },
+    { dificultad: 'Difícil', exito: 15 },
+    { dificultad: 'Difícil', exito: 10 },
+    { dificultad: 'Difícil', exito: 7 },
+    { dificultad: 'Difícil', exito: 4 },
+    { dificultad: 'Difícil', exito: 2 },
+  ]
+  return tabla[posicion - 1]
+}
+
+function estimarHmmtGuts(posicion) {
+  const tanda = Math.ceil(posicion / 4) // 1..9
+  const dificultad = tanda <= 3 ? 'Fácil' : tanda <= 6 ? 'Media' : 'Difícil'
+  const exito = Math.max(3, Math.round(70 - (tanda - 1) * 8))
+  return { dificultad, exito }
+}
+
+function estimarHmmt(ronda, posicion) {
+  if (ronda === 'GUTS') return estimarHmmtGuts(posicion)
+  if (ronda === 'TEAM') return estimarHmmtTeam(posicion)
+  return estimarHmmtIndividual(posicion)
+}
+
+function hmmt(codigo, año, ronda, posicion, titulo, tema, enunciado, solucion) {
+  return {
+    codigo,
+    titulo,
+    categoriaKey: `hmmt-${año}`,
+    año: String(año),
+    tema,
+    tipo: 'HMMT',
+    ...estimarHmmt(ronda, posicion),
+    enunciado,
+    solucion,
+  }
+}
+
+const hmmt2025Algnt = [
+  hmmt('HMMT-2025-ALGNT1', 2025, 'ALGNT', 1, "Divisores de 9! con dígito de unidades 1", "Teoría de Números",
+    String.raw`Calcula la suma de los divisores positivos (incluyendo 1) de $9!$ que tienen dígito de unidades $1$.`,
+    String.raw`La factorización prima de $9!$ es $2^{7} \cdot 3^{4} \cdot 5 \cdot 7$. Todo divisor de $9!$ tiene factorización prima $2^{a} \cdot 3^{b} \cdot 5^{c} \cdot 7^{d}$, donde $0 \leq a \leq 7$, $0 \leq b \leq 4$, $0 \leq c \leq 1$, y $0 \leq d \leq 1$. Si el divisor tiene dígito de unidades $1$, no puede ser divisible entre $2$ ni entre $5$, así que $a = c = 0$.
+
+Ahora dividimos en casos según el valor de $d$:
+- Si $d = 0$, el divisor es $3^{b}$ para algún $0 \leq b \leq 4$. Los divisores posibles son $1$, $3$, $9$, $27$, y $81$, de los cuales $1$ y $81$ funcionan.
+- Si $d = 1$, el divisor es $3^{b} \cdot 7$ para algún $0 \leq b \leq 4$. Los divisores posibles son entonces $7$, $3 \cdot 7$, $9 \cdot 7$, $27 \cdot 7$, y $81 \cdot 7$. De estos, solo $3 \cdot 7 = 21$ funciona.
+
+La respuesta es $1 + 21 + 81 = \boxed{103}$.`),
+  hmmt('HMMT-2025-ALGNT2', 2025, 'ALGNT', 2, "Número de cuatro dígitos con reordenamiento de raíz cuadrada", "Teoría de Números",
+    String.raw`Mark escribe la expresión $\sqrt{abcd}$ en el pizarrón, donde $abcd$ es un número de cuatro dígitos y $a \neq 0$. Derek, un niño pequeño, decide mover la $a$, cambiando la expresión de Mark a $a\sqrt{bcd}$. Sorprendentemente, las dos expresiones son iguales. Calcula el único número de cuatro dígitos $abcd$ posible.`,
+    String.raw`Sea $x = bcd$. Entonces, reescribimos la condición dada $\sqrt{abcd} = a\sqrt{bcd}$ como $$1000a + x = a^{2}x,$$ lo cual se simplifica a $$(a^{2} - 1)x = 1000a.$$ En particular, $a^{2} - 1$ divide a $1000a$. Como $\gcd(a^{2} - 1, a) = 1$, se sigue que $a^{2} - 1 \mid 1000$. El único $a \in \{1, 2, \ldots, 9\}$ que satisface esto es $a = 3$. Entonces $8x = 3000$, así que $x = 375$. Por lo tanto $abcd = \boxed{3375}$.`),
+  hmmt('HMMT-2025-ALGNT3', 2025, 'ALGNT', 3, "Producto mínimo con exponentes logarítmicos", "Álgebra",
+    String.raw`Dado que $x$, $y$, y $z$ son números reales positivos tales que $$x^{\log_{2}(yz)} = 2^{8} \cdot 3^{4}, \quad y^{\log_{2}(zx)} = 2^{9} \cdot 3^{6}, \quad \text{y} \quad z^{\log_{2}(xy)} = 2^{5} \cdot 3^{10},$$ calcula el menor valor posible de $xyz$.`,
+    String.raw`Sea $k = \log_{2} 3$ por brevedad. Tomando el logaritmo base $2$ de cada ecuación se obtiene $$(\log_{2} x)(\log_{2} y + \log_{2} z) = 8 + 4k,$$ $$(\log_{2} y)(\log_{2} z + \log_{2} x) = 9 + 6k,$$ $$(\log_{2} z)(\log_{2} x + \log_{2} y) = 5 + 10k.$$ Sumando las dos primeras ecuaciones y restando la tercera se obtiene $2 \log_{2} x \log_{2} y = 12$, así que $\log_{2} x \log_{2} y = 6$. De manera similar, obtenemos $$\log_{2} x \log_{2} y = 6,$$ $$\log_{2} y \log_{2} z = 3 + 6k,$$ $$\log_{2} z \log_{2} x = 2 + 4k.$$ Multiplicando las primeras dos ecuaciones y dividiendo entre la tercera se obtiene $(\log_{2} y)^{2} = 9$, así que $\log_{2} y = \pm 3$. Entonces, la primera y la última ecuación nos dicen que $\log_{2} x = \pm 2$ y $\log_{2} z = \pm (1 + 2k)$, con todos los signos iguales. Así $$\log_{2} x + \log_{2} y + \log_{2} z = \pm (3 + 2 + (1 + 2k)) = \pm (6 + 2k),$$ así que $$x y z = 2^{\pm (6 + 2k)} = 2^{6} \cdot 3^{2} \quad \text{o} \quad 2^{-6} \cdot 3^{-2}.$$ Claramente, la solución más pequeña es $2^{-6} \cdot 3^{-2} = \boxed{\frac{1}{576}}$.`),
+  hmmt('HMMT-2025-ALGNT4', 2025, 'ALGNT', 4, "Suma de partes enteras de recíprocos desplazados", "Teoría de Números",
+    String.raw`Sea $\lfloor z\rfloor$ el mayor entero menor o igual a $z$. Calcula $$ \sum_{j = -1000}^{1000} \left\lfloor \frac{2025}{j + 0.5} \right\rfloor. $$`,
+    String.raw`La idea clave es emparejar los términos $\left\lfloor \frac{2025}{x} \right\rfloor$ y $\left\lfloor \frac{2025}{-x} \right\rfloor$. Hay 1000 de estos pares y un término solitario, $\left\lfloor \frac{2025}{1000.5} \right\rfloor = 2$. Así, $$ \sum_{j = -1000}^{1000} \left\lfloor \frac{2025}{j + 0.5} \right\rfloor = 2 + \sum_{x \in \{0.5,1.5, \ldots , 999.5\}} \left(\left\lfloor \frac{2025}{x} \right\rfloor + \left\lfloor \frac{2025}{-x} \right\rfloor \right). $$ Como $x$ recorre el conjunto $\{0.5, 1.5, 2.5, \ldots , 999.5\}$, $2x$ recorre el conjunto $\{1, 3, 5, \ldots , 1999\}$. Este conjunto incluye los 15 divisores impares de 4050 excepto 2025. Así, hay 14 valores de $x$ para los cuales $\left\lfloor \frac{2025}{x} \right\rfloor + \left\lfloor \frac{2025}{- x} \right\rfloor$ vale 0, y los $1000 - 14 = 986$ valores restantes de $x$ hacen que valga $-1$. Por lo tanto, $$ \sum_{j = -1000}^{1000} \left\lfloor \frac{2025}{j + 0.5} \right\rfloor = 2 + \sum_{x \in \{0.5,1.5, \ldots , 999.5\}} \left(\left\lfloor \frac{2025}{x} \right\rfloor + \left\lfloor \frac{2025}{-x} \right\rfloor \right) = 2 + 986 \cdot (-1) = \boxed{-984}. $$`),
+  hmmt('HMMT-2025-ALGNT5', 2025, 'ALGNT', 5, "Polinomios mónicos enteros con valores radicales simétricos", "Teoría de Números",
+    String.raw`Sea $\mathcal{S}$ el conjunto de todos los polinomios mónicos no constantes $P$ con coeficientes enteros que satisfacen $P\left(\sqrt{3} + \sqrt{2}\right) = P\left(\sqrt{3} - \sqrt{2}\right)$. Si $Q$ es un elemento de $\mathcal{S}$ de grado mínimo, calcula el único valor posible de $Q(10) - Q(0)$.`,
+    String.raw`Primero, observa que el polinomio $x^{4} - 10x^{2} + 1$ tiene tanto a $\sqrt{3} + \sqrt{2}$ como a $\sqrt{3} - \sqrt{2}$ como raíces. Basta verificar si algún polinomio de grado a lo más 3 pertenece a $\mathcal{S}$. Supón que $f(x) = a x^{3} + b x^{2} + c x + d \in \mathcal{S}$. Calculamos $$(\sqrt{3} + \sqrt{2})^{3} - (\sqrt{3} - \sqrt{2})^{3} = 22\sqrt{2}$$ $$(\sqrt{3} + \sqrt{2})^{2} - (\sqrt{3} - \sqrt{2})^{2} = 4\sqrt{6}$$ $$(\sqrt{3} + \sqrt{2})^{1} - (\sqrt{3} - \sqrt{2})^{1} = 2\sqrt{2},$$ así que obtenemos que $$f(\sqrt{3} + \sqrt{2}) - f(\sqrt{3} - \sqrt{2}) = (22\sqrt{2})a + (4\sqrt{6})b + (2\sqrt{2})c.$$ Al resolver las dependencias lineales, es claro que $b = 0$ y $c = -11a$. Se sigue que si $f$ no es el polinomio cero, debe ser cúbico. Es entonces claro que $f(x) = x^{3} - 11x + d$ tiene grado mínimo en $\mathcal{S}$, y así $Q(10) - Q(0) = f(10) - f(0) = \boxed{890}$.`),
+  hmmt('HMMT-2025-ALGNT6', 2025, 'ALGNT', 6, "Residuo de una potencia módulo un factorial", "Teoría de Números",
+    String.raw`Sea $r$ el residuo cuando $2017^{2025!} - 1$ se divide entre $2025!$. Calcula $\frac{r}{2025!}$. (Nota que $2017$ es primo.)`,
+    String.raw`Sea $N = 2017^{2025!}$. Sea $p$ un primo que divide a $2025!$ distinto de $2017$. Sea $p^{k}$ la mayor potencia de $p$ que divide a $2025!$. Claramente, $\phi (p^{k}) = (p - 1)p^{k - 1}$ divide a $2025!$ y $\gcd (2017, p^{k}) = 1$, así que por el Teorema de Euler, $$ N \equiv 1 \pmod{p^{k}}. $$ Repitiendo para todos esos primos $p$, obtenemos $$ N \equiv 1 \pmod{2025! / 2017}. $$ Por lo tanto, $\frac{2025!}{2017} \mid N - 1$, así que $r = \frac{2025!}{2017} s$ para algún $0 \leq s < 2017$. Además, como $N \equiv 0$ (mód $2017$), tenemos $r = \frac{2025!}{2017} s \equiv -1$ (mód $2017$). Por el Teorema de Wilson, $$ \frac{2025!}{2017} = 2016! (2018)(2019)\ldots (2025) \equiv -8! \equiv 20 \pmod{2017}. $$ Por lo tanto, $s$ es negativo el inverso de $20$ (mód $2017$), que es $1311$. Nuestra respuesta es $$ \frac{r}{2025!} = \frac{(2025! / 2017)(1311)}{2025!} = \boxed{\frac{1311}{2017}}. $$`),
+  hmmt('HMMT-2025-ALGNT8', 2025, 'ALGNT', 8, "Signo del seno en la expansión binaria de 1/π", "Álgebra",
+    String.raw`Define $\operatorname{sgn}(x)$ como $1$ cuando $x$ es positivo, $-1$ cuando $x$ es negativo, y $0$ cuando $x$ es $0$. Calcula $$ \sum_{n = 1}^{\infty}\frac{\operatorname{sgn}(\sin(2^{n}))}{2^{n}}. $$ (Los argumentos de $\sin$ están en radianes.)`,
+    String.raw`Observa que cada una de las siguientes afirmaciones equivale a la siguiente.
+
+$\cdot\ \operatorname{sgn}(\sin (2^{n})) = +1$
+
+$\cdot\ 0 < 2^{n} \bmod 2\pi < \pi$
+
+$\cdot\ 0 < \frac{2^{n}}{\pi} \bmod 2 < 1$
+
+$\cdot\ $ El $n$-ésimo dígito después del punto decimal en la representación binaria de $\frac{1}{\pi}$ es $0$.
+
+De manera similar, $\operatorname{sgn}(\sin (2^{n})) = -1$ si y solo si el $n$-ésimo dígito después del punto decimal en la representación binaria de $\frac{1}{\pi}$ es $1$. En particular, si $a_{n}$ es el $n$-ésimo dígito, entonces $\operatorname{sgn}(\sin (2^{n})) = 1 - 2a_{n}$.
+
+Así, la suma buscada es $$ \sum_{n = 1}^{\infty}\frac{\operatorname{sgn}(\sin(2^{n}))}{2^{n}} = \sum_{n = 1}^{\infty}\frac{1 - 2a_{n}}{2^{n}} = \left(\sum_{n = 1}^{\infty}\frac{1}{2^{n}}\right) - 2\left(\sum_{n = 1}^{\infty}\frac{a_{n}}{2^{n}}\right) = \boxed{1 - \frac{2}{\pi}}. $$`),
+  hmmt('HMMT-2025-ALGNT10', 2025, 'ALGNT', 10, "Sistema cíclico con cuadrados complejos", "Álgebra",
+    String.raw`Sean $a$, $b$, y $c$ números complejos distintos dos a dos tales que $$a^{2} = b + 6,\quad b^{2} = c + 6,\quad \text{y}\quad c^{2} = a + 6.$$ Calcula los dos valores posibles de $a + b + c$.`,
+    String.raw`Solución 1. Observa que si cualquiera de $a$, $b$, o $c$ es $3$ o $-2$, entonces $a = b = c$, lo cual no es válido. Por lo tanto, $$(a^{2} - 9)(b^{2} - 9)(c^{2} - 9) = (b - 3)(c - 3)(a - 3)\implies (a + 3)(b + 3)(c + 3) = 1,$$ $$(a^{2} - 4)(b^{2} - 4)(c^{2} - 4) = (b + 2)(c + 2)(a + 2)\implies (a - 2)(b - 2)(c - 2) = 1.$$ Por lo tanto, $2$ y $-3$ son raíces del polinomio $(x - a)(x - b)(x - c) + 1$, y así existe algún $t$ tal que $$(x - t)(x - 2)(x + 3) = (x - a)(x - b)(x - c) + 1.$$ Comparando coeficientes se obtiene $a + b + c = t - 1$ y $ab + bc + ca = - (t + 6)$. Podemos entonces resolver para $t$ observando que $a^{2} + b^{2} + c^{2} = (b + 6) + (c + 6) + (a + 6) = a + b + c + 18$, así que $$ab + bc + ca = \frac{1}{2} ((a + b + c)^{2} - (a^{2} + b^{2} + c^{2})) = \frac{1}{2} ((a + b + c)^{2} - (a + b + c + 18)).$$ Por lo tanto, $$- (t + 6) = \frac{1}{2} ((t - 1)^{2} - (t + 17))\Longrightarrow t^{2} - t - 4 = 0\Longrightarrow t = \frac{1\pm\sqrt{17}}{2}.$$ Por lo tanto $a + b + c = \boxed{\frac{- 1\pm\sqrt{17}}{2}}$ son los dos valores posibles de $a + b + c$.
+
+Solución 2. Sea $s = a + b + c$. Restando dos ecuaciones adyacentes se obtiene $a^{2} - b^{2} = b - c$, es decir $(a - b)(a + b) = (b - c)$. Multiplicando esto y sus variantes cíclicas se obtiene $$(a + b)(b + c)(c + a) = 1.$$ Ahora, recordamos la identidad $$(a + b + c)^{3} = a^{3} + b^{3} + c^{3} + 3(a + b)(b + c)(c + a)$$ $$\qquad \Rightarrow \qquad s^{3} = a^{3} + b^{3} + c^{3} + 3.$$ Para simplificar $a^{3} + b^{3} + c^{3}$, sumamos $a$ veces la primera ecuación, $b$ veces la segunda, y $c$ veces la tercera para obtener $$a^{3} + b^{3} + c^{3} = a(b + 6) + b(c + 6) + c(a + 6)$$ $$\qquad = (ab + bc + ca) + 6s$$ $$\qquad = \frac{1}{2}\Big((a + b + c)^{2} - (a^{2} + b^{2} + c^{2})\Big) + 6s$$ $$\qquad = \frac{1}{2} s^{2} - \frac{1}{2}\Big((b + 6) + (c + 6) + (a + 6)\Big) + 6s$$ $$\qquad = \frac{1}{2} s^{2} + \frac{11}{2} s - 9.$$ Por lo tanto, $$s^{3} = \frac{1}{2} s^{2} + \frac{11}{2} s - 6 \Rightarrow \left(s - \frac{3}{2}\right)\left(s^{2} + s - 4\right) = 0.$$ En este punto, la única conjetura razonable es que $s = \frac{3}{2}$ es una solución extra, y las dos raíces restantes $s = \frac{- 1\pm\sqrt{17}}{2}$ son las respuestas posibles. Ahora justificamos esta conjetura. Supón por contradicción que $s = \frac{3}{2}$. Entonces, $$a^{2} + b^{2} + c^{2} = (b + 6) + (c + 6) + (a + 6) = \frac{39}{2}$$ $$ab + bc + ca = \frac{1}{2}\left(\frac{9}{4} -\frac{39}{2}\right) = -\frac{69}{8}.$$ Entonces, observa $$abc = (a + b + c)(ab + bc + ca) - (a + b)(b + c)(c + a)$$ $$= -\frac{207}{16} -1 = -\frac{223}{16}.$$ Por otro lado, $$(a + 6)(b + 6)(c + 6) = 216 + 36(a + b + c) + 6(ab + bc + ca) + abc$$ $$\qquad = 216 + 36\cdot \frac{3}{2} -6\cdot \frac{69}{8} -\frac{223}{16},$$ que es un número racional de denominador $16$. Pero $(a + 6)(b + 6)(c + 6) = b^{2}c^{2}a^{2} = \left(-\frac{223}{16}\right)^{2}$ tiene denominador $16^{2} = 256$, una contradicción. Así $s = \frac{3}{2}$ es imposible. (Surge de $a = b = c = \frac{1}{2}$, que satisface $(a + b)(b + c)(c + a) = 1$ pero no las condiciones dadas.)
+
+Solución 3. Restando cualesquiera dos ecuaciones adyacentes se obtiene $a^{2} - b^{2} = b - c$, lo cual equivale tanto a $(a - b)(a + b) = (b - c)$ como a $(a - b)(a + b + 1) = (a - c)$. Multiplicando cada una de estas con su variante cíclica respectiva y cancelando el factor $(a - b)(b - c)(c - a)$ (que se sabe es distinto de cero), obtenemos $$(a + b)(b + c)(c + a) = 1\quad \text{y}\quad (a + b + 1)(b + c + 1)(c + a + 1) = -1.$$ Expandiendo la última ecuación y usando las ecuaciones dadas se obtiene el siguiente resultado. $$(a + b)(b + c)(c + a) + (a^{2} + b^{2} + c^{2}) + 3(ab + bc + ca) + 2(a + b + c) + 1 = -1$$ $$1 + (b + 6 + c + 6 + a + 6) + 3(ab + bc + ca) + 2(a + b + c) + 1 = -1$$ $$3(a + b + c) + 3(ab + bc + ca) = -21$$ $$a + b + c + ab + bc + ca = -7.$$ Sea $s = a + b + c$. Podemos entonces resolver para $s$ considerando lo siguiente: $$s^{2} = (a^{2} + b^{2} + c^{2}) + 2(ab + bc + ca)$$ $$\quad = (b + 6 + c + 6 + a + 6) + 2(-7 - a - b - c)$$ $$\quad = -s + 4,$$ así que $s = \boxed{\frac{- 1\pm\sqrt{17}}{2}}$.
+
+Solución 4. Sea $s = a + b + c$ y considera el polinomio $$x + (x^{2} - 6) + ((x^{2} - 6)^{2} - 6) - s = x^{4} - 11x^{2} + x + 24 - s.$$ Este polinomio tiene raíces $a$, $b$, y $c$. Por las fórmulas de Vieta, la suma de las cuatro raíces es $0$, así que su cuarta raíz debe ser $-s$. Usando Vieta otra vez, tenemos $ab + bc + ca - sa - sb - sc = -11$. Podemos ahora resolver para $s$. $$ab + bc + ca - (a + b + c)^{2} = -11$$ $$a^{2} + b^{2} + c^{2} + ab + bc + ca = 11$$ $$\frac{1}{2} ((a + b + c)^{2} + (a^{2} + b^{2} + c^{2})) = 11$$ $$(a + b + c)^{2} + (b + 6 + c + 6 + a + 6) = 22$$ $$s^{2} + s - 4 = 0\Longrightarrow s = \boxed{\frac{-1\pm\sqrt{17}}{2}}.$$
+
+Observación. Otra forma de terminar usando este enfoque es sustituir $-s$ directamente en $x^{4} - 11x^{2} + x + 24 - s = 0$ para obtener $(s - 3)(s + 2)(x^{2} + x - 4) = 0$, y luego descartar las soluciones $s = 3$ y $s = -2$, que surgen de los valores no válidos $a = b = c = 3$ y $a = b = c = -2$. (En los casos no válidos, $s \neq a + b + c$ porque $a = b = c$ es solo una raíz única del polinomio.)`),
+]
+
+const hmmt2025Comb = [
+  hmmt('HMMT-2025-COMB1', 2025, 'COMB', 1, "Arreglos circulares con productos acotados", "Combinatoria",
+    String.raw`Calcula el número de formas de acomodar los números $1$, $2$, $3$, $4$, $5$, $6$, y $7$ alrededor de un círculo de modo que el producto de cada par de números adyacentes en el círculo sea a lo más $20$. (Las rotaciones y reflexiones cuentan como arreglos distintos.)`,
+    String.raw`Fija la posición del número $7$. Observa que los únicos números que pueden estar junto a $7$ son $1$ y $2$, así que deben ocupar las dos posiciones adyacentes a $7$.
+
+Ahora, el número $6$ solo puede ser adyacente a $1$, $2$, y $3$. Como $6$ ya no puede ser adyacente tanto a $1$ como a $2$, concluimos que $6$ debe ser adyacente a $3$ además de a $1$ o a $2$.
+
+Finalmente, los números $4$ y $5$ pueden colocarse arbitrariamente en las dos posiciones restantes.
+
+Hay $7$ elecciones para la posición del número $7$, $2$ formas de colocar $1$ y $2$ junto a él, $2$ formas de colocar $6$ y $3$, y $2$ formas de colocar $4$ y $5$, dando un total de $7 \cdot 2 \cdot 2 \cdot 2 = \boxed{56}$.`),
+  hmmt('HMMT-2025-COMB2', 2025, 'COMB', 2, "Bloqueo de caminos en una cuadrícula 3×3", "Combinatoria",
+    String.raw`Kelvin la rana está en la lily pad inferior izquierda de una cuadrícula de $3 \times 3$ de lily pads, y su casa está en la lily pad superior derecha. Solo puede saltar entre dos lily pads que sean adyacentes horizontal o verticalmente. Calcula el número de formas de quitar 4 de las lily pads de modo que las lily pads inferior izquierda y superior derecha permanezcan, pero Kelvin no pueda llegar a casa.`,
+    String.raw`En vez de eso, contamos los arreglos para los cuales Kelvin sí puede llegar a casa. Observa que, como mínimo, Kelvin debe usar 5 lily pads para llegar a casa, dejando 4 lily pads que no están en el camino. Esto significa que si quitáramos 4 lily pads y Kelvin aún pudiera llegar a casa, las lily pads no quitadas forman un camino más corto de la esquina inferior izquierda a la superior derecha. Como hay $\binom{4}{2} = 6$ de estos caminos más cortos, nuestra respuesta es $\binom{7}{4} - 6 = \boxed{29}$.`),
+  hmmt('HMMT-2025-COMB3', 2025, 'COMB', 3, "Partición de bolas etiquetadas en grupos de vecinos", "Combinatoria",
+    String.raw`Ben tiene 16 bolas etiquetadas $1$, $2$, $3$, $\ldots$, $16$, así como 4 cajas indistinguibles. Dos bolas son vecinas si sus etiquetas difieren en $1$. Calcula el número de formas de que ponga 4 bolas en cada caja de modo que cada bola esté en la misma caja que al menos uno de sus vecinos. (El orden en que se colocan las bolas no importa.)`,
+    String.raw`Cada caja debe contener un solo grupo de cuatro bolas consecutivas (por ejemplo $5$, $6$, $7$, $8$) o dos grupos de dos bolas consecutivas (por ejemplo $5$, $6$, $9$, $10$). Como todos los grupos tienen longitud par, esto significa que $1$ y $2$ están en el mismo grupo, $3$ y $4$ están en el mismo grupo, y así sucesivamente. Podemos pensar en cada uno de estos $8$ pares de bolas como una unidad individual, así que la respuesta es igual al número de formas de poner $8$ objetos en $4$ cajas indistinguibles, donde cada caja tiene $2$ objetos sin restricciones adicionales. El número de formas de hacer esto es $$ \frac{8!}{2^{4}\cdot 4!} = \boxed{105} $$`),
+  hmmt('HMMT-2025-COMB4', 2025, 'COMB', 4, "Caminos reticulares con movimientos diagonales", "Combinatoria",
+    String.raw`Sophie está en $(0,0)$ en una cuadrícula de coordenadas y quiere llegar a $(3,3)$. Si Sophie está en $(x,y)$, en un solo paso puede moverse a uno de $(x + 1, y)$, $(x, y + 1)$, $(x - 1, y + 1)$, o $(x + 1, y - 1)$. No puede volver a visitar ningún punto a lo largo de su camino, y ni su coordenada $x$ ni su coordenada $y$ pueden ser nunca menores que $0$ ni mayores que $3$. Calcula el número de formas en que Sophie puede llegar a $(3,3)$.`,
+    String.raw`![Una cuadrícula de 4x4 con líneas diagonales azules y flechas rojas etiquetadas con los números 2, 4, y 6, ilustrando los movimientos y conteos posibles entre puntos de la cuadrícula.](/imagenes-problemas/hmmt/2025/5de42bbe7b204ff4624cd4bc2816e63f.jpeg)
+
+Llamemos movimiento lateral a uno que sea hacia arriba o hacia la derecha. Entonces los movimientos laterales son los únicos que aumentan en $1$ la suma de las coordenadas de Sophie, mientras que todos los demás movimientos no cambian la suma, así que Sophie debe hacer $6$ de ellos, uno para aumentar esta suma de $i$ a $i + 1$ para cada $i \in [0, 5]$.
+
+Afirmamos que existe un único camino correspondiente a cada conjunto de $6$ movimientos laterales elegidos de esta forma. En efecto, los movimientos diagonales permiten a Sophie llegar de cualquier punto en $x + y = i$ a cualquier segundo punto en $x + y = i$ de exactamente una forma.
+
+Observa que cuando $i \leq 2$, el número de movimientos laterales que aumentan la suma de coordenadas de $i$ a $i + 1$ es $2i$, al igual que el número que la aumenta de $5 - i$ a $6 - i$. Así, la respuesta es $2 \cdot 4 \cdot 6 \cdot 6 \cdot 4 \cdot 2 = \boxed{2304}$.`),
+  hmmt('HMMT-2025-COMB5', 2025, 'COMB', 5, "Ciclo más largo en un grafo de cuadrícula", "Combinatoria",
+    String.raw`En una cuadrícula de $11 \times 11$ celdas, cada par de celdas adyacentes por lado está conectado por una puerta. Karthik quiere caminar por un camino en esta cuadrícula. Puede empezar en cualquier celda, pero debe terminar en la misma celda donde empezó, y no puede pasar por ninguna puerta más de una vez (ni siquiera en direcciones opuestas). Calcula el número máximo de puertas por las que puede pasar en tal camino.`,
+    String.raw`![Una cuadrícula de 11 por 11 con líneas gruesas resaltando un camino que forma un circuito, ilustrando un posible camino máximo a través de las puertas de la cuadrícula.](/imagenes-problemas/hmmt/2025/7a6cf169c1f9e776c88f599e1de5b658.jpeg)
+
+Esto simplemente pregunta por el circuito más largo en el grafo de adyacencia de esta cuadrícula. Observa que esta cuadrícula tiene $4 \cdot 9 = 36$ celdas de grado impar, 9 a lo largo de cada lado. Si coloreamos las celdas con colores de tablero de ajedrez de modo que las esquinas sean negras, entonces 20 de estas 36 celdas son blancas. Un circuito euleriano usa un número par de puertas de cada celda, así que al menos una puerta de cada una de estas celdas queda sin usar. Ninguna puerta conecta dos celdas blancas, así que al menos 20 puertas quedan sin usar, dejando a lo más $2 \cdot 10 \cdot 11 - 20 = \boxed{200}$ puertas cruzadas.
+
+Para ver que esto es alcanzable, primero eliminamos la celda inferior derecha y sus 2 puertas, así como la celda superior izquierda y sus 2 puertas. Esto deja 8 celdas de grado impar a lo largo de cada lado de la cuadrícula; podemos eliminar 4 puertas a lo largo de cada uno para cubrir todas las celdas de grado impar restantes, para 20 puertas eliminadas en total. El grafo resultante es conexo y no tiene celdas de grado impar, así que debe tener un circuito euleriano. Este circuito es el camino buscado.`),
+  hmmt('HMMT-2025-COMB6', 2025, 'COMB', 6, "Rectángulos sin traslape en una cuadrícula", "Combinatoria",
+    String.raw`Calcula el número de formas de elegir dos rectángulos en una cuadrícula de $5 \times 5$ de cuadrados de modo que los lados de los rectángulos estén sobre las líneas de la cuadrícula y los rectángulos no se traslapen en sus interiores, lados, o vértices. El orden en que se eligen los rectángulos no importa.`,
+    String.raw`Un rectángulo se puede especificar mediante dos intervalos, uno especificando su extensión horizontal (coordenadas $x$ de los lados izquierdo y derecho) y uno especificando su extensión vertical (coordenadas $y$ de los lados inferior y superior). Para que los rectángulos no se traslapen, necesitamos que los intervalos horizontales o los intervalos verticales sean disjuntos (posiblemente ambos).
+
+Primero, contaremos el número de formas para que los intervalos horizontales sean disjuntos. Sean estos intervalos $[a,b]$ y $[c,d]$. Como el orden de los rectángulos no importa, podemos suponer sin pérdida de generalidad que $a < c$, así que $a < b < c < d$. Entonces hay $\binom{6}{4}$ elecciones para $a$, $b$, $c$, y $d$. No hay restricciones sobre los intervalos verticales, así que el número de formas de elegirlos es $\binom{6}{2}^2$. Así, el número total de pares de rectángulos para los cuales los intervalos horizontales son disjuntos es $\binom{6}{4}\binom{6}{2}^2$.
+
+Por simetría, el número total de pares de rectángulos para los cuales los intervalos verticales son disjuntos es el mismo. Falta contar el número de formas para que tanto los intervalos horizontales como los verticales sean disjuntos. De nuevo, sean los intervalos horizontales $[a,b]$ y $[c,d]$, y sean los intervalos verticales $[e,f]$ y $[g,h]$. Podemos suponer $a < b < c < d$ sin pérdida de generalidad, así que hay $\binom{6}{4}$ formas de elegir los intervalos horizontales. Sin embargo, los casos $e < f < g < h$ y $g < h < e < f$ ahora son distintos, así que hay $2\binom{6}{4}$ formas de elegir los intervalos verticales. Por lo tanto, hay $2\binom{6}{4}^2$ pares de rectángulos para los cuales tanto los intervalos horizontales como los verticales son disjuntos.
+
+Por inclusión-exclusión, obtenemos la respuesta final de $$2 \cdot \binom{6}{4}\binom{6}{2}^2 - 2 \cdot \binom{6}{4}^2 = \boxed{6300}.$$`),
+  hmmt('HMMT-2025-COMB7', 2025, 'COMB', 7, "Arreglo de multiconjunto con espaciado balanceado", "Combinatoria",
+    String.raw`Calcula el número de formas de acomodar 3 copias de cada una de las 26 letras minúsculas del alfabeto inglés de modo que para cualesquiera dos letras distintas $x_{1}$ y $x_{2}$, el número de $x_{2}$'s entre la primera y segunda ocurrencia de $x_{1}$ sea igual al número de $x_{2}$'s entre la segunda y tercera ocurrencia de $x_{1}$.`,
+    String.raw`Primero, probamos que tal cadena se puede dividir en bloques donde cada bloque consiste en la misma subcadena escrita tres veces. Probamos el siguiente lema.
+
+Lema 1. Para cualquier letra $x_{1}$, las cadenas entre la primera y segunda ocurrencia de $x_{1}$ y entre la segunda y tercera ocurrencia de $x_{1}$ son iguales.
+
+Demostración. Llamemos $s_{1}$ y $s_{2}$ a estas dos cadenas. Sabemos que deben ser permutaciones una de la otra, y si una letra aparece dos veces en $s_{1}$, también tendría que aparecer dos veces en $s_{2}$, dando cuatro apariciones en total, lo cual es imposible. Así, ninguna letra aparece dos veces en $s_{1}$ (y de igual manera en $s_{2}$).
+
+Supongamos por contradicción que para algunas letras $x_{2}$ y $x_{3}$ en estas cadenas, $x_{2}$ aparece antes que $x_{3}$ en $s_{1}$, pero después de $x_{3}$ en $s_{2}$. Entonces, entre estas dos apariciones de $x_{2}$ (que son consecutivas, porque ninguna otra $x_{2}$ aparece ni en $s_{1}$ ni en $s_{2}$), debe haber dos $x_{3}$'s. Esto implica que también debe haber dos $x_{3}$'s entre el otro par de $x_{2}$'s consecutivas, contradicción.
+
+Concluimos que cualesquiera dos letras en $s_{1}$ y $s_{2}$ aparecen en el mismo orden en ambas cadenas, así que $s_{1} = s_{2}$.
+
+Sea la primera letra de nuestra cadena de 78 caracteres $x_{1}$, y supongamos que la siguiente aparición de $x_{1}$ es la letra número $(k + 1)$. Sean $x_{2}$, $x_{3}$, ..., $x_{k}$ las letras entre medio. Entonces, $x_{2}x_{3}\ldots x_{k}$ es la cadena entre la primera y segunda $x_{1}$'s, así que también debe ser la cadena entre la segunda y tercera $x_{1}$'s. Así, después de la segunda $x_{1}$, debemos tener $x_{2}x_{3}\ldots x_{k}x_{1}$.
+
+Ahora, entre la primera y segunda $x_{k}$'s está la cadena $x_{1}x_{2}x_{3}\ldots x_{k-1}$, así que esta también debe estar entre la segunda y tercera $x_{k}$'s. Así, después de la segunda $x_{k}$, debemos tener $x_{1}x_{2}x_{3}\ldots x_{k}$.
+
+Así, las primeras $3k$ letras son simplemente $x_{1}x_{2}x_{3}\ldots x_{k}$ repetida tres veces. Podemos quitar este bloque de $3k$ letras y repetir para mostrar que toda la cadena se puede dividir en tales bloques.
+
+Para contar el número de tales cadenas, primero observamos que hay $2^{25}$ formas de dividir las cadenas en tales bloques. Esto es porque hay 25 posibles lugares que pueden dividir dos bloques (después de la 3ra, 6ta, 9na letra, etc.), y podemos elegir cualquier subconjunto de estos para dividir bloques.
+
+La cadena queda entonces determinada de manera única por el primer tercio de cada bloque, el cual debe consistir en cada letra exactamente una vez (ya que toda la cadena es solo tres copias de estos tercios unidas). Estos tercios pueden consistir en cualquier ordenamiento de las 26 letras, así que hay $26!$ cadenas para cualquier partición dada de bloques.
+
+Concluimos que el número total de cadenas es $\boxed{2^{25}\cdot 26!}$.`),
+  hmmt('HMMT-2025-COMB8', 2025, 'COMB', 8, "Proceso de máximo en una secuencia circular", "Combinatoria",
+    String.raw`Albert escribe 2025 números $a_{1}$, ..., $a_{2025}$ en un círculo en un pizarrón. Inicialmente, cada uno de los números se elige de manera uniforme e independiente al azar en el intervalo $[0,1]$. Luego, cada segundo, reemplaza simultáneamente $a_{i}$ con $\max (a_{i - 1}, a_{i}, a_{i + 1})$ para todo $i = 1, 2, \ldots, 2025$ (donde $a_{0} = a_{2025}$ y $a_{2026} = a_{1}$). Calcula el valor esperado del número de valores distintos que quedan después de 100 segundos.`,
+    String.raw`Podemos suponer que los números iniciales son todos distintos, ya que esto ocurre con probabilidad 1. Para mayor claridad, denotamos el valor de $a_{i}$ después de $t$ segundos como $a_{i,t}$. El índice $i$ se toma mód 2025.
+
+En general, después de $k < 1012$ segundos, afirmamos que el número esperado de valores distintos que quedan es $\frac{2025}{k + 1}$. Para mostrar esto, primero probamos que, para cualquier valor que queda, sus apariciones son consecutivas. En efecto, observa que para todo $i$ y $k$,
+
+$$
+a_{i,k} = \max (a_{i - 1,k - 1}, a_{i,k - 1}, a_{i + 1,k - 1}) = \max (a_{i - 2,k - 2}, \ldots, a_{i + 2,k - 2}) = \dots = \max (a_{i - k,0}, \ldots, a_{i + k,0}).
+$$
+
+Dado un número inicial $a_{c,0}$, sean $j_{1}$ y $j_{2}$ los menores enteros positivos tales que $a_{c - j_{1},0} > a_{c,0}$ y $a_{c + j_{2},0} > a_{c,0}$. Como los números iniciales son distintos, concluimos que $a_{i,k} = a_{c,0}$ si y solo si $\{i - k, i - k + 1, \ldots, i + k\}$ contiene a $c$ pero no a $c - j_{1}$ ni a $c + j_{2}$ (mód 2025). Los índices $i$ que satisfacen esto son claramente consecutivos.
+
+Ahora considera las variables indicadoras
+
+$$
+\mathbf{1}_{i} = \left\{ \begin{array}{ll}1 & \mathrm{si~}a_{i,k}\neq a_{i + 1,k}\\ 0 & \mathrm{en~otro~caso} \end{array} \right.
+$$
+
+para $1\leq i\leq 2025$. Observa que el número de valores distintos en el tablero después de $k$ segundos es simplemente $\textstyle \sum_{i = 1}^{2025}\mathbf{1}_{i}$. Por linealidad de la esperanza, basta calcular $\mathbb{E}[\mathbf{1}_{i}]$ para cada $i$. Recuerda
+
+$$
+a_{i,k} = \max (a_{i - k,0},\ldots,a_{i + k,0})
+$$
+
+para cada $1\leq i\leq 2025$. Por lo tanto, la condición $a_{i,k}\neq a_{i + 1,k}$ se puede escribir como
+
+$$
+\max (a_{i - k,0},\ldots ,a_{i + k,0})\neq \max (a_{i + 1 - k,0},\ldots ,a_{i + 1 + k,0}).
+$$
+
+Esto ocurre si y solo si $\max (a_{i - k,0},\ldots ,a_{i + k + 1,0})$ es $a_{i - k,0}$ o $a_{i + k + 1,0}$ (ya que $a_{i - k,0}\neq a_{i + k + 1,0}$ y $2k + 2< 2025$). Como los $2k + 2$ valores $a_{i - k,0}$, ..., $a_{i + k + 1,0}$ fueron elegidos independientemente de la misma distribución, cada uno de $a_{i - k,0}$ y $a_{i + k + 1,0}$ tiene probabilidad $\frac{1}{2k + 2}$ de ser el máximo. Por lo tanto,
+
+$$
+\mathbb{E}[\mathbf{1}_{i}] = \operatorname*{Pr}[a_{i,k}\neq a_{i + 1,k}] = \frac{2}{2k + 2} = \frac{1}{k + 1}.
+$$
+
+Así, el número esperado de valores distintos es
+
+$$
+\sum_{i = 1}^{2025}\mathbb{E}[\mathbf{1}_{i}] = \frac{2025}{k + 1}.
+$$
+
+Sustituyendo $k = 100$ obtenemos la respuesta $\boxed{\frac{2025}{101}}$.`),
+  hmmt('HMMT-2025-COMB9', 2025, 'COMB', 9, "Recta aleatoria a través de un hexágono", "Geometría",
+    String.raw`Se eligen dos puntos de manera independiente y uniforme al azar dentro de un hexágono regular. Calcula la probabilidad de que una recta que pasa por ambos puntos interseque un par de lados opuestos del hexágono.`,
+    String.raw`![Dos triángulos, uno arbitrario y uno equilátero, cada uno con dos puntos etiquetados P y Q y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/8a81ca7569630248d95c5ec1aceea0a0.jpeg)
+
+Primero calculamos la probabilidad de que la recta que pasa por dos puntos aleatorios en un triángulo $ABC$ pase por los segmentos $\overline{AB}$ y $\overline{AC}$. Podemos tomar una transformación afín de los dos puntos aleatorios y del triángulo de modo que $ABC$ se vuelva equilátero. Como la distribución de los dos puntos sigue siendo uniforme e independiente, la probabilidad de que la recta interseque dos lados dados cualesquiera es $\frac{1}{3}$ por simetría.
+
+Ahora calculamos la probabilidad de que la recta que pasa por dos puntos aleatorios en un rectángulo $ABCD$ pase por los lados opuestos $\overline{AB}$ y $\overline{CD}$.
+
+![Un cuadrado con vértices etiquetados A, B, C, y D, dos puntos P y Q adentro, una línea punteada que pasa por ellos, y un triángulo sombreado ABC.](/imagenes-problemas/hmmt/2025/dfc8a60ea45461cffaf3d402c804534e.jpeg)
+
+Si la recta pasa por $\overline{AB}$ y $\overline{BC}$, los puntos deben estar ambos en el triángulo $ABC$, cuya área es la mitad de la de $ABCD$. Dado esto, la probabilidad de que la recta pase por esos dos lados es $\frac{1}{3}$, como se calculó antes. Así, la probabilidad de que la recta pase por $\overline{AB}$ y $\overline{BC}$ es $\left(\frac{1}{2}\right)^2 \cdot \frac{1}{3} = \frac{1}{12}$. Lo mismo ocurre para los otros pares de lados adyacentes. Por simetría, la recta tiene la misma probabilidad de pasar por cualquiera de los dos pares de lados opuestos, cada uno con probabilidad $\frac{1}{2}\left(1 - 4 \cdot \frac{1}{12}\right) = \frac{1}{3}$.
+
+![Un hexágono regular con un rectángulo central sombreado, dos puntos P y Q adentro, y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/58ef8107152d81b6f3825726280a35e3.jpeg)
+
+Regresamos ahora al problema original. Si la recta pasa por un par de lados opuestos, entonces ambos puntos deben estar en el rectángulo formado por estos lados, que tiene área $\frac{2}{3}$ de la del hexágono. Dado esto, la probabilidad de que la recta pase por esos dos lados es $\frac{1}{3}$ como se calculó antes. Así, la probabilidad de que la recta pase por el par dado de lados opuestos es $\left(\frac{2}{3}\right)^2 \cdot \frac{1}{3} = \frac{4}{27}$. Por lo tanto, la probabilidad de que la recta pase por cualquiera de los tres pares de lados opuestos es $3 \cdot \frac{4}{27} = \boxed{\frac{4}{9}}$.`),
+  hmmt('HMMT-2025-COMB10', 2025, 'COMB', 10, "Caminatas aleatorias que se fusionan en un círculo", "Combinatoria",
+    String.raw`La circunferencia de un círculo está dividida en $45$ arcos, cada uno de longitud $1$. Inicialmente, hay $15$ serpientes, cada una de longitud $1$, ocupando cada tercer arco. Cada segundo, cada serpiente se mueve independientemente un arco a la izquierda o un arco a la derecha, cada uno con probabilidad $\frac{1}{2}$. Si dos serpientes llegan a tocarse, se fusionan para formar una sola serpiente que ocupa los arcos de ambas serpientes anteriores, y la serpiente fusionada se mueve como una sola serpiente. Calcula el número esperado de segundos hasta que quede solo una serpiente.`),
+]
+
+const hmmt2025Geo = [
+  hmmt('HMMT-2025-GEO1', 2025, 'GEO', 1, "Distancia de un vértice a un triángulo equilátero interior", "Geometría",
+    String.raw`Los triángulos equiláteros $\triangle ABC$ y $\triangle DEF$ se dibujan de manera que los puntos $B$, $E$, $F$, y $C$ están sobre una recta en ese orden, y el punto $D$ está dentro del triángulo $\triangle ABC$. Si $BE = 14$, $EF = 15$, y $FC = 16$, calcula $AD$.`,
+    String.raw`![Diagrama con dos triángulos equiláteros, ABC y DEF, con los puntos B, E, F, y C colineales, y D dentro del triángulo ABC. Se dibujan los segmentos AX y DX, con X en AC.](/imagenes-problemas/hmmt/2025/a6173614c1296050c66bb92f443fe679.jpeg)
+
+Extiende $DE$ hasta que se encuentre con $AC$ en $X$. Observa que $ABEX$ y $DFCX$ son trapecios isósceles (ambos con ángulos base de $60^\circ$), así que tenemos
+
+$AX = BE = 14$
+
+$DX = FC = 16$
+
+y $\angle AXD = 120^\circ$
+
+Por la Ley de Cosenos en $\triangle ADX$, la respuesta es
+
+$$
+AD = \sqrt{AX^2 + DX^2 - 2 \cos(120^\circ) \cdot AX \cdot DX}
+$$
+
+$$
+= \sqrt{14^2 + 16^2 + 14 \cdot 16} = \boxed{26}.
+$$`),
+  hmmt('HMMT-2025-GEO2', 2025, 'GEO', 2, "Cuadrado a partir de puntas de estalactitas y estalagmitas", "Geometría",
+    String.raw`En una cueva bidimensional con un piso y un techo paralelos, dos estalactitas de longitudes $16$ y $36$ cuelgan perpendicularmente del techo, mientras que dos estalagmitas de alturas $25$ y $49$ crecen perpendicularmente desde el piso. Si las puntas de estas cuatro estructuras forman los vértices de un cuadrado en algún orden, calcula la altura de la cueva.`,
+    String.raw`Observa que la diferencia de alturas entre las dos estalactitas no es igual a la diferencia de alturas entre las estalagmitas. Esto nos dice que las dos estalactitas forman un par de vértices opuestos del cuadrado, y lo mismo para las estalagmitas. Como el punto medio de cada par de estructuras debe coincidir, sabemos que está a $\frac{16 + 36}{2} = 26$ del techo por las estalactitas, y a $\frac{25 + 49}{2} = 37$ del piso por las estalagmitas. Por lo tanto, la altura de la cueva es simplemente la suma de estos dos valores, es decir $\boxed{63}$.
+
+![Un cuadrado inscrito entre dos rectas paralelas que representan el piso y el techo de la cueva, con cuatro segmentos verticales desde el piso y el techo tocando los vértices del cuadrado.](/imagenes-problemas/hmmt/2025/fd62624cfb0627a2adc3480c4bc66874.jpeg)`),
+  hmmt('HMMT-2025-GEO3', 2025, 'GEO', 3, "Producto de distancias de un punto a los vértices de un cuadrado", "Geometría",
+    String.raw`El punto $P$ está dentro del cuadrado $ABCD$ de modo que las áreas de $\triangle PAB$, $\triangle PBC$, $\triangle PCD$, y $\triangle PDA$ son $1$, $2$, $3$, y $4$, en algún orden. Calcula $PA \cdot PB \cdot PC \cdot PD$.`,
+    String.raw`Sean $h_{1}$, $h_{2}$, $h_{3}$, y $h_{4}$ las longitudes de las alturas desde $P$ a los lados $AB$, $BC$, $CD$, y $DA$, respectivamente. Entonces, el enunciado del problema implica que $\{h_{1}, h_{2}, h_{3}, h_{4}\} = \{x, 2x, 3x, 4x\}$ para algún $x$. Además, el área del cuadrado es $1 + 2 + 3 + 4 = 10$, así que tenemos
+$$h_{1} + h_{3} = \sqrt{10} = h_{2} + h_{4}.$$
+Por lo tanto, o bien $\{h_{1}, h_{3}\} = \{x, 4x\}$ y $\{h_{2}, h_{4}\} = \{2x, 3x\}$, o bien $\{h_{2}, h_{4}\} = \{x, 4x\}$ y $\{h_{1}, h_{3}\} = \{2x, 3x\}$. En cualquier caso, de lo anterior obtenemos $5x = \sqrt{10}$, y terminamos usando el Teorema de Pitágoras:
+$$PA \cdot PB \cdot PC \cdot PD = \sqrt{x^{2} + (2x)^{2}} \cdot \sqrt{(2x)^{2} + (4x)^{2}} \cdot \sqrt{(4x)^{2} + (3x)^{2}} \cdot \sqrt{(3x)^{2} + x^{2}}$$
+$$\qquad = 50\sqrt{10}x^{4}$$
+$$\qquad = (50\sqrt{10}) \cdot \left(\frac{2}{5}\right)^{2}$$
+$$\qquad = \boxed{8\sqrt{10}}.$$`),
+  hmmt('HMMT-2025-GEO4', 2025, 'GEO', 4, "Producto de segmentos de cuerda en semicírculos anidados", "Geometría",
+    String.raw`Un semicírculo está inscrito en otro semicírculo si el diámetro del semicírculo menor es una cuerda del semicírculo mayor, y el arco del semicírculo menor es tangente al diámetro del semicírculo mayor.
+
+El semicírculo $S_{1}$ está inscrito en un semicírculo $S_{2}$, el cual está inscrito en otro semicírculo $S_{3}$. Los radios de $S_{1}$ y $S_{3}$ son $1$ y $10$, respectivamente, y los diámetros de $S_{1}$ y $S_{3}$ son paralelos. Los extremos del diámetro de $S_{3}$ son $A$ y $B$, y el arco de $S_{2}$ es tangente a $AB$ en $C$. Calcula $AC \cdot CB$.
+
+![Un diagrama que muestra tres semicírculos anidados S1, S2, y S3, con S1 inscrito en S2 y S2 inscrito en S3. Los diámetros de S1 y S3 son paralelos, y los puntos A, B, y C están marcados en el diámetro de S3.](/imagenes-problemas/hmmt/2025/6fc5d1b7698693176f0318294751a3ba.jpeg)`,
+    String.raw`![Un diagrama geométrico con tres semicírculos anidados S1, S2, y S3, mostrando los centros P, Q, R, el punto de intersección V, y los puntos A, B, y C sobre el diámetro. Líneas de construcción adicionales conectan estos puntos.](/imagenes-problemas/hmmt/2025/663200b55e5c280cca76a457c7d2b8f7.jpeg)
+
+Sean $P$, $Q$, y $R$ los puntos medios de los diámetros (es decir, el centro de los arcos circulares) de $S_{3}$, $S_{2}$, y $S_{1}$, respectivamente. Observa que si fijamos $S_{3}$, la ubicación de $S_{2}$ queda determinada de manera única por el ángulo entre los diámetros de $S_{2}$ y $S_{3}$. Lo mismo ocurre para $S_{2}$ y $S_{1}$. Así, las figuras $S_{3} \cup S_{2}$ y $S_{2} \cup S_{1}$ son semejantes. Esto nos da que el radio de $S_{2}$ es $\sqrt{10}$.
+
+Para calcular la respuesta, definimos $V$ como cualquiera de las dos intersecciones de los arcos de $S_{2}$ y $S_{3}$. Por el Teorema de Pitágoras, $PQ = \sqrt{PV^{2} - VQ^{2}} = \sqrt{100 - 10} = \sqrt{90}$. Por el Teorema de Pitágoras otra vez, $PC = \sqrt{PQ^{2} - QC^{2}} = \sqrt{90 - 10} = \sqrt{80}$. Así $AC \cdot CB = (10 + PC)(10 - PC) = 100 - PC^{2} = \boxed{20}$.`),
+  hmmt('HMMT-2025-GEO5', 2025, 'GEO', 5, "Intersección de círculos en un triángulo equilátero", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo equilátero de lado $6$. Sea $P$ un punto dentro del triángulo $\triangle ABC$ tal que $\angle BPC = 120^\circ$. El círculo con diámetro $\overline{AP}$ se encuentra de nuevo con el circuncírculo de $\triangle ABC$ en $X \neq A$. Dado que $AX = 5$, calcula $XP$.`,
+    String.raw`![Un diagrama del triángulo equilátero ABC inscrito en un círculo, con los puntos A, B, C, A', P, y X marcados. Se muestran el círculo con diámetro AP y un arco punteado que pasa por B y C, y X está marcado en el circuncírculo de modo que AX = 5.](/imagenes-problemas/hmmt/2025/bd8399251a351972a45c43c96e817f24.jpeg)
+
+Sea $A'$ el antípoda de $A$. Como $\angle AXA' = 90^\circ$, tenemos que $X$, $P$, y $A'$ son colineales. Como $\angle BPC = 120^\circ$ y $\angle BA'C = 180^\circ - \angle BAC = 120^\circ$, se sigue que $P$ está en el círculo con centro $A'$ que pasa por $B$ y $C$, así que $A'P = \frac{BC}{\sqrt{3}} = 2\sqrt{3}$ y $AA' = 2A'B = 4\sqrt{3}$. Por el Teorema de Pitágoras, $XA' = \sqrt{(4\sqrt{3})^2 - 5^2} = \sqrt{23}$, así que la respuesta es $XA' - PA' = \boxed{\sqrt{23} - 2\sqrt{3}}$.`),
+  hmmt('HMMT-2025-GEO6', 2025, 'GEO', 6, "Área a partir de los circuncentros de un trapecio", "Geometría",
+    String.raw`El trapecio $ABCD$, con $AB \parallel CD$, tiene lados de longitud $AB = 11$, $BC = 8$, $CD = 19$, y $DA = 4$. Calcula el área del cuadrilátero convexo cuyos vértices son los circuncentros de $\triangle ABC$, $\triangle BCD$, $\triangle CDA$, y $\triangle DAB$.`,
+    String.raw`![Un trapecio etiquetado ABCD con los circuncentros OA, OB, OC, y OD marcados adentro. Líneas punteadas indican mediatrices y un cuadrilátero sombreado conecta los circuncentros.](/imagenes-problemas/hmmt/2025/b89478beaacda454384b1b3adf2b03df.jpeg)
+
+Sean $O_{A}$, $O_{B}$, $O_{C}$, y $O_{D}$ los circuncentros de $\triangle BCD$, $\triangle CDA$, $\triangle DAB$, y $\triangle ABC$, respectivamente. Observa que $O_{B}O_{C}$ es la mediatriz de $\overline{AD}$. De manera similar, $O_{B}O_{D} \perp AC$ y $O_{C}O_{D} \perp AB$. Como $AB \parallel CD$, tenemos $O_{C}O_{D} \perp CD$. Entonces, $\triangle O_{B}O_{C}O_{D} \stackrel{\star}{\sim} \triangle ADC$, ya que sus lados correspondientes son perpendiculares. Del mismo modo, $\triangle O_{D}O_{A}O_{B} \stackrel{\star}{\sim} \triangle CBA$, así que $O_{A}O_{B}O_{C}O_{D} \stackrel{\star}{\sim} BADC$.
+
+Por lo tanto, solo necesitamos calcular el área de $ABCD$ y la razón de semejanza entre los dos trapecios. Traza una recta paralela a $\overline{AD}$ que pase por $B$. Sea $X$ el punto donde esta recta interseca a $\overline{CD}$. Entonces, $BX = AD = 4$, $CB = 8$, y $CX = CD - AB = 8$. La altura $h$ de $ABCD$ está dada por
+$$
+h = d(B, \overline{XC}) = \frac{2[\triangle BXC]}{XC} = \frac{BX \cdot d(C, \overline{BX})}{XC} = \frac{4\sqrt{8^2 - 2^2}}{8} = \sqrt{15}.
+$$
+Por otro lado, la altura de $O_{A}O_{B}O_{C}O_{D}$ es la distancia entre las mediatrices de $\overline{AB}$ y $\overline{CD}$, que pasan por los puntos medios $M$ de $\overline{AB}$ y $N$ de $\overline{CD}$. Sean $A'$ y $M'$ las proyecciones de $A$ y $M$ sobre $\overline{CD}$, respectivamente. Entonces, la altura de $O_{A}O_{B}O_{C}O_{D}$ está dada por
+$$
+M'N = DN - DM' = \frac{CD}{2} - \frac{AB}{2} - DA' = \frac{19 - 11}{2} - \sqrt{4^2 - h^2} = 3.
+$$
+Por lo tanto, la razón de semejanza entre los dos trapecios es $\frac{3}{\sqrt{15}}$. Sabemos que el área de $ABCD$ es $\frac{1}{2}(11 + 19)\sqrt{15} = 15\sqrt{15}$, así que el área de $O_{A}O_{B}O_{C}O_{D}$ es $\left(\frac{3}{\sqrt{15}}\right)^2 \cdot 15\sqrt{15} = \boxed{9\sqrt{15}}$.`),
+  hmmt('HMMT-2025-GEO7', 2025, 'GEO', 7, "Razón de áreas con una condición de ángulos", "Geometría",
+    String.raw`El punto $P$ está dentro del triángulo $\triangle ABC$ de modo que $\angle ABP = \angle ACP$. Dado que $AB = 6$, $AC = 8$, $BC = 7$, y $\frac{BP}{PC} = \frac{1}{2}$, calcula $\frac{|BPC|}{|ABC|}$.
+
+(Aquí, $[XYZ]$ denota el área de $\triangle XYZ$.)`,
+    String.raw`Solución 1. ![Un triángulo ABC con el punto P adentro, bisectrices de ángulo trazadas, y los puntos D, D', E, E' marcados sobre el lado BC. Se muestran rectas paralelas y marcas de ángulos.](/imagenes-problemas/hmmt/2025/0f8d285c7902e9de79a6c8453e3fe343.jpeg)
+
+Sean $D$ y $E$ los puntos donde las bisectrices interna y externa de $\angle BAC$ se encuentran con $BC$. De manera similar, sean $D'$ y $E'$ los puntos donde las bisectrices interna y externa de $\angle BPC$ se encuentran con $BC$. La condición de ángulos implica que $AD\parallel PD'$ y $AE\parallel PE'$. Así, los triángulos $ADE$ y $PD'E'$ son homotéticos. Por lo tanto, la razón buscada es $\frac{DE}{D'E'}$. Aplicaciones repetidas del teorema de la bisectriz dan
+
+$$
+BD = 7 \cdot \frac{6}{6 + 8} = 3,
+$$
+$$
+BE = 7 \cdot \frac{6}{8 - 6} = 21,
+$$
+$$
+BD' = 7 \cdot \frac{1}{1 + 2} = \frac{7}{3},
+$$
+$$
+BE' = 7 \cdot \frac{1}{2 - 1} = 7,
+$$
+así que $DE = 24$ y $D'E' = 28 / 3$. Por lo tanto, la respuesta es $\frac{28 / 3}{24} = \boxed{\frac{7}{18}}$.
+
+Solución 2.
+
+![Un triángulo ABC con el punto P adentro, los puntos E y F marcados, y un círculo punteado que pasa por B, C, E, y F. Se muestran marcas de ángulos.](/imagenes-problemas/hmmt/2025/81c307a05321f49518a124cd36d44fda.jpeg)
+
+Sean $D = AP\cap BC$, $E = BP\cap AC$ y $F = CP\cap AB$. Entonces, $BCEF$ es cíclico, así que por potencia de un punto, $\frac{AE}{AF} = \frac{AB}{AC} = \frac{3}{4}$. Sean $AE = 3x$ y $AF = 4x$. Entonces,
+
+$$
+\triangle PFB \sim \triangle PEC \Longrightarrow \frac{BF}{CE} = \frac{BP}{CP} \Longrightarrow \frac{6 - 4x}{8 - 3x} = \frac{1}{2}.
+$$
+Resolviendo para $x$ se obtiene $x = \frac{4}{5}$, así que $AF = \frac{16}{5}$, $FB = \frac{14}{5}$, $AE = \frac{12}{5}$, y $EC = \frac{40}{5}$. Por el teorema de Ceva en $\triangle ABC$ y el punto $P$, tenemos
+
+$$
+\frac{BD}{DC} = \frac{AE}{EC} \cdot \frac{BF}{FA} = \frac{AE}{AF} \cdot \frac{BF}{CE} = \frac{3}{4} \cdot \frac{1}{2} = \frac{3}{8}.
+$$
+Finalmente, por el teorema de Menelao en $\triangle ADC$ y la recta $BE$, obtenemos que
+
+$$
+\frac{AP}{PD} = \frac{CB}{BD} \cdot \frac{AE}{EC} = \frac{11}{3} \cdot \frac{12}{28} = \frac{11}{7},
+$$
+lo cual implica que $\frac{|BPC|}{|ABC|} = \boxed{\frac{7}{18}}$.
+
+Solución 3.
+
+Usamos coordenadas baricéntricas respecto a $\triangle ABC$. De $\angle ABP = \angle ACP$, obtenemos
+
+$$
+\frac{|ABP|}{|ACP|} = \frac{AB \cdot BP}{AC \cdot CP} = \frac{3}{8},
+$$
+así que $P$ tiene coordenada $(- :8:3)$. Sea $Q$ el conjugado isogonal de $P$, así que $Q$ está en la mediatriz de $BC$. Por el teorema de la razón de Steiner, $Q$ tiene coordenada $(- :8^2 / 8:6^2 / 3) = (- :8:12) = (- :2:3)$. Sea la coordenada $(t:2:3)$ para algún número real $t$. Entonces, recordando la ecuación de la mediatriz:
+
+$$
+a^2(z - y) + x(c^2 - b^2) = 0
+$$
+$$
+\Rightarrow 7^2(3 - 2) + t(6^2 - 8^2) = 0,
+$$
+así que $t = \frac{7^2(3 - 2)}{8^2 - 6^2} = \frac{7}{4}$. Por lo tanto, el punto $Q$ tiene coordenadas $(7:8:12)$, así que el punto $P$ tiene coordenadas $(7^2 / 7:8^2 / 8:6^2 / 12) = (7:8:3)$. Por lo tanto, $|BPC| / |ABC| = \boxed{\frac{7}{18}}$.`),
+  hmmt('HMMT-2025-GEO8', 2025, 'GEO', 8, "Distancia de punto medio en un trapecio cíclico", "Geometría",
+    String.raw`Sea $ABCD$ un trapecio isósceles tal que $CD > AB = 4$. Sea $E$ un punto en la recta $CD$ tal que $DE = 2$ y $D$ está entre $E$ y $C$. Sea $M$ el punto medio de $\overline{AE}$. Dado que los puntos $A$, $B$, $C$, $D$, y $M$ están en un círculo de radio $5$, calcula $MD$.`,
+    String.raw`![Un diagrama del trapecio isósceles ABCD inscrito en un círculo, con los puntos E y D' marcados en la extensión de CD, M como punto medio de AE, y varios segmentos y etiquetas que ilustran las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/99272909b8e7b4116af394fdccc3eb87.jpeg)
+
+Sea $D'$ la reflexión de $D$ sobre $M$. Entonces, $ADED'$ es un paralelogramo. Por lo tanto, $D'A = 2$, así que $D'B = 6$. Así, si $D'M = MD = x$, entonces la potencia de un punto en $D'$ da $x \cdot (2x) = 2 \cdot 6$, así que $x = \boxed{\sqrt{6}}$.`),
+  hmmt('HMMT-2025-GEO9', 2025, 'GEO', 9, "Rectángulo con restricciones de circunradio", "Geometría",
+    String.raw`Sea $ABCD$ un rectángulo con $BC = 24$. El punto $X$ está dentro del rectángulo de modo que $\angle AXB = 90^{\circ}$. Dado que los triángulos $\triangle AXD$ y $\triangle BXC$ son ambos acutángulos y tienen circunradios $13$ y $15$, respectivamente, calcula $AB$.`,
+    String.raw`Solución 1. Sea $M$ el punto medio de $AB$. Sean $O_{1}$ y $O_{2}$ los circuncentros de $\triangle AXD$ y $\triangle BXC$, respectivamente. Como $O_{1}M$ es la mediatriz de $AX$ y $O_{2}M$ es la mediatriz de $BX$, obtenemos que $\angle O_{1}MO_{2} = 90^{\circ}$.
+
+Sean $P_{1}$ y $P_{2}$ las proyecciones de $O_{1}$ y $O_{2}$ sobre el segmento $AB$, respectivamente, y sea $AB = 2x$. Por el Teorema de Pitágoras, $P_{1}A = \sqrt{O_{1}A^{2} - O_{1}P_{1}^{2}} = \sqrt{15^{2} - 12^{2}} = 5$, así que $MP_{1} = MA - P_{1}A = x - 5$. De igual manera, $MP_{2} = MB - \sqrt{15^{2} - 12^{2}} = x - 9$. Como $\triangle MP_{1}O_{1} \sim \triangle O_{2}P_{2}M$, sabemos que
+$$(x - 5)(x - 9) = MP_{1} \cdot MP_{2} = O_{2}P_{2} \cdot P_{1}O_{1} = 12^{2}.$$
+Resolviendo esto, obtenemos $x = 7 + 2\sqrt{37}$, lo cual implica que $AB = 2x = \boxed{14 + 4\sqrt{37}}$. (La condición de que $\triangle AXD$ y $\triangle BXC$ sean acutángulos descarta $14 - 4\sqrt{37}$.)
+
+![Un rectángulo ABCD con el punto X adentro, circuncírculos trazados por AXD y BXC, y los puntos O1, O2, M, P1, y P2 etiquetados. Se resaltan perpendiculares y segmentos clave.](/imagenes-problemas/hmmt/2025/73c875021da9d1a19da0890bf095a65e.jpeg)
+
+Solución 2. ![Un rectángulo ABCD con el punto X adentro, circuncírculos por AXD y BXC, y los puntos P y Q sobre CD. Se muestran diámetros y perpendiculares, con segmentos clave resaltados.](/imagenes-problemas/hmmt/2025/666d9c083cfaee5f174d61d41f0513fe.jpeg)
+
+Sea $P$ el antípoda de $A$ en $\odot (AXD)$ y $Q$ el antípoda de $B$ en $\odot (BXC)$. De $\angle PDA = \angle QCB = 90^{\circ}$, obtenemos que $P$ y $Q$ están sobre $CD$. Además, de $\angle PXA = 90^{\circ}$, obtenemos que $P \in BX$, y de manera similar $Q \in AX$.
+
+Al ser un diámetro, $AP = 2 \cdot 13 = 26$, así que por el Teorema de Pitágoras, $DP = \sqrt{26^{2} - 24^{2}} = 10$. De manera similar, $BQ = 30$ y $CQ = \sqrt{30^{2} - 24^{2}} = 18$. Sea $AB = x$, obtenemos $PQ = x - 28$. El cuadrilátero $ABQP$ tiene diagonales perpendiculares, así que $AB^{2} + PQ^{2} = AP^{2} + BQ^{2}$, lo cual significa que $x^{2} + (x - 28)^{2} = 26^{2} + 30^{2}$.
+
+Resolviendo esta ecuación cuadrática se obtiene $x = \boxed{14 + 4\sqrt{37}}$. (La condición de que $\triangle AXD$ y $\triangle BXC$ sean acutángulos descarta $14 - 4\sqrt{37}$.)`),
+  hmmt('HMMT-2025-GEO10', 2025, 'GEO', 10, "Un plano corta un prisma en un hexágono", "Geometría",
+    String.raw`Un plano $\mathcal{P}$ interseca un prisma rectangular en un hexágono que tiene lados de longitud $45$, $66$, $63$, $55$, $54$, y $77$, en ese orden. Calcula la distancia del centro del prisma rectangular a $\mathcal{P}$.`,
+    String.raw`Solución 1. Traslada $\mathcal{P}$ de modo que contenga al centro. La intersección del plano trasladado con el prisma rectangular es un hexágono centralmente simétrico. Sean sus lados de longitud $a$, $b$, $c$, $a$, $b$, y $c$, en ese orden. Entonces, para algunos $t_{a}$, $t_{b}$, y $t_{c}$, los lados del hexágono antes de la traslación eran
+$$(a - t_{a}, b + t_{b}, c - t_{c}, a + t_{a}, b - t_{b}, c + t_{c}) = (45, 66, 63, 55, 54, 77),$$
+de donde se sigue que $t_{a} = 5$, $t_{b} = 6$, y $t_{c} = 7$.
+
+Ahora, una traslación de un plano se puede escribir de una de tres formas equivalentes: se puede ver como una traslación en la dirección $x$ por una distancia $d_{x}$, una traslación en la dirección $y$ por una distancia $d_{y}$, o una traslación en la dirección $z$ por una distancia $d_{z}$ (con los ejes coordenados elegidos como se muestra abajo).
+
+![Un prisma rectangular intersecado por un plano formando un hexágono, con las longitudes de los lados etiquetadas y los vectores de traslación dx, dy, dz mostrados.](/imagenes-problemas/hmmt/2025/aa24b6ffd361094bfb5582485f15d72d.jpeg)
+
+Como se muestra arriba, podemos expresar $t_{a}$, $t_{b}$, y $t_{c}$ en términos de $d_{x}$, $d_{y}$, y $d_{z}$ usando el Teorema de Pitágoras, lo cual da $t_{a} = \sqrt{d_{y}^{2} + d_{z}^{2}}$, $t_{b} = \sqrt{d_{z}^{2} + d_{x}^{2}}$, y $t_{c} = \sqrt{d_{x}^{2} + d_{y}^{2}}$. Por lo tanto,
+$$(d_{x}^{2}, d_{y}^{2}, d_{z}^{2}) = \left(\frac{5^{2} + 6^{2} - 7^{2}}{2}, \frac{6^{2} + 7^{2} - 5^{2}}{2}, \frac{7^{2} + 5^{2} - 6^{2}}{2}\right) = (6, 30, 19).$$
+Podemos dibujar una pirámide recta con catetos $d_{x}$, $d_{y}$, y $d_{z}$ que tiene al centro del prisma como vértice, con la cara opuesta en $\mathcal{P}$. Entonces, la altura de esta pirámide, es decir la distancia del centro a $\mathcal{P}$, es
+$$\sqrt{\frac{1}{d_{x}^{-2} + d_{y}^{-2} + d_{z}^{-2}}} = \sqrt{\frac{1}{6^{-1} + 30^{-1} + 19^{-1}}} = \boxed{\sqrt{\frac{95}{24}}}.$$
+
+Solución 2. Sean los vértices del hexágono $ABCDEF$, donde $AB = 45$, $BC = 66$, etc. Observa que $AB \parallel DE$, $BC \parallel EF$, y $CD \parallel FA$. Sea $O$ el centro del prisma, y sean $M$, $N$, y $P$ los puntos medios de $AD$, $BE$, y $CF$, respectivamente.
+
+![Un hexágono con los vértices etiquetados y los lados marcados, los puntos medios M, N, P marcados, y un triángulo MNP resaltado en el centro.](/imagenes-problemas/hmmt/2025/f74d2aed280dfd51da731ca27ca6a400.jpeg)
+
+La observación clave es que $MN$ es la línea media entre $AB$ y $DE$. Por lo tanto, el plano $OMN$ es el plano medio entre las caras del prisma que contienen los lados $AB$ y $DE$. De manera similar, los planos $OMP$ y $ONP$ son los otros dos planos medios del prisma. Así, $OM$, $ON$, y $OP$ son mutuamente ortogonales.
+
+Observa
+$$MN = \frac{|AB - DE|}{2} = 5, \quad NP = \frac{|BC - EF|}{2} = 6, \quad \text{y} \quad PM = \frac{|CD - FA|}{2} = 7,$$
+así que por la fórmula de Herón, podemos calcular el área de $MNP$ como $\sqrt{9(9 - 5)(9 - 6)(9 - 7)} = 6\sqrt{6}$.
+
+Además, si $x = OM$, $y = ON$, y $z = OP$, entonces,
+$$x^{2} + y^{2} = 5^{2}, \quad y^{2} + z^{2} = 6^{2}, \quad \text{y} \quad z^{2} + x^{2} = 7^{2}.$$
+Resolviendo este sistema de ecuaciones se obtiene $x = \sqrt{19}$, $y = \sqrt{6}$, y $z = \sqrt{30}$. Por lo tanto, si $d$ es la distancia de $O$ al plano $MNP$ (es decir, la respuesta), el volumen del tetraedro $OMNP$ se puede escribir como
+$$\frac{1}{6} \cdot \sqrt{19} \cdot \sqrt{6} \cdot \sqrt{30} = \frac{1}{3} \cdot (6\sqrt{6}) \cdot d,$$
+así que
+$$d = \frac{\sqrt{19 \cdot 6 \cdot 30}}{2 \cdot 6 \sqrt{6}} = \boxed{\sqrt{\frac{95}{24}}}.$$`),
+]
+
+const hmmt2025Team = [
+  hmmt('HMMT-2025-TEAM1', 2025, 'TEAM', 1, "MCD de recíprocos en progresión aritmética", "Teoría de Números",
+    String.raw`Sean $a$, $b$, y $c$ enteros positivos distintos dos a dos tales que $\frac{1}{a}$, $\frac{1}{b}$, $\frac{1}{c}$ es una sucesión aritmética creciente en ese orden. Demuestra que $\gcd(a, b) > 1$.`,
+    String.raw`Solución 1. Observa que $\frac{1}{a} + \frac{1}{c} = \frac{2}{b}$, así que $b(a + c) = 2ac$, y por lo tanto $a \mid b(a + c)$. Si suponemos que $\gcd(a, b) = 1$, entonces debemos tener $a \mid a + c$, así que $a \mid c$. Sin embargo, $\frac{1}{a} < \frac{1}{c}$, así que $a > c$, contradicción. Por lo tanto, $\gcd(a, b) > 1$, como se quería.
+
+Solución 2. Observa que $\frac{2}{b} - \frac{1}{a} = \frac{1}{c}$, así que $(2a - b)c = ab$ y por lo tanto $2a - b \mid ab$. Si suponemos que $\gcd(a, b) = 1$, entonces $\gcd(2a - b, a) = 1$, así que $2a - b \mid b$. Entonces $2a - b \mid (2a - b) + b = 2a$, así que $2a - b \mid \gcd(2a, b) \leq 2$. Por lo tanto $2a - b \leq 2$. Pero $a > b$, contradicción. Por lo tanto, $\gcd(a, b) > 1$, como se quería.`),
+  hmmt('HMMT-2025-TEAM2', 2025, 'TEAM', 2, "Poliominós con perímetro y área fijos", "Combinatoria",
+    String.raw`Un poliominó es una figura conexa construida al unir uno o más cuadrados unitarios lado con lado. Determina, con demostración, el número de poliominós no congruentes sin huecos, con perímetro $180$ y área $2024$.`,
+    String.raw`Define la caja delimitadora de un poliominó como el rectángulo axialmente alineado más pequeño que contiene a todo el poliominó. Supón que un poliominó que satisface las condiciones dadas tiene una caja delimitadora de dimensiones $w \times h$.
+
+Afirmación 1. $w + h \leq 90$.
+
+Demostración. El poliominó tiene al menos $2w$ lados horizontales y al menos $2h$ lados verticales. Además, tiene un perímetro de $180$. Por lo tanto, $2w + 2h \leq 180$, así que $w + h \leq 90$.
+
+Afirmación 2. Las dimensiones de la caja delimitadora son $44 \times 46$, $45 \times 45$, o $46 \times 44$.
+
+Demostración. Observa que $hw \geq 2024$ ya que contiene al poliominó de área $2024$. Supón por contradicción que $h + w \leq 89$. Entonces,
+$$
+(h - w)^2 = (h + w)^2 - 4hw \leq 89^2 - 4 \cdot 2024 = -175,
+$$
+contradicción. Por lo tanto, $h + w = 90$, así que podemos escribir $(h,w) = (45 + x,45 - x)$. Entonces, $2025 - x^2 = hw \geq 2024$ implica que $x \in \{-1,0,1\}$, como se quería.
+
+En el primer y tercer caso, la caja delimitadora tiene área $2024$, así que debe ser el poliominó completo, dándonos el rectángulo $44 \times 46$ (y su rotación) como una posible respuesta. En el segundo caso, la caja delimitadora tiene área $2025$, así que se debe quitar una celda para formar el poliominó. Quitar la celda de una esquina produce un poliominó con perímetro $180$, y quitar cualquier otra celda produce un poliominó con perímetro mayor que $180$. Por lo tanto, la única otra posibilidad es un cuadrado de $45 \times 45$ al que le falta una esquina. Así, la respuesta es $\boxed{2}$.`),
+  hmmt('HMMT-2025-TEAM3', 2025, 'TEAM', 3, "Lugar geométrico del circuncentro con una bisectriz", "Geometría",
+    String.raw`Sean $\omega_{1}$ y $\omega_{2}$ dos círculos que se intersecan en los puntos distintos $A$ y $B$. El punto $X$ varía sobre $\omega_{1}$, y el punto $Y$ sobre $\omega_{2}$ se elige de modo que $AB$ biseca el ángulo $\angle XAY$. Demuestra que, cuando $X$ varía sobre $\omega_{1}$, el circuncentro de $\triangle AXY$ (si existe) varía sobre una recta fija.`,
+    String.raw`Solución 1. ![Dos círculos que se intersecan con centros O1 y O2, intersecándose en los puntos A y B. Se traza el triángulo AXY con su circuncentro O marcado, junto con segmentos y ángulos relevantes resaltados.](/imagenes-problemas/hmmt/2025/d98306254a4727f82e4d13898cfcfd32.jpeg)
+
+Sean $O_{1}$, $O_{2}$, y $O$ los centros de $\omega_{1}$, $\omega_{2}$, y el circuncírculo de $\triangle AXY$, respectivamente. Afirmamos que el triángulo $O O_{1}O_{2}$ es isósceles con $O O_{1} = O O_{2}$, y por lo tanto, en particular, $O$ siempre está en la mediatriz de $O_{1}O_{2}$.
+
+Para esto, observa que $O O_{1} \perp A X$ y $O_{1}O_{2} \perp A B$, así que $\angle O O_{1}O_{2} = \angle X A B$. De manera análoga, $\angle O O_{2}O_{1} = \angle Y A B$. Así que en efecto $O O_{1}O_{2}$ es isósceles, y terminamos.
+
+Solución 2. ![Dos diagramas: a la izquierda, el triángulo AXY inscrito en un círculo con los puntos M, N, y A' marcados; a la derecha, una configuración invertida con los puntos P, Q, N*, A, X*, Y*, M*, y B* etiquetados, mostrando rectas e intersecciones.](/imagenes-problemas/hmmt/2025/ae48eed2043117eba1dbe2e28f2c5e1a.jpeg)
+
+Sea $A^{\prime}$ el antípoda de $A$ en el círculo $(A X Y)$. Basta mostrar que $A^{\prime}$ está en una recta fija. Mostraremos que esta recta es paralela a $A B$.
+
+Sea $M$ la segunda intersección de la recta $A B$ con el círculo $(A X Y)$, y sea $N$ el antípoda de $M$ en este círculo. Como $A M A^{\prime}N$ es un rectángulo con $N$ sobre la recta que pasa por $A$ perpendicular a $A B$, basta mostrar que $N$ es fijo (independiente de $X$ y $Y$).
+
+Para esto, toma una inversión en $A$ con radio arbitrario, denotando las imágenes con $\bullet \mapsto \bullet^{*}$.
+
+Observa que $X^{*}$ y $Y^{*}$ están sobre las rectas fijas $\ell_{1} = \omega_{1}^{*}$ y $\ell_{2} = \omega_{2}^{*}$. Sea $\ell$ la recta que pasa por $A$ perpendicular a $A B^{*}$, y supón que $\ell_{1}$ y $\ell_{2}$ intersecan a $\ell$ en $P$ y $Q$, respectivamente.
+
+Como $\angle X A B = \angle B A Y$, tenemos $\angle X^{*}A B^{*} = \angle B^{*}A Y^{*}$. Los círculos $\omega_{1}$, $\omega_{2}$, y $(A X Y)$ se transforman en las rectas $B^{*}X^{*}$, $B^{*}Y^{*}$, y $X^{*}Y^{*}$. Como $A N \perp A B$, se sigue que $N^{*}$ es la intersección de $X^{*}Y^{*}$ y $\ell$.
+
+Finalmente, observa que $(N^{*},A;P,Q)\stackrel {B^{*}}{=}(N^{*},M^{*};X,Y)$ es un haz armónico, ya que $A M^{*}$ biseca $\angle X^{*}A Y^{*}$ y $\angle M^{*}A N^{*} = 90^{\circ}$. Como $A$, $P$, y $Q$ son fijos, también lo es $N^{*}$. Así $N$ es fijo, y $O$ está en la mediatriz de $A N$, que también es fija.`),
+  hmmt('HMMT-2025-TEAM4', 2025, 'TEAM', 4, "Torres con ataques acotados en una cuadrícula", "Combinatoria",
+    String.raw`Jerry coloca a lo más una torre en cada celda de una cuadrícula de $2025 \times 2025$ celdas. Una torre ataca a otra torre si las dos torres están en la misma fila o columna y no hay otras torres entre ellas.
+
+Determina, con demostración, el número máximo de torres que Jerry puede colocar en la cuadrícula de modo que ninguna torre ataque a 4 otras torres.`,
+    String.raw`Solución 1. La respuesta es $2024 \times 4 = \boxed{8096}$. De manera más general, para una cuadrícula de $n \times n$, la respuesta es $4n - 4$. Llamemos buena a una torre que ataca a lo más a 3 otras torres.
+
+Usamos la siguiente observación en ambas partes de la solución: una torre en el borde de la cuadrícula debe ser buena.
+
+Cota inferior: Coloca torres en las $4n - 4$ celdas del borde de la cuadrícula. Por la observación anterior, toda torre es buena.
+
+Cota superior: Considera cualquier colocación válida de torres, y supón que existe una torre que no está en el borde. Podemos mover esta torre al borde mediante un movimiento usual de torre, ya que esta torre es buena y por lo tanto el camino hacia una de las cuatro celdas del borde en su fila o columna debe estar vacío.
+
+Después de este movimiento, afirmamos que la colocación de torres sigue siendo válida. En efecto:
+- la torre movida ahora está en el borde, así que por la observación anterior, debe ser buena;
+- cualquier torre que solía atacar a esta torre no puede atacar a más torres después del movimiento, así que esas torres deben seguir siendo buenas;
+- cualquier torre atacada en la posición final debe estar o bien:
+  - en la dirección opuesta al movimiento, en cuyo caso atacaba a la torre movida tanto antes como después del movimiento (así que sigue siendo buena), o
+  - perpendicular a la dirección del movimiento, en cuyo caso es una torre del borde y debe ser siempre buena.
+
+Repitiendo el proceso anterior, siempre podemos pasar de cualquier posición buena a una donde todas las torres estén en el borde. Esto implica que el número de torres en cualquier posición buena es a lo más $4n - 4$. Cuando $n = 2025$, la respuesta es $4n - 4 = \boxed{8096}$.
+
+Solución 2. Considera el conjunto de todas las torres que son la más a la izquierda o más a la derecha en su fila, o la más arriba o más abajo en su columna. Observa que este conjunto debe incluir a toda torre, ya que cualquier torre que no esté en este conjunto ataca a una torre en las 4 direcciones.
+
+Cada columna aporta a lo más 2 torres a este conjunto, y cada fila aporta a lo más 2 torres. Podemos ignorar sin problema las filas superior e inferior en este conteo, ya que cualquier torre en la fila superior o inferior ya es la torre más arriba o más abajo en su columna. Así, el número de torres en el conjunto es a lo más $2 \cdot (2025 + 2025 - 2) = \boxed{8096}$, lo cual se puede construir como se vio antes.`),
+  hmmt('HMMT-2025-TEAM5', 2025, 'TEAM', 5, "Altura del ortocentro y un ángulo recto", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo acutángulo con ortocentro $H$. Los puntos $E$ y $F$ están en los segmentos $\overline{AC}$ y $\overline{AB}$, respectivamente, de modo que $\angle EHF = 90^\circ$. Sea $X$ el pie de la altura desde $H$ a $\overline{EF}$. Demuestra que $\angle BXC = 90^\circ$.`,
+    String.raw`Solución 1. ![Diagrama del triángulo ABC con ortocentro H, los puntos E y F sobre AC y AB, X como el pie desde H a EF, y varios círculos y cuadriláteros cíclicos resaltados.](/imagenes-problemas/hmmt/2025/034f5986e2970ee1d6cd8c5f3ebb9d68.jpeg)
+
+Usamos $\angle$ para denotar ángulos dirigidos. Sean $Y$ y $Z$ los pies de las alturas desde $B$ y $C$ a $AC$ y $AB$, respectivamente. Entonces $\angle HZF = \angle HXF = 90^\circ$, así que $HZFX$ es cíclico. De manera similar, $HYEX$ es cíclico. Por lo tanto,
+
+$$
+\angle BYX = \angle HYX = \angle HEX = \angle FHX = \angle FZX = \angle BZX.
+$$
+Así, $BZXY$ es cíclico. Un argumento simétrico muestra que $C$ también está en este círculo. Se sigue que $\angle BXC = \angle BYC = 90^\circ$, como se quería.
+
+Solución 2. Sea $T$ el pie de la altura desde $A$ a $BC$. Para cualquier punto $X$, sea $X'$ la imagen de $X$ bajo la inversión negativa en $H$ con radio $\sqrt{HA \cdot HT}$. Entonces $B'$ y $C'$ son los pies de las alturas desde $B$ y $C$ a los lados $AC$ y $AB$, respectivamente.
+
+Afirmación 1. $\angle BX'C = 90^\circ$.
+
+Demostración. Como $HX \perp EF$ y $HE \perp HF$, el cuadrilátero $HE'X'F'$ es un rectángulo. Observa que $\angle BE'H = \angle EB'H = 90^\circ$ y $\angle X'E'H = 90^\circ$. En consecuencia, $X'$, $B$, y $E'$ son colineales. De manera similar, $X'$, $C$, y $F'$ son colineales. Entonces, $\angle BX'C = \angle E'X'F' = 90^\circ$, como se quería.
+
+De la afirmación, $X'$ está en el círculo con diámetro $BC$ (en el cual también están $B'$ y $C'$). Como este círculo es invariante bajo la inversión, $X$ también está en el círculo con diámetro $BC$, y $\angle BXC = 90^\circ$.
+
+![Diagrama del triángulo ABC con los puntos E, F, H, X, y sus inversos E', F', X' mostrados, incluyendo un círculo que pasa por B, C, E', F', y X'.](/imagenes-problemas/hmmt/2025/fce69e9afe523959d3e7279c83798c3e.jpeg)
+
+Solución 3. Comenzamos probando el siguiente lema.
+
+Lema 2. Sea $ABCD$ un cuadrilátero y $P$ un punto tal que $\angle APB + \angle CPD = 180^\circ$. Entonces, los pies de las alturas desde $P$ a cada lado de $ABCD$ son concíclicos.
+
+Demostración. Sean $P_A, P_B, P_C, P_D$ los pies de las alturas desde $P$ a $AB$, $BC$, $CD$, y $DA$ respectivamente. Observa que el cuadrilátero $P_AP P_BB$ es cíclico. Persiguiendo ángulos,
+
+$$
+\begin{align*}
+\angle P_D P_A P_B + \angle P_B P_C P_D &= \angle P_D P_A P + \angle P P_A P_B + \angle P_B P_C P + \angle P P_C P_D \\
+&= \angle P_D A P + \angle P B P_B + \angle P_B C P + \angle P D P_D \\
+&= (180^\circ - \angle APD) + (180^\circ - \angle BPC) \\
+&= \angle BPA + \angle DPC \\
+&= 180^\circ.
+\end{align*}
+$$
+Por lo tanto, $P_A P_B P_C P_D$ es cíclico como se quería.
+
+![Diagrama del triángulo ABC con los puntos E, F, H, X, y un círculo que pasa por B, C, Y, y Z, con perpendiculares y cuadriláteros cíclicos indicados.](/imagenes-problemas/hmmt/2025/566f3a0c1030d06209b8a6b669b29550.jpeg)
+
+Sea $P_{\infty}$ el punto al infinito sobre la recta $AC$. Sean $Y$ y $Z$ los pies de las alturas desde $H$ a $AB$ y $AC$, respectivamente. Observa que $\angle EHF + \angle BHP_{\infty} = 90^\circ + 90^\circ = 180^\circ$. Así, los pies de las alturas desde $H$ a $EF$, $EB$, $BP_{\infty}$, y $CP_{\infty}$ son concíclicos. En otras palabras, $XYZB$ es cíclico. Como $BCYZ$ es un cuadrilátero cíclico, concluimos que $X$ está en este círculo, lo cual da $\angle BXC = 90^\circ$ como se quería.
+
+Observación. Aquí hay otra forma de demostrar el lema.
+
+Es bien sabido que, con la condición dada, existe un punto $P'$ que es el conjugado isogonal de $P$ respecto al cuadrilátero $ABCD$. Sean $P_A$, $P_B$, $P_C$, y $P_D$ los pies de las alturas desde $P$ a $AB$, $BC$, $CD$, y $DA$, respectivamente, y sea $Q$ el pie de la altura desde $P'$ a $AB$. Como $P$ y $P'$ son conjugados isogonales respecto al triángulo formado por las rectas $AB$, $BC$, y $CD$, tenemos que $P_A P_B P_C Q$ es cíclico. De manera similar, como $P$ y $P'$ también son conjugados isogonales respecto al triángulo formado por las rectas $DA$, $AB$, y $BC$, tenemos que $P_D P_A P_B Q$ es cíclico. En consecuencia, $P_A P_B P_C P_D$ es cíclico como se quería.`),
+  hmmt('HMMT-2025-TEAM6', 2025, 'TEAM', 6, "Condición de punto fijo en el círculo unitario", "Álgebra",
+    String.raw`Los números complejos $\omega_{1}$, $\ldots$, $\omega_{n}$ tienen todos magnitud $1$. Sea $z$ un número complejo distinto de $\omega_{1}$, $\ldots$, $\omega_{n}$ tal que
+$$
+\frac{z + \omega_{1}}{z - \omega_{1}} + \dots + \frac{z + \omega_{n}}{z - \omega_{n}} = 0.
+$$
+Demuestra que $|z| = 1$.`,
+    String.raw`Solución 1. Mostramos que no puede existir ninguna solución $z$ fuera del círculo unitario. Primero, eliminamos $|z| > 1$.
+
+Afirmación 1. Para todo $j$ y $|z| > 1$, la parte real de $\frac{z + \omega_{j}}{z - \omega_{j}}$ es positiva.
+
+Demostración. Usamos geometría. Observa que $\omega_{j}$ y $-\omega_{j}$ son antípodas en el círculo unitario. Como $z$ está fuera del círculo unitario, se sigue que $\angle \omega_{j}z(-\omega_{j})$ es agudo. Pero esto significa que el número complejo $\frac{z + \omega_{j}}{z - \omega_{j}}$ está estrictamente en el primer o cuarto cuadrante del plano complejo y por lo tanto tiene parte real positiva, como se quería.
+
+Es entonces claro que siempre que $|z| > 1$, la suma $\sum_{j = 1}^{n} \frac{z + \omega_{j}}{z - \omega_{j}}$ tiene parte real positiva y por lo tanto no puede ser $0$. El caso donde $|z| < 1$ es análogo, excepto que $\angle \omega_{j}z(-\omega_{j})$ es obtuso en su lugar, así que $\frac{z + \omega_{j}}{z - \omega_{j}}$ tiene parte real negativa para todo $j$. Por lo tanto, toda solución $z$ de la ecuación original debe satisfacer $|z| = 1$.
+
+Solución 2. Mostramos, de manera más general, que para cualesquiera enteros positivos $k$, $a_{1}$, $\ldots$, $a_{k}$, y $\omega_{j}$ distintos en el círculo unitario, la ecuación
+$$
+\sum_{j = 1}^{k} a_{j} \left(\frac{z + \omega_{j}}{z - \omega_{j}}\right) = 0
+$$
+tiene $k$ soluciones distintas en el círculo unitario. El problema original se sigue entonces al consolidar $\omega_{j}$'s duplicadas. Sin pérdida de generalidad, supón que $\omega_{1}$, $\ldots$, $\omega_{k}$ están en este orden yendo en sentido horario alrededor del círculo unitario.
+
+Afirmación 2. Hay una solución en el arco (en sentido horario) de $\omega_{j}$ a $\omega_{j + 1}$ para todo $j$ (donde $\omega_{k + 1} = \omega_{1}$).
+
+Demostración. Primero, $\omega_{j}$ y $-\omega_{j}$ son antípodas en el círculo unitario, así que si $z$ está en el círculo unitario, $\angle \omega_{j}z(-\omega_{j}) = 90^{\circ}$. Esto significa que $\frac{z + \omega_{j}}{z - \omega_{j}}$ es puramente imaginario. Ahora considera la parte imaginaria del lado izquierdo de la ecuación, que es una función real y continua en el arco estrictamente entre $\omega_{j}$ y $\omega_{j + 1}$ para cada $j$. En particular, cuando $z$ se aproxima a $\omega_{j + 1}$ desde la dirección horaria, esta función se aproxima a $\infty$. Por otro lado, cuando $z$ se aproxima a $\omega_{j}$ desde la dirección antihoraria, esta función se aproxima a $-\infty$. Por el Teorema del Valor Intermedio, debe haber una solución en este arco, como se quería.
+
+Se sigue que hay al menos $k$ soluciones en el círculo unitario. Pero la ecuación equivale a un polinomio de grado $k$. Por lo tanto, hay exactamente $k$ soluciones, todas las cuales están en el círculo unitario.`),
+  hmmt('HMMT-2025-TEAM7', 2025, 'TEAM', 7, "Disección de un cuadrado en triángulos 30-75-75", "Geometría",
+    String.raw`Determina, con demostración, si un cuadrado se puede disecar en un número finito de triángulos (no necesariamente congruentes), cada uno con ángulos interiores $30^{\circ}$, $75^{\circ}$, y $75^{\circ}$.`,
+    String.raw`Solución 1. Supón por contradicción que existe tal disección. Tiene exactamente la mitad de ángulos de $30^{\circ}$ que de ángulos de $75^{\circ}$.
+
+Alrededor de cualquier punto de intersección salvo los vértices del cuadrado, los únicos ángulos que pueden aparecer son $30^{\circ}$, $75^{\circ}$, y $180^{\circ}$. Las únicas combinaciones de estos que suman $180^{\circ}$ o $360^{\circ}$ son
+$$6 \cdot 30^{\circ} = 180^{\circ},$$
+$$30^{\circ} + 2 \cdot 75^{\circ} = 180^{\circ},$$
+$$180^{\circ} = 180^{\circ},$$
+$$12 \cdot 30^{\circ} = 360^{\circ},$$
+$$7 \cdot 30^{\circ} + 2 \cdot 75^{\circ} = 360^{\circ},$$
+$$2 \cdot 30^{\circ} + 4 \cdot 75^{\circ} = 360^{\circ},$$
+$$6 \cdot 30^{\circ} + 180^{\circ} = 360^{\circ},$$
+$$30^{\circ} + 2 \cdot 75^{\circ} + 180^{\circ} = 360^{\circ},$$
+$$180^{\circ} + 180^{\circ} = 360^{\circ}.$$
+En particular, alrededor de cualquiera de estos puntos, hay al menos la mitad de ángulos de $30^{\circ}$ que de ángulos de $75^{\circ}$.
+
+Sin embargo, los vértices del cuadrado deben estar rodeados cada uno por tres ángulos de $30^{\circ}$ y ningún ángulo de $75^{\circ}$, ya que no hay otra forma de obtener una suma de $90^{\circ}$. Así, el número total de ángulos de $30^{\circ}$ en la disección debe ser al menos 12 más que la mitad del número de ángulos de $75^{\circ}$, contradicción.
+
+Por lo tanto, $\boxed{\text{no existe tal disección}}$.
+
+Solución 2. De nuevo supón por contradicción que existe una disección. Interpreta la disección como un grafo $G$, donde los vértices del grafo son los vértices de todos los triángulos, y las aristas conectan cada par de vértices consecutivos a lo largo de un segmento de recta.
+
+Llamemos plano a un vértice si está en la frontera del cuadrado (incluyendo sus esquinas) o en el interior de un lado de algún triángulo. Sea $X$ el número de vértices planos y $Y$ el número de vértices no planos en $G$. Sean $E$ y $F$ el número de aristas y caras (triángulos) en la disección, respectivamente. Entonces $(X + Y) - E + F = 1$.
+
+Observando las combinaciones de ángulos en la primera solución, vemos que cualquier vértice no plano debe tener al menos 6 aristas incidentes, y cualquier vértice plano debe tener al menos 4. Así $2E \geq 6Y + 4X$, así que $E \geq 3Y + 2X$.
+
+La suma de los ángulos de todos los $F$ triángulos es $\pi F$. Alrededor de cualquier vértice no plano, tales ángulos suman $2\pi$. Alrededor de cualquier vértice plano, los ángulos suman $\pi$, con la excepción de las cuatro esquinas del cuadrado, donde suman $\pi/2$ en su lugar. Así
+$$F\pi = (X - 4)\pi + 4(\pi/2) + Y(2\pi) = (X + 2Y - 2)\pi,$$
+así que $F = X + 2Y - 2$. Esto significa
+$$X + Y - E + F \leq (X + Y) - (3Y + 2X) + (X + 2Y - 2) = -2,$$
+contradicción. Por lo tanto, $\boxed{\text{no existe tal disección}}$.`),
+  hmmt('HMMT-2025-TEAM8', 2025, 'TEAM', 8, "Círculo tangente al incentro y un ángulo recto", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo con incentro $I$. El incírculo del triángulo $\triangle ABC$ toca $\overline{BC}$ en $D$. Sea $M$ el punto medio de $\overline{BC}$, y sea $L \neq A$ el segundo punto donde la recta $AI$ encuentra al circuncírculo del triángulo $\triangle ABC$. Sea $\omega$ el círculo centrado en $L$ tangente a $AB$ y $AC$. Si $\omega$ interseca al segmento $\overline{AD}$ en el punto $P$, demuestra que $\angle IPM = 90^{\circ}$.`,
+    String.raw`Solución 1. Sean $X$ y $Y$ el punto inferior y superior de $\omega$ (es decir, las tangentes a $\omega$ en $X$ y $Y$ son paralelas a $BC$, y $Y$ y $A$ están del mismo lado de $BC$). Observa que $A$, $P$, $D$, y $X$ son colineales por homotecia entre el incírculo y $\omega$. La afirmación clave es la siguiente.
+
+Afirmación 1. La recta $IY$ es tangente a $\omega$.
+
+Demostración. Sea la recta por $I$ paralela a $BC$ la que encuentra a $AB$ y $AC$ en $B'$, $C'$, respectivamente. Observa que $B'L$ es la mediatriz de $BI$, así que $B'L$ biseca externamente a $\angle AB'C'$. De manera similar, $C'L$ biseca externamente a $\angle AC'B'$. Por lo tanto, $L$ es el excentro de $\triangle AB'C'$, lo cual significa que $B'C'$ es tangente a $\omega$.
+
+![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, punto L en el circuncírculo, círculo omega centrado en L tangente a AB y AC, y varios puntos y rectas auxiliares incluyendo B', C', D, P, X, y Y.](/imagenes-problemas/hmmt/2025/9d25c968fd58984cde61b27542d89c49.jpeg)
+
+Ahora, observamos que $LY \perp BC$, así que $L$, $Y$, y $M$ son colineales (sobre la mediatriz de $BC$). Como $\angle YPX = 90^{\circ}$ y $\angle YMD = 90^{\circ}$, $PDMY$ es cíclico. Sin embargo, $IYMD$ es un rectángulo, así que $IPDMY$ es un pentágono cíclico. Por lo tanto, $\angle IPM = \angle IDM = 90^{\circ}$.
+
+Solución 2. Sean $E$ y $F$ los puntos donde el incírculo toca a $AC$ y $AB$, respectivamente. Sea $X$ la intersección de $DI$ con $EF$. Sea $D'$ la otra intersección de $AD$ con el incírculo.
+
+Afirmación 2. $PM \parallel D'X$.
+
+Demostración. Considera la homotecia en $A$ que envía $\omega$ al incírculo. Envía $L$ a $I$ y $P$ a $D'$. Además, es bien sabido que $X$ está en $AM$. Como $IX \parallel LM$, la homotecia también envía $M$ a $X$. Estos hechos implican que $D'X \parallel PM$.
+
+![Un diagrama geométrico del triángulo ABC con incírculo, incentro I, punto medio M de BC, los puntos D, D', X, T, T', y P, mostrando varias rectas y segmentos relevantes para la solución.](/imagenes-problemas/hmmt/2025/3588a05bc805619ce4de2b7bfb81bb3c.jpeg)
+
+Sea $T$ el antípoda de $D$ en el incírculo. Sea $T'$ la segunda intersección de $AT$ con el incírculo. Como $X$ está en la polar de $A$ respecto al incírculo, por el teorema de Brocard, $D'$, $X$, y $T'$ son colineales. Es bien sabido que $AT \parallel IM$. Por lo tanto, $\angle DPM = \angle DD'X = \angle DD'T' = \angle DTT' = \angle DIM$. En consecuencia, $IMDP$ es cíclico, y $\angle IPM = \angle IDM = 90^{\circ}$.
+
+Solución 3. Sea $\omega$ tangente a $AB$ y $AC$ en $E$ y $F$, respectivamente. Observa que estos son los pies de las alturas desde $L$ a $AB$ y $AC$, y $L$ está en el circuncírculo de $\triangle ABC$ por el Hecho 5. Como $M$ es claramente el pie desde $L$ a $BC$, se sigue que $E$, $F$, y $M$ son colineales sobre la recta de Simson de $L$ respecto a $\triangle ABC$.
+
+Por último, queremos que $P$ esté en el círculo con diámetro $IM$. Este círculo interseca a $EF$ de nuevo en el pie desde $M$ a $AI$, que es el punto medio de $EF$. Sea este punto $M'$. Considera la homotecia que envía el incírculo a $\omega$. Esta claramente envía $D$ a la segunda intersección de $AD$ y $\omega$, que es $P'$, y envía $I$ a $L$. Observa que $AP \cdot AP' = AE^2 = AM \cdot AL$, ya que el círculo con diámetro $LE$ es tangente a $AE$. Así, $PP'M'L$ es cíclico. Como $ID \parallel LP'$, $I$ está en $M'L$, y $D$ está en $PP'$. Por el teorema de Reim, también tenemos que $PDM'I$ es cíclico. Como $IM$ es un diámetro de $(DM'I)$, tenemos $\angle IPM = 90^{\circ}$.
+
+![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, los puntos L, P, P', E, F, y M', con varias rectas y círculos que ilustran las relaciones en la solución.](/imagenes-problemas/hmmt/2025/bd8de87f9a899904f1b27f0c1c33d28a.jpeg)`),
+  hmmt('HMMT-2025-TEAM9', 2025, 'TEAM', 9, "Primos que admiten una ecuación funcional periódica", "Teoría de Números",
+    String.raw`Sea $\mathbb{Z}$ el conjunto de los enteros. Determina, con demostración, todos los primos $p$ para los cuales existe una función $f\colon \mathbb{Z}\to \mathbb{Z}$ tal que para todo entero $x$,
+
+$f(x + p) = f(x)$ y $p$ divide a $f(x + f(x)) - x$.`,
+    String.raw`Los primos que funcionan son $\boxed{p = 5 \text{ y los primos } p \text{ para los cuales } 5 \text{ es un residuo cuadrático módulo } p}$.
+
+Trabajamos en $\mathbb{F}_p$, viendo a $f$ como un mapeo de $\mathbb{F}_p$ en sí mismo. Claramente, $p = 2$ no funciona. Para $p > 2$ tal que $5$ es un residuo cuadrático módulo $p$, así como para $p = 5$ mismo, existe algún $\alpha$ tal que $(2\alpha + 1)^2\equiv 5$ (mód $p$). Tomando $f(x) = \alpha x$ entonces funciona porque
+
+$$
+f(x + f(x)) - x = (\alpha^2 + \alpha -1)x = \frac{1}{4}\left((2\alpha +1)^2 - 5\right)x\equiv 0\pmod {p}.
+$$
+
+Para probar que ningún otro primo satisface las condiciones del enunciado, observa que $f$ es sobreyectiva, ya que para cualquier $x$, $f(x + f(x)) = x$. Como $\mathbb{F}_p$ es finito, $f$ es biyectiva. Sustituyendo $x = f(y)$ se obtiene
+
+$$
+f(f(y) + f(f(y))) = f(y)\implies f(y) + f(f(y)) = y.
+$$
+
+Como $f$ es biyectiva, existe $z\in \mathbb{F}_p$ tal que $f(z) = 0$, entonces $z = f(z + f(z)) = f(z) = 0$. Por lo tanto, $f(0) = 0$. Este es el único punto fijo, ya que cualquier punto fijo $d$ satisfaría $d = f(d) + f(f(d)) = 2d$, lo cual es imposible si $d \neq 0$. Por lo tanto, los residuos restantes forman ciclos no triviales $y$, $f(y)$, $f(f(y))$, etc. Si el ciclo que contiene a $y$ tiene longitud $n$, entonces
+
+$$
+\begin{array}{rl}
+& f^{-1}(y) = y + f(y),\\
+& f^{-2}(y) = f^{-1}(y) + y = 2y + f(y),\\
+& \qquad \vdots\\
+& f^{-(n - 1)}(y) = f(y) = F_ny + F_{n - 1}f(y),\\
+& \qquad y = F_{n + 1}y + F_n f(y),
+\end{array} \quad (\text{por inducción})
+$$
+
+donde $F_k$ es el $k$-ésimo número de Fibonacci. Como $y \neq 0$ y $f(y) \neq 0$, las últimas dos ecuaciones nos dicen que
+
+$$
+F_n^2 \equiv \left(\frac{(1 - F_{n - 1})f(y)}{y}\right) \left(\frac{(1 - F_{n + 1})y}{f(y)}\right) \equiv (F_{n + 1} - 1)(F_{n - 1} - 1) \pmod {p}.
+$$
+
+Sea $A = F_{n + 1} - 1$ y $B = F_{n - 1} - 1$ por brevedad. La última ecuación se convierte en
+
+$$
+(A - B)^2 \equiv AB \equiv \frac{1}{4} ((A + B)^2 - (A - B)^2) \pmod {p} \Longrightarrow (A + B)^2 \equiv 5(A - B)^2 \pmod {p}.
+$$
+
+Como $5$ no es residuo cuadrático, esto implica que $F_{n + 1} \equiv F_{n - 1} \equiv 1 \pmod {p}$. Por lo tanto, si $d$ es el menor entero positivo tal que $F_d \equiv 0 \pmod {p}$ y $F_{d + 1} \equiv 1 \pmod {p}$, entonces la sucesión de Fibonacci es periódica módulo $p$ con periodo $d$, así que $d \mid n$. La suma de todas las longitudes de ciclo (excluyendo el punto fijo $0$) es $p - 1$, así que $d \mid p - 1$. El siguiente lema bien conocido nos dará una contradicción.
+
+Lema 1. Si $5$ no es residuo cuadrático módulo un primo $p$, entonces $p \nmid F_{p - 1}$.
+
+Demostración 1. Recuerda la fórmula de Binet,
+
+$$
+F_{p - 1} = \frac{1}{\sqrt{5}} \left(\left(\frac{1 + \sqrt{5}}{2}\right)^{p - 1} - \left(\frac{1 - \sqrt{5}}{2}\right)^{p - 1}\right).
+$$
+
+Multiplicando ambos lados por $2^{p - 1}$ y expandiendo mediante el teorema del binomio, tenemos
+
+$$
+2^{p - 1}F_{p - 1} = 2\sum_{k = 0}^{\frac{p - 3}{2}}5^{k}\binom{p - 1}{2k + 1}.
+$$
+
+Sin embargo, $\binom{p- 1}{2k+1} \equiv(- 1)^{2k+1} \equiv- 1 \pmod{p}$ para todo $k$, así que
+
+$$
+p \mid F_{p - 1} \quad \text{si y solo si} \quad p \left| \sum_{k = 0}^{\frac{p - 3}{2}} 5^{k} = \frac{5^{\frac{p - 1}{2}} - 1}{5 - 1} \right.
+$$
+
+Por lo tanto $p \mid F_{p - 1}$ si y solo si $5^{\frac{p - 1}{2}} \equiv 1 \pmod {p}$, lo cual no se cumple si $5$ no es residuo cuadrático módulo $p$, como se quería.
+
+Demostración 2. Trabajamos en $\mathbb{F}_{p^{2}} = \mathbb{F}_{p}[\sqrt{5}]$. Como $5$ no es residuo cuadrático, obtenemos que $(\sqrt{5})^{p} = - \sqrt{5}$. Usando el hecho de que $(a + b)^{p} = a^{p} + b^{p}$ (porque todos los demás términos tienen coeficiente divisible entre $p$), obtenemos que
+
+$$
+\left(\frac{1 + \sqrt{5}}{2}\right)^{p} = \frac{1 - \sqrt{5}}{2} \implies \left(\frac{1 + \sqrt{5}}{2}\right)^{p - 1} = \left(\frac{1 - \sqrt{5}}{2}\right)^{2} = \frac{3 - \sqrt{5}}{2}.
+$$
+
+De manera similar, $\left(\frac{1 - \sqrt{5}}{2}\right)^{p - 1} = \frac{3 + \sqrt{5}}{2}$. Por lo tanto, por la fórmula de Binet,
+
+$$
+F_{p - 1} = \frac{1}{\sqrt{5}}\left(\left(\frac{1 + \sqrt{5}}{2}\right)^{p - 1} - \left(\frac{1 - \sqrt{5}}{2}\right)^{p - 1}\right)
+= \frac{1}{\sqrt{5}}\left(\frac{3 - \sqrt{5}}{2} -\frac{3 + \sqrt{5}}{2}\right) = -1,
+$$
+
+así que no es divisible entre $p$.
+
+Por lo tanto, $F_{p - 1} \neq 0$ (mód $p$) si $5$ no es residuo cuadrático módulo $p$, lo cual contradice $d \mid p - 1$ de arriba. Esto completa la solución.`),
+  hmmt('HMMT-2025-TEAM10', 2025, 'TEAM', 10, "MCD de una suma de cuadrados y un producto", "Teoría de Números",
+    String.raw`Determina, con demostración, todos los valores posibles de $\gcd (a^{2} + b^{2} + c^{2}, abc)$ sobre todas las ternas de enteros positivos $(a, b, c)$.`,
+    String.raw`Los valores posibles son $\boxed{n \geq 1 \text{ tales que } \nu_p(n) \text{ es par para todo primo } p \equiv 3 \pmod 4}$.
+
+Primero, mostramos que ningún otro $n$ funciona. Si existiera un primo $p \equiv 3$ (mód $4$) tal que $\nu_{p}(n) = 1$, entonces $p \mid abc$; sin pérdida de generalidad, supón que $p$ divide a $a$. Entonces, $p^{2} \mid a^{2}$ y $p \mid a^{2} + b^{2} + c^{2}$, así que $p \mid b^{2} + c^{2}$. Como $p$ es $3$ módulo $4$, $-1$ no es residuo cuadrático módulo $p$, así que $b^{2} \equiv -c^{2}$ (mód $p$) solo tiene la solución trivial $(b, c) = 0$. Por lo tanto $p \mid b$ y $p \mid c$, así que $p^{2} \mid n$. Esto contradice $\nu_{p}(n) = 1$, así que no existen soluciones fuera del conjunto de soluciones afirmado.
+
+Ahora, damos la construcción. Sea $n$ en el conjunto de soluciones afirmado. Procedemos en dos pasos.
+
+Paso 1 (Paso local). Para cada primo $p$ que divide a $n$, construiremos $a, b$, y $c$ módulo $p^{\nu_{p}(n) + 1}$ tales que $\nu_{p}(\gcd (a^{2} + b^{2} + c^{2}, abc)) = \nu_{p}(n)$.
+
+Tenemos un par de casos.
+- Si $\nu_{p}(n) = 2k$ para algún entero positivo $k$, elige $a = p^{k}$, $b = p^{k}$, y $c = p^{k + 1}$ para $p \neq 2$ y elige $a = b = c = p^{k}$ para $p = 2$.
+- Si $p \not\equiv 3$ (mód $4$) y $\nu_{p}(n) = 2k + 1$ para algún entero no negativo $k$, entonces por el teorema de Navidad de Fermat, hay enteros positivos $x$ y $y$ tales que $x^{2} + y^{2} = p$. Entonces elige $a = x p^{k}$, $b = y p^{k}$, y $c = p^{k + 1}$.
+- Si $p \equiv 3$ (mód $4$) y $\nu_{p}(n) = 2k + 1$ para algún entero no negativo $k$, entonces $k \geq 1$ por suposición. Sean $x$ y $y$ enteros positivos tales que $\nu_{p}(x^{2} + y^{2} + 1) = 1$. (Esto es bastante estándar. Para recordar brevemente la demostración, observa que existen $x$ y $y$ que satisfacen $x^{2} + 1 \equiv -y^{2}$ (mód $p$) porque algún residuo cuadrático debe ser adyacente a un no residuo cuadrático, y forzar $x^{2} + 1 \not\equiv -y^{2}$ (mód $p^{2}$) se puede lograr sumando múltiplos apropiados de $p$ a $x$ o $y$.) Entonces, elige $a = x p^{k}$, $b = y p^{k}$, y $c = p^{k}$.
+
+Paso 2 (Paso global). Dadas soluciones $(a_{p}, b_{p}, c_{p})$ módulo $p^{\nu_{p}(n) + 1}$ para cada primo $p \mid n$, construimos una solución $(a, b, c)$ que funciona sobre los enteros positivos.
+
+Por el Teorema Chino del Residuo, podemos elegir enteros positivos $a, b$, y $c$ tales que para todo primo $p \mid n$, $(a, b, c) \equiv (a_{p}, b_{p}, c_{p}) \pmod {p^{\nu_{p}(n) + 1}}$. Ahora, necesitamos modificar esta construcción para asegurar que ningún otro primo divida a $\gcd (a^{2} + b^{2} + c^{2}, abc)$.
+
+Para cada primo $p \mid c$ con $p \nmid n$, modificamos $a$ y $b$ (agregando relaciones de congruencia adicionales) de modo que $p$ no divida a $a^{2} + b^{2}$. Entonces, $p$ no divide a $\gcd (a^{2} + b^{2} + c^{2}, abc)$ para ningún primo $p$ tal que $p \mid c$ y $p \nmid n$. Sea
+$$N = \prod_{p \mid c n} p^{\nu_{p}(n) + 1},$$
+$$S = \{\text{primos } p \text{ tales que } p \mid ab \text{ pero } p \nmid c n\},$$
+$$P = \prod_{p \in S} p^{\varphi (N)} \equiv 1 \pmod {N}.$$
+En particular, en este punto solo hemos fijado residuos de $a, b, c$ módulo $N$. Ahora, sean $a_{1} = a P$ y $b_{1} = b P$. Esto mantiene todas nuestras condiciones módulo $N$. Ahora afirmamos que $(a_{1}, b_{1}, c)$ funciona. Para probar esto, fija un primo $p$, y observa que
+
+si $p$ divide a $c n$, entonces como $a' \equiv a$ (mód $N$) y $b' \equiv b$ (mód $N$), tenemos $\nu_{p}(\gcd (a_{1}^{2} + b_{1}^{2} + c^{2}, a_{1} b_{1} c)) = \nu_{p}(n)$ por nuestra construcción de $(a, b, c)$.
+
+si $p \in S$, entonces observamos que $p$ divide a $a_{1}^{2} + b_{1}^{2}$, pero no a $c^{2}$, así que $p$ no divide a $a_{1}^{2} + b_{1}^{2} + c^{2}$.
+
+si $p \notin S$ y $p \nmid c n$, entonces $p$ no divide a $a_{1} b_{1} c$.
+
+Esto concluye la demostración.`),
+]
+
+const hmmt2025Guts = [
+  hmmt('HMMT-2025-GUTS1', 2025, 'GUTS', 1, "Números primos 'cassowary' pandigitales de 9 dígitos", "Teoría de Números",
+    String.raw`Llama cassowary a un número de 9 dígitos si usa cada uno de los dígitos $1$ al $9$ exactamente una vez. Calcula el número de cassowaries que son primos.`,
+    String.raw`Todo cassowary es divisible entre $3$, ya que la suma de sus dígitos es $1 + 2 + \dots + 9 = 45$. Como todos estos números son divisibles entre $3$ y mayores que $3$, ninguno de ellos es primo. Así, hay $\boxed{0}$ cassowaries primos.`),
+  hmmt('HMMT-2025-GUTS2', 2025, 'GUTS', 2, "Fracciones anidadas con recíprocos", "Álgebra",
+    String.raw`Calcula
+$$
+\frac{20 + \frac{1}{25 - \frac{1}{20}}}{25 + \frac{1}{20 - \frac{1}{25}}}.
+$$`,
+    String.raw`Podemos usar el hecho de que
+$$
+x + \frac{1}{y - \frac{1}{x}} = x + \frac{x}{xy - 1} = \frac{x^2 y}{xy - 1}.
+$$
+Tomando $x = 20$, $y = 25$ y viceversa en la expresión anterior, obtenemos
+$$
+\frac{x + \frac{1}{y - \frac{1}{x}}}{y + \frac{1}{x - \frac{1}{y}}} = \frac{x^2 y}{x y^2} = \frac{x}{y} = \boxed{\frac{4}{5}}.
+$$`),
+  hmmt('HMMT-2025-GUTS3', 2025, 'GUTS', 3, "Probabilidad condicional con sumas de dados", "Combinatoria",
+    String.raw`Jacob lanza dos dados justos de seis caras. Si los resultados de estos lanzamientos son iguales, lanza un tercer dado justo de seis caras. Calcula la probabilidad de que la suma de los resultados de todos los dados que lanzó sea par.`,
+    String.raw`Hay una probabilidad de $\frac{1}{2} - \frac{1}{6} = \frac{1}{3}$ de que obtenga un número par sin sacar dobles: sea cual sea el primer lanzamiento, hay una probabilidad de $\frac{1}{2}$ de que el segundo lanzamiento sea de paridad opuesta, y restamos la probabilidad de $\frac{1}{6}$ de que el segundo lanzamiento sea igual.
+
+Hay una probabilidad de $\frac{1}{6} \cdot \frac{1}{2} = \frac{1}{12}$ de que saque dobles y luego lance un número par.
+
+Sumando $\frac{1}{3}$ y $\frac{1}{12}$ obtenemos $\boxed{\frac{5}{12}}$.`),
+  hmmt('HMMT-2025-GUTS4', 2025, 'GUTS', 4, "Partición del área de un triángulo equilátero", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo equilátero de lado $4$. Entre todos los puntos $P$ dentro del triángulo $\triangle ABC$ que satisfacen $[PAB] + [PAC] = [PBC]$, calcula la menor longitud posible de $PA$.
+
+(Aquí, $[XYZ]$ denota el área del triángulo $\triangle XYZ$.)`,
+    String.raw`![Un triángulo equilátero ABC con un punto P adentro. El triángulo está dividido en dos regiones por una línea punteada roja paralela a BC, y un segmento rojo conecta A con P. Las regiones PAB y PBC están sombreadas en colores distintos.](/imagenes-problemas/hmmt/2025/69fadc0b114370291d5cfb809590a975.jpeg)
+
+La condición de área implica $[ABC] = 2[PBC]$. Por lo tanto, $P$ está en la línea media desde $A$ del triángulo $\triangle ABC$. Así, el menor valor posible de $PA$ es la distancia de $A$ a esta línea media. Esto se alcanza tomando $P$ como el pie de la perpendicular desde $A$ a la línea media. Esta distancia es la mitad de la altura de $ABC$, que tiene lado $4$, así que la respuesta es $\frac{1}{2} (2\sqrt{3}) = \boxed{\sqrt{3}}$.`),
+  hmmt('HMMT-2025-GUTS5', 2025, 'GUTS', 5, "Círculo máximo inscrito en una región con valor absoluto anidado", "Geometría",
+    String.raw`Calcula el mayor radio posible de un círculo contenido en la región definida por $|x + |y|| \leq 1$ en el plano coordenado.`,
+    String.raw`![Un plano coordenado que muestra la región definida por |x + |y|| ≤ 1 sombreada, con un círculo rojo inscrito adentro de la región, tangente a las fronteras y pasando por el punto (-1, 0).](/imagenes-problemas/hmmt/2025/2694b339b7413b14bf3ffd174cfea391.jpeg)
+
+Después de dibujar la gráfica, es claro que el círculo debe pasar por $(-1, 0)$ y ser tangente a $y = x - 1$ y $y = -x + 1$. Sea $r$ el radio de este círculo, tenemos $r\sqrt{2} + r = 2$, así que $\boxed{r = 2\sqrt{2} - 2}$.`),
+  hmmt('HMMT-2025-GUTS6', 2025, 'GUTS', 6, "Triángulo equilátero con una condición de punto medio", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo equilátero. El punto $D$ está en el segmento $\overline{BC}$ tal que $BD = 1$ y $DC = 4$. Los puntos $E$ y $F$ están en los rayos $\overrightarrow{AC}$ y $\overrightarrow{AB}$, respectivamente, de modo que $D$ es el punto medio de $\overline{EF}$. Calcula $EF$.`,
+    String.raw`![Un diagrama geométrico que muestra el triángulo equilátero ABC con el punto D sobre BC, los puntos E y F sobre los rayos AC y AB, y la reflexión C' de C sobre D. El segmento EF pasa por D, y varios segmentos están marcados con símbolos de congruencia.](/imagenes-problemas/hmmt/2025/932a7555b8a60afcb53d5e3fcf9e922c.jpeg)
+
+Sea $C'$ la reflexión de $C$ sobre $D$. Entonces, $\overline{EC} \parallel \overline{C'F}$ ya que $ECFC'$ es un paralelogramo. Así, $BFC'$ es un triángulo equilátero, así que $BF = BC' = 3$ y $\angle FBD = 120^\circ$. Por la Ley de Cosenos, obtenemos $DF = \sqrt{3^2 + 3 \cdot 1 + 1^2} = \sqrt{13}$ y $EF = \boxed{2\sqrt{13}}$.`),
+  hmmt('HMMT-2025-GUTS7', 2025, 'GUTS', 7, "Factores primos de un cociente exponencial", "Teoría de Números",
+    String.raw`El número
+$$
+\frac{9^{9} - 8^{8}}{1001}
+$$
+es un entero. Calcula la suma de sus factores primos.`,
+    String.raw`Observa
+$$
+9^{9} - 8^{8} = 27^{6} - 16^{6}
+$$
+$$
+= (27^{2} - 16^{2})(27^{4} + 27^{2} \cdot 16^{2} + 16^{4})
+$$
+$$
+= (27 - 16)(27 + 16)(27^{2} - 27 \cdot 16 + 16^{2})(27^{2} + 27 \cdot 16 + 16^{2})
+$$
+$$
+= 11 \cdot 43 \cdot 553 \cdot 1417.
+$$
+Las factorizaciones restantes se motivan por el hecho de que $1001 = 7 \cdot 11 \cdot 13$. Vemos que $553 = 7 \cdot 79$ y $1417 = 13 \cdot 109$, así que la respuesta es $43 + 79 + 109 = \boxed{231}$.`),
+  hmmt('HMMT-2025-GUTS8', 2025, 'GUTS', 8, "Tableros de ajedrez con un número fijo de celdas negras", "Teoría de Números",
+    String.raw`Un tablero de ajedrez es una cuadrícula rectangular de celdas coloreadas de negro y blanco tal que la esquina superior izquierda es negra y no hay dos celdas del mismo color que compartan un lado. Dos tableros de ajedrez son distintos si y solo si tienen un número distinto de filas o columnas. Por ejemplo, un tablero de $20 \times 25$ y uno de $25 \times 20$ se consideran distintos.
+
+Calcula el número de tableros de ajedrez distintos que tienen exactamente 41 celdas negras.`,
+    String.raw`Como hay una esquina negra en el tablero, el número de casillas blancas es a lo más el número de casillas negras. Así, el tablero tiene 40 o 41 casillas blancas. Por lo tanto, queremos calcular el número de pares ordenados $(r,c)$ con producto 81 o 82. Como $81 = 3^{4}$ tiene 5 divisores y $82 = 41 \cdot 2$ tiene 4 divisores, hay $\boxed{9}$ tableros de ajedrez con exactamente 41 celdas negras.`),
+  hmmt('HMMT-2025-GUTS9', 2025, 'GUTS', 9, "Segmento aleatorio en los cuadriláteros de un hexágono", "Geometría",
+    String.raw`Sean $P$ y $Q$ puntos elegidos de manera uniforme e independiente al azar dentro de un hexágono regular $ABCDEF$. Calcula la probabilidad de que el segmento $\overline{PQ}$ esté completamente contenido en al menos uno de los cuadriláteros $ABCD$, $BCDE$, $CDEF$, $DEFA$, $EFAB$, o $FABC$.`,
+    String.raw`![Un hexágono regular dividido en seis triángulos por líneas desde el centro O hasta cada vértice, con los puntos P y Q marcados y un segmento PQ trazado. Los triángulos ABO y DEO están sombreados, y los cuadriláteros están implícitos visualmente.](/imagenes-problemas/hmmt/2025/0d46ba45e4b43766265ed8aab827c8da.jpeg)
+
+Sea $O$ el centro del hexágono. Sin pérdida de generalidad, supón que $P$ está en $\triangle ABO$. Entonces, el segmento $PQ$ está completamente contenido en uno de los cuadriláteros dados si y solo si $Q$ no está en $\triangle DEO$. La probabilidad de que $Q$ esté en $\triangle DEO$ es $\frac{|DEO|}{|ABCDEF|} = \frac{1}{6}$, así que la respuesta es $\boxed{\frac{5}{6}}$.`),
+  hmmt('HMMT-2025-GUTS10', 2025, 'GUTS', 10, "Perímetro máximo de un pentágono en la disección de un cuadrado", "Geometría",
+    String.raw`Un cuadrado de lado $1$ se diseca en dos pentágonos congruentes. Calcula el supremo del perímetro de uno de estos pentágonos.`,
+    String.raw`![Un cuadrado ABCD se divide en dos pentágonos congruentes mediante dos líneas punteadas que conectan los puntos Y cerca de A y X cerca de C, con los pentágonos sombreados en colores distintos.](/imagenes-problemas/hmmt/2025/a779607648888b3176dd8192def6d28b.jpeg)
+
+Sean $P_{1}$ y $P_{2}$ los dos pentágonos congruentes. Sea $p(P)$ el perímetro del polígono $P$.
+
+Damos una cota superior para $p(P_{1}) + p(P_{2})$. Observa que, como un cuadrado tiene cuatro lados, al menos cuatro lados de $P_{1}$ y $P_{2}$ combinados están sobre los lados del cuadrado. Estos lados tienen longitud total a lo más $4$, el perímetro de $ABCD$.
+
+Cada uno de los lados restantes tiene longitud a lo más $\sqrt{2}$, ya que la mayor longitud posible de un segmento dentro de $ABCD$ es $\sqrt{2}$. Hay a lo más $6$ lados restantes, así que
+$$
+p(P_{1}) + p(P_{2}) \leq 4 + 6\sqrt{2}.
+$$
+Como $P_{1}$ y $P_{2}$ son congruentes, esto implica
+$$
+p(P_{1}) = p(P_{2}) \leq \boxed{2 + 3\sqrt{2}}.
+$$
+Este supremo se puede alcanzar colocando $X$ cerca de $C$ y $Y$ cerca de $A$, como se ve en el diagrama.`),
+  hmmt('HMMT-2025-GUTS12', 2025, 'GUTS', 12, "Ángulos interiores de polígonos con un valor faltante", "Teoría de Números",
+    String.raw`Holden tiene una colección de polígonos. Escribe una lista con la medida de cada ángulo interior de cada uno de sus polígonos. Escribe la lista $30^{\circ}$, $50^{\circ}$, $60^{\circ}$, $70^{\circ}$, $90^{\circ}$, $100^{\circ}$, $120^{\circ}$, $160^{\circ}$, y $x^{\circ}$, en algún orden. Calcula $x$.`,
+    String.raw`Trabajamos en grados. La suma de los 9 ángulos es $680 + x$. La suma de los ángulos en un polígono de $n$ lados es $180(n - 2) \equiv 180n$ mód $360$. Como hay 9 ángulos, los polígonos tienen un total de 9 lados, así que la suma de los 9 ángulos debe ser $9 \cdot 180 \equiv 180$ mód $360$. Así $680 + x \equiv 180$ mód $360$, así que $x \equiv 220$ mód $360$. Como $0 < x < 360$, sabemos que $x = \boxed{220}$.`),
+  hmmt('HMMT-2025-GUTS13', 2025, 'GUTS', 13, "Números 'ascendentes' divisibles entre 11", "Teoría de Números",
+    String.raw`Un número es ascendente si sus dígitos en base 10 son no decrecientes al leerlos de izquierda a derecha. Calcula el número de enteros positivos menores que $10^{6}$ que son a la vez ascendentes y múltiplos de 11.`,
+    String.raw`Para que un número $d_{5}d_{4}d_{3}d_{2}d_{1}d_{0}$ (permitiendo ceros a la izquierda) sea ascendente y múltiplo de 11, debemos tener
+$$d_{5} \leq d_{4} \leq d_{3} \leq d_{2} \leq d_{1} \leq d_{0},$$
+$$d_{0} - d_{1} + d_{2} - d_{3} + d_{4} - d_{5} \equiv 0 \pmod{11}.$$
+Observa que $d_{0} - d_{1}$, $d_{2} - d_{3}$, y $d_{4} - d_{5}$ son todos no negativos. Así,
+$$0 \leq (d_{0} - d_{1}) + (d_{2} - d_{3}) + (d_{4} - d_{5})$$
+$$\leq (d_{0} - d_{1}) + (d_{1} - d_{2}) + (d_{2} - d_{3}) + (d_{3} - d_{4}) + (d_{4} - d_{5})$$
+$$= d_{0} - d_{5}$$
+$$\leq 9.$$
+Por lo tanto,
+$$(d_{0} - d_{1}) + (d_{2} - d_{3}) + (d_{4} - d_{5}) = 0,$$
+lo cual solo puede ocurrir cuando $d_{0} = d_{1}$, $d_{2} = d_{3}$, y $d_{4} = d_{5}$, es decir, el número tiene la forma $aabbcc$. Podemos verificar fácilmente que todos los números de la forma $aabbcc$ con dígitos $a \leq b \leq c$ satisfacen nuestras condiciones, así que simplemente tenemos que contarlos.
+
+Hay $\binom{12}{3} = 220$ de estas ternas de dígitos $(a,b,c)$. Sin embargo, una de estas ternas es $(0,0,0)$, que corresponde al número 0. Así nuestra respuesta es $220 - 1 = \boxed{219}$.`),
+  hmmt('HMMT-2025-GUTS14', 2025, 'GUTS', 14, "Paralelogramo doblado en un pentágono regular", "Geometría",
+    String.raw`Un paralelogramo $P$ se puede doblar sobre una recta de modo que la figura resultante sea un pentágono regular de lado $1$. Calcula el perímetro de $P$.`,
+    String.raw`![Un diagrama que muestra un pentágono regular ABCDE con un paralelogramo CDE'D' adjunto, y la región ABDE reflejada sobre AB para formar ABD'E'.](/imagenes-problemas/hmmt/2025/49af5caed6e82e485305f9f5f5390039.jpeg)
+
+En el pentágono regular $ABCDE$ (etiquetado en sentido horario), refleja $ABDE$ sobre $AB$ para obtener $ABD'E'$. Entonces, $CDE'D'$ es uno de tales paralelogramos $P$. La longitud de $CD'$ es
+$$
+CB + BD = 1 + 2\cos \angle CBD = 1 + 2\cos (\pi /5) = 1 + \frac{\sqrt{5} + 1}{2} = \frac{\sqrt{5} + 3}{2}.
+$$
+Por lo tanto, el perímetro del paralelogramo buscado es
+$$
+2\left(1 + \frac{\sqrt{5} + 3}{2}\right) = \boxed{5 + \sqrt{5}}.
+$$`),
+  hmmt('HMMT-2025-GUTS15', 2025, 'GUTS', 15, "Triángulo rectángulo inscrito en un equilátero", "Geometría",
+    String.raw`El triángulo rectángulo $\triangle DEF$ con $\angle D = 90^{\circ}$ y $\angle F = 30^{\circ}$ está inscrito en el triángulo equilátero $\triangle ABC$ de modo que $D$, $E$, y $F$ están en los segmentos $\overline{BC}$, $\overline{CA}$, y $\overline{AB}$, respectivamente. Dado que $BD = 7$ y $DC = 4$, calcula $DE$.`,
+    String.raw`Solución 1. ![Un triángulo equilátero ABC con un triángulo rectángulo inscrito DEF, donde D está sobre BC, E está sobre CA, y F está sobre AB. El ángulo recto está en D.](/imagenes-problemas/hmmt/2025/ddd982a2b8a39ca0e846cc3a28985b3e.jpeg)
+
+De $\angle E = 60^{\circ}$, obtenemos que $\angle AEF = 120^{\circ} - \angle CED = \angle CDE$. Por lo tanto, $\triangle AEF \sim \triangle CDE$. Como $EF:DE = 2:1$, la razón de semejanza debe ser $2:1$, así que $AE = 2CD = 8$. Recuerda que $ABC$ tiene lado $7 + 4 = 11$, así que $EC = 11 - 8 = 3$. La Ley de Cosenos en $\triangle CDE$ da $DE^2 = 3^2 + 4^2 - 3\cdot 4 = 13$, así que $DE = \boxed{\sqrt{13}}$.
+
+Solución 2. ![El mismo triángulo equilátero ABC con el triángulo inscrito DEF, y un círculo que pasa por D, E, F. El punto X está marcado sobre AC, y se muestra una perpendicular punteada desde D hasta AC.](/imagenes-problemas/hmmt/2025/6bdde14db96ad51963d491cef9d82b2a.jpeg)
+
+Sea $X$ el segundo punto donde $\odot (DEF)$ se encuentra con $AC$. Entonces, $\angle FXA = 180^{\circ} - \angle FXE = \angle FDE = 90^{\circ}$ y $\angle XDC = 180^{\circ} - \angle DCX - \angle DXC = 120^{\circ} - \angle DXE = 120^{\circ} - \angle DFE = 90^{\circ}$. Se sigue que $CX = 2CD = 8$, así que $AX = 11 - CX = 3$, y $AF = 2AX = 6$. Así, la Ley de Cosenos en $\triangle AEF$ da $EF = \sqrt{8^2 + 6^2 - 8\cdot 6} = 2\sqrt{13}$, lo cual implica que $DE = \boxed{\sqrt{13}}$.`),
+  hmmt('HMMT-2025-GUTS16', 2025, 'GUTS', 16, "Distancia esperada en el conjunto de Cantor", "Combinatoria",
+    String.raw`El conjunto de Cantor se define como el conjunto de números reales $x$ tales que $0 \leq x < 1$ y el dígito $1$ no aparece en la expansión en base $3$ de $x$. Se seleccionan dos números de manera uniforme e independiente al azar del conjunto de Cantor. Calcula el valor esperado de su diferencia absoluta.
+
+(Formalmente, se puede elegir un número $x$ uniformemente al azar del conjunto de Cantor eligiendo primero un número real $y$ uniformemente al azar del intervalo $[0,1)$, escribiéndolo en binario, leyendo sus dígitos como si estuvieran en base $3$, y definiendo $x$ como $2$ veces el resultado.)`,
+    String.raw`Sea $d$ el valor esperado de la diferencia absoluta. Observa que el conjunto de Cantor está formado por dos copias más pequeñas de sí mismo, cada una escalada por un factor de $3$. Hay una probabilidad de $\frac{1}{2}$ de que los dos números elegidos estén en la misma copia, en cuyo caso el valor esperado de su diferencia absoluta es $\frac{1}{3} d$. De lo contrario, podemos escribirlos como $\frac{2 + x}{3}$ y $\frac{y}{3}$ para $x$ y $y$ elegidos independiente y uniformemente al azar en el conjunto de Cantor. Su diferencia es $\frac{2 + (x - y)}{3}$, que por simetría tiene valor esperado $\frac{2}{3}$. Así
+$$
+d = \frac{1}{2}\cdot \frac{1}{3} d + \frac{1}{2}\cdot \frac{2}{3} \Rightarrow d = \boxed{\frac{2}{5}}.
+$$`),
+  hmmt('HMMT-2025-GUTS17', 2025, 'GUTS', 17, "Cuadrática más una sucesión geométrica", "Álgebra",
+    String.raw`Sea $f$ un polinomio cuadrático con coeficientes reales, y sea $g_{1}$, $g_{2}$, $g_{3}$, ... una progresión geométrica de números reales. Define $a_{n} = f(n) + g_{n}$. Dado que $a_{1}$, $a_{2}$, $a_{3}$, $a_{4}$, y $a_{5}$ son iguales a $1$, $2$, $3$, $14$, y $16$, respectivamente, calcula $\frac{g_{2}}{g_{1}}$.`,
+    String.raw`Usaremos el método de diferencias finitas. Define $b_{n} = a_{n + 3} - 3a_{n + 2} + 3a_{n + 1} - a_{n}$. Como $f$ es cuadrático, la tercera diferencia finita de $f$ es cero. Así, $b_{n} = g_{n + 3} - 3g_{n + 2} + 3g_{n + 1} - g_{n}$. Sea $r$ la razón común de la sucesión geométrica, obtenemos que $b_{n} = (r^{3} - 3r^{2} + 3r - 1)g_{n}$. Así, $b_{n}$ es un múltiplo constante de $g_{n}$. Por lo tanto, la razón $\frac{g_{2}}{g_{1}} = \frac{b_{2}}{b_{1}}$. Calculando $b_{1} = 14 - 3\cdot 3 + 3\cdot 2 - 1 = 10$ y $b_{2} = 16 - 3\cdot 14 + 3\cdot 3 - 3\cdot 2 = -19$, obtenemos
+
+$$
+\frac{g_{2}}{g_{1}} = \frac{b_{2}}{b_{1}} = \boxed{\frac{19}{10}}.
+$$`),
+  hmmt('HMMT-2025-GUTS18', 2025, 'GUTS', 18, "Valor esperado de una iteración de permutación", "Combinatoria",
+    String.raw`Sea $f:\{1,2,3,\ldots ,9\} \to \{1,2,3,\ldots ,9\}$ una permutación elegida uniformemente al azar entre las $9!$ permutaciones posibles. Calcula el valor esperado de $\underbrace{f(f(\cdots f(f(1))\cdots))}_{2025\ f\text{'s}}$.`,
+    String.raw`Primero calculamos la probabilidad de que $f(1) = 1$. Observa que $f(1) = 1$ si y solo si $1$ es parte de un ciclo cuya longitud divide a $2025$.
+
+Afirmamos que, para cualquier $k$ dado, la probabilidad de que $1$ esté en un ciclo de longitud $k$ es $\frac{1}{9}$. En efecto, la probabilidad de que $f(1) \neq 1$ es $\frac{8}{9}$. Dado esto, quedan $8$ valores posibles para $f(f(1))$, así que la probabilidad de que $f(f(1)) \neq 1$ es $\frac{7}{8}$, y así sucesivamente. Finalmente, quedan $10 - k$ valores posibles para $f^{k}(1)$, así que la probabilidad de que $f^{k}(1) = 1$ dadas todas las suposiciones anteriores es $\frac{1}{10 - k}$. Así, la probabilidad de que $1$ esté en un ciclo de longitud $k$ es
+$$
+\frac{8}{9} \cdot \frac{7}{8} \cdot \frac{10 - k}{11 - k} \cdot \frac{1}{10 - k} = \frac{1}{9}.
+$$
+Por lo tanto, la probabilidad de que $f^{2025}(1) = 1$ es la probabilidad de que $1$ esté en un ciclo de longitud $1$, $3$, $5$, o $9$, que es $\frac{4}{9}$.
+Si $f(1) \neq 1$, entonces $f(1)$ tiene la misma probabilidad de ser cualquiera de $2$ a $9$ por simetría, promediando $5.5$.
+Por lo tanto, el valor esperado de $f(1)$ es
+$$
+\frac{4}{9} \cdot 1 + \frac{5}{9} \cdot 5.5 = \boxed{\frac{7}{2}}.
+$$`),
+  hmmt('HMMT-2025-GUTS19', 2025, 'GUTS', 19, "Subconjuntos balanceados con una condición modular", "Teoría de Números",
+    String.raw`Un subconjunto $S$ de $\{1,2,3,\ldots ,2025\}$ se llama balanceado si para todos los elementos $a$ y $b$ en $S$, existe un elemento $c$ en $S$ tal que $2025$ divide a $a + b - 2c$. Calcula el número de subconjuntos balanceados no vacíos.`,
+    String.raw`Trabajamos mód $2025$, así que la condición se convierte en que para cualesquiera $a$, $b \in S$, tenemos $\frac{a + b}{2} \in S$.
+
+Primero, probamos que $S$ debe ser una progresión aritmética. Observa que si $S$ es balanceado, entonces también lo es el desplazamiento $S + k = \{s + k \mid s \in S\}$ para todo $k$, así que podemos suponer que $0 \in S$. Sea $s$ un elemento de $S$ tal que $d = \gcd (s, 2025)$ es mínimo. Observa que para cualquier $t \in S$, tenemos $\frac{t}{2} = \frac{0 + t}{2} \in S$. Así, $\frac{s}{2^n}$ está en $S$ para todo $n$. Como $\gcd (2, 2025) = 1$, esto implica que $2^n s \bmod 2025 \in S$ para todo $n$. Probamos la siguiente afirmación.
+
+Afirmación 1. Para todo entero positivo $m$, tenemos $ms \in S$.
+
+Demostración. Procedemos por inducción en el número de 1's en la representación binaria de $m$.
+
+Caso base: $m$ tiene un 1 en binario, así que $m$ es una potencia de 2. Entonces $ms \in S$ como se observó arriba.
+
+Paso inductivo: Supón que la afirmación se cumple para todo $m$ que tenga $k$ 1's en su representación binaria. Supón que $m$ tiene $k + 1$ 1's en su representación binaria. Sea $2^{n}$ la mayor potencia de 2 que es a lo más $m$. Entonces $m - 2^{n}$ tiene $k$ 1's en su representación binaria, así que $2(m - 2^{n})$ también. Por la hipótesis de inducción, $2(m - 2^{n})s \in S$. Además, $2^{n + 1}s \in S$, así que
+$$
+m s = \frac{2^{n + 1}s + 2(m - 2^{n})s}{2} \in S,
+$$
+como se quería.
+
+Se sigue que todo múltiplo de $s$ está en $S$. Los múltiplos de $s$ son precisamente los múltiplos de $d$, así que $S$ contiene todo múltiplo de $d$. Ahora supón por contradicción que $S$ contiene algún elemento $t$ que no es múltiplo de $d$, así que podemos escribir $t = cd + r$ tal que $0 < r < d$. Entonces $2t \in S$, así que
+$$
+r = \frac{2t + (- 2c)d}{2} \in S.
+$$
+Pero entonces $\gcd (r, 2025) \leq r < d$, contradiciendo la minimalidad de $d$. Así $S$ es precisamente los múltiplos de $d$.
+
+Se puede verificar que para cualquier $d \mid 2025$, el conjunto de múltiplos de $d$ es balanceado. En efecto, como $d$ es impar, para cualesquiera $ad$, $bd \in S$, su promedio $\frac{(a + b)d}{2}$ es múltiplo de $d$ y por lo tanto también está en $S$. Así, cualquier desplazamiento de tal conjunto también es balanceado; como se vio arriba, estos clasifican todos los conjuntos balanceados. Para cada $d \mid 2025$, hay $d$ elecciones para $S$, así que la respuesta es
+$$
+\sum_{d \mid 2025} d = \frac{3^5 - 1}{2} \cdot \frac{5^3 - 1}{4} = \boxed{3751}.
+$$`),
+  hmmt('HMMT-2025-GUTS20', 2025, 'GUTS', 20, "Múltiplos de 7 con dígitos menores que 3", "Teoría de Números",
+    String.raw`Calcula el 100º menor múltiplo positivo de $7$ cuyos dígitos en base $10$ son todos estrictamente menores que $3$.`,
+    String.raw`Construimos una biyección que preserva el orden entre los múltiplos positivos de $7$ en base $10$ cuyos dígitos son todos menores que $3$, y los múltiplos positivos de $7$. Para cualquier múltiplo de $7$ en base $10$ con dígitos todos menores que $3$, lo interpretamos como un número en base $3$ y lo convertimos a un decimal en base $10$, el cual será múltiplo de $7$. Por ejemplo, $1022$ se transformaría en $1022_3 = 35_{10}$.
+
+Primero mostramos que este es un mapeo válido. Sea $a_n \ldots a_1 a_0$ un múltiplo arbitrario de $7$ (en base $10$) cuyos dígitos son todos menores que $3$. Esto tiene una interpretación natural en base $3$, y convertir esta interpretación a base $10$ da
+$$
+a_n \ldots a_1 a_{0_3} = a_n \cdot 3^n + \cdots + a_1 \cdot 3^1 + a_0 \cdot 3^0 \equiv a_n \cdot 10^n + \cdots + a_1 \cdot 10^1 + a_0 \cdot 10^0 = a_n \ldots a_1 a_0 \pmod{7},
+$$
+que es múltiplo de $7$.
+
+Este mapeo es una inyección porque el cambio de base es una inyección, y este mapeo también es una sobreyección porque para cualquier múltiplo de $7$ en base $10$, podemos convertirlo a base $3$ e interpretar este número como un decimal en base $10$. (Invirtiendo los pasos anteriores, vemos que el número decimal resultante es múltiplo de $7$.) Además, para dos múltiplos positivos de $7$ cuyos dígitos son menores que $3$, el mayor tendrá una representación en base $3$ mayor, así que este mapeo preserva el orden.
+
+Así, este mapeo es una biyección que preserva el orden entre los múltiplos de $7$ en base $10$ con dígitos menores que $3$ y los múltiplos de $7$ en base $3$. Por lo tanto, la respuesta es la preimagen del 100º menor múltiplo positivo de $7$, que es igual a $700_{10} = \boxed{221221}_{3}$.`),
+  hmmt('HMMT-2025-GUTS21', 2025, 'GUTS', 21, "Un número de cinco dígitos como un cuadrado", "Teoría de Números",
+    String.raw`Calcula el único entero positivo de 5 dígitos $abcde$ tal que $a \neq 0$, $c \neq 0$, y
+$$abcde = (ab + cde)^2.$$`,
+    String.raw`Sea $ab = X$ y $cde = Y$. La ecuación original equivale a $1000X + Y = (X + Y)^2$. Tomando esto módulo 999, obtenemos $(X + Y)^2 \equiv X + Y \pmod{999}$. Por lo tanto, $27 \cdot 37 = 999$ divide a $(X + Y)(X + Y - 1)$. Como $\gcd(X + Y, X + Y - 1) = 1$, cada uno de 27 y 37 puede dividir a lo más a uno de $X + Y$ y $X + Y - 1$. Por lo tanto, $X + Y$ es 0 o 1 módulo 27, así como 0 o 1 módulo 37.
+
+Por el Teorema Chino del Residuo, los cuatro residuos posibles para $X + Y$ módulo 999 son 0, 1, 297, y 703. Como $(X + Y)^2 = abcde$ debe ser un entero de 5 dígitos, sabemos que $100 \leq X + Y \leq 316$, así que el único valor posible para $X + Y$ es 297. Así, la respuesta es $(X + Y)^2 = 297^2 = \boxed{88209}$.`),
+  hmmt('HMMT-2025-GUTS22', 2025, 'GUTS', 22, "Valor mínimo de un producto simétrico abc", "Álgebra",
+    String.raw`Sean $a$, $b$, y $c$ números reales tales que $a^2(b + c) = 1$, $b^2(c + a) = 2$, y $c^2(a + b) = 5$. Dado que hay tres valores posibles para $abc$, calcula el menor valor posible de $abc$.`,
+    String.raw`Sea $x = abc$. Multiplicando todas las ecuaciones y simplificando se obtiene
+$$(abc)^2 (a + b)(b + c)(c + a) = 10,$$
+$$(abc)^2 \left(a^2(b + c) + b^2(c + a) + c^2(a + b) + 2abc\right) = 10,$$
+$$x^2 (1 + 2 + 5 + 2x) = 10,$$
+$$x^2 (x + 4) = 5.$$
+La cúbica resultante se factoriza como $(x - 1)(x^2 + 5x + 5) = 0$. Por lo tanto, el menor valor posible de $abc$ es $\boxed{\frac{-5 - \sqrt{5}}{2}}$.`),
+  hmmt('HMMT-2025-GUTS23', 2025, 'GUTS', 23, "Círculo tangente a los lados de un hexágono y a dos rectas", "Geometría",
+    String.raw`El hexágono regular $ABCDEF$ tiene lado $2$. El círculo $\omega$ está dentro del hexágono y es tangente a los segmentos $\overline{AB}$ y $\overline{AF}$. Existen dos rectas perpendiculares tangentes a $\omega$ que pasan por $C$ y $E$, respectivamente. Dado que estas dos rectas no se intersecan sobre la recta $AD$, calcula el radio de $\omega$.`,
+    String.raw`Solución 1. ![Un hexágono regular etiquetado ABCDEF con un círculo inscrito tangente a los lados AB y AF. El centro del círculo está marcado O. Se trazan dos rectas tangentes rojas desde los puntos C y E, que se encuentran en el punto P fuera del círculo. Se etiquetan un arco punteado y varios puntos.](/imagenes-problemas/hmmt/2025/dcb968f470d9995223369f2d83efd4f0.jpeg)
+
+Sea $O$ el centro de $\omega$, y sea $P$ el punto donde se intersecan las dos rectas tangentes. Observa que $O$ está en la bisectriz externa de $\angle CPE$ porque las tangentes son simétricas respecto a la recta $PO$. Además, $O$ está en la mediatriz de $CE$ por simetría. Por el Hecho 5, $COPE$ es cíclico y $\angle COE = 90^{\circ}$. Para terminar, observa que $\angle COD = 45^{\circ}$. Trazando la altura $CH$ hacia $AD$ obtenemos $OH = CH = \sqrt{3}$. Así, $AO = AH - OH = 3 - \sqrt{3}$. La respuesta buscada es entonces $\frac{\sqrt{3}}{2} \cdot AO = \boxed{\frac{3\sqrt{3} - 3}{2}}$.
+
+Solución 2. Otra forma de obtener $\angle COE = 90^{\circ}$ es la siguiente.
+Sea $\omega$ tangente a las rectas desde $C$ y $E$ en $Q$ y $R$, respectivamente. Observa que $OC = OE$ (ya que $O$ está en la mediatriz de $CE$) y $OQ = OR$, así que $\triangle OCQ \cong \triangle OER$. Entonces $\angle COE = \angle QOR = 90^{\circ}$.`),
+  hmmt('HMMT-2025-GUTS24', 2025, 'GUTS', 24, "Polinomio factorial módulo 101²", "Teoría de Números",
+    String.raw`Para cualquier entero $x$, sea
+$$
+  f(x) = 100! \left(1 + x + \frac{x^{2}}{2!} + \frac{x^{3}}{3!} + \dots + \frac{x^{100}}{100!}\right).
+$$
+Se elige un entero positivo $a$ tal que $f(a) - 20$ es divisible entre $101^{2}$. Calcula el residuo cuando $f(a + 101)$ se divide entre $101^{2}$.`,
+    String.raw`Solución 1. Por el teorema del binomio,
+$$
+(a + 101)^{n} \equiv a^{n} + \binom{n}{1} a^{n - 1}101 = a^{n} + 101n a^{n - 1} \pmod {101^{2}}.
+$$
+Usando esto obtenemos (todas las congruencias son módulo $101^{2}$)
+$$
+\begin{align*}
+f(a + 101) &= 100!\sum_{n = 0}^{100}\frac{(a + 101)^{n}}{n!} \\
+&\equiv 100!\sum_{n = 0}^{100}\left(\frac{a^{n}}{n!} +\frac{101n a^{n - 1}}{n!}\right) \\
+&\equiv f(a) + 100!\cdot 101\sum_{n = 1}^{100}\frac{a^{n - 1}}{(n - 1)!} \\
+&\equiv f(a) + 101f(a) - 100!\cdot 101\frac{a^{100}}{100!} \\
+&\equiv f(a) + 101(f(a) - 1) \\
+&\equiv 20 + 101(20 - 1) = \boxed{1939}\quad (\mathrm{mod}\ 101^{2}).
+\end{align*}
+$$
+
+Solución 2. La solución anterior se puede ver como una consecuencia del lema de Hensel de la siguiente manera. Como $101$ es primo, para cualquier entero $x$ no divisible entre $101$, tenemos que
+$$
+f^{\prime}(x) = 100!\left(1 + x + \frac{x^{2}}{2!} +\dots +\frac{x^{99}}{99!}\right) = f(x) - x^{100}\equiv f(x) - 1\pmod {101}.
+$$
+Claramente $101 \nmid a$. Por lo tanto, por el lema de Hensel, obtenemos que
+$$
+f(a + 101) \equiv f(a) + 101f^{\prime}(a) \equiv 20 + 101 \cdot 19 \equiv \boxed{1939} \pmod {101^{2}}.
+$$`),
+  hmmt('HMMT-2025-GUTS25', 2025, 'GUTS', 25, "Trapecio con restricciones de bisectriz de ángulo", "Geometría",
+    String.raw`Sea $ABCD$ un trapecio tal que $AB \parallel CD$, $AD = 13$, $BC = 15$, $AB = 20$, y $CD = 34$. El punto $X$ está dentro del trapecio de modo que $\angle XAB = 2\angle XBA$ y $\angle XDC = 2\angle XCD$. Calcula $XD - XA$.`,
+    String.raw`![Un trapecio etiquetado ABCD con AB paralelo a CD, y los puntos interiores X, P, y Q marcados. Se muestran varias marcas de ángulos y de congruencia, ilustrando las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/7a6b1d63c0cdadfc836209379f9acbdc.jpeg)
+
+Construye el punto $P$ sobre $AB$ tal que $XA = XP$ y el punto $Q$ sobre $CD$ tal que $XD = XQ$. La condición de ángulos da $QC = XQ = XD$ y $PB = XP = XA$. Además, $ADQP$ es un trapecio isósceles.
+
+Sea $S$ la proyección de $A$ sobre $CD$, y sea $T$ sobre $CD$ tal que $AT \parallel BC$. Entonces $ADT$ es un triángulo 13-14-15, así que $DS = 5$. Por lo tanto, $QD - PA = 10$. Finalmente, obtenemos
+$$
+XD - XA = QC - PB = (34 - QD) - (20 - PA) = 14 - 10 = \boxed{4}.
+$$`),
+  hmmt('HMMT-2025-GUTS26', 2025, 'GUTS', 26, "Diamantes azules esperados tras un proceso aleatorio", "Combinatoria",
+    String.raw`Isabella tiene una bolsa con 20 diamantes azules y 25 diamantes morados. Repite el siguiente proceso 44 veces: saca un diamante de la bolsa de manera uniforme al azar, y luego pone un diamante azul y un diamante morado en la bolsa. Calcula el número esperado de diamantes azules en la bolsa después de las 44 repeticiones.`,
+    String.raw`Sean $a = 20$ y $b = 25$ los números iniciales de diamantes azules y morados, respectivamente, y sea $c = 44$ el número de veces que Isabella realiza la operación. Supón que en algún momento la bolsa contiene $x$ diamantes azules y $y$ diamantes morados, con $x + y = z$ diamantes en total. Después de un paso, la bolsa tendrá $z + 1$ diamantes. El cambio esperado en el número de diamantes azules en este paso es $(- x / z) + 1 = y / z$, y de igual manera esta cantidad para los diamantes morados es $x / z$. Así, el cambio esperado en la diferencia entre el número de diamantes azules y morados es $(y - x) / z$. Como esta diferencia era inicialmente $x - y$, el valor esperado de esta diferencia se multiplica por $(z - 1) / z$ en cada paso (sin importar $x - y$). Como $z$ comienza en $a + b$ y termina en $a + b + c$, la diferencia esperada después de $c$ operaciones es
+$$
+(a - b)\cdot \prod_{z = a + b}^{a + b + c - 1}\frac{z - 1}{z} = \frac{(a + b - 1)(a - b)}{(a + b + c - 1)},
+$$
+y como el número total de diamantes es $a + b + c$, el número esperado de diamantes azules al final es
+$$
+\frac{a + b + c}{2} + \frac{(a + b - 1)(a - b)}{2(a + b + c - 1)}.
+$$
+Sustituyendo $a = 20$, $b = 25$, y $c = 44$ obtenemos la respuesta, $\boxed{\frac{173}{4}}$.`),
+  hmmt('HMMT-2025-GUTS27', 2025, 'GUTS', 27, "MCD de expresiones exponenciales", "Teoría de Números",
+    String.raw`Calcula el número de pares ordenados $(m, n)$ de enteros positivos impares, ambos menores que $80$, tales que
+$$\gcd (4^{m} + 2^{m} + 1, 4^{n} + 2^{n} + 1) > 1.$$`,
+    String.raw`Primero, caracterizamos todos los pares ordenados de enteros positivos generales (no necesariamente impares) $(m, n)$ tales que $\gcd (4^{m} + 2^{m} + 1, 4^{n} + 2^{n} + 1) > 1$. Afirmamos que $(m, n)$ funciona si y solo si
+- $m$ y $n$ son ambos pares, o
+- $\nu_{3}(m) = \nu_{3}(n)$.
+
+Demostración de la necesidad. Supón que $p$ es un primo que divide tanto a $4^{m} + 2^{m} + 1$ como a $4^{n} + 2^{n} + 1$. Si $p = 3$, $m$ y $n$ deben ser ambos pares. De aquí en adelante supón que $p \neq 3$. Sea $d$ el orden de $2$ módulo $p$. Entonces, como $p \mid 2^{3m} - 1$, encontramos que $d \mid 3m$. Además, no podemos tener $p \mid 2^{m} - 1$. De lo contrario, por levantamiento del exponente (y $p \neq 3$),
+$$
+\nu_{p}(2^{3m} - 1) = \nu_{p}(2^{m} - 1) + \nu_{p}(3) = \nu_{p}(2^{m} - 1) \implies \nu_{p}(4^{m} + 2^{m} + 1) = 0.
+$$
+Los dos resultados anteriores implican $\nu_{3}(d) = \nu_{3}(m) + 1$. De manera similar, $\nu_{3}(d) = \nu_{3}(n) + 1$, así que $\nu_{3}(m) = \nu_{3}(n)$.
+
+Demostración de la suficiencia. Si $m$ y $n$ son ambos pares, entonces $3$ divide tanto a $4^{m} + 2^{m} + 1$ como a $4^{n} + 2^{n} + 1$. Si $\nu_{3}(m) = \nu_{3}(n) = k$, entonces afirmamos que $4^{3^{k}} + 2^{3^{k}} + 1$ divide tanto a $4^{m} + 2^{m} + 1$ como a $4^{n} + 2^{n} + 1$. En efecto, observa que, como polinomios, $x^{2} + x + 1$ divide a $x^{2\ell} + x^{\ell} + 1$ cuando $3 \nmid \ell$. Sustituyendo $x = 2^{3^{k}}$ con $\ell = m / 3^{k}$ y $\ell = n / 3^{k}$ se obtiene el resultado buscado.
+
+Extracción de la respuesta. Contamos los pares de enteros impares $(m,n)$ menores que $80$ con $\nu_{3}(m) = \nu_{3}(n)$. De todos los enteros en el conjunto $\{1,3,5,\ldots ,79\}$, hay $27$, $9$, $3$, y $1$ de ellos que tienen $\nu_{3}$ igual a $0$, $1$, $2$, y $3$, respectivamente. Por lo tanto, la respuesta es $27^{2} + 9^{2} + 3^{2} + 1^{2} = \boxed{820}$.`),
+  hmmt('HMMT-2025-GUTS28', 2025, 'GUTS', 28, "Función recursiva con piso y techo", "Teoría de Números",
+    String.raw`Sea $f$ una función de los enteros no negativos a los enteros no negativos tal que $f(0) = 0$ y
+$$
+  f(m) = f\left(\left\lfloor \frac{m}{2} \right\rfloor\right) + \left\lceil \frac{m}{2} \right\rceil^2
+$$
+para todo entero positivo $m$. Calcula
+$$
+  \frac{f(1)}{1 \cdot 2} + \frac{f(2)}{2 \cdot 3} + \frac{f(3)}{3 \cdot 4} + \dots + \frac{f(31)}{31 \cdot 32}.
+$$
+(Aquí, $\lfloor z\rfloor$ es el mayor entero menor o igual a $z$, y $\lceil z\rceil$ es el menor entero mayor o igual a $z$.)`,
+    String.raw`Solución 1. Para todo entero positivo $n$, sea $\omega(n) = f(n) - f(n - 1)$. Afirmamos que $\omega(n)$ es el mayor divisor impar de $n$ para todo $n > 0$. En efecto, para todo entero positivo $k$, tenemos
+
+$$
+  \omega(2k) = f(2k) - f(2k - 1) = f(k) + k^2 - (f(k - 1) + k^2) = f(k) - f(k - 1) = \omega(k)
+$$
+y
+$$
+  \omega(2k + 1) = f(2k + 1) - f(2k) = f(k) + (k + 1)^2 - (f(k) + k^2) = 2k + 1.
+$$
+Por inducción en los enteros positivos, $\omega(n)$ es en efecto el mayor divisor impar de $n$.
+
+Ahora podemos reescribir la suma como
+$$
+  \sum_{n = 1}^{31} \frac{f(n)}{n(n + 1)} = \sum_{n = 1}^{31} \left( \frac{f(n)}{n} - \frac{f(n)}{n + 1} \right ) = \left( \sum_{n = 1}^{30} \frac{f(n) - f(n - 1)}{n} \right ) - \frac{f(31)}{32}.
+$$
+Observa que usando la definición recursiva original, podemos calcular
+$$
+  f(31) = 16^2 + 8^2 + 4^2 + 2^2 + 1^2 = 341.
+$$
+Además, también vemos que $\frac{f(n) - f(n - 1)}{n} = \frac{\omega(n)}{n} = 2^{-\nu_2(n)}$, donde $2^{\nu_2(n)}$ es la mayor potencia de $2$ que divide a $n$. Así, nuestra suma buscada es
+$$
+  \left( \sum_{n = 1}^{31} 2^{-\nu_2(n)} \right ) - \frac{341}{32} = 16 \cdot 2^{-0} + 8 \cdot 2^{-1} + 4 \cdot 2^{-2} + 2 \cdot 2^{-3} + 1 \cdot 2^{-4} - \frac{341}{32} = \boxed{\frac{341}{32}}.
+$$
+
+Solución 2. De la recursión original, para todo entero positivo $n$, tenemos
+$$
+  \frac{f(2n)}{2n(2n + 1)} = \frac{f(n) + n^2}{2n(2n + 1)} = \frac{f(n)}{2n(2n + 1)} + \frac{n}{2(2n + 1)}
+$$
+y
+$$
+  \frac{f(2n + 1)}{(2n + 1)(2n + 2)} = \frac{f(n) + (n + 1)^2}{(2n + 1)(2n + 2)} = \frac{f(n)}{(2n + 1)(2n + 2)} + \frac{n + 1}{2(2n + 1)}.
+$$
+Sumando estas dos ecuaciones se obtiene
+$$
+  \frac{f(2n)}{2n(2n + 1)} + \frac{f(2n + 1)}{(2n + 1)(2n + 2)} = \frac{f(n)}{2n(n + 1)} + \frac{1}{2}.
+$$
+Así, si $T(n) = \sum_{k = 1}^n \frac{f(k)}{k(k + 1)}$, tenemos
+$$
+  T(2n + 1) = \sum_{k = 1}^{2n + 1} \frac{f(k)}{k(k + 1)} = \frac{f(1)}{1 \cdot 2} + \sum_{m = 1}^n \left( \frac{f(2m)}{2m(2m + 1)} + \frac{f(2m + 1)}{(2m + 1)(2m + 2)} \right )
+$$
+$$
+  = \frac{1}{2} + \sum_{m = 1}^n \left( \frac{f(m)}{2m(m + 1)} + \frac{1}{2} \right )
+$$
+$$
+  = \frac{n + 1}{2} + \frac{1}{2} T(n).
+$$
+Comenzando desde $T(1) = 1$, podemos calcular $T(3) = \frac{5}{4}$, $T(7) = \frac{21}{8}$, $T(15) = \frac{85}{16}$, y finalmente, $T(31) = \boxed{\frac{341}{32}}$.`),
+  hmmt('HMMT-2025-GUTS29', 2025, 'GUTS', 29, "Semejanza de un círculo con distancias fijas", "Geometría",
+    String.raw`Los puntos $A$ y $B$ están en el círculo $\omega$ con centro $O$. Sea $X$ un punto dentro de $\omega$. Supón que $XO = 2\sqrt{2}$, $XA = 1$, $XB = 3$, y $\angle AXB = 90^{\circ}$. Los puntos $Y$ y $Z$ están en $\omega$ tales que $Y \neq A$ y los triángulos $\triangle AXB$ y $\triangle YXZ$ son semejantes con la misma orientación. Calcula $XY$.`,
+    String.raw`Solución 1. Considera una rotación alrededor de $X$ por $90^{\circ}$ seguida de una homotecia de razón $\frac{1}{3}$ que envía $B$ a $A$. Esto envía $\omega$ a $\omega'$ con radio $\frac{1}{3}$ del radio de $\omega$ y centro $O'$. Como $A$ es la imagen de $B$ bajo esta rotación, sabemos que $A$ está en ambos círculos; el mismo argumento muestra que $Y$ debe estar en ambos círculos. Así, $Y$ es la reflexión de $A$ sobre $OO'$. En particular, esto significa que $XY = AX'$, donde $X'$ es la reflexión de $X$ sobre $OO'$.
+
+Sea $M$ el punto medio de $AB$. Observa que como $\triangle OXO'$ $\sim$ $\triangle BXA$, también tenemos $\triangle XOX'$ $\sim$ $\triangle XMA$, ya que ambos son isósceles y $\angle XOX' = 2\angle XOO' = 2\angle XBA = \angle XMA$. Esto implica que $\triangle XOM \sim \triangle XX'A$. Así, sabemos que $AX' = OM \cdot \frac{XA}{XM} = \frac{2}{\sqrt{10}} OM$. Falta calcular $OM$; observando que la distancia entre $O$ y el pie desde $X$ a $AB$ es $\frac{2}{5}\sqrt{10}$, y que la altura de $\triangle AXY$ tiene longitud $\frac{3}{10}\sqrt{10}$, obtenemos que la distancia de $O$ a $AB$ es
+
+$$
+\frac{3}{10}\sqrt{10} + \sqrt{\left(2\sqrt{2}\right)^2 - \left(\frac{2}{5}\sqrt{10}\right)^2} = \frac{11}{10}\sqrt{10}
+$$
+
+por el Teorema de Pitágoras, lo cual significa que $XY = AX' = \boxed{\frac{11}{5}}$.
+
+Solución 2. ![Un diagrama geométrico que muestra dos círculos con los puntos A, B, X, Y, Z, O, M, N, P, y X' etiquetados. Se marcan varios segmentos y un ángulo recto en X, ilustrando las relaciones descritas.](/imagenes-problemas/hmmt/2025/79e94bdb5b607f1c5bb5ad0a8ff2bf6a.jpeg)
+
+Sea $M$ el punto medio de $AB$. Primero encontraremos $MO$.
+
+Sea $P$ el punto donde la bisectriz interna de $\angle A X B$ interseca a $\odot (A X B)$. Por Ptolomeo, $X P = 2\sqrt{2} = X O$. Sea $X'$ el pie de la altura desde $X$ a $M O$. Observa que $O$ es la reflexión de $P$ a través de $X X'$. Por el área de $\triangle A X B$, tenemos $X'M = \frac{3}{\sqrt{10}}$. Por lo tanto,
+
+$$
+M O = O X' + X'M = X'P + X'M = 2X'M + M P = \frac{11\sqrt{10}}{10}.
+$$
+
+Por la semejanza espiral $\triangle X A B \mapsto \triangle X Y Z$, tenemos que $A Y \perp B Z$ y $\angle A O B + \angle Y O Z = 90^{\circ}$. Por lo tanto, $\triangle X A M \sim \triangle X Y N$ donde $N$ es el punto medio de $Y Z$. Así, $Y Z = \frac{11\sqrt{10}}{5}$ y $X Y = \boxed{\frac{11}{5}}$.`),
+  hmmt('HMMT-2025-GUTS30', 2025, 'GUTS', 30, "Sistema con raíces cuadradas simétricas", "Álgebra",
+    String.raw`Sean $a$, $b$, y $c$ números reales que satisfacen el sistema de ecuaciones
+$$a\sqrt{1 + b^{2}} + b\sqrt{1 + a^{2}} = \frac{3}{4},$$
+$$b\sqrt{1 + c^{2}} + c\sqrt{1 + b^{2}} = \frac{5}{12},$$
+y
+$$c\sqrt{1 + a^{2}} + a\sqrt{1 + c^{2}} = \frac{21}{20}.$$
+
+Calcula $a$.`,
+    String.raw`Solución 1. Recuerda que las funciones $\sinh(x) = \frac{e^{x} - e^{-x}}{2}$ y $\cosh(x) = \frac{e^{x} + e^{-x}}{2}$ satisfacen la relación
+$$\sinh(x + y) = \sinh(x)\cosh(y) + \cosh(x)\sinh(y) = \sinh(x)\sqrt{1 + \sinh(y)^{2}} + \sinh(y)\sqrt{1 + \sinh(x)^{2}}.$$
+Como $\sinh$ es sobreyectiva, podemos hacer la sustitución $a = \sinh(x)$, $b = \sinh(y)$, y $c = \sinh(z)$, lo cual convierte las ecuaciones en
+$$\sinh(x + y) = \frac{2 - \frac{1}{2}}{2},$$
+$$\sinh(y + z) = \frac{\frac{3}{2} - \frac{2}{3}}{2},$$
+$$\sinh(z + x) = \frac{\frac{5}{2} - \frac{2}{5}}{2}.$$
+Así, $x + y = \log(2)$, $y + z = \log(3 / 2)$, y $z + x = \log(5 / 2)$. Resolviendo estas ecuaciones se obtiene $x = \log(\sqrt{10 / 3})$, así que
+$$a = \frac{1}{2}\left(\sqrt{\frac{10}{3}} - \sqrt{\frac{3}{10}}\right) = \boxed{\frac{7}{2\sqrt{30}}}$$
+
+Solución 2.
+Podemos encontrar números reales positivos $x$, $y$, y $z$ tales que $a = \frac{x^{2} - 1}{2x}$, $b = \frac{y^{2} - 1}{2y}$, y $c = \frac{z^{2} - 1}{2z}$. Entonces, la primera ecuación se convierte en
+$$\frac{x^{2} - 1}{2x} \cdot \frac{y^{2} + 1}{2y} + \frac{y^{2} - 1}{2y} \cdot \frac{x^{2} + 1}{2x} = \frac{3}{4},$$
+lo cual se simplifica a
+$$xy - \frac{1}{xy} = \frac{3}{2},$$
+de donde se sigue que $xy = 2$. De manera similar, $yz - \frac{1}{yz} = \frac{5}{6}$ y $zx - \frac{1}{zx} = \frac{21}{10}$, así que $yz = \frac{3}{2}$ y $zx = \frac{5}{2}$. Así $x = \sqrt{(2 \cdot \frac{5}{2}) / (\frac{3}{2})} = \sqrt{\frac{10}{3}}$, y
+$$a = \frac{(10 / 3) - 1}{2\sqrt{10 / 3}} = \boxed{\frac{7}{2\sqrt{30}}}$$`),
+  hmmt('HMMT-2025-GUTS31', 2025, 'GUTS', 31, "Círculo tangente a una parábola y a una curva cúbica", "Geometría",
+    String.raw`Existe un único círculo que es tangente a la parábola $y = x^{2}$ en dos puntos y también tangente a la curva $x = \sqrt{\frac{y^{3}}{1 - y}}$. Calcula el radio de este círculo.`,
+    String.raw`![Un plano coordenado que muestra una parábola que abre hacia arriba, un círculo tangente a la parábola en dos puntos, y otra curva tangente al mismo círculo. También se muestra el círculo unitario como un círculo punteado.](/imagenes-problemas/hmmt/2025/8ed7b13c95d2c464ecbb46a164de476c.jpeg)
+
+Podemos elevar al cuadrado ambos lados de la segunda curva para obtener $x^{2} = \frac{y^{3}}{1 - y}$, lo cual se reordena a
+$$
+\frac{x^{2}}{(x^{2} + y^{2})^{2}} = \frac{y}{x^{2} + y^{2}}.
+$$
+Esta relación implica que las curvas $y = x^{2}$ y $x^{2} = \frac{y^{3}}{1 - y}$ se corresponden entre sí bajo una inversión respecto al círculo unitario $x^{2} + y^{2} = 1$. Por lo tanto, el círculo único que buscamos debe ser invariante bajo la inversión respecto a $x^{2} + y^{2} = 1$.
+
+Como el círculo es tangente a $y = x^{2}$, sabemos que el círculo tiene la forma
+$$
+x^{2} + (y - y_{0})^{2} = r^{2}.
+$$
+Sabemos que la longitud de la tangente desde $(0,0)$ a este círculo es $1$. Como la distancia de $(0,0)$ al centro del círculo es $y_{0}$, el Teorema de Pitágoras da $r^{2} + 1 = y_{0}^{2}$.
+
+Como la parábola $y = x^{2}$ es tangente a este círculo en dos puntos distintos, la ecuación $x^{2} + (x^{2} - y_{0})^{2} = r^{2} = y_{0}^{2} - 1$ debe tener dos raíces dobles. Por lo tanto,
+$$
+x^{2} + (x^{2} - y_{0})^{2} - (y_{0}^{2} - 1) = x^{4} - (2y_{0} - 1)x^{2} + 1
+$$
+debe ser un cuadrado perfecto, así que $2y_{0} - 1 = 2 \implies y_{0} = \frac{3}{2}$.
+
+Esto significa $r^{2} = y_{0}^{2} - 1 = \frac{5}{4}$, así que el radio del círculo es $\boxed{\frac{\sqrt{5}}{2}}$.`),
+  hmmt('HMMT-2025-GUTS32', 2025, 'GUTS', 32, "Visitas esperadas a la línea x+y máxima", "Combinatoria",
+    String.raw`En el plano coordenado, un lazo reticular cerrado de longitud $2n$ es una sucesión de puntos reticulares $P_{0}, P_{1}, P_{2}, \ldots , P_{2n}$ tales que $P_{0}$ y $P_{2n}$ son ambos el origen y $P_{i}P_{i + 1} = 1$ para cada $i$. Se elige un lazo reticular cerrado de longitud $2026$ de manera uniforme al azar entre todos esos lazos. Sea $k$ el mayor entero tal que la recta $\ell$ de ecuación $x + y = k$ pasa por al menos un punto del lazo. Calcula el número esperado de índices $i$ tales que $0 \leq i \leq 2025$ y $P_{i}$ está en $\ell$.
+(Un punto reticular es un punto con coordenadas enteras.)`,
+    String.raw`Afirmamos que si $2026$ se reemplaza por $2n$, la respuesta es $\frac{2n}{n + 1}$.
+
+Escribe el camino como una sucesión de movimientos $U$, $D$, $L$, y $R$. Las sucesiones posibles que pueden resultar son precisamente aquellas con un número igual de $U$'s y $D$'s, y un número igual de $R$'s y $L$'s. Primero proyectamos esta sucesión en una sola dimensión convirtiendo cada $U$ y $R$ en un $1$, y cada $D$ y $L$ en un $-1$. La sucesión resultante tendrá un número igual de $1$'s y $-1$'s.
+
+Afirmamos que cada una de estas sucesiones de $n$ $1$'s y $n$ $-1$'s corresponde al mismo número de lazos reticulares cerrados. En efecto, dada tal sucesión, se puede construir un lazo reticular correspondiente reemplazando todos los $1$'s por $U$'s y $R$'s, y todos los $-1$'s por $D$'s y $L$'s, de modo que haya un número igual de $U$'s y $D$'s. Nada en este proceso de reemplazo depende del orden, así que el número de formas de crear este lazo no depende de la sucesión inicial.
+
+Podemos ver que cada uno de los $1$'s mueve el camino hacia $\ell$ y los $-1$'s lo alejan. Por lo tanto, podemos pensar en el camino como una caminata unidimensional, que empieza y termina en el mismo lugar, donde los puntos sobre $\ell$ corresponden exactamente a los máximos de esta caminata unidimensional.
+
+Usando números de Catalan, la probabilidad de que cualquier punto dado esté en el máximo es
+$$
+\frac{\frac{1}{n + 1}\binom{2n}{n}}{\binom{2n}{n}} = \frac{1}{n + 1},
+$$
+y así, por linealidad, el número esperado de $i \in [0, 2025]$ tales que $P_{i}$ está en $\ell$ es $\frac{2n}{n + 1}$.
+
+Sustituyendo $n = 1013$ se obtiene la respuesta final de $\boxed{\frac{1013}{507}}$.`),
+  hmmt('HMMT-2025-GUTS34', 2025, 'GUTS', 34, "Área esperada de un 12-gono aleatorio", "Geometría",
+    String.raw`Sobre el perímetro de un círculo unitario, se eligen 12 puntos de manera uniforme e independiente al azar. Estima el valor esperado del área del 12-gono convexo formado por estos puntos.
+
+Envía un número positivo $E$ escrito en decimal. Si la respuesta correcta es $A$, recibirás $\mathrm{round}\left(20e^{-15|E - A|}\right)$ puntos.`,
+    String.raw`Calculamos la respuesta exacta dada arriba. Sea $n = 12$, y sean $\theta_{1}, \theta_{2}, \ldots, \theta_{n}$ generados uniformemente al azar de modo que $\theta_{1} + \cdots + \theta_{n} = 2\pi$. Estamos tratando de estimar
+
+$$
+\mathbb{E}\left[\frac{1}{2}\sum_{i = 1}^{n}\sin (\theta_{i})\right] = \frac{1}{2}\sum_{i = 1}^{n}\mathbb{E}[\sin (\theta_{i})].
+$$
+
+Hacemos esto calculando la distribución marginal de $\theta_{i}$, la cual es proporcional al área de la sección transversal $n - 2$ dimensional
+
+$$
+\sum_{j\neq i}\theta_{j} = 2\pi -\theta_{i}.
+$$
+
+El volumen de esta sección transversal es proporcional a $(2\pi - \theta_{i})^{n - 2}$. Así, la distribución de probabilidad marginal de $\theta_{i}$ se puede escribir como
+
+$$
+p(\theta_{i}) = C(2\pi -\theta_{i})^{n - 2}
+$$
+
+para alguna constante $C$. Podemos resolver para $C$ porque sabemos que $\int_{0}^{2\pi}p(\theta_{i})d\theta_{i} = 1$. El resultado es que
+
+$$
+p(\theta_{i}) = \frac{n - 1}{2\pi}\left(1 - \frac{\theta_{i}}{2\pi}\right)^{n - 2}.
+$$
+
+Así, la cantidad que buscamos estimar es
+
+$$
+\mathbb{E}\left[\frac{1}{2}\sum_{i = 1}^{n}\sin \theta_{i}\right] = \frac{n}{2}\mathbb{E}[\sin \theta_{i}]
+$$
+$$
+\qquad = n\int_{0}^{2\pi}p(\theta_{i})\sin \theta_{i}d\theta_{i}
+$$
+$$
+\qquad = \frac{n(n - 1)}{4\pi}\int_{0}^{2\pi}\left(1 - \frac{\theta}{2\pi}\right)^{n - 2}\sin \theta d\theta
+$$
+$$
+\qquad = \frac{33}{\pi}\int_{0}^{2\pi}\left(1 - \frac{\theta}{2\pi}\right)^{10}\sin \theta d\theta.
+$$
+
+Podemos integrar esto usando integración tabular por partes, derivando repetidamente el factor polinomial e integrando repetidamente el factor trigonométrico (alternando $\sin\theta$, $\cos\theta$, $-\sin\theta$, $-\cos\theta$, con signos que se van alternando). Al calcular el producto, observa que cualquier término de la forma $C\left(1 - \frac{\theta}{2\pi}\right)^{n} \sin \theta$ se anula al evaluar la integral definida de $0$ a $2\pi$. Por lo tanto, el valor buscado es
+
+$$
+\frac{33}{\pi}\left((1 - \frac{\theta}{2\pi})^{10} - \frac{45}{2\pi^{2}}\left(1 - \frac{\theta}{2\pi}\right)^{8} + \frac{315}{\pi^{4}}\left(1 - \frac{\theta}{2\pi}\right)^{6} - \frac{4725}{2\pi^{6}}\left(1 - \frac{\theta}{2\pi}\right)^{4}
++ \frac{14175}{2\pi^{8}}\left(1 - \frac{\theta}{2\pi}\right)^{2} + \frac{14175}{4\pi^{10}}\right)\cos \theta \bigg|_{0}^{2\pi}
+$$
+
+$$
+\qquad = \frac{33}{\pi}\left(1 - \frac{45}{2\pi^{2}} +\frac{315}{\pi^{4}} -\frac{4725}{2\pi^{6}} +\frac{14175}{2\pi^{8}}\right)
+$$
+$$
+\qquad = \boxed{\frac{33}{\pi} -\frac{1485}{2\pi^{3}} +\frac{10395}{\pi^{5}} -\frac{155925}{\pi^{7}} +\frac{467775}{2\pi^{9}}}
+$$`),
+  hmmt('HMMT-2025-GUTS36', 2025, 'GUTS', 36, "Construcción de enteros a partir de treses y cincos", "Álgebra",
+    String.raw`Ethan inicialmente escribe algunos números en un pizarrón, cada uno de los cuales es un $3$ o un $5$. Luego, repetidamente elige dos números y los reemplaza por su suma, diferencia, producto, o cociente (si el divisor es distinto de cero). Sea $f(n)$ el número mínimo de números que Ethan debe escribir inicialmente para poder eventualmente escribir el número $n$. Por ejemplo, $f(2025) \leq 6$ porque Ethan podría empezar con $3$, $3$, $3$, $3$, $5$, y $5$ en el pizarrón, y luego multiplicar repetidamente dos números a la vez para eventualmente obtener $2025$.
+
+Envía una 8-tupla ordenada de enteros separados por comas correspondiente a los valores de $f(164)$, $f(187)$, $f(191)$, $f(224)$, $f(255)$, $f(286)$, $f(374)$, y $f(479)$, en ese orden, o una X para cualquier valor que prefieras dejar en blanco. Por ejemplo, si crees que $f(164) = 9$ y $f(224) = 8$, deberías enviar "9, X, X, 8, X, X, X, X". Ganarás $\left|0.6^{W} \cdot \frac{(C + 1)^{2}}{4}\right|$ puntos, donde $C$ es el número de respuestas correctas que envías y $W$ es el número de respuestas incorrectas (no en blanco).`,
+    String.raw`Las siguientes expresiones representan formas óptimas para que Ethan construya cada uno de los 8 números dados.
+
+$$164 = 3(5(5 + 5) + 3) + 5$$
+
+$$187 = 3(3 + 5)(3 + 5) - 5$$
+
+$$191 = 5 \cdot 5(3 + 5) - 3 \cdot 3$$
+
+$$224 = (3 + 5)(5 \cdot 5 + 3)$$
+
+$$255 = 5 \cdot 5(5 + 5) + 5$$
+
+$$286 = (3 + 5 + 5)(5 \cdot 5 - 3)$$
+
+$$374 = 3 \cdot 5 \cdot 5 \cdot 5 - 3 / 3 = 3 \cdot 5 \cdot 5 \cdot 5 - 5 / 5$$
+
+$$479 = (5 \cdot 5 - 3)(5 \cdot 5 - 3) - 5 = (3 - 5 \cdot 5)(3 - 5 \cdot 5) - 5$$
+
+Se puede verificar mediante un programa de cómputo que estas son óptimas (es decir, que dan el valor mínimo de números usados para cada $f(n)$).`),
+]
+
+export const hmmt2025 = [
+  ...hmmt2025Algnt,
+  ...hmmt2025Comb,
+  ...hmmt2025Geo,
+  ...hmmt2025Team,
+  ...hmmt2025Guts,
+]
+
 export const problemas = [
   ...omumPrimeraRonda,
   ...omumNacional,
@@ -1808,4 +3072,5 @@ export const problemas = [
   ...putnam2023,
   ...putnam2024,
   ...putnam2025,
+  ...hmmt2025,
 ]
