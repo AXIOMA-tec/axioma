@@ -135,9 +135,11 @@ export const miembros = [
         email: '', linkedin: 'https://www.linkedin.com/in/edgar-axel-flores',
         foto: '/equipo/edgar-perez.jpg' },
       { nombre: 'Angel Everardo Rodríguez Guevara', rol: 'Coordinador de Responsabilidad Social',
-        email: '', linkedin: 'https://www.linkedin.com/in/angelrdzg' },
+        email: '', linkedin: 'https://www.linkedin.com/in/angelrdzg',
+        foto: '/equipo/angel-everardo.jpg' },
       { nombre: 'Andres Saul Perez Martinez', rol: 'Coordinador de Responsabilidad Social',
-        email: '', linkedin: '', github: 'https://github.com/Andres210212' },
+        email: '', linkedin: '', github: 'https://github.com/Andres210212',
+        foto: '/equipo/andres-saul.jpg' },
     ],
   },
   // Asesores: van al final a propósito, con `esAsesor: true` — Equipo.jsx
