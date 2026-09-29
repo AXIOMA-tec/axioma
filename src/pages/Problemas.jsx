@@ -114,6 +114,17 @@ const TEMAS = [
 ]
 const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional', 'HMMT']
 
+// Contexto corto de cada concurso — se muestra solo al entrar a su carpeta
+// raíz (no en cada año/subcarpeta), para quien no sabe qué es "HMMT" u
+// "OMUM" a diferencia de Putnam. Nada inventado: descripciones generales de
+// cada torneo, no estadísticas específicas que habría que verificar.
+const CONTEXTO_CONCURSO = {
+  Putnam: 'La competencia universitaria de matemáticas más prestigiosa de Estados Unidos y Canadá (William Lowell Putnam Mathematical Competition). Un examen de seis horas con doce problemas extremadamente difíciles — resolver aunque sea uno completo ya es un logro.',
+  'OMUM Primera Ronda': 'La primera fase de la Olimpiada Mexicana Universitaria de Matemáticas: un examen clasificatorio que decide quién representa a su universidad en el Concurso Nacional.',
+  'OMUM Nacional': 'La fase final de la Olimpiada Mexicana Universitaria de Matemáticas, donde compiten los clasificados de universidades de todo el país.',
+  HMMT: 'Harvard-MIT Mathematics Tournament: uno de los torneos de matemáticas de preparatoria más grandes del mundo, con rondas individuales, por equipo, y la famosa ronda "Guts" cronometrada.',
+}
+
 // ---------------------------------------------------------------------------
 // Carpetas (Category): la API regresa una lista PLANA, cada una con un campo
 // `parent` (el _id de su padre, o null si es de nivel superior). Para
@@ -1409,6 +1420,15 @@ export default function Problemas() {
                   {cantidadVista} {cantidadVista === 1 ? 'problema' : 'problemas'}
                 </p>
               </div>
+
+              {/* Contexto del concurso: solo en la carpeta raíz de cada uno
+                  (no en cada año/subcarpeta) — para quien no sabe qué es
+                  "HMMT" u "OMUM" a diferencia de Putnam. */}
+              {vista === 'carpetas' && carpetaAbierta && !carpetaAbierta.parent && CONTEXTO_CONCURSO[carpetaAbierta.name] && (
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-neutral-600">
+                  {CONTEXTO_CONCURSO[carpetaAbierta.name]}
+                </p>
+              )}
 
               {/* Filtros activos como etiquetas que se pueden quitar. */}
               {hayFiltrosActivos && (
