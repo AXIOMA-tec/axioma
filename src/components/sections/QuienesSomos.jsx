@@ -111,7 +111,7 @@ function ImagenMagnetica() {
             es más ancha que este recuadro (4:3), así que object-cover
             recorta un poco los lados y centra la pantalla y los ponentes. */}
         <img
-          src="/quienes-somos-grupal.png"
+          src="/quienes-somos-grupal.webp"
           alt="Presentación de Axioma ante el club, con la pantalla del logo al fondo"
           className="h-full w-full object-cover"
         />

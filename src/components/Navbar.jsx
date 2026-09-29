@@ -105,7 +105,7 @@ export default function Navbar() {
           className={`flex items-center ${FOCUS_RING}`}
         >
           <img
-            src="/AXIOMA LOGOS (3).png"
+            src="/AXIOMA LOGOS (3).webp"
             alt="Axioma"
             className="h-12 w-auto"
           />

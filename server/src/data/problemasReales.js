@@ -1907,7 +1907,7 @@ Hay $7$ elecciones para la posición del número $7$, $2$ formas de colocar $1$ 
     String.raw`Cada caja debe contener un solo grupo de cuatro bolas consecutivas (por ejemplo $5$, $6$, $7$, $8$) o dos grupos de dos bolas consecutivas (por ejemplo $5$, $6$, $9$, $10$). Como todos los grupos tienen longitud par, esto significa que $1$ y $2$ están en el mismo grupo, $3$ y $4$ están en el mismo grupo, y así sucesivamente. Podemos pensar en cada uno de estos $8$ pares de bolas como una unidad individual, así que la respuesta es igual al número de formas de poner $8$ objetos en $4$ cajas indistinguibles, donde cada caja tiene $2$ objetos sin restricciones adicionales. El número de formas de hacer esto es $$ \frac{8!}{2^{4}\cdot 4!} = \boxed{105} $$`),
   hmmt('HMMT-2025-COMB4', 2025, 'COMB', 4, "Caminos reticulares con movimientos diagonales", "Combinatoria",
     String.raw`Sophie está en $(0,0)$ en una cuadrícula de coordenadas y quiere llegar a $(3,3)$. Si Sophie está en $(x,y)$, en un solo paso puede moverse a uno de $(x + 1, y)$, $(x, y + 1)$, $(x - 1, y + 1)$, o $(x + 1, y - 1)$. No puede volver a visitar ningún punto a lo largo de su camino, y ni su coordenada $x$ ni su coordenada $y$ pueden ser nunca menores que $0$ ni mayores que $3$. Calcula el número de formas en que Sophie puede llegar a $(3,3)$.`,
-    String.raw`![Una cuadrícula de 4x4 con líneas diagonales azules y flechas rojas etiquetadas con los números 2, 4, y 6, ilustrando los movimientos y conteos posibles entre puntos de la cuadrícula.](/imagenes-problemas/hmmt/2025/5de42bbe7b204ff4624cd4bc2816e63f.jpeg)
+    String.raw`![Una cuadrícula de 4x4 con líneas diagonales azules y flechas rojas etiquetadas con los números 2, 4, y 6, ilustrando los movimientos y conteos posibles entre puntos de la cuadrícula.](/imagenes-problemas/hmmt/2025/5de42bbe7b204ff4624cd4bc2816e63f.webp)
 
 Llamemos movimiento lateral a uno que sea hacia arriba o hacia la derecha. Entonces los movimientos laterales son los únicos que aumentan en $1$ la suma de las coordenadas de Sophie, mientras que todos los demás movimientos no cambian la suma, así que Sophie debe hacer $6$ de ellos, uno para aumentar esta suma de $i$ a $i + 1$ para cada $i \in [0, 5]$.
 
@@ -1916,7 +1916,7 @@ Afirmamos que existe un único camino correspondiente a cada conjunto de $6$ mov
 Observa que cuando $i \leq 2$, el número de movimientos laterales que aumentan la suma de coordenadas de $i$ a $i + 1$ es $2i$, al igual que el número que la aumenta de $5 - i$ a $6 - i$. Así, la respuesta es $2 \cdot 4 \cdot 6 \cdot 6 \cdot 4 \cdot 2 = \boxed{2304}$.`),
   hmmt('HMMT-2025-COMB5', 2025, 'COMB', 5, "Ciclo más largo en un grafo de cuadrícula", "Combinatoria",
     String.raw`En una cuadrícula de $11 \times 11$ celdas, cada par de celdas adyacentes por lado está conectado por una puerta. Karthik quiere caminar por un camino en esta cuadrícula. Puede empezar en cualquier celda, pero debe terminar en la misma celda donde empezó, y no puede pasar por ninguna puerta más de una vez (ni siquiera en direcciones opuestas). Calcula el número máximo de puertas por las que puede pasar en tal camino.`,
-    String.raw`![Una cuadrícula de 11 por 11 con líneas gruesas resaltando un camino que forma un circuito, ilustrando un posible camino máximo a través de las puertas de la cuadrícula.](/imagenes-problemas/hmmt/2025/7a6cf169c1f9e776c88f599e1de5b658.jpeg)
+    String.raw`![Una cuadrícula de 11 por 11 con líneas gruesas resaltando un camino que forma un circuito, ilustrando un posible camino máximo a través de las puertas de la cuadrícula.](/imagenes-problemas/hmmt/2025/7a6cf169c1f9e776c88f599e1de5b658.webp)
 
 Esto simplemente pregunta por el circuito más largo en el grafo de adyacencia de esta cuadrícula. Observa que esta cuadrícula tiene $4 \cdot 9 = 36$ celdas de grado impar, 9 a lo largo de cada lado. Si coloreamos las celdas con colores de tablero de ajedrez de modo que las esquinas sean negras, entonces 20 de estas 36 celdas son blancas. Un circuito euleriano usa un número par de puertas de cada celda, así que al menos una puerta de cada una de estas celdas queda sin usar. Ninguna puerta conecta dos celdas blancas, así que al menos 20 puertas quedan sin usar, dejando a lo más $2 \cdot 10 \cdot 11 - 20 = \boxed{200}$ puertas cruzadas.
 
@@ -1998,17 +1998,17 @@ $$
 Sustituyendo $k = 100$ obtenemos la respuesta $\boxed{\frac{2025}{101}}$.`),
   hmmt('HMMT-2025-COMB9', 2025, 'COMB', 9, "Recta aleatoria a través de un hexágono", "Geometría",
     String.raw`Se eligen dos puntos de manera independiente y uniforme al azar dentro de un hexágono regular. Calcula la probabilidad de que una recta que pasa por ambos puntos interseque un par de lados opuestos del hexágono.`,
-    String.raw`![Dos triángulos, uno arbitrario y uno equilátero, cada uno con dos puntos etiquetados P y Q y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/8a81ca7569630248d95c5ec1aceea0a0.jpeg)
+    String.raw`![Dos triángulos, uno arbitrario y uno equilátero, cada uno con dos puntos etiquetados P y Q y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/8a81ca7569630248d95c5ec1aceea0a0.webp)
 
 Primero calculamos la probabilidad de que la recta que pasa por dos puntos aleatorios en un triángulo $ABC$ pase por los segmentos $\overline{AB}$ y $\overline{AC}$. Podemos tomar una transformación afín de los dos puntos aleatorios y del triángulo de modo que $ABC$ se vuelva equilátero. Como la distribución de los dos puntos sigue siendo uniforme e independiente, la probabilidad de que la recta interseque dos lados dados cualesquiera es $\frac{1}{3}$ por simetría.
 
 Ahora calculamos la probabilidad de que la recta que pasa por dos puntos aleatorios en un rectángulo $ABCD$ pase por los lados opuestos $\overline{AB}$ y $\overline{CD}$.
 
-![Un cuadrado con vértices etiquetados A, B, C, y D, dos puntos P y Q adentro, una línea punteada que pasa por ellos, y un triángulo sombreado ABC.](/imagenes-problemas/hmmt/2025/dfc8a60ea45461cffaf3d402c804534e.jpeg)
+![Un cuadrado con vértices etiquetados A, B, C, y D, dos puntos P y Q adentro, una línea punteada que pasa por ellos, y un triángulo sombreado ABC.](/imagenes-problemas/hmmt/2025/dfc8a60ea45461cffaf3d402c804534e.webp)
 
 Si la recta pasa por $\overline{AB}$ y $\overline{BC}$, los puntos deben estar ambos en el triángulo $ABC$, cuya área es la mitad de la de $ABCD$. Dado esto, la probabilidad de que la recta pase por esos dos lados es $\frac{1}{3}$, como se calculó antes. Así, la probabilidad de que la recta pase por $\overline{AB}$ y $\overline{BC}$ es $\left(\frac{1}{2}\right)^2 \cdot \frac{1}{3} = \frac{1}{12}$. Lo mismo ocurre para los otros pares de lados adyacentes. Por simetría, la recta tiene la misma probabilidad de pasar por cualquiera de los dos pares de lados opuestos, cada uno con probabilidad $\frac{1}{2}\left(1 - 4 \cdot \frac{1}{12}\right) = \frac{1}{3}$.
 
-![Un hexágono regular con un rectángulo central sombreado, dos puntos P y Q adentro, y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/58ef8107152d81b6f3825726280a35e3.jpeg)
+![Un hexágono regular con un rectángulo central sombreado, dos puntos P y Q adentro, y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/58ef8107152d81b6f3825726280a35e3.webp)
 
 Regresamos ahora al problema original. Si la recta pasa por un par de lados opuestos, entonces ambos puntos deben estar en el rectángulo formado por estos lados, que tiene área $\frac{2}{3}$ de la del hexágono. Dado esto, la probabilidad de que la recta pase por esos dos lados es $\frac{1}{3}$ como se calculó antes. Así, la probabilidad de que la recta pase por el par dado de lados opuestos es $\left(\frac{2}{3}\right)^2 \cdot \frac{1}{3} = \frac{4}{27}$. Por lo tanto, la probabilidad de que la recta pase por cualquiera de los tres pares de lados opuestos es $3 \cdot \frac{4}{27} = \boxed{\frac{4}{9}}$.`),
   hmmt('HMMT-2025-COMB10', 2025, 'COMB', 10, "Caminatas aleatorias que se fusionan en un círculo", "Combinatoria",
@@ -2018,7 +2018,7 @@ Regresamos ahora al problema original. Si la recta pasa por un par de lados opue
 const hmmt2025Geo = [
   hmmt('HMMT-2025-GEO1', 2025, 'GEO', 1, "Distancia de un vértice a un triángulo equilátero interior", "Geometría",
     String.raw`Los triángulos equiláteros $\triangle ABC$ y $\triangle DEF$ se dibujan de manera que los puntos $B$, $E$, $F$, y $C$ están sobre una recta en ese orden, y el punto $D$ está dentro del triángulo $\triangle ABC$. Si $BE = 14$, $EF = 15$, y $FC = 16$, calcula $AD$.`,
-    String.raw`![Diagrama con dos triángulos equiláteros, ABC y DEF, con los puntos B, E, F, y C colineales, y D dentro del triángulo ABC. Se dibujan los segmentos AX y DX, con X en AC.](/imagenes-problemas/hmmt/2025/a6173614c1296050c66bb92f443fe679.jpeg)
+    String.raw`![Diagrama con dos triángulos equiláteros, ABC y DEF, con los puntos B, E, F, y C colineales, y D dentro del triángulo ABC. Se dibujan los segmentos AX y DX, con X en AC.](/imagenes-problemas/hmmt/2025/a6173614c1296050c66bb92f443fe679.webp)
 
 Extiende $DE$ hasta que se encuentre con $AC$ en $X$. Observa que $ABEX$ y $DFCX$ son trapecios isósceles (ambos con ángulos base de $60^\circ$), así que tenemos
 
@@ -2041,7 +2041,7 @@ $$`),
     String.raw`En una cueva bidimensional con un piso y un techo paralelos, dos estalactitas de longitudes $16$ y $36$ cuelgan perpendicularmente del techo, mientras que dos estalagmitas de alturas $25$ y $49$ crecen perpendicularmente desde el piso. Si las puntas de estas cuatro estructuras forman los vértices de un cuadrado en algún orden, calcula la altura de la cueva.`,
     String.raw`Observa que la diferencia de alturas entre las dos estalactitas no es igual a la diferencia de alturas entre las estalagmitas. Esto nos dice que las dos estalactitas forman un par de vértices opuestos del cuadrado, y lo mismo para las estalagmitas. Como el punto medio de cada par de estructuras debe coincidir, sabemos que está a $\frac{16 + 36}{2} = 26$ del techo por las estalactitas, y a $\frac{25 + 49}{2} = 37$ del piso por las estalagmitas. Por lo tanto, la altura de la cueva es simplemente la suma de estos dos valores, es decir $\boxed{63}$.
 
-![Un cuadrado inscrito entre dos rectas paralelas que representan el piso y el techo de la cueva, con cuatro segmentos verticales desde el piso y el techo tocando los vértices del cuadrado.](/imagenes-problemas/hmmt/2025/fd62624cfb0627a2adc3480c4bc66874.jpeg)`),
+![Un cuadrado inscrito entre dos rectas paralelas que representan el piso y el techo de la cueva, con cuatro segmentos verticales desde el piso y el techo tocando los vértices del cuadrado.](/imagenes-problemas/hmmt/2025/fd62624cfb0627a2adc3480c4bc66874.webp)`),
   hmmt('HMMT-2025-GEO3', 2025, 'GEO', 3, "Producto de distancias de un punto a los vértices de un cuadrado", "Geometría",
     String.raw`El punto $P$ está dentro del cuadrado $ABCD$ de modo que las áreas de $\triangle PAB$, $\triangle PBC$, $\triangle PCD$, y $\triangle PDA$ son $1$, $2$, $3$, y $4$, en algún orden. Calcula $PA \cdot PB \cdot PC \cdot PD$.`,
     String.raw`Sean $h_{1}$, $h_{2}$, $h_{3}$, y $h_{4}$ las longitudes de las alturas desde $P$ a los lados $AB$, $BC$, $CD$, y $DA$, respectivamente. Entonces, el enunciado del problema implica que $\{h_{1}, h_{2}, h_{3}, h_{4}\} = \{x, 2x, 3x, 4x\}$ para algún $x$. Además, el área del cuadrado es $1 + 2 + 3 + 4 = 10$, así que tenemos
@@ -2056,20 +2056,20 @@ $$\qquad = \boxed{8\sqrt{10}}.$$`),
 
 El semicírculo $S_{1}$ está inscrito en un semicírculo $S_{2}$, el cual está inscrito en otro semicírculo $S_{3}$. Los radios de $S_{1}$ y $S_{3}$ son $1$ y $10$, respectivamente, y los diámetros de $S_{1}$ y $S_{3}$ son paralelos. Los extremos del diámetro de $S_{3}$ son $A$ y $B$, y el arco de $S_{2}$ es tangente a $AB$ en $C$. Calcula $AC \cdot CB$.
 
-![Un diagrama que muestra tres semicírculos anidados S1, S2, y S3, con S1 inscrito en S2 y S2 inscrito en S3. Los diámetros de S1 y S3 son paralelos, y los puntos A, B, y C están marcados en el diámetro de S3.](/imagenes-problemas/hmmt/2025/6fc5d1b7698693176f0318294751a3ba.jpeg)`,
-    String.raw`![Un diagrama geométrico con tres semicírculos anidados S1, S2, y S3, mostrando los centros P, Q, R, el punto de intersección V, y los puntos A, B, y C sobre el diámetro. Líneas de construcción adicionales conectan estos puntos.](/imagenes-problemas/hmmt/2025/663200b55e5c280cca76a457c7d2b8f7.jpeg)
+![Un diagrama que muestra tres semicírculos anidados S1, S2, y S3, con S1 inscrito en S2 y S2 inscrito en S3. Los diámetros de S1 y S3 son paralelos, y los puntos A, B, y C están marcados en el diámetro de S3.](/imagenes-problemas/hmmt/2025/6fc5d1b7698693176f0318294751a3ba.webp)`,
+    String.raw`![Un diagrama geométrico con tres semicírculos anidados S1, S2, y S3, mostrando los centros P, Q, R, el punto de intersección V, y los puntos A, B, y C sobre el diámetro. Líneas de construcción adicionales conectan estos puntos.](/imagenes-problemas/hmmt/2025/663200b55e5c280cca76a457c7d2b8f7.webp)
 
 Sean $P$, $Q$, y $R$ los puntos medios de los diámetros (es decir, el centro de los arcos circulares) de $S_{3}$, $S_{2}$, y $S_{1}$, respectivamente. Observa que si fijamos $S_{3}$, la ubicación de $S_{2}$ queda determinada de manera única por el ángulo entre los diámetros de $S_{2}$ y $S_{3}$. Lo mismo ocurre para $S_{2}$ y $S_{1}$. Así, las figuras $S_{3} \cup S_{2}$ y $S_{2} \cup S_{1}$ son semejantes. Esto nos da que el radio de $S_{2}$ es $\sqrt{10}$.
 
 Para calcular la respuesta, definimos $V$ como cualquiera de las dos intersecciones de los arcos de $S_{2}$ y $S_{3}$. Por el Teorema de Pitágoras, $PQ = \sqrt{PV^{2} - VQ^{2}} = \sqrt{100 - 10} = \sqrt{90}$. Por el Teorema de Pitágoras otra vez, $PC = \sqrt{PQ^{2} - QC^{2}} = \sqrt{90 - 10} = \sqrt{80}$. Así $AC \cdot CB = (10 + PC)(10 - PC) = 100 - PC^{2} = \boxed{20}$.`),
   hmmt('HMMT-2025-GEO5', 2025, 'GEO', 5, "Intersección de círculos en un triángulo equilátero", "Geometría",
     String.raw`Sea $\triangle ABC$ un triángulo equilátero de lado $6$. Sea $P$ un punto dentro del triángulo $\triangle ABC$ tal que $\angle BPC = 120^\circ$. El círculo con diámetro $\overline{AP}$ se encuentra de nuevo con el circuncírculo de $\triangle ABC$ en $X \neq A$. Dado que $AX = 5$, calcula $XP$.`,
-    String.raw`![Un diagrama del triángulo equilátero ABC inscrito en un círculo, con los puntos A, B, C, A', P, y X marcados. Se muestran el círculo con diámetro AP y un arco punteado que pasa por B y C, y X está marcado en el circuncírculo de modo que AX = 5.](/imagenes-problemas/hmmt/2025/bd8399251a351972a45c43c96e817f24.jpeg)
+    String.raw`![Un diagrama del triángulo equilátero ABC inscrito en un círculo, con los puntos A, B, C, A', P, y X marcados. Se muestran el círculo con diámetro AP y un arco punteado que pasa por B y C, y X está marcado en el circuncírculo de modo que AX = 5.](/imagenes-problemas/hmmt/2025/bd8399251a351972a45c43c96e817f24.webp)
 
 Sea $A'$ el antípoda de $A$. Como $\angle AXA' = 90^\circ$, tenemos que $X$, $P$, y $A'$ son colineales. Como $\angle BPC = 120^\circ$ y $\angle BA'C = 180^\circ - \angle BAC = 120^\circ$, se sigue que $P$ está en el círculo con centro $A'$ que pasa por $B$ y $C$, así que $A'P = \frac{BC}{\sqrt{3}} = 2\sqrt{3}$ y $AA' = 2A'B = 4\sqrt{3}$. Por el Teorema de Pitágoras, $XA' = \sqrt{(4\sqrt{3})^2 - 5^2} = \sqrt{23}$, así que la respuesta es $XA' - PA' = \boxed{\sqrt{23} - 2\sqrt{3}}$.`),
   hmmt('HMMT-2025-GEO6', 2025, 'GEO', 6, "Área a partir de los circuncentros de un trapecio", "Geometría",
     String.raw`El trapecio $ABCD$, con $AB \parallel CD$, tiene lados de longitud $AB = 11$, $BC = 8$, $CD = 19$, y $DA = 4$. Calcula el área del cuadrilátero convexo cuyos vértices son los circuncentros de $\triangle ABC$, $\triangle BCD$, $\triangle CDA$, y $\triangle DAB$.`,
-    String.raw`![Un trapecio etiquetado ABCD con los circuncentros OA, OB, OC, y OD marcados adentro. Líneas punteadas indican mediatrices y un cuadrilátero sombreado conecta los circuncentros.](/imagenes-problemas/hmmt/2025/b89478beaacda454384b1b3adf2b03df.jpeg)
+    String.raw`![Un trapecio etiquetado ABCD con los circuncentros OA, OB, OC, y OD marcados adentro. Líneas punteadas indican mediatrices y un cuadrilátero sombreado conecta los circuncentros.](/imagenes-problemas/hmmt/2025/b89478beaacda454384b1b3adf2b03df.webp)
 
 Sean $O_{A}$, $O_{B}$, $O_{C}$, y $O_{D}$ los circuncentros de $\triangle BCD$, $\triangle CDA$, $\triangle DAB$, y $\triangle ABC$, respectivamente. Observa que $O_{B}O_{C}$ es la mediatriz de $\overline{AD}$. De manera similar, $O_{B}O_{D} \perp AC$ y $O_{C}O_{D} \perp AB$. Como $AB \parallel CD$, tenemos $O_{C}O_{D} \perp CD$. Entonces, $\triangle O_{B}O_{C}O_{D} \stackrel{\star}{\sim} \triangle ADC$, ya que sus lados correspondientes son perpendiculares. Del mismo modo, $\triangle O_{D}O_{A}O_{B} \stackrel{\star}{\sim} \triangle CBA$, así que $O_{A}O_{B}O_{C}O_{D} \stackrel{\star}{\sim} BADC$.
 
@@ -2086,7 +2086,7 @@ Por lo tanto, la razón de semejanza entre los dos trapecios es $\frac{3}{\sqrt{
     String.raw`El punto $P$ está dentro del triángulo $\triangle ABC$ de modo que $\angle ABP = \angle ACP$. Dado que $AB = 6$, $AC = 8$, $BC = 7$, y $\frac{BP}{PC} = \frac{1}{2}$, calcula $\frac{|BPC|}{|ABC|}$.
 
 (Aquí, $[XYZ]$ denota el área de $\triangle XYZ$.)`,
-    String.raw`Solución 1. ![Un triángulo ABC con el punto P adentro, bisectrices de ángulo trazadas, y los puntos D, D', E, E' marcados sobre el lado BC. Se muestran rectas paralelas y marcas de ángulos.](/imagenes-problemas/hmmt/2025/0f8d285c7902e9de79a6c8453e3fe343.jpeg)
+    String.raw`Solución 1. ![Un triángulo ABC con el punto P adentro, bisectrices de ángulo trazadas, y los puntos D, D', E, E' marcados sobre el lado BC. Se muestran rectas paralelas y marcas de ángulos.](/imagenes-problemas/hmmt/2025/0f8d285c7902e9de79a6c8453e3fe343.webp)
 
 Sean $D$ y $E$ los puntos donde las bisectrices interna y externa de $\angle BAC$ se encuentran con $BC$. De manera similar, sean $D'$ y $E'$ los puntos donde las bisectrices interna y externa de $\angle BPC$ se encuentran con $BC$. La condición de ángulos implica que $AD\parallel PD'$ y $AE\parallel PE'$. Así, los triángulos $ADE$ y $PD'E'$ son homotéticos. Por lo tanto, la razón buscada es $\frac{DE}{D'E'}$. Aplicaciones repetidas del teorema de la bisectriz dan
 
@@ -2106,7 +2106,7 @@ así que $DE = 24$ y $D'E' = 28 / 3$. Por lo tanto, la respuesta es $\frac{28 / 
 
 Solución 2.
 
-![Un triángulo ABC con el punto P adentro, los puntos E y F marcados, y un círculo punteado que pasa por B, C, E, y F. Se muestran marcas de ángulos.](/imagenes-problemas/hmmt/2025/81c307a05321f49518a124cd36d44fda.jpeg)
+![Un triángulo ABC con el punto P adentro, los puntos E y F marcados, y un círculo punteado que pasa por B, C, E, y F. Se muestran marcas de ángulos.](/imagenes-problemas/hmmt/2025/81c307a05321f49518a124cd36d44fda.webp)
 
 Sean $D = AP\cap BC$, $E = BP\cap AC$ y $F = CP\cap AB$. Entonces, $BCEF$ es cíclico, así que por potencia de un punto, $\frac{AE}{AF} = \frac{AB}{AC} = \frac{3}{4}$. Sean $AE = 3x$ y $AF = 4x$. Entonces,
 
@@ -2143,7 +2143,7 @@ $$
 así que $t = \frac{7^2(3 - 2)}{8^2 - 6^2} = \frac{7}{4}$. Por lo tanto, el punto $Q$ tiene coordenadas $(7:8:12)$, así que el punto $P$ tiene coordenadas $(7^2 / 7:8^2 / 8:6^2 / 12) = (7:8:3)$. Por lo tanto, $|BPC| / |ABC| = \boxed{\frac{7}{18}}$.`),
   hmmt('HMMT-2025-GEO8', 2025, 'GEO', 8, "Distancia de punto medio en un trapecio cíclico", "Geometría",
     String.raw`Sea $ABCD$ un trapecio isósceles tal que $CD > AB = 4$. Sea $E$ un punto en la recta $CD$ tal que $DE = 2$ y $D$ está entre $E$ y $C$. Sea $M$ el punto medio de $\overline{AE}$. Dado que los puntos $A$, $B$, $C$, $D$, y $M$ están en un círculo de radio $5$, calcula $MD$.`,
-    String.raw`![Un diagrama del trapecio isósceles ABCD inscrito en un círculo, con los puntos E y D' marcados en la extensión de CD, M como punto medio de AE, y varios segmentos y etiquetas que ilustran las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/99272909b8e7b4116af394fdccc3eb87.jpeg)
+    String.raw`![Un diagrama del trapecio isósceles ABCD inscrito en un círculo, con los puntos E y D' marcados en la extensión de CD, M como punto medio de AE, y varios segmentos y etiquetas que ilustran las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/99272909b8e7b4116af394fdccc3eb87.webp)
 
 Sea $D'$ la reflexión de $D$ sobre $M$. Entonces, $ADED'$ es un paralelogramo. Por lo tanto, $D'A = 2$, así que $D'B = 6$. Así, si $D'M = MD = x$, entonces la potencia de un punto en $D'$ da $x \cdot (2x) = 2 \cdot 6$, así que $x = \boxed{\sqrt{6}}$.`),
   hmmt('HMMT-2025-GEO9', 2025, 'GEO', 9, "Rectángulo con restricciones de circunradio", "Geometría",
@@ -2154,9 +2154,9 @@ Sean $P_{1}$ y $P_{2}$ las proyecciones de $O_{1}$ y $O_{2}$ sobre el segmento $
 $$(x - 5)(x - 9) = MP_{1} \cdot MP_{2} = O_{2}P_{2} \cdot P_{1}O_{1} = 12^{2}.$$
 Resolviendo esto, obtenemos $x = 7 + 2\sqrt{37}$, lo cual implica que $AB = 2x = \boxed{14 + 4\sqrt{37}}$. (La condición de que $\triangle AXD$ y $\triangle BXC$ sean acutángulos descarta $14 - 4\sqrt{37}$.)
 
-![Un rectángulo ABCD con el punto X adentro, circuncírculos trazados por AXD y BXC, y los puntos O1, O2, M, P1, y P2 etiquetados. Se resaltan perpendiculares y segmentos clave.](/imagenes-problemas/hmmt/2025/73c875021da9d1a19da0890bf095a65e.jpeg)
+![Un rectángulo ABCD con el punto X adentro, circuncírculos trazados por AXD y BXC, y los puntos O1, O2, M, P1, y P2 etiquetados. Se resaltan perpendiculares y segmentos clave.](/imagenes-problemas/hmmt/2025/73c875021da9d1a19da0890bf095a65e.webp)
 
-Solución 2. ![Un rectángulo ABCD con el punto X adentro, circuncírculos por AXD y BXC, y los puntos P y Q sobre CD. Se muestran diámetros y perpendiculares, con segmentos clave resaltados.](/imagenes-problemas/hmmt/2025/666d9c083cfaee5f174d61d41f0513fe.jpeg)
+Solución 2. ![Un rectángulo ABCD con el punto X adentro, circuncírculos por AXD y BXC, y los puntos P y Q sobre CD. Se muestran diámetros y perpendiculares, con segmentos clave resaltados.](/imagenes-problemas/hmmt/2025/666d9c083cfaee5f174d61d41f0513fe.webp)
 
 Sea $P$ el antípoda de $A$ en $\odot (AXD)$ y $Q$ el antípoda de $B$ en $\odot (BXC)$. De $\angle PDA = \angle QCB = 90^{\circ}$, obtenemos que $P$ y $Q$ están sobre $CD$. Además, de $\angle PXA = 90^{\circ}$, obtenemos que $P \in BX$, y de manera similar $Q \in AX$.
 
@@ -2171,7 +2171,7 @@ de donde se sigue que $t_{a} = 5$, $t_{b} = 6$, y $t_{c} = 7$.
 
 Ahora, una traslación de un plano se puede escribir de una de tres formas equivalentes: se puede ver como una traslación en la dirección $x$ por una distancia $d_{x}$, una traslación en la dirección $y$ por una distancia $d_{y}$, o una traslación en la dirección $z$ por una distancia $d_{z}$ (con los ejes coordenados elegidos como se muestra abajo).
 
-![Un prisma rectangular intersecado por un plano formando un hexágono, con las longitudes de los lados etiquetadas y los vectores de traslación dx, dy, dz mostrados.](/imagenes-problemas/hmmt/2025/aa24b6ffd361094bfb5582485f15d72d.jpeg)
+![Un prisma rectangular intersecado por un plano formando un hexágono, con las longitudes de los lados etiquetadas y los vectores de traslación dx, dy, dz mostrados.](/imagenes-problemas/hmmt/2025/aa24b6ffd361094bfb5582485f15d72d.webp)
 
 Como se muestra arriba, podemos expresar $t_{a}$, $t_{b}$, y $t_{c}$ en términos de $d_{x}$, $d_{y}$, y $d_{z}$ usando el Teorema de Pitágoras, lo cual da $t_{a} = \sqrt{d_{y}^{2} + d_{z}^{2}}$, $t_{b} = \sqrt{d_{z}^{2} + d_{x}^{2}}$, y $t_{c} = \sqrt{d_{x}^{2} + d_{y}^{2}}$. Por lo tanto,
 $$(d_{x}^{2}, d_{y}^{2}, d_{z}^{2}) = \left(\frac{5^{2} + 6^{2} - 7^{2}}{2}, \frac{6^{2} + 7^{2} - 5^{2}}{2}, \frac{7^{2} + 5^{2} - 6^{2}}{2}\right) = (6, 30, 19).$$
@@ -2180,7 +2180,7 @@ $$\sqrt{\frac{1}{d_{x}^{-2} + d_{y}^{-2} + d_{z}^{-2}}} = \sqrt{\frac{1}{6^{-1} 
 
 Solución 2. Sean los vértices del hexágono $ABCDEF$, donde $AB = 45$, $BC = 66$, etc. Observa que $AB \parallel DE$, $BC \parallel EF$, y $CD \parallel FA$. Sea $O$ el centro del prisma, y sean $M$, $N$, y $P$ los puntos medios de $AD$, $BE$, y $CF$, respectivamente.
 
-![Un hexágono con los vértices etiquetados y los lados marcados, los puntos medios M, N, P marcados, y un triángulo MNP resaltado en el centro.](/imagenes-problemas/hmmt/2025/f74d2aed280dfd51da731ca27ca6a400.jpeg)
+![Un hexágono con los vértices etiquetados y los lados marcados, los puntos medios M, N, P marcados, y un triángulo MNP resaltado en el centro.](/imagenes-problemas/hmmt/2025/f74d2aed280dfd51da731ca27ca6a400.webp)
 
 La observación clave es que $MN$ es la línea media entre $AB$ y $DE$. Por lo tanto, el plano $OMN$ es el plano medio entre las caras del prisma que contienen los lados $AB$ y $DE$. De manera similar, los planos $OMP$ y $ONP$ son los otros dos planos medios del prisma. Así, $OM$, $ON$, y $OP$ son mutuamente ortogonales.
 
@@ -2221,13 +2221,13 @@ contradicción. Por lo tanto, $h + w = 90$, así que podemos escribir $(h,w) = (
 En el primer y tercer caso, la caja delimitadora tiene área $2024$, así que debe ser el poliominó completo, dándonos el rectángulo $44 \times 46$ (y su rotación) como una posible respuesta. En el segundo caso, la caja delimitadora tiene área $2025$, así que se debe quitar una celda para formar el poliominó. Quitar la celda de una esquina produce un poliominó con perímetro $180$, y quitar cualquier otra celda produce un poliominó con perímetro mayor que $180$. Por lo tanto, la única otra posibilidad es un cuadrado de $45 \times 45$ al que le falta una esquina. Así, la respuesta es $\boxed{2}$.`),
   hmmt('HMMT-2025-TEAM3', 2025, 'TEAM', 3, "Lugar geométrico del circuncentro con una bisectriz", "Geometría",
     String.raw`Sean $\omega_{1}$ y $\omega_{2}$ dos círculos que se intersecan en los puntos distintos $A$ y $B$. El punto $X$ varía sobre $\omega_{1}$, y el punto $Y$ sobre $\omega_{2}$ se elige de modo que $AB$ biseca el ángulo $\angle XAY$. Demuestra que, cuando $X$ varía sobre $\omega_{1}$, el circuncentro de $\triangle AXY$ (si existe) varía sobre una recta fija.`,
-    String.raw`Solución 1. ![Dos círculos que se intersecan con centros O1 y O2, intersecándose en los puntos A y B. Se traza el triángulo AXY con su circuncentro O marcado, junto con segmentos y ángulos relevantes resaltados.](/imagenes-problemas/hmmt/2025/d98306254a4727f82e4d13898cfcfd32.jpeg)
+    String.raw`Solución 1. ![Dos círculos que se intersecan con centros O1 y O2, intersecándose en los puntos A y B. Se traza el triángulo AXY con su circuncentro O marcado, junto con segmentos y ángulos relevantes resaltados.](/imagenes-problemas/hmmt/2025/d98306254a4727f82e4d13898cfcfd32.webp)
 
 Sean $O_{1}$, $O_{2}$, y $O$ los centros de $\omega_{1}$, $\omega_{2}$, y el circuncírculo de $\triangle AXY$, respectivamente. Afirmamos que el triángulo $O O_{1}O_{2}$ es isósceles con $O O_{1} = O O_{2}$, y por lo tanto, en particular, $O$ siempre está en la mediatriz de $O_{1}O_{2}$.
 
 Para esto, observa que $O O_{1} \perp A X$ y $O_{1}O_{2} \perp A B$, así que $\angle O O_{1}O_{2} = \angle X A B$. De manera análoga, $\angle O O_{2}O_{1} = \angle Y A B$. Así que en efecto $O O_{1}O_{2}$ es isósceles, y terminamos.
 
-Solución 2. ![Dos diagramas: a la izquierda, el triángulo AXY inscrito en un círculo con los puntos M, N, y A' marcados; a la derecha, una configuración invertida con los puntos P, Q, N*, A, X*, Y*, M*, y B* etiquetados, mostrando rectas e intersecciones.](/imagenes-problemas/hmmt/2025/ae48eed2043117eba1dbe2e28f2c5e1a.jpeg)
+Solución 2. ![Dos diagramas: a la izquierda, el triángulo AXY inscrito en un círculo con los puntos M, N, y A' marcados; a la derecha, una configuración invertida con los puntos P, Q, N*, A, X*, Y*, M*, y B* etiquetados, mostrando rectas e intersecciones.](/imagenes-problemas/hmmt/2025/ae48eed2043117eba1dbe2e28f2c5e1a.webp)
 
 Sea $A^{\prime}$ el antípoda de $A$ en el círculo $(A X Y)$. Basta mostrar que $A^{\prime}$ está en una recta fija. Mostraremos que esta recta es paralela a $A B$.
 
@@ -2266,7 +2266,7 @@ Solución 2. Considera el conjunto de todas las torres que son la más a la izqu
 Cada columna aporta a lo más 2 torres a este conjunto, y cada fila aporta a lo más 2 torres. Podemos ignorar sin problema las filas superior e inferior en este conteo, ya que cualquier torre en la fila superior o inferior ya es la torre más arriba o más abajo en su columna. Así, el número de torres en el conjunto es a lo más $2 \cdot (2025 + 2025 - 2) = \boxed{8096}$, lo cual se puede construir como se vio antes.`),
   hmmt('HMMT-2025-TEAM5', 2025, 'TEAM', 5, "Altura del ortocentro y un ángulo recto", "Geometría",
     String.raw`Sea $\triangle ABC$ un triángulo acutángulo con ortocentro $H$. Los puntos $E$ y $F$ están en los segmentos $\overline{AC}$ y $\overline{AB}$, respectivamente, de modo que $\angle EHF = 90^\circ$. Sea $X$ el pie de la altura desde $H$ a $\overline{EF}$. Demuestra que $\angle BXC = 90^\circ$.`,
-    String.raw`Solución 1. ![Diagrama del triángulo ABC con ortocentro H, los puntos E y F sobre AC y AB, X como el pie desde H a EF, y varios círculos y cuadriláteros cíclicos resaltados.](/imagenes-problemas/hmmt/2025/034f5986e2970ee1d6cd8c5f3ebb9d68.jpeg)
+    String.raw`Solución 1. ![Diagrama del triángulo ABC con ortocentro H, los puntos E y F sobre AC y AB, X como el pie desde H a EF, y varios círculos y cuadriláteros cíclicos resaltados.](/imagenes-problemas/hmmt/2025/034f5986e2970ee1d6cd8c5f3ebb9d68.webp)
 
 Usamos $\angle$ para denotar ángulos dirigidos. Sean $Y$ y $Z$ los pies de las alturas desde $B$ y $C$ a $AC$ y $AB$, respectivamente. Entonces $\angle HZF = \angle HXF = 90^\circ$, así que $HZFX$ es cíclico. De manera similar, $HYEX$ es cíclico. Por lo tanto,
 
@@ -2283,7 +2283,7 @@ Demostración. Como $HX \perp EF$ y $HE \perp HF$, el cuadrilátero $HE'X'F'$ es
 
 De la afirmación, $X'$ está en el círculo con diámetro $BC$ (en el cual también están $B'$ y $C'$). Como este círculo es invariante bajo la inversión, $X$ también está en el círculo con diámetro $BC$, y $\angle BXC = 90^\circ$.
 
-![Diagrama del triángulo ABC con los puntos E, F, H, X, y sus inversos E', F', X' mostrados, incluyendo un círculo que pasa por B, C, E', F', y X'.](/imagenes-problemas/hmmt/2025/fce69e9afe523959d3e7279c83798c3e.jpeg)
+![Diagrama del triángulo ABC con los puntos E, F, H, X, y sus inversos E', F', X' mostrados, incluyendo un círculo que pasa por B, C, E', F', y X'.](/imagenes-problemas/hmmt/2025/fce69e9afe523959d3e7279c83798c3e.webp)
 
 Solución 3. Comenzamos probando el siguiente lema.
 
@@ -2302,7 +2302,7 @@ $$
 $$
 Por lo tanto, $P_A P_B P_C P_D$ es cíclico como se quería.
 
-![Diagrama del triángulo ABC con los puntos E, F, H, X, y un círculo que pasa por B, C, Y, y Z, con perpendiculares y cuadriláteros cíclicos indicados.](/imagenes-problemas/hmmt/2025/566f3a0c1030d06209b8a6b669b29550.jpeg)
+![Diagrama del triángulo ABC con los puntos E, F, H, X, y un círculo que pasa por B, C, Y, y Z, con perpendiculares y cuadriláteros cíclicos indicados.](/imagenes-problemas/hmmt/2025/566f3a0c1030d06209b8a6b669b29550.webp)
 
 Sea $P_{\infty}$ el punto al infinito sobre la recta $AC$. Sean $Y$ y $Z$ los pies de las alturas desde $H$ a $AB$ y $AC$, respectivamente. Observa que $\angle EHF + \angle BHP_{\infty} = 90^\circ + 90^\circ = 180^\circ$. Así, los pies de las alturas desde $H$ a $EF$, $EB$, $BP_{\infty}$, y $CP_{\infty}$ son concíclicos. En otras palabras, $XYZB$ es cíclico. Como $BCYZ$ es un cuadrilátero cíclico, concluimos que $X$ está en este círculo, lo cual da $\angle BXC = 90^\circ$ como se quería.
 
@@ -2373,7 +2373,7 @@ Afirmación 1. La recta $IY$ es tangente a $\omega$.
 
 Demostración. Sea la recta por $I$ paralela a $BC$ la que encuentra a $AB$ y $AC$ en $B'$, $C'$, respectivamente. Observa que $B'L$ es la mediatriz de $BI$, así que $B'L$ biseca externamente a $\angle AB'C'$. De manera similar, $C'L$ biseca externamente a $\angle AC'B'$. Por lo tanto, $L$ es el excentro de $\triangle AB'C'$, lo cual significa que $B'C'$ es tangente a $\omega$.
 
-![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, punto L en el circuncírculo, círculo omega centrado en L tangente a AB y AC, y varios puntos y rectas auxiliares incluyendo B', C', D, P, X, y Y.](/imagenes-problemas/hmmt/2025/9d25c968fd58984cde61b27542d89c49.jpeg)
+![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, punto L en el circuncírculo, círculo omega centrado en L tangente a AB y AC, y varios puntos y rectas auxiliares incluyendo B', C', D, P, X, y Y.](/imagenes-problemas/hmmt/2025/9d25c968fd58984cde61b27542d89c49.webp)
 
 Ahora, observamos que $LY \perp BC$, así que $L$, $Y$, y $M$ son colineales (sobre la mediatriz de $BC$). Como $\angle YPX = 90^{\circ}$ y $\angle YMD = 90^{\circ}$, $PDMY$ es cíclico. Sin embargo, $IYMD$ es un rectángulo, así que $IPDMY$ es un pentágono cíclico. Por lo tanto, $\angle IPM = \angle IDM = 90^{\circ}$.
 
@@ -2383,7 +2383,7 @@ Afirmación 2. $PM \parallel D'X$.
 
 Demostración. Considera la homotecia en $A$ que envía $\omega$ al incírculo. Envía $L$ a $I$ y $P$ a $D'$. Además, es bien sabido que $X$ está en $AM$. Como $IX \parallel LM$, la homotecia también envía $M$ a $X$. Estos hechos implican que $D'X \parallel PM$.
 
-![Un diagrama geométrico del triángulo ABC con incírculo, incentro I, punto medio M de BC, los puntos D, D', X, T, T', y P, mostrando varias rectas y segmentos relevantes para la solución.](/imagenes-problemas/hmmt/2025/3588a05bc805619ce4de2b7bfb81bb3c.jpeg)
+![Un diagrama geométrico del triángulo ABC con incírculo, incentro I, punto medio M de BC, los puntos D, D', X, T, T', y P, mostrando varias rectas y segmentos relevantes para la solución.](/imagenes-problemas/hmmt/2025/3588a05bc805619ce4de2b7bfb81bb3c.webp)
 
 Sea $T$ el antípoda de $D$ en el incírculo. Sea $T'$ la segunda intersección de $AT$ con el incírculo. Como $X$ está en la polar de $A$ respecto al incírculo, por el teorema de Brocard, $D'$, $X$, y $T'$ son colineales. Es bien sabido que $AT \parallel IM$. Por lo tanto, $\angle DPM = \angle DD'X = \angle DD'T' = \angle DTT' = \angle DIM$. En consecuencia, $IMDP$ es cíclico, y $\angle IPM = \angle IDM = 90^{\circ}$.
 
@@ -2391,7 +2391,7 @@ Solución 3. Sea $\omega$ tangente a $AB$ y $AC$ en $E$ y $F$, respectivamente. 
 
 Por último, queremos que $P$ esté en el círculo con diámetro $IM$. Este círculo interseca a $EF$ de nuevo en el pie desde $M$ a $AI$, que es el punto medio de $EF$. Sea este punto $M'$. Considera la homotecia que envía el incírculo a $\omega$. Esta claramente envía $D$ a la segunda intersección de $AD$ y $\omega$, que es $P'$, y envía $I$ a $L$. Observa que $AP \cdot AP' = AE^2 = AM \cdot AL$, ya que el círculo con diámetro $LE$ es tangente a $AE$. Así, $PP'M'L$ es cíclico. Como $ID \parallel LP'$, $I$ está en $M'L$, y $D$ está en $PP'$. Por el teorema de Reim, también tenemos que $PDM'I$ es cíclico. Como $IM$ es un diámetro de $(DM'I)$, tenemos $\angle IPM = 90^{\circ}$.
 
-![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, los puntos L, P, P', E, F, y M', con varias rectas y círculos que ilustran las relaciones en la solución.](/imagenes-problemas/hmmt/2025/bd8de87f9a899904f1b27f0c1c33d28a.jpeg)`),
+![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, los puntos L, P, P', E, F, y M', con varias rectas y círculos que ilustran las relaciones en la solución.](/imagenes-problemas/hmmt/2025/bd8de87f9a899904f1b27f0c1c33d28a.webp)`),
   hmmt('HMMT-2025-TEAM9', 2025, 'TEAM', 9, "Primos que admiten una ecuación funcional periódica", "Teoría de Números",
     String.raw`Sea $\mathbb{Z}$ el conjunto de los enteros. Determina, con demostración, todos los primos $p$ para los cuales existe una función $f\colon \mathbb{Z}\to \mathbb{Z}$ tal que para todo entero $x$,
 
@@ -2536,17 +2536,17 @@ Sumando $\frac{1}{3}$ y $\frac{1}{12}$ obtenemos $\boxed{\frac{5}{12}}$.`),
     String.raw`Sea $\triangle ABC$ un triángulo equilátero de lado $4$. Entre todos los puntos $P$ dentro del triángulo $\triangle ABC$ que satisfacen $[PAB] + [PAC] = [PBC]$, calcula la menor longitud posible de $PA$.
 
 (Aquí, $[XYZ]$ denota el área del triángulo $\triangle XYZ$.)`,
-    String.raw`![Un triángulo equilátero ABC con un punto P adentro. El triángulo está dividido en dos regiones por una línea punteada roja paralela a BC, y un segmento rojo conecta A con P. Las regiones PAB y PBC están sombreadas en colores distintos.](/imagenes-problemas/hmmt/2025/69fadc0b114370291d5cfb809590a975.jpeg)
+    String.raw`![Un triángulo equilátero ABC con un punto P adentro. El triángulo está dividido en dos regiones por una línea punteada roja paralela a BC, y un segmento rojo conecta A con P. Las regiones PAB y PBC están sombreadas en colores distintos.](/imagenes-problemas/hmmt/2025/69fadc0b114370291d5cfb809590a975.webp)
 
 La condición de área implica $[ABC] = 2[PBC]$. Por lo tanto, $P$ está en la línea media desde $A$ del triángulo $\triangle ABC$. Así, el menor valor posible de $PA$ es la distancia de $A$ a esta línea media. Esto se alcanza tomando $P$ como el pie de la perpendicular desde $A$ a la línea media. Esta distancia es la mitad de la altura de $ABC$, que tiene lado $4$, así que la respuesta es $\frac{1}{2} (2\sqrt{3}) = \boxed{\sqrt{3}}$.`),
   hmmt('HMMT-2025-GUTS5', 2025, 'GUTS', 5, "Círculo máximo inscrito en una región con valor absoluto anidado", "Geometría",
     String.raw`Calcula el mayor radio posible de un círculo contenido en la región definida por $|x + |y|| \leq 1$ en el plano coordenado.`,
-    String.raw`![Un plano coordenado que muestra la región definida por |x + |y|| ≤ 1 sombreada, con un círculo rojo inscrito adentro de la región, tangente a las fronteras y pasando por el punto (-1, 0).](/imagenes-problemas/hmmt/2025/2694b339b7413b14bf3ffd174cfea391.jpeg)
+    String.raw`![Un plano coordenado que muestra la región definida por |x + |y|| ≤ 1 sombreada, con un círculo rojo inscrito adentro de la región, tangente a las fronteras y pasando por el punto (-1, 0).](/imagenes-problemas/hmmt/2025/2694b339b7413b14bf3ffd174cfea391.webp)
 
 Después de dibujar la gráfica, es claro que el círculo debe pasar por $(-1, 0)$ y ser tangente a $y = x - 1$ y $y = -x + 1$. Sea $r$ el radio de este círculo, tenemos $r\sqrt{2} + r = 2$, así que $\boxed{r = 2\sqrt{2} - 2}$.`),
   hmmt('HMMT-2025-GUTS6', 2025, 'GUTS', 6, "Triángulo equilátero con una condición de punto medio", "Geometría",
     String.raw`Sea $\triangle ABC$ un triángulo equilátero. El punto $D$ está en el segmento $\overline{BC}$ tal que $BD = 1$ y $DC = 4$. Los puntos $E$ y $F$ están en los rayos $\overrightarrow{AC}$ y $\overrightarrow{AB}$, respectivamente, de modo que $D$ es el punto medio de $\overline{EF}$. Calcula $EF$.`,
-    String.raw`![Un diagrama geométrico que muestra el triángulo equilátero ABC con el punto D sobre BC, los puntos E y F sobre los rayos AC y AB, y la reflexión C' de C sobre D. El segmento EF pasa por D, y varios segmentos están marcados con símbolos de congruencia.](/imagenes-problemas/hmmt/2025/932a7555b8a60afcb53d5e3fcf9e922c.jpeg)
+    String.raw`![Un diagrama geométrico que muestra el triángulo equilátero ABC con el punto D sobre BC, los puntos E y F sobre los rayos AC y AB, y la reflexión C' de C sobre D. El segmento EF pasa por D, y varios segmentos están marcados con símbolos de congruencia.](/imagenes-problemas/hmmt/2025/932a7555b8a60afcb53d5e3fcf9e922c.webp)
 
 Sea $C'$ la reflexión de $C$ sobre $D$. Entonces, $\overline{EC} \parallel \overline{C'F}$ ya que $ECFC'$ es un paralelogramo. Así, $BFC'$ es un triángulo equilátero, así que $BF = BC' = 3$ y $\angle FBD = 120^\circ$. Por la Ley de Cosenos, obtenemos $DF = \sqrt{3^2 + 3 \cdot 1 + 1^2} = \sqrt{13}$ y $EF = \boxed{2\sqrt{13}}$.`),
   hmmt('HMMT-2025-GUTS7', 2025, 'GUTS', 7, "Factores primos de un cociente exponencial", "Teoría de Números",
@@ -2576,12 +2576,12 @@ Calcula el número de tableros de ajedrez distintos que tienen exactamente 41 ce
     String.raw`Como hay una esquina negra en el tablero, el número de casillas blancas es a lo más el número de casillas negras. Así, el tablero tiene 40 o 41 casillas blancas. Por lo tanto, queremos calcular el número de pares ordenados $(r,c)$ con producto 81 o 82. Como $81 = 3^{4}$ tiene 5 divisores y $82 = 41 \cdot 2$ tiene 4 divisores, hay $\boxed{9}$ tableros de ajedrez con exactamente 41 celdas negras.`),
   hmmt('HMMT-2025-GUTS9', 2025, 'GUTS', 9, "Segmento aleatorio en los cuadriláteros de un hexágono", "Geometría",
     String.raw`Sean $P$ y $Q$ puntos elegidos de manera uniforme e independiente al azar dentro de un hexágono regular $ABCDEF$. Calcula la probabilidad de que el segmento $\overline{PQ}$ esté completamente contenido en al menos uno de los cuadriláteros $ABCD$, $BCDE$, $CDEF$, $DEFA$, $EFAB$, o $FABC$.`,
-    String.raw`![Un hexágono regular dividido en seis triángulos por líneas desde el centro O hasta cada vértice, con los puntos P y Q marcados y un segmento PQ trazado. Los triángulos ABO y DEO están sombreados, y los cuadriláteros están implícitos visualmente.](/imagenes-problemas/hmmt/2025/0d46ba45e4b43766265ed8aab827c8da.jpeg)
+    String.raw`![Un hexágono regular dividido en seis triángulos por líneas desde el centro O hasta cada vértice, con los puntos P y Q marcados y un segmento PQ trazado. Los triángulos ABO y DEO están sombreados, y los cuadriláteros están implícitos visualmente.](/imagenes-problemas/hmmt/2025/0d46ba45e4b43766265ed8aab827c8da.webp)
 
 Sea $O$ el centro del hexágono. Sin pérdida de generalidad, supón que $P$ está en $\triangle ABO$. Entonces, el segmento $PQ$ está completamente contenido en uno de los cuadriláteros dados si y solo si $Q$ no está en $\triangle DEO$. La probabilidad de que $Q$ esté en $\triangle DEO$ es $\frac{|DEO|}{|ABCDEF|} = \frac{1}{6}$, así que la respuesta es $\boxed{\frac{5}{6}}$.`),
   hmmt('HMMT-2025-GUTS10', 2025, 'GUTS', 10, "Perímetro máximo de un pentágono en la disección de un cuadrado", "Geometría",
     String.raw`Un cuadrado de lado $1$ se diseca en dos pentágonos congruentes. Calcula el supremo del perímetro de uno de estos pentágonos.`,
-    String.raw`![Un cuadrado ABCD se divide en dos pentágonos congruentes mediante dos líneas punteadas que conectan los puntos Y cerca de A y X cerca de C, con los pentágonos sombreados en colores distintos.](/imagenes-problemas/hmmt/2025/a779607648888b3176dd8192def6d28b.jpeg)
+    String.raw`![Un cuadrado ABCD se divide en dos pentágonos congruentes mediante dos líneas punteadas que conectan los puntos Y cerca de A y X cerca de C, con los pentágonos sombreados en colores distintos.](/imagenes-problemas/hmmt/2025/a779607648888b3176dd8192def6d28b.webp)
 
 Sean $P_{1}$ y $P_{2}$ los dos pentágonos congruentes. Sea $p(P)$ el perímetro del polígono $P$.
 
@@ -2616,7 +2616,7 @@ lo cual solo puede ocurrir cuando $d_{0} = d_{1}$, $d_{2} = d_{3}$, y $d_{4} = d
 Hay $\binom{12}{3} = 220$ de estas ternas de dígitos $(a,b,c)$. Sin embargo, una de estas ternas es $(0,0,0)$, que corresponde al número 0. Así nuestra respuesta es $220 - 1 = \boxed{219}$.`),
   hmmt('HMMT-2025-GUTS14', 2025, 'GUTS', 14, "Paralelogramo doblado en un pentágono regular", "Geometría",
     String.raw`Un paralelogramo $P$ se puede doblar sobre una recta de modo que la figura resultante sea un pentágono regular de lado $1$. Calcula el perímetro de $P$.`,
-    String.raw`![Un diagrama que muestra un pentágono regular ABCDE con un paralelogramo CDE'D' adjunto, y la región ABDE reflejada sobre AB para formar ABD'E'.](/imagenes-problemas/hmmt/2025/49af5caed6e82e485305f9f5f5390039.jpeg)
+    String.raw`![Un diagrama que muestra un pentágono regular ABCDE con un paralelogramo CDE'D' adjunto, y la región ABDE reflejada sobre AB para formar ABD'E'.](/imagenes-problemas/hmmt/2025/49af5caed6e82e485305f9f5f5390039.webp)
 
 En el pentágono regular $ABCDE$ (etiquetado en sentido horario), refleja $ABDE$ sobre $AB$ para obtener $ABD'E'$. Entonces, $CDE'D'$ es uno de tales paralelogramos $P$. La longitud de $CD'$ es
 $$
@@ -2628,11 +2628,11 @@ $$
 $$`),
   hmmt('HMMT-2025-GUTS15', 2025, 'GUTS', 15, "Triángulo rectángulo inscrito en un equilátero", "Geometría",
     String.raw`El triángulo rectángulo $\triangle DEF$ con $\angle D = 90^{\circ}$ y $\angle F = 30^{\circ}$ está inscrito en el triángulo equilátero $\triangle ABC$ de modo que $D$, $E$, y $F$ están en los segmentos $\overline{BC}$, $\overline{CA}$, y $\overline{AB}$, respectivamente. Dado que $BD = 7$ y $DC = 4$, calcula $DE$.`,
-    String.raw`Solución 1. ![Un triángulo equilátero ABC con un triángulo rectángulo inscrito DEF, donde D está sobre BC, E está sobre CA, y F está sobre AB. El ángulo recto está en D.](/imagenes-problemas/hmmt/2025/ddd982a2b8a39ca0e846cc3a28985b3e.jpeg)
+    String.raw`Solución 1. ![Un triángulo equilátero ABC con un triángulo rectángulo inscrito DEF, donde D está sobre BC, E está sobre CA, y F está sobre AB. El ángulo recto está en D.](/imagenes-problemas/hmmt/2025/ddd982a2b8a39ca0e846cc3a28985b3e.webp)
 
 De $\angle E = 60^{\circ}$, obtenemos que $\angle AEF = 120^{\circ} - \angle CED = \angle CDE$. Por lo tanto, $\triangle AEF \sim \triangle CDE$. Como $EF:DE = 2:1$, la razón de semejanza debe ser $2:1$, así que $AE = 2CD = 8$. Recuerda que $ABC$ tiene lado $7 + 4 = 11$, así que $EC = 11 - 8 = 3$. La Ley de Cosenos en $\triangle CDE$ da $DE^2 = 3^2 + 4^2 - 3\cdot 4 = 13$, así que $DE = \boxed{\sqrt{13}}$.
 
-Solución 2. ![El mismo triángulo equilátero ABC con el triángulo inscrito DEF, y un círculo que pasa por D, E, F. El punto X está marcado sobre AC, y se muestra una perpendicular punteada desde D hasta AC.](/imagenes-problemas/hmmt/2025/6bdde14db96ad51963d491cef9d82b2a.jpeg)
+Solución 2. ![El mismo triángulo equilátero ABC con el triángulo inscrito DEF, y un círculo que pasa por D, E, F. El punto X está marcado sobre AC, y se muestra una perpendicular punteada desde D hasta AC.](/imagenes-problemas/hmmt/2025/6bdde14db96ad51963d491cef9d82b2a.webp)
 
 Sea $X$ el segundo punto donde $\odot (DEF)$ se encuentra con $AC$. Entonces, $\angle FXA = 180^{\circ} - \angle FXE = \angle FDE = 90^{\circ}$ y $\angle XDC = 180^{\circ} - \angle DCX - \angle DXC = 120^{\circ} - \angle DXE = 120^{\circ} - \angle DFE = 90^{\circ}$. Se sigue que $CX = 2CD = 8$, así que $AX = 11 - CX = 3$, y $AF = 2AX = 6$. Así, la Ley de Cosenos en $\triangle AEF$ da $EF = \sqrt{8^2 + 6^2 - 8\cdot 6} = 2\sqrt{13}$, lo cual implica que $DE = \boxed{\sqrt{13}}$.`),
   hmmt('HMMT-2025-GUTS16', 2025, 'GUTS', 16, "Distancia esperada en el conjunto de Cantor", "Combinatoria",
@@ -2721,7 +2721,7 @@ $$x^2 (x + 4) = 5.$$
 La cúbica resultante se factoriza como $(x - 1)(x^2 + 5x + 5) = 0$. Por lo tanto, el menor valor posible de $abc$ es $\boxed{\frac{-5 - \sqrt{5}}{2}}$.`),
   hmmt('HMMT-2025-GUTS23', 2025, 'GUTS', 23, "Círculo tangente a los lados de un hexágono y a dos rectas", "Geometría",
     String.raw`El hexágono regular $ABCDEF$ tiene lado $2$. El círculo $\omega$ está dentro del hexágono y es tangente a los segmentos $\overline{AB}$ y $\overline{AF}$. Existen dos rectas perpendiculares tangentes a $\omega$ que pasan por $C$ y $E$, respectivamente. Dado que estas dos rectas no se intersecan sobre la recta $AD$, calcula el radio de $\omega$.`,
-    String.raw`Solución 1. ![Un hexágono regular etiquetado ABCDEF con un círculo inscrito tangente a los lados AB y AF. El centro del círculo está marcado O. Se trazan dos rectas tangentes rojas desde los puntos C y E, que se encuentran en el punto P fuera del círculo. Se etiquetan un arco punteado y varios puntos.](/imagenes-problemas/hmmt/2025/dcb968f470d9995223369f2d83efd4f0.jpeg)
+    String.raw`Solución 1. ![Un hexágono regular etiquetado ABCDEF con un círculo inscrito tangente a los lados AB y AF. El centro del círculo está marcado O. Se trazan dos rectas tangentes rojas desde los puntos C y E, que se encuentran en el punto P fuera del círculo. Se etiquetan un arco punteado y varios puntos.](/imagenes-problemas/hmmt/2025/dcb968f470d9995223369f2d83efd4f0.webp)
 
 Sea $O$ el centro de $\omega$, y sea $P$ el punto donde se intersecan las dos rectas tangentes. Observa que $O$ está en la bisectriz externa de $\angle CPE$ porque las tangentes son simétricas respecto a la recta $PO$. Además, $O$ está en la mediatriz de $CE$ por simetría. Por el Hecho 5, $COPE$ es cíclico y $\angle COE = 90^{\circ}$. Para terminar, observa que $\angle COD = 45^{\circ}$. Trazando la altura $CH$ hacia $AD$ obtenemos $OH = CH = \sqrt{3}$. Así, $AO = AH - OH = 3 - \sqrt{3}$. La respuesta buscada es entonces $\frac{\sqrt{3}}{2} \cdot AO = \boxed{\frac{3\sqrt{3} - 3}{2}}$.
 
@@ -2759,7 +2759,7 @@ f(a + 101) \equiv f(a) + 101f^{\prime}(a) \equiv 20 + 101 \cdot 19 \equiv \boxed
 $$`),
   hmmt('HMMT-2025-GUTS25', 2025, 'GUTS', 25, "Trapecio con restricciones de bisectriz de ángulo", "Geometría",
     String.raw`Sea $ABCD$ un trapecio tal que $AB \parallel CD$, $AD = 13$, $BC = 15$, $AB = 20$, y $CD = 34$. El punto $X$ está dentro del trapecio de modo que $\angle XAB = 2\angle XBA$ y $\angle XDC = 2\angle XCD$. Calcula $XD - XA$.`,
-    String.raw`![Un trapecio etiquetado ABCD con AB paralelo a CD, y los puntos interiores X, P, y Q marcados. Se muestran varias marcas de ángulos y de congruencia, ilustrando las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/7a6b1d63c0cdadfc836209379f9acbdc.jpeg)
+    String.raw`![Un trapecio etiquetado ABCD con AB paralelo a CD, y los puntos interiores X, P, y Q marcados. Se muestran varias marcas de ángulos y de congruencia, ilustrando las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/7a6b1d63c0cdadfc836209379f9acbdc.webp)
 
 Construye el punto $P$ sobre $AB$ tal que $XA = XP$ y el punto $Q$ sobre $CD$ tal que $XD = XQ$. La condición de ángulos da $QC = XQ = XD$ y $PB = XP = XA$. Además, $ADQP$ es un trapecio isósceles.
 
@@ -2863,7 +2863,7 @@ $$
 
 por el Teorema de Pitágoras, lo cual significa que $XY = AX' = \boxed{\frac{11}{5}}$.
 
-Solución 2. ![Un diagrama geométrico que muestra dos círculos con los puntos A, B, X, Y, Z, O, M, N, P, y X' etiquetados. Se marcan varios segmentos y un ángulo recto en X, ilustrando las relaciones descritas.](/imagenes-problemas/hmmt/2025/79e94bdb5b607f1c5bb5ad0a8ff2bf6a.jpeg)
+Solución 2. ![Un diagrama geométrico que muestra dos círculos con los puntos A, B, X, Y, Z, O, M, N, P, y X' etiquetados. Se marcan varios segmentos y un ángulo recto en X, ilustrando las relaciones descritas.](/imagenes-problemas/hmmt/2025/79e94bdb5b607f1c5bb5ad0a8ff2bf6a.webp)
 
 Sea $M$ el punto medio de $AB$. Primero encontraremos $MO$.
 
@@ -2900,7 +2900,7 @@ de donde se sigue que $xy = 2$. De manera similar, $yz - \frac{1}{yz} = \frac{5}
 $$a = \frac{(10 / 3) - 1}{2\sqrt{10 / 3}} = \boxed{\frac{7}{2\sqrt{30}}}$$`),
   hmmt('HMMT-2025-GUTS31', 2025, 'GUTS', 31, "Círculo tangente a una parábola y a una curva cúbica", "Geometría",
     String.raw`Existe un único círculo que es tangente a la parábola $y = x^{2}$ en dos puntos y también tangente a la curva $x = \sqrt{\frac{y^{3}}{1 - y}}$. Calcula el radio de este círculo.`,
-    String.raw`![Un plano coordenado que muestra una parábola que abre hacia arriba, un círculo tangente a la parábola en dos puntos, y otra curva tangente al mismo círculo. También se muestra el círculo unitario como un círculo punteado.](/imagenes-problemas/hmmt/2025/8ed7b13c95d2c464ecbb46a164de476c.jpeg)
+    String.raw`![Un plano coordenado que muestra una parábola que abre hacia arriba, un círculo tangente a la parábola en dos puntos, y otra curva tangente al mismo círculo. También se muestra el círculo unitario como un círculo punteado.](/imagenes-problemas/hmmt/2025/8ed7b13c95d2c464ecbb46a164de476c.webp)
 
 Podemos elevar al cuadrado ambos lados de la segunda curva para obtener $x^{2} = \frac{y^{3}}{1 - y}$, lo cual se reordena a
 $$

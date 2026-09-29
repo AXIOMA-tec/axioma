@@ -3,7 +3,7 @@
 export default function AxiomaMark({ className = 'h-8 w-8' }) {
   return (
     <img
-      src="/axioma-mark.png"
+      src="/axioma-mark.webp"
       alt="Axioma"
       className={`object-contain ${className}`}
     />
