@@ -80,7 +80,7 @@ export default function Contacto() {
             rel="noreferrer"
             className="group inline-flex items-center gap-3 border border-[#FFB401] bg-[#FFB401] px-7 py-3.5 text-xs font-medium uppercase tracking-[0.18em] text-[#120303] transition-colors duration-300 hover:border-white hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
-            Escríbenos por Instagram
+            Únete aquí
             <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
               →
             </span>
