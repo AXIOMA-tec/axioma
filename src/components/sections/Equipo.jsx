@@ -65,7 +65,7 @@ const MIEMBROS_RESPALDO = [
     orden: 5,
     nombre: 'Alejandro José Alfaro García',
     rol: 'Dirección de Finanzas',
-    foto: null,
+    foto: '/equipo/alejandro-alfaro.jpg',
     email: 'A00842460@tec.mx',
     linkedin: 'https://www.linkedin.com/in/alejandro-j-alfaro-g/',
     // Sin GitHub: el botón simplemente no aparece.
