@@ -63,9 +63,29 @@ function renderFormulasEnLinea(texto, prefijoKey) {
   })
 }
 
+// Algunos problemas (ej. HMMT) traen un diagrama: una imagen en formato Markdown
+// metida en medio del enunciado o la solución, como "![texto alternativo](url)".
+// Se reconoce como un bloque más, igual que "$$...$$", y se dibuja como <img>
+// en vez de mandarla a KaTeX.
+const IMAGEN_REGEX = /^!\[([^\]]*)\]\(([^)]+)\)$/
+
 function renderEnunciado(texto) {
-  const bloques = texto.split(/(\$\$[\s\S]+?\$\$)/g)
+  const bloques = texto.split(/(\$\$[\s\S]+?\$\$|!\[[^\]]*\]\([^)]+\))/g)
   return bloques.map((bloque, i) => {
+    const esImagen = IMAGEN_REGEX.test(bloque)
+    if (esImagen) {
+      const [, alt, src] = bloque.match(IMAGEN_REGEX)
+      return (
+        <img
+          key={i}
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="my-4 max-w-full border border-neutral-200"
+        />
+      )
+    }
+
     const esDisplay = bloque.startsWith('$$') && bloque.endsWith('$$') && bloque.length > 4
     if (!esDisplay) return renderFormulasEnLinea(bloque, i)
 
@@ -92,7 +112,18 @@ const TEMAS = [
   'Probabilidad',
   'Teoría de Números',
 ]
-const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional']
+const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional', 'HMMT']
+
+// Contexto corto de cada concurso — se muestra solo al entrar a su carpeta
+// raíz (no en cada año/subcarpeta), para quien no sabe qué es "HMMT" u
+// "OMUM" a diferencia de Putnam. Nada inventado: descripciones generales de
+// cada torneo, no estadísticas específicas que habría que verificar.
+const CONTEXTO_CONCURSO = {
+  Putnam: 'La competencia universitaria de matemáticas más prestigiosa de Estados Unidos y Canadá (William Lowell Putnam Mathematical Competition). Un examen de seis horas con doce problemas extremadamente difíciles — resolver aunque sea uno completo ya es un logro.',
+  'OMUM Primera Ronda': 'La primera fase de la Olimpiada Mexicana Universitaria de Matemáticas: un examen clasificatorio que decide quién representa a su universidad en el Concurso Nacional.',
+  'OMUM Nacional': 'La fase final de la Olimpiada Mexicana Universitaria de Matemáticas, donde compiten los clasificados de universidades de todo el país.',
+  HMMT: 'Harvard-MIT Mathematics Tournament: uno de los torneos de matemáticas de preparatoria más grandes del mundo, con rondas individuales, por equipo, y la famosa ronda "Guts" cronometrada.',
+}
 
 // ---------------------------------------------------------------------------
 // Carpetas (Category): la API regresa una lista PLANA, cada una con un campo
@@ -133,6 +164,17 @@ function contarProblemas(nodo, problemas) {
 // último guion, sin importar cuántos guiones tenga el prefijo.
 function numeroProblema(problema) {
   return problema.codigo.split('-').pop()
+}
+
+// El número grande al inicio de cada fila (ver ProblemaRow). Para Putnam/OMUM
+// esto es lo mismo que numeroProblema ("A1", "B6": ya es corto). Pero en HMMT
+// ese número trae pegado el nombre de la ronda (ALGNT10, GUTS36...), que es
+// demasiado largo para esa columna angosta y se encima con el título de al
+// lado — ahí basta el número solo, porque la ronda completa ya aparece en el
+// título (ver formatearTitulo).
+function numeroIndice(problema) {
+  const numero = numeroProblema(problema)
+  return problema.tipo === 'HMMT' ? numero.replace(/^[A-Z]+/, '') : numero
 }
 
 function formatearTitulo(problema) {
@@ -707,7 +749,7 @@ function ProblemaRow({ problema, onOpen }) {
         className="absolute inset-0 origin-left scale-x-0 bg-neutral-100 transition-transform duration-300 ease-out group-hover:scale-x-100"
       />
       <span className="relative font-display text-xl tabular-nums text-neutral-400 transition-colors group-hover:text-neutral-950 sm:text-2xl">
-        {numeroProblema(problema)}
+        {numeroIndice(problema)}
       </span>
       <span className="relative min-w-0">
         <span className="block text-base text-neutral-950 sm:text-lg">
@@ -1378,6 +1420,15 @@ export default function Problemas() {
                   {cantidadVista} {cantidadVista === 1 ? 'problema' : 'problemas'}
                 </p>
               </div>
+
+              {/* Contexto del concurso: solo en la carpeta raíz de cada uno
+                  (no en cada año/subcarpeta) — para quien no sabe qué es
+                  "HMMT" u "OMUM" a diferencia de Putnam. */}
+              {vista === 'carpetas' && carpetaAbierta && !carpetaAbierta.parent && CONTEXTO_CONCURSO[carpetaAbierta.name] && (
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-neutral-600">
+                  {CONTEXTO_CONCURSO[carpetaAbierta.name]}
+                </p>
+              )}
 
               {/* Filtros activos como etiquetas que se pueden quitar. */}
               {hayFiltrosActivos && (

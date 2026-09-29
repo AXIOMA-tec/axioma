@@ -60,6 +60,12 @@ export const categorias = [
   { key: 'putnam-2012', name: '2012', parent: 'putnam' },
   { key: 'putnam-2013', name: '2013', parent: 'putnam' },
   { key: 'putnam-2014', name: '2014', parent: 'putnam' },
+  { key: 'putnam-2015', name: '2015', parent: 'putnam' },
+  { key: 'putnam-2016', name: '2016', parent: 'putnam' },
+  { key: 'putnam-2017', name: '2017', parent: 'putnam' },
+  { key: 'putnam-2018', name: '2018', parent: 'putnam' },
+  { key: 'putnam-2019', name: '2019', parent: 'putnam' },
+  { key: 'putnam-2020', name: '2020', parent: 'putnam' },
   { key: 'putnam-2021', name: '2021', parent: 'putnam' },
   { key: 'putnam-2022', name: '2022', parent: 'putnam' },
   { key: 'putnam-2023', name: '2023', parent: 'putnam' },
@@ -75,6 +81,9 @@ export const categorias = [
   { key: 'omum-nac-2024', name: '2024', parent: 'omum-nac' },
   { key: 'omum-nac-2025', name: '2025', parent: 'omum-nac' },
   { key: 'omum-nac-2026', name: '2026', parent: 'omum-nac' },
+
+  { key: 'hmmt', name: 'HMMT', parent: null },
+  { key: 'hmmt-2025', name: '2025', parent: 'hmmt' },
 ]
 
 // posicion = lugar del problema dentro de su ronda/sección (1 = primero).
@@ -1163,49 +1172,569 @@ En cualquier punto del juego, el conjunto $S$ de elementos previamente elegidos 
 Ahora sea $G$ el grupo de matrices invertibles de $n\times n$ con entradas en $\mathbb{Z}/p\mathbb{Z}$. Si $p>2$, entonces $Z(S)$ siempre contendrá la matriz escalar $-1$ de orden 2, así que la victoria de Keeta está garantizada (una estrategia ganadora explícita es responder a cualquier movimiento $g$ con el movimiento $-g$). Si $p=2$, establecemos la existencia de $g \in G$ tal que $Z(\{g\})$ tiene orden impar usando la existencia de un polinomio irreducible $P(x)$ de grado $n$ sobre $\mathbb{Z}/p\mathbb{Z}$. Construimos una matriz de $n\times n$ sobre $\mathbb{Z}/p\mathbb{Z}$ con polinomio característico $P(x)$ tomando la matriz compañera de $P(x)$: escribe $P(x) = x^n+P_{n-1}x^{n-1}+\cdots+P_0$ y define $$ g = \begin{pmatrix} 0 & 0 & \cdots & 0 & -P_0 \\ 1 & 0 & \cdots & 0 & -P_1 \\ 0 & 1 & \cdots & 0 & -P_2 \\ \vdots & \vdots & \ddots & \vdots & \vdots \\ 0 & 0 & \cdots & 1 & -P_{n-1} \end{pmatrix}. $$ En particular, $\det(g) = (-1)^nP_0 \neq 0$, así que $g \in G$. Sobre una clausura algebraica de $\mathbb{Z}/p\mathbb{Z}$, $g$ se vuelve diagonalizable con valores propios distintos, así que cualquier matriz que conmute con $g$ también debe ser diagonalizable, y por lo tanto de orden impar. En particular, $Z(\{g\})$ tiene orden impar, así que Patniss tiene una estrategia ganadora. Por lo tanto, $$ \boxed{\text{Patniss gana si } p=2 \text{; Keeta gana si } p>2}. $$`),
 ]
 
+const putnam2015 = [
+  putnam('PUTNAM-2015-A2', 2015, 'A', 2, 'Factor primo impar de una recursión lineal a_n=4a_{n-1}−a_{n-2}', 'Teoría de Números',
+    String.raw`Sea $a_0=1$, $a_1=2$, y $a_n=4a_{n-1}-a_{n-2}$ para $n\geq 2$. Encuentra un factor primo impar de $a_{2015}$.`,
+    String.raw`Una respuesta posible es $181$. Por inducción, tenemos $a_n = ((2+\sqrt{3})^n+(2-\sqrt{3})^n)/2 = (\alpha^n+\beta^n)/2$ para todo $n$, donde $\alpha = 2+\sqrt{3}$ y $\beta = 2-\sqrt{3}$. Observa que si $k$ es un entero positivo impar y $a_n \neq 0$, entonces $$ \frac{a_{kn}}{a_n} = \frac{\alpha^{kn}+\beta^{kn}}{\alpha^n+\beta^n} = \alpha^{(k-1)n}-\alpha^{(k-2)n}\beta^n+\cdots-\alpha^n\beta^{(k-2)n}+\beta^{(k-1)n}. $$ Esta expresión es racional (porque $a_n$ y $a_{kn}$ son enteros) y de la forma $a+b\sqrt{3}$ para algunos enteros $a,b$ por las expresiones de $\alpha,\beta$; se sigue que debe ser un entero, así que $a_{kn}$ es divisible entre $a_n$. Aplicando esto a $n=5$ y $k=403$, encontramos que $a_{2015}$ es divisible entre $a_5 = 362$ y por lo tanto entre $\boxed{181}$.`),
+  putnam('PUTNAM-2015-A3', 2015, 'A', 3, 'Logaritmo base 2 de un producto doble de raíces de la unidad', 'Teoría de Números',
+    String.raw`Calcula $$ \log_2\left(\prod_{a=1}^{2015}\prod_{b=1}^{2015}(1+e^{2\pi i a b/2015})\right). $$ Aquí $i$ es la unidad imaginaria (es decir, $i^2=-1$).`,
+    String.raw`La respuesta es $13725$. Primero afirmamos que si $n$ es impar, entonces $\prod_{b=1}^n (1+e^{2\pi i ab/n}) = 2^{\gcd(a,n)}$. Para verlo, escribe $d=\gcd(a,n)$ y $a=da_1$, $n=dn_1$ con $\gcd(a_1,n_1)=1$. Entonces $a_1, 2a_1,\dots,n_1a_1$ módulo $n_1$ es una permutación de $1,2,\dots,n_1$ módulo $n_1$, así que, para $\omega=e^{2\pi i/n_1}$, $\omega^{a_1},\omega^{2a_1},\dots,\omega^{n_1a_1}$ es una permutación de $\omega,\omega^2,\ldots,\omega^{n_1}$; se sigue que $$ \prod_{b=1}^{n_1} (1+e^{2\pi i ab/n}) = \prod_{b=1}^{n_1} (1+e^{2\pi i a_1 b/n_1}) = \prod_{b=1}^{n_1} (1+\omega^b). $$ Como las raíces de $z^{n_1}-1$ son $\omega,\omega^2,\ldots,\omega^{n_1}$, se sigue que $z^{n_1}-1 = \prod_{b=1}^{n_1} (z-\omega^b)$. Sustituyendo $z=-1$ y usando que $n_1$ es impar da $\prod_{b=1}^{n_1}(1+\omega^b) = 2$. Finalmente, $\prod_{b=1}^n (1+e^{2\pi i ab/n}) = \left(\prod_{b=1}^{n_1}(1+e^{2\pi i ab/n})\right)^d = 2^d$, lo cual demuestra la afirmación.
+
+De la afirmación, encontramos que $$ \log_2\left(\prod_{a=1}^{2015}\prod_{b=1}^{2015}(1+e^{2\pi i ab/2015})\right) = \sum_{a=1}^{2015} \log_2\left(\prod_{b=1}^{2015}(1+e^{2\pi i ab/2015})\right) = \sum_{a=1}^{2015} \gcd(a,2015). $$ Ahora, para cada divisor $d$ de 2015, hay $\phi(2015/d)$ enteros entre 1 y 2015 inclusive cuyo mcd con 2015 es $d$. Así, $$ \sum_{a=1}^{2015} \gcd(a,2015) = \sum_{d\mid 2015} d\cdot\phi(2015/d). $$ Factorizamos $2015=pqr$ con $p=5$, $q=13$, $r=31$, y calculamos que $$ \sum_{d\mid pqr} d\cdot\phi(pqr/d) = (2p-1)(2q-1)(2r-1) $$ (sumando las ocho contribuciones correspondientes a cada divisor de $pqr$). Cuando $(p,q,r)=(5,13,31)$, esto es igual a $\boxed{13725}$.`),
+  putnam('PUTNAM-2015-A4', 2015, 'A', 4, 'Cota inferior óptima L=4/7 para una suma binaria ponderada', 'Análisis',
+    String.raw`Para cada número real $x$, sea $$ f(x) = \sum_{n\in S_x} \frac{1}{2^n}, $$ donde $S_x$ es el conjunto de enteros positivos $n$ para los cuales $\lfloor nx \rfloor$ es par. ¿Cuál es el mayor número real $L$ tal que $f(x) \geq L$ para todo $x \in [0,1)$?`,
+    String.raw`La respuesta es $L = 4/7$. Para $S \subset \mathbb{N}$, sea $F(S) = \sum_{n\in S} 1/2^n$, de modo que $f(x) = F(S_x)$. Observa que para $T=\{1,4,7,10,\ldots\}$, tenemos $F(T)=4/7$.
+
+Primero mostramos, por contradicción, que para cualquier $x \in [0,1)$, $f(x) \geq 4/7$. Como cada término de la serie geométrica $\sum_n 1/2^n$ es igual a la suma de todos los términos siguientes, si $S,S'$ son subconjuntos distintos de $\mathbb{N}$ y el menor entero positivo en uno de $S,S'$ pero no en el otro está en $S$, entonces $F(S) \geq F(S')$. Supón $f(x) < 4/7$; entonces el menor entero en uno de $S_x, T$ pero no en el otro está en $T$. Ahora $1 \in S_x$ para cualquier $x \in [0,1)$, y concluimos que hay tres enteros consecutivos $n,n+1,n+2$ que no están en $S_x$: es decir, $\lfloor nx\rfloor$, $\lfloor(n+1)x\rfloor$, $\lfloor(n+2)x\rfloor$ son todos impares. Como la diferencia entre términos consecutivos de $nx$, $(n+1)x$, $(n+2)x$ es $x<1$, concluimos que $\lfloor nx\rfloor = \lfloor(n+1)x\rfloor = \lfloor(n+2)x\rfloor$, así que $x<1/2$. Pero entonces $2 \in S_x$, así que $f(x) \geq 3/4$, contradiciendo nuestra suposición.
+
+Falta mostrar que $4/7$ es la mayor cota inferior para $f(x)$, $x\in[0,1)$. Para cualquier $n$, elige $x=2/3-\epsilon$ con $0<\epsilon<1/(9n)$; entonces para $1\leq k\leq n$ se puede verificar que $$ \lfloor(3k-2)x\rfloor = 2k-2, \qquad \lfloor(3k-1)x\rfloor = 2k-1, \qquad \lfloor 3kx\rfloor = 2k-1. $$ Se sigue que $S_x$ es un subconjunto de $S=\{1,4,7,\ldots,3n-2,3n+1,3n+2,3n+3,\ldots\}$, así que $$ f(x)=F(S_x) \leq F(S) = \left(\frac{1}{2}+\frac{1}{2^4}+\cdots+\frac{1}{2^{3n+1}}\right)+\frac{1}{2^{3n+1}}. $$ Esta última expresión tiende a $4/7$ cuando $n\to\infty$, así que ningún número mayor que $4/7$ puede ser cota inferior de $f(x)$ para todo $x\in[0,1)$. Por lo tanto, $\boxed{L=\frac{4}{7}}$.`),
+  putnam('PUTNAM-2015-B1', 2015, 'B', 1, "Al menos dos ceros de f+6f'+12f''+8f''' dado 5 ceros de f", 'Análisis',
+    String.raw`Sea $f$ una función tres veces diferenciable (definida en $\mathbb{R}$ y con valores reales) tal que $f$ tiene al menos cinco ceros reales distintos. Demuestra que $f + 6f' + 12f'' + 8f'''$ tiene al menos dos ceros reales distintos.`,
+    String.raw`Sea $g(x) = e^{x/2} f(x)$. Entonces $g$ tiene al menos 5 ceros reales distintos, y aplicando repetidamente el teorema de Rolle, $g', g'', g'''$ tienen al menos $4,3,2$ ceros reales distintos, respectivamente. Pero $$ g'''(x) = \frac{1}{8} e^{x/2} \left(f(x) + 6f'(x) + 12f''(x) + 8f'''(x)\right), $$ y $e^{x/2}$ nunca es cero, así que obtenemos el resultado deseado.`),
+  putnam('PUTNAM-2015-B2', 2015, 'B', 2, '42015 aparece en la secuencia de sumas de tríos consecutivos', 'Teoría de Números',
+    String.raw`Dada la lista de enteros positivos $1,2,3,4,\dots$, toma los primeros tres números $1,2,3$ y su suma $6$, y elimina los cuatro números de la lista. Repite con los tres números restantes más pequeños $4,5,7$ y su suma $16$. Continúa así, eliminando los tres números restantes más pequeños y su suma, y considera la sucesión de sumas producida: $6, 16, 27, 36, \dots$. Demuestra o refuta que hay algún número en la sucesión cuya representación en base 10 termina en $2015$.`,
+    String.raw`Demostraremos que 42015 es tal número en la sucesión. Etiqueta la sucesión de sumas $s_0, s_1, \dots$, y sean $a_n, b_n, c_n$ los sumandos de $s_n$ en orden ascendente. Se puede probar por inducción que, para cada entero no negativo $n$: (a) la secuencia $a_{3n}, b_{3n}, c_{3n}, a_{3n+1}, b_{3n+1}, c_{3n+1}, a_{3n+2}, b_{3n+2}, c_{3n+2}$ se obtiene de la secuencia $10n+1, \dots, 10n+10$ eliminando uno de $10n+5, 10n+6, 10n+7$; y (b) se tiene $s_{3n} = 30n+6$, $s_{3n+1} \in \{30n+15, 30n+16, 30n+17\}$, $s_{3n+2} = 30n+27$. Estas afirmaciones se verifican por inducción, partiendo del caso base $n=0,1,2$ (donde $(a,b,c,s)$ es $(1,2,3,6)$, $(4,5,7,16)$, $(8,9,10,27)$) y observando que cada paso implica el siguiente.
+
+Para producir un valor de $n$ para el cual $s_n \equiv 2015 \pmod{10000}$, tomamos $n=3m+1$ para algún entero no negativo $m$ tal que $s_{3m+1}=30m+15$. También necesitamos $30m \equiv 2000 \pmod{10000}$, es decir, $m \equiv 400 \pmod{1000}$. Tomando $m=1400$, aseguramos que $m \equiv 2 \pmod 3$, lo cual garantiza que $s_{3m+1}=30m+15$; esto da $$ s_n = 30m+15 = \boxed{42015}, $$ como se quería.`),
+  putnam('PUTNAM-2015-B4', 2015, 'B', 4, 'Suma sobre triples triangulares (a,b,c) de 2^a/(3^b 5^c)', 'Teoría de Números',
+    String.raw`Sea $T$ el conjunto de todas las ternas $(a,b,c)$ de enteros positivos para las cuales existen triángulos con lados $a,b,c$. Expresa $$ \sum_{(a,b,c)\in T} \frac{2^a}{3^b5^c} $$ como un número racional en su forma más simple.`,
+    String.raw`La respuesta es $17/21$. Para $b,c$ fijos, hay un triángulo de lados $a,b,c$ si y solo si $|b-c|<a<b+c$. Se sigue que la suma buscada es $$ S = \sum_{b,c} \frac{1}{3^b5^c}\left(\sum_{a=|b-c|+1}^{b+c-1} 2^a\right) = \sum_{b,c} \frac{2^{b+c}-2^{|b-c|+1}}{3^b5^c}. $$ Escribimos esto como $S=S_1+S_2$, donde $S_1$ suma sobre enteros positivos $b,c$ con $b\leq c$ y $S_2$ sobre $b>c$. Entonces $$ S_1 = \sum_{b=1}^\infty \sum_{c=b}^\infty \frac{2^{b+c}-2^{c-b+1}}{3^b5^c} = \sum_{b=1}^\infty \left(\left(\frac{2}{3}\right)^b-\frac{2}{6^b}\right)\frac{5}{3}\left(\frac{2}{5}\right)^b = \sum_{b=1}^\infty \left(\frac{5}{3}\left(\frac{4}{15}\right)^b - \frac{10}{3}\left(\frac{1}{15}\right)^b\right) = \frac{85}{231}. $$ De manera similar, $$ S_2 = \sum_{c=1}^\infty \sum_{b=c+1}^\infty \frac{2^{b+c}-2^{b-c+1}}{3^b5^c} = \sum_{c=1}^\infty \left(2\left(\frac{4}{15}\right)^c - 4\left(\frac{1}{15}\right)^c\right) = \frac{34}{77}. $$ Concluimos que $S = S_1+S_2 = \boxed{\frac{17}{21}}$.`),
+  putnam('PUTNAM-2015-B5', 2015, 'B', 5, 'Invariante P_{n+5}−P_{n+4}−P_{n+3}+P_n=4 en permutaciones acotadas', 'Combinatoria',
+    String.raw`Sea $P_n$ el número de permutaciones $\pi$ de $\{1,2,\dots,n\}$ tales que $$ |i-j|=1 \implies |\pi(i)-\pi(j)| \leq 2 $$ para todos $i,j$ en $\{1,2,\dots,n\}$. Demuestra que, para $n \geq 2$, la cantidad $$ P_{n+5} - P_{n+4} - P_{n+3} + P_n $$ no depende de $n$, y encuentra su valor.`,
+    String.raw`La respuesta es $\boxed{4}$. Supongamos $n \geq 3$ por el momento. Escribimos las permutaciones $\pi$ contadas por $P_n$ como secuencias $\pi(1),\pi(2),\ldots,\pi(n)$. Sea $U_n$ el número de permutaciones contadas por $P_n$ que terminan en $n-1,n$; sea $V_n$ el número que termina en $n,n-1$; sea $W_n$ el número que comienza en $n-1$ y termina en $n-2,n$; sea $T_n$ el número que termina en $n-2,n$ pero no comienza en $n-1$; y sea $S_n$ el número que tiene $n-1,n$ consecutivos en ese orden, pero no al principio ni al final. Es claro que toda permutación $\pi$ contada por $P_n$ está en exactamente uno de los conjuntos contados por $U_n, V_n, W_n, T_n, S_n$, o es el reverso de tal permutación. Por lo tanto, $$ P_n = 2(U_n+V_n+W_n+T_n+S_n). $$ Examinando cómo cada elemento de los conjuntos contados por $U_{n+1}, V_{n+1}, W_{n+1}, T_{n+1}, S_{n+1}$ se puede obtener de un elemento (único) de uno de los conjuntos contados por $U_n, V_n, W_n, T_n, S_n$ insertando adecuadamente el elemento $n+1$, obtenemos las relaciones de recurrencia $$ U_{n+1}=U_n+W_n+T_n, \quad V_{n+1}=U_n, \quad W_{n+1}=W_n, \quad T_{n+1}=V_n, \quad S_{n+1}=S_n+V_n. $$ También es claro que $W_n=1$ para todo $n$.
+
+Aunque hemos supuesto $n \geq 3$, es sencillo extrapolar las sucesiones $P_n,U_n,V_n,W_n,T_n,S_n$ hasta $n=2$ preservando las identidades anteriores. Aplicando estas recurrencias repetidamente, para todo $n \geq 2$ se obtiene, tras varios pasos algebraicos, $$ P_{n+5} = P_{n+4}+P_{n+3}-P_n+4, $$ como se quería.`),
+  putnam('PUTNAM-2015-B6', 2015, 'B', 6, 'Suma alternante de A(k)/k converge a π²/16', 'Teoría de Números',
+    String.raw`Para cada entero positivo $k$, sea $A(k)$ el número de divisores impares de $k$ en el intervalo $[1, \sqrt{2k})$. Evalúa $$ \sum_{k=1}^\infty (-1)^{k-1} \frac{A(k)}{k}. $$`,
+    String.raw`(de artofproblemsolving.com) Demostraremos que la suma converge a $\pi^2/16$. Observa primero que la suma no converge absolutamente, así que no somos libres de reordenarla arbitrariamente; de hecho, el criterio usual de series alternantes tampoco aplica directamente, porque los valores absolutos de los términos no decrecen a 0, así que incluso la convergencia de la suma debe establecerse a mano.
+
+Dejando esto de lado por un momento, observa que los elementos del conjunto contado por $A(k)$ son los enteros positivos impares $d$ para los cuales $m=k/d$ también es entero y $d<\sqrt{2dm}$; si escribimos $d=2\ell-1$, la condición sobre $m$ se reduce a $m \geq \ell$. En otras palabras, la suma original es igual a $$ S_1 := \sum_{k=1}^\infty \sum_{\ell \geq 1,\, m \geq \ell,\, k=m(2\ell-1)} \frac{(-1)^{m-1}}{m(2\ell-1)}, $$ y quisiéramos reordenarla como $$ S_2 := \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \sum_{m=\ell}^\infty \frac{(-1)^{m-1}}{m}, $$ en la cual ambas sumas convergen por el criterio de series alternantes. De hecho, se cumple algo más fuerte: $$ \left| \sum_{m=\ell}^\infty \frac{(-1)^{m-1}}{m} \right| < \frac{1}{\ell}, $$ así que la suma exterior converge absolutamente. En particular, $S_2$ es el límite de las sumas truncadas $$ S_{2,n} = \sum_{\ell(2\ell-1) \leq n} \frac{1}{2\ell-1} \sum_{m=\ell}^\infty \frac{(-1)^{m-1}}{m}. $$ Para ver que $S_1$ converge al mismo valor que $S_2$, se puede mostrar que la diferencia entre $S_{2,n}$ y la suma truncada correspondiente de $S_1$ está acotada en valor absoluto por $\sum_{\ell(2\ell-1)\leq n} \frac{1}{n}$, cuyo número de sumandos es a lo más $\sqrt{n}$; así, esa diferencia está acotada por $1/\sqrt{n}$ y converge a cero cuando $n\to\infty$. Es decir, $S_1$ converge y es igual a $S_2$.
+
+Nos concentramos entonces en calcular $S_2$. Comenzamos escribiendo $$ S_2 = \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \sum_{m=\ell}^\infty (-1)^{m-1} \int_0^1 t^{m-1}\,dt. $$ El siguiente paso es intercambiar la suma interior con la integral; esto se justifica mediante el teorema de convergencia monótona de Lebesgue. Así, $$ S_2 = \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \int_0^1 \left(\sum_{m=\ell}^\infty (-1)^{m-1} t^{m-1}\right)\,dt = \sum_{\ell=1}^\infty \frac{1}{2\ell-1} \int_0^1 \frac{(-t)^{\ell-1}}{1+t}\,dt. $$ Como la suma exterior converge absolutamente, podemos intercambiarla libremente con la integral: $$ S_2 = \int_0^1 \left(\sum_{\ell=1}^\infty \frac{1}{2\ell-1} \frac{(-t)^{\ell-1}}{1+t}\right)dt = \int_0^1 \frac{1}{\sqrt{t}(1+t)} \left(\sum_{\ell=1}^\infty \frac{(-1)^{\ell-1} t^{\ell-1/2}}{2\ell-1}\right) dt = \int_0^1 \frac{\arctan(\sqrt{t})}{\sqrt{t}(1+t)}\,dt. $$ Sustituyendo $u=\sqrt{t}$, $$ S_2 = \int_0^1 \frac{2}{1+u^2}\arctan(u)\,du = \arctan(1)^2 - \arctan(0)^2 = \boxed{\frac{\pi^2}{16}}. $$`),
+]
+
+const putnam2016 = [
+  putnam('PUTNAM-2016-A1', 2016, 'A', 1, 'Menor j para que p^(j)(k) sea divisible entre 2016', 'Teoría de Números',
+    String.raw`Encuentra el menor entero positivo $j$ tal que, para todo polinomio $p(x)$ con coeficientes enteros y todo entero $k$, el entero $$ p^{(j)}(k) = \left.\frac{d^j}{dx^j}p(x)\right|_{x=k} $$ (la $j$-ésima derivada de $p(x)$ en $k$) es divisible entre 2016.`,
+    String.raw`La respuesta es $j=8$. Primero supón que $j$ satisface la condición dada. Para $p(x)=x^j$, tenemos $p^{(j)}(x)=j!$, así que $j!$ debe ser divisible entre 2016. Como 2016 es divisible entre $2^5$ y $7!$ no lo es, se sigue que $j \geq 8$. Recíprocamente, afirmamos que $j=8$ funciona. En efecto, sea $p(x)=\sum_{m=0}^n a_m x^m$ un polinomio con coeficientes enteros; entonces, para cualquier entero $k$, $$ p^{(8)}(k) = \sum_{m=8}^n m(m-1)\cdots(m-7)a_m k^{m-8} = \sum_{m=8}^n \binom{m}{8} 8! \, a_m k^{m-8} $$ es divisible entre $8! = 20 \cdot 2016$, así que $p^{(8)}(k)$ es divisible entre 2016. Por lo tanto, $\boxed{j=8}$.`),
+  putnam('PUTNAM-2016-A2', 2016, 'A', 2, 'Límite de M(n)/n para el mayor m con C(m,n−1)>C(m−1,n)', 'Análisis',
+    String.raw`Dado un entero positivo $n$, sea $M(n)$ el mayor entero $m$ tal que $$ \binom{m}{n-1} > \binom{m-1}{n}. $$ Evalúa $$ \lim_{n \to \infty} \frac{M(n)}{n}. $$`,
+    String.raw`La respuesta es $\frac{3+\sqrt{5}}{2}$. Observa que para $m>n+1$, ambos coeficientes binomiales son no nulos y su razón es $$ \binom{m}{n-1}\Big/\binom{m-1}{n} = \frac{mn}{(m-n+1)(m-n)}. $$ Así, la condición $\binom{m}{n-1}>\binom{m-1}{n}$ equivale a $(m-n+1)(m-n)-mn<0$. El lado izquierdo de esta desigualdad es una función cuadrática de $m$ con raíces $$ \alpha(n) = \frac{3n-1+\sqrt{5n^2-2n+1}}{2}, \qquad \beta(n) = \frac{3n-1-\sqrt{5n^2-2n+1}}{2}, $$ ambas reales ya que $5n^2-2n+1 = 4n^2+(n-1)^2 > 0$; se sigue que $m$ satisface la desigualdad dada si y solo si $\beta(n)<m<\alpha(n)$. (Observa que, como $\alpha(n)-\beta(n)=\sqrt{5n^2-2n+1}>1$, siempre hay algún entero $m$ entre $\beta(n)$ y $\alpha(n)$.) Concluimos que $M(n)$ es el mayor entero estrictamente menor que $\alpha(n)$, y así $\alpha(n)-1 \leq M(n) < \alpha(n)$. Ahora $$ \lim_{n\to\infty} \frac{\alpha(n)}{n} = \lim_{n\to\infty} \frac{3-\frac{1}{n}+\sqrt{5-\frac{2}{n}+\frac{1}{n^2}}}{2} = \frac{3+\sqrt{5}}{2}, $$ y de manera similar $\lim_{n\to\infty}\frac{\alpha(n)-1}{n}=\frac{3+\sqrt{5}}{2}$, así que por el teorema del sándwich, $$ \lim_{n\to\infty} \frac{M(n)}{n} = \boxed{\frac{3+\sqrt{5}}{2}}. $$`),
+  putnam('PUTNAM-2016-A3', 2016, 'A', 3, 'Integral de f dado f(x)+f(1−1/x)=arctan(x)', 'Análisis',
+    String.raw`Supón que $f$ es una función de $\mathbb{R}$ a $\mathbb{R}$ tal que $$ f(x) + f\left(1-\frac{1}{x}\right) = \arctan x $$ para todo real $x \neq 0$. (Como es usual, $y=\arctan x$ significa $-\pi/2 < y < \pi/2$ y $\tan y = x$.) Encuentra $$ \int_0^1 f(x)\,dx. $$`,
+    String.raw`La ecuación funcional dada, junto con la misma ecuación pero reemplazando $x$ por $\frac{x-1}{x}$ y por $\frac{1}{1-x}$ respectivamente, da: $$ f(x) + f\left(1-\frac{1}{x}\right) = \arctan(x), $$ $$ f\left(\frac{x-1}{x}\right) + f\left(\frac{1}{1-x}\right) = \arctan\left(\frac{x-1}{x}\right), $$ $$ f\left(\frac{1}{1-x}\right) + f(x) = \arctan\left(\frac{1}{1-x}\right). $$ Sumando la primera y la tercera y restando la segunda: $$ 2f(x) = \arctan(x) + \arctan\left(\frac{1}{1-x}\right) - \arctan\left(\frac{x-1}{x}\right). $$ Ahora, $\arctan(t)+\arctan(1/t)$ es igual a $\pi/2$ si $t>0$ y $-\pi/2$ si $t<0$; se sigue que, para $x \in (0,1)$, $$ 2(f(x)+f(1-x)) = \left(\arctan(x)+\arctan(1/x)\right) + \left(\arctan(1-x)+\arctan\left(\frac{1}{1-x}\right)\right) - \left(\arctan\left(\frac{x-1}{x}\right)+\arctan\left(\frac{x}{x-1}\right)\right) = \frac{\pi}{2}+\frac{\pi}{2}+\frac{\pi}{2} = \frac{3\pi}{2}. $$ Así, $$ 4\int_0^1 f(x)\,dx = 2\int_0^1 (f(x)+f(1-x))\,dx = \frac{3\pi}{2}, $$ y finalmente $$ \int_0^1 f(x)\,dx = \boxed{\frac{3\pi}{8}}. $$`),
+  putnam('PUTNAM-2016-A4', 2016, 'A', 4, 'Mínimo de fichas mn para teselar un rectángulo (2m−1)×(2n−1)', 'Combinatoria',
+    String.raw`Considera una región rectangular de $(2m-1) \times (2n-1)$, donde $m$ y $n$ son enteros con $m, n \geq 4$. Esta región se va a teselar usando fichas de dos tipos mostrados en una figura (las líneas punteadas dividen las fichas en cuadrados de $1\times 1$). Las fichas se pueden rotar y reflejar, siempre que sus lados queden paralelos a los lados de la región; deben caber dentro de la región y cubrirla por completo sin traslaparse. ¿Cuál es el número mínimo de fichas necesarias para cubrir la región?`,
+    String.raw`El número mínimo de fichas es $mn$. Para ver que se necesitan al menos tantas, etiqueta las casillas $(i,j)$ con $1\leq i\leq 2m-1$ y $1\leq j\leq 2n-1$, y colorea de rojo cada casilla con $i,j$ ambos impares; entonces ninguna ficha puede cubrir más de una casilla roja, y hay $mn$ casillas rojas.
+
+Falta mostrar que se puede cubrir cualquier rectángulo $(2m-1)\times(2n-1)$ con $mn$ fichas cuando $m,n\geq 4$. Primero observa que se puede teselar cualquier rectángulo $2\times(2k-1)$ con $k\geq 3$ usando $k$ fichas: una del primer tipo, luego $k-2$ del segundo tipo, y finalmente una del primer tipo. Así, si podemos cubrir un cuadrado $7\times 7$ con 16 fichas, entonces podemos cubrir el rectángulo general $(2m-1)\times(2n-1)$, descomponiéndolo en un cuadrado $7\times 7$ en la esquina inferior izquierda, junto con $m-4$ rectángulos $2\times 7$ a la derecha del cuadrado, y $n-4$ rectángulos $(2m-1)\times 2$ arriba, y teselando cada uno de estos por separado, para un total de $16+4(m-4)+m(n-4) = mn$ fichas.
+
+Para cubrir el cuadrado $7\times 7$, observa que la teselación debe consistir de 15 fichas del primer tipo y 1 del segundo tipo, y que cualquier rectángulo $2\times 3$ se puede cubrir con 2 fichas del primer tipo. Así, podemos construir una cobertura adecuada cubriendo todo excepto la casilla central con ocho rectángulos $2\times 3$, de modo que la casilla central se pueda unir a uno de estos rectángulos para formar una figura que se cubre con dos fichas. Existen muchas soluciones posibles de este tipo. Por lo tanto, el mínimo buscado es $$ \boxed{mn}. $$`),
+  putnam('PUTNAM-2016-A6', 2016, 'A', 6, 'Menor constante C=5/6 para ∫|P| en cúbicos con raíz en [0,1]', 'Álgebra',
+    String.raw`Encuentra la menor constante $C$ tal que, para todo polinomio real $P(x)$ de grado 3 que tiene una raíz en el intervalo $[0,1]$, $$ \int_0^1 \left| P(x) \right|\,dx \leq C \max_{x \in [0,1]} \left| P(x) \right|. $$`,
+    String.raw`Demostramos que el menor valor de $C$ es $\boxed{5/6}$ (basado en una sugerencia de Daniel Kane). Primero reducimos al caso en que $P$ es no negativo en $[0,1]$ y $P(0)=0$. Para lograr esto, supón que un valor dado de $C$ satisface la desigualdad para tal $P$. Para $P$ general, divide el intervalo $[0,1]$ en subintervalos $I_1,\dots,I_k$ en las raíces de $P$. Escribe $\ell(I_i)$ para la longitud de $I_i$; como cada intervalo está acotado por una raíz de $P$, podemos hacer un cambio lineal de variable para ver que $$ \int_{I_i} |P(x)|\,dx \leq C\, \ell(I_i) \max_{x \in I_i} |P(x)| \quad (i=1,\dots,k). $$ Sumando sobre $i$ se obtiene la desigualdad deseada.
+
+Supón ahora que $P$ toma valores no negativos en $[0,1]$, $P(0)=0$, y $\max_{x\in[0,1]} P(x) = 1$. Escribe $P(x)=ax^3+bx^2+cx$ para algunos $a,b,c \in \mathbb{R}$; entonces $$ \int_0^1 P(x)\,dx = \frac{1}{4}a+\frac{1}{3}b+\frac{1}{2}c = \frac{2}{3}\left(\frac{1}{8}a+\frac{1}{4}b+\frac{1}{2}c\right) + \frac{1}{6}(a+b+c) = \frac{2}{3}P\left(\frac{1}{2}\right) + \frac{1}{6}P(1) \leq \frac{2}{3}+\frac{1}{6} = \frac{5}{6}. $$ En consecuencia, la desigualdad original se cumple con $C=5/6$.
+
+Para demostrar que este valor es óptimo, basta exhibir un polinomio $P$ como el anterior con $\int_0^1 P(x)\,dx = 5/6$; verificamos que $$ P(x) = 4x^3-8x^2+5x $$ tiene esta propiedad. Es evidente que $\int_0^1 P(x)\,dx=5/6$. Como $P'(x)=(2x-1)(6x-5)$ y $$ P(0)=0, \quad P\left(\frac{1}{2}\right)=1, \quad P\left(\frac{5}{6}\right)=\frac{25}{27}, \quad P(1)=1, $$ se sigue que $P$ crece de 0 en $x=0$ a 1 en $x=1/2$, luego decrece a un valor positivo en $x=5/6$, y luego crece a 1 en $x=1$. Por lo tanto $P$ tiene la forma requerida.`),
+  putnam('PUTNAM-2016-B1', 2016, 'B', 1, 'Suma de una sucesión x_{n+1}=ln(e^{x_n}−x_n)', 'Análisis',
+    String.raw`Sea $x_0,x_1,x_2,\dots$ la sucesión tal que $x_0=1$ y, para $n \geq 0$, $$ x_{n+1} = \ln(e^{x_n} - x_n) $$ (como es usual, $\ln$ es el logaritmo natural). Demuestra que la serie infinita $$ x_0 + x_1 + x_2 + \cdots $$ converge, y encuentra su suma.`,
+    String.raw`Observa que la función $e^x-x$ es estrictamente creciente para $x>0$ (porque su derivada es $e^x-1$, positiva porque $e^x$ es estrictamente creciente), y su valor en 0 es 1. Por inducción en $n$, vemos que $x_n>0$ para todo $n$.
+
+Exponenciando la ecuación que define $x_{n+1}$, obtenemos $$ x_n = e^{x_n} - e^{x_{n+1}}. $$ Usamos esta ecuación repetidamente para obtener información cada vez más precisa sobre la sucesión $\{x_n\}$: como $x_n>0$, tenemos $e^{x_n}>e^{x_{n+1}}$, así que $x_n>x_{n+1}$; como la sucesión $\{x_n\}$ es decreciente y acotada por debajo por 0, converge a algún límite $L$; tomando límites en la ecuación se obtiene $L=e^L-e^L$, de donde $L=0$; y, como $L=0$, la sucesión $\{e^{x_n}\}$ converge a 1.
+
+Ahora tenemos una suma telescópica: $$ x_0+\cdots+x_n = (e^{x_0}-e^{x_1})+\cdots+(e^{x_n}-e^{x_{n+1}}) = e^{x_0}-e^{x_{n+1}} = e-e^{x_{n+1}}. $$ Tomando límites, vemos que la suma $x_0+x_1+\cdots$ converge al valor $\boxed{e-1}$.`),
+  putnam('PUTNAM-2016-B2', 2016, 'B', 2, 'Exponente α y constante β para el conteo de enteros "squarish"', 'Teoría de Números',
+    String.raw`Define un entero positivo $n$ como "squarish" si $n$ mismo es un cuadrado perfecto, o si la distancia de $n$ al cuadrado perfecto más cercano es un cuadrado perfecto. Por ejemplo, 2016 es squarish, porque el cuadrado perfecto más cercano a 2016 es $45^2=2025$ y $2025-2016=9$ es un cuadrado perfecto. (De los enteros positivos entre 1 y 10, solo 6 y 7 no son squarish.) Para un entero positivo $N$, sea $S(N)$ el número de enteros squarish entre 1 y $N$, inclusive. Encuentra constantes positivas $\alpha$ y $\beta$ tales que $$ \lim_{N \to \infty} \frac{S(N)}{N^\alpha} = \beta, $$ o demuestra que tales constantes no existen.`,
+    String.raw`Demostramos que el límite existe para $\alpha=\frac{3}{4}$, $\beta=\frac{4}{3}$. Para cualquier entero positivo dado $n$, los enteros más cercanos a $n^2$ que a cualquier otro cuadrado perfecto son los del intervalo $[n^2-n-1, n^2+n]$. El número de enteros squarish en este intervalo es $1+\lfloor\sqrt{n-1}\rfloor+\lfloor\sqrt{n}\rfloor$. A grandes rasgos, esto significa que $$ S(N) \sim \int_0^{\sqrt{N}} 2\sqrt{x}\,dx = \frac{4}{3}N^{3/4}. $$ Para hacer esto preciso, usamos las cotas $x-1 \leq \lfloor x \rfloor \leq x$, y las estimaciones de sumas de Riemann superior e inferior para la integral de $\sqrt{x}$, para obtener cotas superior e inferior en $S(N)$: $$ S(N) \geq \sum_{n=1}^{\lfloor \sqrt{N} \rfloor - 1} (2\sqrt{n-1}-1) \geq \int_0^{\lfloor \sqrt{N} \rfloor - 2} 2\sqrt{x}\,dx - \sqrt{N} \geq \frac{4}{3}(\sqrt{N}-3)^{3/2} - \sqrt{N}, $$ $$ S(N) \leq \sum_{n=1}^{\lceil \sqrt{N} \rceil} (2\sqrt{n}+1) \leq \int_0^{\lceil \sqrt{N}\rceil+1} 2\sqrt{x}\,dx + \sqrt{N}+1 \leq \frac{4}{3}(\sqrt{N}+2)^{3/2}+\sqrt{N}+1. $$ Ambas cotas, divididas entre $N^{3/4}$, tienden a $4/3$ cuando $N\to\infty$, lo cual confirma que $$ \lim_{N\to\infty} \frac{S(N)}{N^{3/4}} = \boxed{\frac{4}{3}}. $$`),
+  putnam('PUTNAM-2016-B4', 2016, 'B', 4, 'Valor esperado de det(A−A^t) para una matriz aleatoria 0/1', 'Combinatoria',
+    String.raw`Sea $A$ una matriz de $2n \times 2n$, con entradas elegidas independientemente al azar. Cada entrada se elige como 0 o 1, cada una con probabilidad $1/2$. Encuentra el valor esperado de $\det(A-A^t)$ (como función de $n$), donde $A^t$ es la transpuesta de $A$.`,
+    String.raw`El valor esperado es igual a $$ \boxed{\frac{(2n)!}{4^n n!}}. $$ Escribe el determinante de $A-A^t$ como la suma sobre permutaciones $\sigma$ de $\{1,\dots,2n\}$ del producto $$ \operatorname{sgn}(\sigma) \prod_{i=1}^{2n} (A-A^t)_{i \sigma(i)} = \operatorname{sgn}(\sigma) \prod_{i=1}^{2n} (A_{i \sigma(i)} - A_{\sigma(i) i}); $$ entonces el valor esperado del determinante es la suma sobre $\sigma$ del valor esperado de este producto, que denotamos $E_\sigma$.
+
+Observa que si partimos $\{1,\dots,2n\}$ en órbitas de la acción de $\sigma$, y partimos los factores del producto de acuerdo con esto, ninguna entrada de $A$ aparece en más de uno de estos factores; en consecuencia, estos factores son variables aleatorias independientes, y podemos calcular $E_\sigma$ como el producto de los valores esperados de los factores individuales.
+
+Es claro que cualquier órbita de tamaño 1 produce el factor cero, así que el valor esperado del factor correspondiente es cero. Para una órbita de tamaño $m \geq 3$, el factor correspondiente contiene $2m$ entradas distintas de la matriz, así que de nuevo podemos calcular el valor esperado del factor como producto de los valores esperados de los términos individuales $A_{i\sigma(i)}-A_{\sigma(i)i}$; pero la distribución de este término es simétrica respecto a 0, así que su valor esperado es 0.
+
+Concluimos que $E_\sigma=0$ a menos que $\sigma$ actúe con $n$ órbitas de tamaño 2. Para calcular $E_\sigma$ en este caso, supón sin pérdida de generalidad que las órbitas de $\sigma$ son $\{1,2\},\dots,\{2n-1,2n\}$; observa que $\operatorname{sgn}(\sigma)=(-1)^n$. Entonces $E_\sigma$ es el valor esperado de $\prod_{i=1}^n -(A_{(2i-1)2i}-A_{2i(2i-1)})^2$, que es $(-1)^n$ veces la $n$-ésima potencia del valor esperado de $(A_{12}-A_{21})^2$. Como $A_{12}-A_{21}$ toma los valores $-1,0,1$ con probabilidades $\frac{1}{4},\frac{1}{2},\frac{1}{4}$, su cuadrado toma los valores $0,1$ con probabilidades $\frac{1}{2},\frac{1}{2}$; concluimos que $$ E_\sigma = 2^{-n}. $$ Las permutaciones $\sigma$ de esta forma corresponden a particiones no ordenadas de $\{1,\dots,2n\}$ en $n$ conjuntos de tamaño 2, así que hay $$ \frac{(2n)!}{n!(2!)^n} $$ tales permutaciones. Combinando todo esto se obtiene el resultado afirmado.`),
+  putnam('PUTNAM-2016-B5', 2016, 'B', 5, 'Funciones f con (f(x))²≤f(y)≤(f(x))³ dado x²≤y≤x³', 'Análisis',
+    String.raw`Encuentra todas las funciones $f$ del intervalo $(1, \infty)$ a $(1, \infty)$ con la siguiente propiedad: si $x,y \in (1, \infty)$ y $x^2 \leq y \leq x^3$, entonces $(f(x))^2 \leq f(y) \leq (f(x))^3$.`,
+    String.raw`Es claro que, para cualquier $c>0$, la función $f(x)=x^c$ tiene la propiedad deseada; demostraremos que, recíprocamente, cualquier función con esta propiedad tiene esta forma para algún $c$.
+
+Define la función $g:(0,\infty)\to(0,\infty)$ dada por $g(x)=\log f(e^x)$; esta función tiene la propiedad de que si $x,y\in(0,\infty)$ y $2x\leq y\leq 3x$, entonces $2g(x)\leq g(y)\leq 3g(x)$. Bastará mostrar que existe $c>0$ tal que $g(x)=cx$ para todo $x>0$.
+
+De manera similar, define $h:\mathbb{R}\to\mathbb{R}$ dada por $h(x)=\log g(e^x)$; esta función tiene la propiedad de que si $x,y\in\mathbb{R}$ y $x+\log 2 \leq y \leq x+\log 3$, entonces $h(x)+\log 2 \leq h(y) \leq h(x)+\log 3$. Bastará mostrar que existe $c$ tal que $h(x)=x+c$ para todo $x\in\mathbb{R}$ (pues entonces $g(x)=e^cx$ para todo $x>0$).
+
+Intercambiando los papeles de $x$ y $y$, podemos reformular la condición sobre $h$ así: si $x-\log 3 \leq y \leq x-\log 2$, entonces $h(x)-\log 3 \leq h(y) \leq h(x)-\log 2$. Esto da los casos $a+b=0,1$ de la siguiente afirmación, que se establece por inducción completa en $a+b$: para cualesquiera enteros no negativos $a,b$, para todos $x,y\in\mathbb{R}$ tales que $$ x+a\log 2-b\log 3 \leq y \leq x+a\log 3-b\log 2, $$ se tiene $$ h(x)+a\log 2-b\log 3 \leq h(y) \leq h(x)+a\log 3-b\log 2. $$ El paso inductivo se verifica dividiendo el intervalo mediante un punto intermedio adecuado y aplicando la hipótesis de inducción dos veces.
+
+Ahora fija $x,y\in\mathbb{R}$ con $x\leq y$. Como $\log 2$ y $\log 3$ son linealmente independientes sobre $\mathbb{Q}$, las partes fraccionarias de los múltiplos enteros no negativos de $\log 3/\log 2$ son densas en $[0,1)$ (un resultado debido a Kronecker). En particular, para cualquier $\epsilon>0$ y cualquier $N>0$, podemos encontrar enteros $a,b>N$ tales que $$ y-x < a\log 3-b\log 2 < y-x+\epsilon $$ y, para $N$ suficientemente grande, también $a\log 2-b\log 3 < y-x$. Se sigue que $h(y)\leq h(x)+a\log 2-b\log 3 < y-x+\epsilon$; como $\epsilon>0$ es arbitrario, $h(y)-h(x)\leq y-x$. Un argumento similar da $h(y)-h(x)\geq y-x$, así que $h(y)-h(x)=y-x$, es decir, $h(y)-y=h(x)-x$. En otras palabras, la función $x\mapsto h(x)-x$ es constante, como se quería. Por lo tanto, $$ \boxed{f(x)=x^c \text{ para algún } c>0}. $$`),
+  putnam('PUTNAM-2016-B6', 2016, 'B', 6, 'Suma doble alternante con potencias de 2 igual a 1', 'Análisis',
+    String.raw`Evalúa $$ \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k} \sum_{n=0}^\infty \frac{1}{k2^n + 1}. $$`,
+    String.raw`Sea $S$ la suma buscada. Demostraremos que $S=\boxed{1}$. Escribe $$ \sum_{n=0}^\infty \frac{1}{k2^n+1} = \frac{1}{k+1} + \sum_{n=1}^\infty \frac{1}{k2^n+1}; $$ entonces podemos escribir $S=S_1+S_2$ donde $$ S_1 = \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k(k+1)}, \qquad S_2 = \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k} \sum_{n=1}^\infty \frac{1}{k2^n+1}. $$ El reordenamiento es válido porque tanto $S_1$ como $S_2$ convergen absolutamente en $k$, por comparación con $\sum 1/k^2$.
+
+Para calcular $S_1$, observa que $$ \sum_{k=1}^N \frac{(-1)^{k-1}}{k(k+1)} = \sum_{k=1}^N (-1)^{k-1}\left(\frac{1}{k}-\frac{1}{k+1}\right) = -1+\frac{(-1)^N}{N+1}+2\sum_{k=1}^N \frac{(-1)^{k-1}}{k} $$ converge a $2\ln 2-1$ cuando $N\to\infty$, así que $S_1=2\ln 2-1$.
+
+Para calcular $S_2$, escribe $\frac{1}{k2^n+1}$ como la serie geométrica $\sum_{m=0}^\infty \frac{(-1)^m}{k^{m+1}2^{mn+n}}$, de donde $$ S_2 = \sum_{k=1}^\infty \sum_{n=1}^\infty \sum_{m=0}^\infty \frac{(-1)^{k+m-1}}{k^{m+2}2^{mn+n}}. $$ Esta suma triple converge absolutamente (se puede acotar por $\sum_k 2/k^2 < \infty$), así que podemos reordenarla para obtener $$ S_2 = \sum_{m=0}^\infty (-1)^m \left(\sum_{n=1}^\infty \frac{1}{2^{mn+n}}\right)\left(\sum_{k=1}^\infty \frac{(-1)^{k-1}}{k^{m+2}}\right). $$ La suma en $n$ es la serie geométrica $\frac{1}{2^{m+1}-1}$. Si llamamos $S_3$ a la suma en $k$, entonces, separando los términos pares de $\sum_k 1/k^{m+2}$, se obtiene $$ S_3 = \left(1-\frac{1}{2^{m+1}}\right)\sum_{k=1}^\infty \frac{1}{k^{m+2}}. $$ Se sigue que $$ S_2 = \sum_{m=0}^\infty \frac{(-1)^m}{2^{m+1}}\sum_{k=1}^\infty \frac{1}{k^{m+2}} = \sum_{k=1}^\infty \frac{1}{2k^2}\sum_{m=0}^\infty \left(-\frac{1}{2k}\right)^m = \sum_{k=1}^\infty \frac{1}{k(2k+1)} = 2\sum_{k=1}^\infty\left(\frac{1}{2k}-\frac{1}{2k+1}\right) = 2(1-\ln 2). $$ Finalmente, $S = S_1+S_2 = \boxed{1}$.`),
+]
+
+const putnam2017 = [
+  putnam('PUTNAM-2017-A1', 2017, 'A', 1, 'Enteros que no están en el conjunto S generado por 2, n², (n+5)²', 'Teoría de Números',
+    String.raw`Sea $S$ el menor conjunto de enteros positivos tal que (a) $2$ está en $S$, (b) $n$ está en $S$ siempre que $n^2$ está en $S$, y (c) $(n+5)^2$ está en $S$ siempre que $n$ está en $S$. ¿Qué enteros positivos no están en $S$? (El conjunto $S$ es "menor" en el sentido de que $S$ está contenido en cualquier otro conjunto con estas propiedades.)`,
+    String.raw`Afirmamos que los enteros positivos que no están en $S$ son $1$ y todos los múltiplos de $5$. Si $S$ consiste de todos los demás números naturales, entonces $S$ satisface las condiciones dadas: observa que los únicos cuadrados perfectos que no están en $S$ son $1$ y los números de la forma $(5k)^2$ para algún entero positivo $k$, y de esto se sigue fácilmente que (b) y (c) se cumplen.
+
+Ahora supón que $T$ es otro conjunto de enteros positivos que satisface (a), (b), y (c). De (b) y (c) se sigue que si $n \in T$ entonces $n+5 \in T$, así que $T$ satisface la siguiente propiedad: (d) si $n\in T$, entonces $n+5k \in T$ para todo $k \geq 0$.
+
+Entonces deben estar en $T$, con las implicaciones etiquetadas por las condiciones (b) a (d): $$ 2 \xRightarrow{c} 49 \xRightarrow{c} 54^2 \xRightarrow{d} 56^2 \xRightarrow{b} 56 \xRightarrow{d} 121 \xRightarrow{b} 11, $$ $$ 11 \xRightarrow{d} 16 \xRightarrow{b} 4 \xRightarrow{d} 9 \xRightarrow{b} 3, \qquad 16 \xRightarrow{d} 36 \xRightarrow{b} 6. $$ Como $2,3,4,6 \in T$, por (d) tenemos $S \subseteq T$, así que $S$ es el menor. Por lo tanto, $$ \boxed{1 \text{ y todos los múltiplos de } 5 \text{ no están en } S}. $$`),
+  putnam('PUTNAM-2017-A6', 2017, 'A', 6, 'Coloreados de aristas de un icosaedro con dos iguales y una distinta por cara', 'Combinatoria',
+    String.raw`Las 30 aristas de un icosaedro regular se distinguen etiquetándolas $1,2,\dots,30$. ¿De cuántas formas distintas se puede pintar cada arista de rojo, blanco o azul de modo que cada una de las 20 caras triangulares del icosaedro tenga dos aristas del mismo color y una tercera de un color distinto?`,
+    String.raw`El número de tales coloreados es $2^{20}3^{10} = \boxed{61917364224}$. Identifica los tres colores rojo, blanco y azul con (en algún orden) los elementos del campo $\mathbb{F}_3$ de tres elementos (el anillo de enteros módulo 3). El conjunto de coloreados se puede identificar entonces con el espacio vectorial $\mathbb{F}_3^E$ generado por el conjunto $E$ de aristas. Sea $F$ el conjunto de caras, y sea $\mathbb{F}_3^F$ el espacio vectorial sobre la base $F$; podemos definir entonces una transformación lineal $T: \mathbb{F}_3^E \to \mathbb{F}_3^F$ que envía un coloreado al vector cuya componente correspondiente a una cara dada es igual a la suma de las tres aristas de esa cara. Los coloreados que queremos contar son aquellos cuyas imágenes bajo $T$ no tienen componentes nulas.
+
+Mostramos ahora que $T$ es sobreyectiva. Sea $\Gamma$ el grafo dual del icosaedro, es decir, $\Gamma$ tiene conjunto de vértices $F$, y dos elementos de $F$ son adyacentes en $\Gamma$ si comparten una arista en el icosaedro. El grafo $\Gamma$ admite un camino hamiltoniano, es decir, existe un orden $f_1,\dots,f_{20}$ de las caras tal que dos caras consecutivas cualesquiera son adyacentes en $\Gamma$ (por ejemplo, con $f_1,\dots,f_5$ las cinco caras que comparten un vértice del icosaedro y $f_{16},\dots,f_{20}$ las cinco que comparten el vértice antípoda). Para $i=1,\dots,19$, sea $e_i$ la arista común de $f_i$ y $f_{i+1}$; estas son claramente todas distintas. Prescribiendo componentes para $e_1,\dots,e_{19}$ una por una y fijando las demás en cero, podemos construir un elemento de $\mathbb{F}_3^E$ cuya imagen bajo $T$ coincide con cualquier vector dado de $\mathbb{F}_3^F$ en las componentes de $f_1,\dots,f_{19}$. Los vectores de $\mathbb{F}_3^F$ obtenidos así forman un subespacio de dimensión 19; este subespacio también se puede describir como los vectores para los cuales las componentes de $f_1,\dots,f_{19}$ suman lo mismo que las de $f_2,\dots,f_{20}$.
+
+Mediante una reflexión especular, podemos construir un segundo camino hamiltoniano $g_1,\dots,g_{20}$ con la propiedad de que $g_1=f_1$, $g_2=f_5$, $g_3=f_4$, $g_4=f_3$, $g_5=f_2$. Repitiendo la construcción anterior, obtenemos un subespacio de dimensión 19 distinto de $\mathbb{F}_3^F$ contenido en la imagen de $T$. Esto implica que $T$ es sobreyectiva, como se afirmó.
+
+Como $T$ es un homomorfismo sobreyectivo de un espacio vectorial de dimensión 30 a uno de dimensión 20, tiene un núcleo de dimensión 10. Cada uno de los $2^{20}$ elementos de $\mathbb{F}_3^F$ sin componentes nulas es entonces la imagen de exactamente $3^{10}$ coloreados de la forma deseada, lo cual da el resultado.`),
+  putnam('PUTNAM-2017-B2', 2017, 'B', 2, 'Menor a en una expresión de N como suma de 2017 consecutivos únicamente', 'Teoría de Números',
+    String.raw`Supón que un entero positivo $N$ se puede expresar como la suma de $k$ enteros positivos consecutivos $$ N = a + (a+1) + (a+2) + \cdots + (a+k-1) $$ para $k=2017$ pero para ningún otro valor de $k>1$. Considerando todos los enteros positivos $N$ con esta propiedad, ¿cuál es el menor entero positivo $a$ que ocurre en alguna de estas expresiones?`,
+    String.raw`Demostramos que el menor valor de $a$ es $\boxed{16}$. Observa que la expresión para $N$ se puede reescribir como $k(2a+k-1)/2$, así que $2N=k(2a+k-1)$. En esta expresión, $k>1$ por hipótesis; $k<2a+k-1$ porque $a>1$; y claramente $k$ y $2a+k-1$ tienen paridad opuesta. Recíprocamente, para cualquier factorización $2N=mn$ con $1<m<n$ y $m,n$ de paridad opuesta, obtenemos una expresión de $N$ de la forma deseada tomando $k=m$, $a=(n+1-m)/2$.
+
+Observa ahora que 2017 es primo (esto se puede verificar por división de prueba entre los primos hasta 43, ya que $2017<45^2$). Para que $2N=2017(2a+2016)$ no tenga otra expresión de la forma especificada, debe ocurrir que $2a+2016$ no tenga ningún divisor impar mayor que 1, es decir, $2a+2016$ debe ser una potencia de 2. Esto ocurre primero cuando $2a+2016=2048$, lo cual da el resultado afirmado.`),
+  putnam('PUTNAM-2017-B4', 2017, 'B', 4, 'Suma alternante de ln(4k+j)/(4k+j) igual a (ln 2)²', 'Análisis',
+    String.raw`Evalúa la suma $$ \sum_{k=0}^\infty \left( 3\cdot\frac{\ln(4k+2)}{4k+2} - \frac{\ln(4k+3)}{4k+3} - \frac{\ln(4k+4)}{4k+4} - \frac{\ln(4k+5)}{4k+5} \right). $$`,
+    String.raw`Demostramos que la suma es igual a $\boxed{(\log 2)^2}$; escribimos $\log x$ para el logaritmo natural de $x$. Observa que, de las dos expresiones de la suma original, la primera es absolutamente convergente (los sumandos decaen como $\log(x)/x^2$), así que debemos ser cuidadosos al reordenar los términos.
+
+Define $a_k = \frac{\log k}{k} - \frac{\log(k+1)}{k+1}$. La suma infinita $\sum_{k=1}^\infty a_k$ converge a 0, ya que $\sum_{k=1}^n a_k$ telescopa a $-\frac{\log(n+1)}{n+1}$, lo cual converge a 0 cuando $n\to\infty$. Observa que $a_k>0$ para $k\geq 3$ ya que $\frac{\log x}{x}$ es decreciente para $x>e$, así que la convergencia de $\sum a_k$ es absoluta.
+
+Escribe $S$ para la suma buscada. Como $3a_{4k+2}+2a_{4k+3}+a_{4k+4} = (a_{4k+2}+a_{4k+4})+2(a_{4k+2}+a_{4k+3})$, tenemos $$ S = \sum_{k=0}^\infty (3a_{4k+2}+2a_{4k+3}+a_{4k+4}) = \sum_{k=1}^\infty a_{2k} + \sum_{k=0}^\infty 2(a_{4k+2}+a_{4k+3}), $$ donde podemos reordenar los términos de la suma infinita ya que $\sum a_k$ converge absolutamente. Ahora, $$ 2(a_{4k+2}+a_{4k+3}) = \frac{\log(4k+2)}{2k+1}-\frac{\log(4k+4)}{2k+2} = a_{2k+1}+(\log 2)\left(\frac{1}{2k+1}-\frac{1}{2k+2}\right), $$ y sumando sobre $k$ se obtiene $$ \sum_{k=0}^\infty 2(a_{4k+2}+a_{4k+3}) = \sum_{k=0}^\infty a_{2k+1} + (\log 2)\sum_{k=1}^\infty \frac{(-1)^{k+1}}{k} = \sum_{k=0}^\infty a_{2k+1} + (\log 2)^2. $$ Finalmente, $$ S = \sum_{k=1}^\infty a_{2k} + \sum_{k=0}^\infty a_{2k+1} + (\log 2)^2 = \sum_{k=1}^\infty a_k + (\log 2)^2 = \boxed{(\log 2)^2}. $$`),
+  putnam('PUTNAM-2017-B5', 2017, 'B', 5, 'Triángulo (9,8,7) con exactamente dos "igualadores" de área y perímetro', 'Geometría',
+    String.raw`Una recta en el plano de un triángulo $T$ se llama igualador si divide a $T$ en dos regiones de área igual y perímetro igual. Encuentra enteros positivos $a>b>c$, con $a$ lo más pequeño posible, tales que exista un triángulo con lados $a, b, c$ que tenga exactamente dos igualadores distintos.`,
+    String.raw`Los enteros buscados son $\boxed{(a,b,c) = (9,8,7)}$. Supón que tenemos un triángulo $T=\triangle ABC$ con $BC=a$, $CA=b$, $AB=c$ y $a>b>c$. Di que una recta es un igualador de área si divide a $T$ en dos regiones de área igual. Una recta que interseca $T$ debe intersecar dos de los tres lados de $T$. Considera primero una recta que interseca los segmentos $AB$ en $X$ y $BC$ en $Y$, y sean $BX=x$, $BY=y$. Esta recta es un igualador de área si y solo si $xy\sin B = \frac{1}{2}ac\sin B$, es decir, $2xy=ac$. Como $x\leq c$ y $y\leq a$, los igualadores de área corresponden a valores de $x,y$ con $xy=ac/2$ y $x\in[c/2,c]$. Tal igualador de área también es un igualador (de perímetro) si y solo si $p/2=x+y$, donde $p=a+b+c$ es el perímetro de $T$. Si escribimos $f(x)=x+ac/(2x)$, queremos resolver $f(x)=p/2$ para $x\in[c/2,c]$; como $f$ es convexa, $f(c/2)=a+c/2>p/2$, y $f(c)=a/2+c<p/2$, hay exactamente una solución en $[c/2,c]$. De manera similar, para igualadores que intersecan $T$ en los lados $AB$ y $AC$, resolvemos $g(x)=p/2$ con $g(x)=x+bc/(2x)$, $x\in[c/2,c]$; como $g$ es convexa y $g(c/2)<p/2$, $g(c)<p/2$, no hay soluciones ahí.
+
+Se sigue que si $T$ tiene exactamente dos igualadores, debe tener exactamente uno intersecando $T$ en los lados $AC$ y $BC$. Aquí queremos resolver $h(x)=p/2$ con $h(x)=x+ab/(2x)$, $x\in[a/2,a]$. Ahora $h$ es convexa y $h(a/2)>p/2$, $h(a)>p/2$; así, $h(x)=p/2$ tiene exactamente una solución en $[a/2,a]$ si y solo si existe $x_0\in[a/2,a]$ con $h'(x_0)=0$ y $h(x_0)=p/2$. La primera condición da $x_0=\sqrt{ab/2}$, y la segunda da $8ab=p^2$. Observa que $\sqrt{ab/2}$ está en $[a/2,a]$ ya que $a>b$ y $a<b+c<2b$.
+
+Concluimos que $T$ tiene dos igualadores si y solo si $8ab=(a+b+c)^2$. Observa que $(a,b,c)=(9,8,7)$ funciona. Afirmamos que esta es la única posibilidad cuando $a>b>c$ son enteros y $a\leq 9$: los únicos $(a,b)$ enteros con $2\leq b<a\leq 9$ para los cuales $8ab$ es un cuadrado perfecto son $(4,2),(6,3),(8,4),(9,2),(9,8)$, y las primeras cuatro posibilidades no producen triángulos porque no satisfacen $a<2b$. Esto da el resultado afirmado.`),
+  putnam('PUTNAM-2017-B6', 2017, 'B', 6, 'Conteo de 64-tuplas distintas con suma ponderada divisible entre 2017', 'Teoría de Números',
+    String.raw`Encuentra el número de 64-tuplas ordenadas $(x_0,x_1,\dots,x_{63})$ tales que $x_0,x_1,\dots,x_{63}$ son elementos distintos de $\{1,2,\dots,2017\}$ y $$ x_0 + x_1 + 2x_2 + 3x_3 + \cdots + 63x_{63} $$ es divisible entre 2017.`,
+    String.raw`El conteo buscado es $$ \boxed{\frac{2016!}{1953!} - 63!\cdot 2016}, $$ el cual se calcula usando el principio de inclusión-exclusión. Como en A2, usamos que 2017 es primo, lo cual permite hacer álgebra lineal sobre el campo $\mathbb{F}_{2017}$: en particular, toda ecuación lineal homogénea no nula en $n$ variables sobre $\mathbb{F}_{2017}$ tiene exactamente $2017^{n-1}$ soluciones.
+
+Para cada partición $\pi$ de $\{0,\dots,63\}$ en bloques, contamos, mediante inclusión-exclusión sobre el retículo de particiones, cuántas 64-tuplas de $\mathbb{F}_{2017}$ satisfacen tanto la condición de suma ponderada divisible entre 2017 como la restricción de que las coordenadas en un mismo bloque de $\pi$ sean iguales. Usando los coeficientes $c_0=1$, $c_i=i$ para $i>1$ (que suman $1+\frac{63\cdot 64}{2}=2017$), se verifica que el número de soluciones para una partición $\pi$ con $|\pi|$ bloques es $2017^{|\pi|-1}$, salvo para la partición trivial de un solo bloque, donde es $2017^{|\pi|}$ en lugar de $2017^{|\pi|-1}$.
+
+Aplicando inclusión-exclusión sobre el retículo de particiones (con los coeficientes de Möbius correspondientes, denotados $\mu_\pi$), el conteo buscado se puede escribir como $$ \frac{2016!}{1953!} + 2016\,\mu_{\pi_1}, $$ donde $\pi_1$ es la partición trivial (todo en un solo bloque). Un argumento independiente (aplicando la misma inclusión-exclusión al conteo de 64-tuplas distintas en un conjunto arbitrario de tamaño $|A|$, y comparando coeficientes del término lineal en $|A|$) muestra que $\mu_{\pi_1} = -63!$. Sustituyendo, se obtiene el resultado afirmado.`),
+]
+
+const putnam2018 = [
+  putnam('PUTNAM-2018-A1', 2018, 'A', 1, 'Pares (a,b) con 1/a+1/b=3/2018', 'Teoría de Números',
+    String.raw`Encuentra todos los pares ordenados $(a,b)$ de enteros positivos para los cuales $$ \frac{1}{a}+\frac{1}{b} = \frac{3}{2018}. $$`,
+    String.raw`Despejando denominadores y reagrupando, vemos que la ecuación dada equivale a $$ (3a-2018)(3b-2018) = 2018^2. $$ Cada uno de los factores es congruente con $1 \pmod 3$. Hay 6 divisores positivos de $2018^2 = 2^2\cdot 1009^2$ congruentes con $1 \pmod 3$: $1$, $2^2$, $1009$, $2^2\cdot 1009$, $1009^2$, $2^2\cdot 1009^2$. Estos dan los 6 pares posibles: $$ \boxed{(a,b) \in \{(673,1358114), (674,340033), (1009,2018), (2018,1009), (340033,674), (1358114,673)\}}. $$ En cuanto a los divisores negativos, los congruentes con $1 \pmod 3$ son $-2, -2\cdot 1009, -2\cdot 1009^2$; sin embargo, todos estos llevan a pares donde $a\leq 0$ o $b\leq 0$.`),
+  putnam('PUTNAM-2018-A2', 2018, 'A', 2, 'Determinante de una matriz de intersección de subconjuntos no vacíos', 'Teoría de Números',
+    String.raw`Sean $S_1, S_2, \dots, S_{2^n-1}$ los subconjuntos no vacíos de $\{1,2,\dots,n\}$ en algún orden, y sea $M$ la matriz de $(2^n-1)\times(2^n-1)$ cuya entrada $(i,j)$ es $$ m_{ij} = \begin{cases} 0 & \text{si } S_i \cap S_j = \emptyset, \\ 1 & \text{en otro caso.} \end{cases} $$ Calcula el determinante de $M$.`,
+    String.raw`La respuesta es $\boxed{1 \text{ si } n=1,\ -1 \text{ si } n>1}$. Escribe $M_n$ para una matriz de $(2^n-1)\times(2^n-1)$ de esta forma, y observa que $\det M_n$ no depende del orden de los subconjuntos: intercambiar dos subconjuntos tiene el efecto de intercambiar dos filas y luego dos columnas en $M_n$, lo cual no cambia el determinante.
+
+Claramente $\det M_1 = 1$. Afirmamos que, para $n>1$, $\det M_n = -(\det M_{n-1})^2$, de donde el resultado se sigue por inducción. Sean $S_1',\ldots,S_{2^{n-1}-1}'$ los subconjuntos no vacíos de $\{1,\ldots,n-1\}$ en algún orden, con matriz resultante $M_{n-1}$. Ordena los subconjuntos no vacíos $S_1,\ldots,S_{2^n-1}$ de $\{1,\ldots,n\}$ de modo que los primeros $2^{n-1}-1$ sean los $S_i'$, los siguientes $2^{n-1}-1$ sean los $S_i' \cup \{n\}$, y el último sea $\{n\}$. Con este orden, $M_n$ tiene una estructura de bloques: dos bloques iguales a $M_{n-1}$, una columna y fila final correspondientes a $\{n\}$ (que interseca a todos los demás subconjuntos), y ceros donde $S_i'$ y $S_j' \cup \{n\}$ son disjuntos.
+
+Restando la fila y columna finales de las filas y columnas correspondientes a los conjuntos $S_i' \cup \{n\}$ (lo cual no cambia el determinante), y luego eliminando la fila y columna final (ya reducida a un 1 aislado), se obtiene la matriz de bloques $$ \begin{pmatrix} M_{n-1} & 0 \\ M_{n-1} & M_{n-1} \end{pmatrix} $$ tras intercambiar las primeras $2^{n-1}-1$ filas con las últimas $2^{n-1}-1$ filas, lo cual introduce un factor global de $(-1)^{(2^{n-1}-1)^2}=-1$. El determinante de esta matriz de bloques (triangular por bloques) es $(\det M_{n-1})^2$. Así, $\det M_n = -(\det M_{n-1})^2$, como se quería.`),
+  putnam('PUTNAM-2018-A3', 2018, 'A', 3, 'Máximo de ∑cos(3x_i) dado ∑cos(x_i)=0 para 10 términos', 'Trigonometría',
+    String.raw`Determina el mayor valor posible de $\sum_{i=1}^{10} \cos(3x_i)$ para números reales $x_1,x_2,\dots,x_{10}$ que satisfacen $\sum_{i=1}^{10} \cos(x_i) = 0$.`,
+    String.raw`El valor máximo es $\boxed{480/49}$. Como $\cos(3x_i) = 4\cos(x_i)^3-3\cos(x_i)$, es equivalente maximizar $4\sum_{i=1}^{10} y_i^3$ para $y_1,\dots,y_{10}\in[-1,1]$ con $\sum_{i=1}^{10} y_i=0$; este dominio es compacto, así que el máximo existe. Por conveniencia, establecemos algo un poco más general: maximizamos $4\sum_{i=1}^n y_i^3$ para $y_1,\dots,y_n\in[-1,1]$ con $\sum_{i=1}^n y_i=0$, donde $n$ puede ser cualquier entero par no negativo hasta 10, y mostramos que el máximo se alcanza en $n=10$.
+
+Primero estudiamos el efecto de variar $y_i$ y $y_j$ manteniendo fija su suma $s$: la función $y \mapsto y^3+(s-y)^3$ tiene segunda derivada constante $6s$, así que es siempre convexa o siempre cóncava. En consecuencia, si $(y_1,\dots,y_n)$ alcanza el máximo, entonces para cualesquiera dos índices $i<j$, al menos una de las siguientes debe cumplirse: uno de $y_i,y_j$ es extremo (igual a 1 o $-1$); $y_i=y_j<0$; o $y_i=-y_j$. En el último caso, podemos descartar $y_i$ y $y_j$ y reducir a un caso con $n$ menor; así que podemos suponer que esto no ocurre. En este caso, todos los valores no extremos son iguales a algún valor común $y<0$, y además no podemos tener tanto 1 como $-1$ presentes; no podemos omitir el 1, pues de lo contrario la condición de suma cero no se puede lograr. Así, solo aparecen los términos 1 y $y$, con multiplicidades positivas $a$ y $b$ que suman $n$.
+
+Como $a+b=n$ y $a+by=0$, podemos despejar $y=-a/b$; entonces $$ 4\sum_{i=1}^n y_i^3 = a+by^3 = 4a\left(1-\frac{a^2}{b^2}\right). $$ Como $y>-1$, debemos tener $a<b$. Para $a$ fijo, la función objetivo crece conforme $b$ crece, así que el caso óptimo debe ocurrir cuando $a+b=10$. Los pares posibles $(a,b)$ en ese caso son $(1,9),(2,8),(3,7),(4,6)$; calculando la función objetivo para estos valores se obtiene, respectivamente, $\frac{32}{9}, \frac{15}{2}, \frac{480}{49}, \frac{80}{9}$, dando $\boxed{480/49}$ como el valor máximo.`),
+  putnam('PUTNAM-2018-B1', 2018, 'B', 1, 'Vector v que rompe la partición equilibrada de una malla 3×101', 'Combinatoria',
+    String.raw`Sea $\mathcal{P}$ el conjunto de vectores definido por $$ \mathcal{P} = \left\{ \begin{pmatrix} a \\ b \end{pmatrix} \,\middle|\, 0 \leq a \leq 2,\ 0 \leq b \leq 100,\ a,b \in \mathbb{Z} \right\}. $$ Encuentra todos los $\mathbf{v} \in \mathcal{P}$ tales que el conjunto $\mathcal{P} \setminus \{\mathbf{v}\}$, obtenido al omitir el vector $\mathbf{v}$ de $\mathcal{P}$, se puede partir en dos conjuntos de igual tamaño e igual suma.`,
+    String.raw`La respuesta es $\boxed{(1,b) \text{ con } 0 \leq b \leq 100 \text{ y } b \text{ par}}$. (Por conveniencia tipográfica, escribimos tuplas en vez de vectores columna.)
+
+Primero mostramos que si $\mathcal{P} \setminus \{\mathbf{v}\}$ se puede partir en subconjuntos $S_1$ y $S_2$ de igual tamaño e igual suma, entonces $\mathbf{v}$ debe tener la forma $(1,b)$ con $b$ par. Para un conjunto finito no vacío $S$ de vectores en $\mathbb{Z}^2$, sea $\Sigma(S)$ la suma de los vectores de $S$. Como las coordenadas $x$ y $y$ promedio en $\mathcal{P}$ son $1$ y $50$ respectivamente, y hay $3\cdot 101$ elementos en $\mathcal{P}$, tenemos $$ \Sigma(\mathcal{P}) = 303\cdot(1,50) = (303,15150). $$ Por otro lado, $$ \Sigma(\mathcal{P}) = \mathbf{v}+\Sigma(S_1)+\Sigma(S_2) = \mathbf{v}+2\Sigma(S_1). $$ Por consideraciones de paridad, las entradas de $\mathbf{v}$ deben ser impar y par, respectivamente, así que $\mathbf{v}$ tiene la forma afirmada.
+
+Ahora supón $\mathbf{v}=(1,b)$ con $b$ par. Observa que $\mathcal{P}\setminus\{(1,50)\}$ se puede partir en 151 parejas de vectores distintos $(x,y)$ y $(2-x,100-y)$, cada una sumando $(2,100)$. Con un ajuste cuidadoso de tres de estas parejas cerca de $b$ (para evitar coincidencias en el caso especial $b=50$), se puede asignar la mitad de las parejas restantes a $S_1$ y la mitad a $S_2$, completando así una partición de $\mathcal{P}\setminus\{\mathbf{v}\}$ en dos conjuntos con el mismo tamaño y la misma suma.`),
+  putnam('PUTNAM-2018-B3', 2018, 'B', 3, 'n=2^(2^ℓ) para ℓ=1,2,4,8 satisface n|2^n, n−1|2^n−1, n−2|2^n−2', 'Teoría de Números',
+    String.raw`Encuentra todos los enteros positivos $n<10^{100}$ para los cuales simultáneamente $n$ divide a $2^n$, $n-1$ divide a $2^n-1$, y $n-2$ divide a $2^n-2$.`,
+    String.raw`Los valores de $n$ con esta propiedad son $\boxed{2^{2^\ell} \text{ para } \ell=1,2,4,8}$. Primero, $n$ divide a $2^n$ si y solo si $n$ es una potencia de 2; escribimos entonces $n=2^m$, y como $n<10^{100}<2^{340}$, tenemos $1\leq m\leq 340$ (el caso $m=0$ no funciona porque para $n=1$, $n-1=0$ no divide a $2^n-1=1$).
+
+Ahora, módulo $n-1=2^m-1$, las potencias de 2 ciclan con periodo $m$; en consecuencia, $n-1$ divide a $2^n-1$ si y solo si $m$ divide a $n=2^m$, lo cual ocurre si y solo si $m$ es una potencia de 2. Escribimos $m=2^\ell$; como $2^\ell<340<512$, tenemos $\ell<9$ (el caso $\ell=0$ no funciona porque para $n=2$, $n-2=0$ no divide a $2^n-2=2$, así que $1\leq \ell \leq 8$).
+
+Finalmente, $n-2=2^m-2$ divide a $2^n-2$ si y solo si $2^{m-1}-1$ divide a $2^{n-1}-1$, lo cual (por la misma lógica) ocurre si y solo si $m-1$ divide a $n-1$, es decir, si $2^\ell-1$ divide a $2^m-1$, lo cual a su vez ocurre si y solo si $\ell$ divide a $m=2^\ell$, es decir, si y solo si $\ell$ es una potencia de 2. Los valores permitidos por la cota $\ell<9$ son $\ell=1,2,4,8$; para estos valores, $m\leq 2^8=256$ y $n=2^m \leq 2^{256} < 10^{100}$, así que las soluciones listadas sí satisfacen la desigualdad original.`),
+  putnam('PUTNAM-2018-B6', 2018, 'B', 6, 'Cota superior para sucesiones de longitud 2018 con suma 3860', 'Combinatoria',
+    String.raw`Sea $S$ el conjunto de sucesiones de longitud 2018 cuyos términos están en el conjunto $\{1,2,3,4,5,6,10\}$ y suman 3860. Demuestra que la cardinalidad de $S$ es a lo más $$ 2^{3860} \cdot \left(\frac{2018}{2048}\right)^{2018}. $$`,
+    String.raw`(por Manjul Bhargava) Sea $a(k,n)$ el número de sucesiones de longitud $k$ tomadas del conjunto $\{1,2,3,4,5,6,10\}$ con suma $n$. Demostramos, por inducción doble en $n+k$ y $n-k$, que $$ a(k,n) < 2^n \left(\frac{2018}{2048}\right)^k. $$ La afirmación es claramente cierta cuando $n-k\leq 0$, en particular en el caso base $n=k=1$.
+
+Clasificamos las sucesiones contadas por $a(k,n)$ según su último término ($1,2,3,4,5,6$ o $10$); quitando el último término se obtiene una sucesión contada por $a(k-1,n-1), a(k-1,n-2), \ldots, a(k-1,n-6), a(k-1,n-10)$, respectivamente. Por lo tanto, $$ a(k,n) = a(k-1,n-1)+\cdots+a(k-1,n-6)+a(k-1,n-10) $$ $$ < (2^{n-1}+\cdots+2^{n-6}+2^{n-10})\left(\frac{2018}{2048}\right)^{k-1} = 2^n\left(\frac{1}{2}+\cdots+\frac{1}{64}+\frac{1}{1024}\right)\left(\frac{2018}{2048}\right)^{k-1} $$ $$ = 2^n\left(\frac{1009}{1024}\right)\left(\frac{2018}{2048}\right)^{k-1} = 2^n\left(\frac{2018}{2048}\right)^k, $$ donde usamos directamente la hipótesis de inducción para obtener la desigualdad de la segunda línea. El caso $k=2018$, $n=3860$ da el resultado deseado: $$ |S| = a(2018,3860) < \boxed{2^{3860}\left(\frac{2018}{2048}\right)^{2018}}. $$`),
+]
+
+const putnam2019 = [
+  putnam('PUTNAM-2019-A1', 2019, 'A', 1, 'Valores de A³+B³+C³−3ABC: todos salvo ≡3,6 mod 9', 'Teoría de Números',
+    String.raw`Determina todos los valores posibles de la expresión $$ A^3+B^3+C^3-3ABC $$ donde $A, B, C$ son enteros no negativos.`,
+    String.raw`La respuesta es $\boxed{\text{todos los enteros no negativos no congruentes con } 3 \text{ o } 6 \pmod 9}$. Sea $X$ la expresión dada; primero mostramos que podemos lograr cada uno de los valores afirmados. Escribe $B=A+b$ y $C=A+c$, de modo que $$ X = (b^2-bc+c^2)(3A+b+c). $$ Tomando $(b,c)=(0,1)$ o $(b,c)=(1,1)$, obtenemos respectivamente $X=3A+1$ y $X=3A+2$; en consecuencia, al variar $A$, logramos todo entero no negativo no divisible entre 3. Tomando $(b,c)=(1,2)$, obtenemos $X=9A+9$; así, al variar $A$, logramos todo entero positivo divisible entre 9. También podemos lograr $X=0$ tomando $(b,c)=(0,0)$.
+
+En la otra dirección, $X$ siempre es no negativo: basta aplicar la desigualdad entre la media aritmética y la media geométrica, o escribir $b^2-bc+c^2 = (b-c/2)^2+3c^2/4$ para ver que es no negativo. Solo falta mostrar que si $X$ es múltiplo de 3, entonces es múltiplo de 9. Observa que $3A+b+c \equiv b+c \pmod 3$ y $b^2-bc+c^2 \equiv (b+c)^2 \pmod 3$; en consecuencia, si $X$ es divisible entre 3, entonces $b+c$ debe ser divisible entre 3, así que cada factor de $X=(b^2-bc+c^2)(3A+b+c)$ es divisible entre 3, y por lo tanto $X$ es divisible entre 9. Esto demuestra la afirmación.`),
+  putnam('PUTNAM-2019-A2', 2019, 'A', 2, 'Ángulo α=π/2 dado IG paralelo a AB y β=2arctan(1/3)', 'Geometría',
+    String.raw`En el triángulo $\triangle ABC$, sea $G$ el centroide, y sea $I$ el centro de la circunferencia inscrita. Sean $\alpha$ y $\beta$ los ángulos en los vértices $A$ y $B$, respectivamente. Supón que el segmento $IG$ es paralelo a $AB$ y que $\beta = 2\tan^{-1}(1/3)$. Encuentra $\alpha$.`,
+    String.raw`Sean $M$ y $D$ el punto medio de $AB$ y el pie de la altura desde $C$ a $AB$, respectivamente, y sea $r$ el inradio de $\triangle ABC$. Como $C,G,M$ son colineales con $CM=3GM$, la distancia de $C$ a la recta $AB$ es 3 veces la distancia de $G$ a $AB$, y esta última es $r$ ya que $IG \parallel AB$; por lo tanto la altura $CD$ mide $3r$. Por la fórmula del ángulo doble para la tangente, $\frac{CD}{DB}=\tan\beta=\frac{3}{4}$, así que $DB=4r$. Sea $E$ el punto donde la circunferencia inscrita toca a $AB$; entonces $EB = r/\tan(\beta/2) = 3r$. Se sigue que $ED=r$, por lo que la circunferencia inscrita es tangente a la altura $CD$. Esto implica que $D=A$, que $ABC$ es un triángulo rectángulo, y que $\alpha = \boxed{\frac{\pi}{2}}$.`),
+  putnam('PUTNAM-2019-A3', 2019, 'A', 3, 'Constante óptima M=2019^(−1/2019) para el promedio de raíces', 'Números Complejos',
+    String.raw`Dados números reales $b_0, b_1, \dots, b_{2019}$ con $b_{2019} \neq 0$, sean $z_1,z_2,\dots,z_{2019}$ las raíces en el plano complejo del polinomio $$ P(z) = \sum_{k=0}^{2019} b_k z^k. $$ Sea $\mu = (|z_1|+\cdots+|z_{2019}|)/2019$ el promedio de las distancias de $z_1,z_2,\dots,z_{2019}$ al origen. Determina la mayor constante $M$ tal que $\mu \geq M$ para todas las elecciones de $b_0,b_1,\dots,b_{2019}$ que satisfacen $$ 1 \leq b_0 < b_1 < b_2 < \cdots < b_{2019} \leq 2019. $$`,
+    String.raw`La respuesta es $M = \boxed{2019^{-1/2019}}$. Para cualesquiera elecciones de $b_0,\ldots,b_{2019}$ como se especifica, por AM-GM, $$ \mu \geq |z_1\cdots z_{2019}|^{1/2019} = |b_0/b_{2019}|^{1/2019} \geq 2019^{-1/2019}. $$ Para ver que esto es óptimo, considera $b_0,\ldots,b_{2019}$ dados por $b_k = 2019^{k/2019}$ para todo $k$. Entonces $$ P(z/2019^{1/2019}) = \sum_{k=0}^{2019} z^k = \frac{z^{2020}-1}{z-1} $$ tiene todas sus raíces sobre el círculo unitario. Se sigue que todas las raíces de $P(z)$ tienen módulo $2019^{-1/2019}$, así que $\mu = 2019^{-1/2019}$ en este caso.`),
+  putnam('PUTNAM-2019-A5', 2019, 'A', 5, 'Mayor n=(p−1)/2 tal que (x−1)^n divide a q(x) en F_p[x]', 'Teoría de Números',
+    String.raw`Sea $p$ un primo impar, y sea $\mathbb{F}_p$ el campo de los enteros módulo $p$. Sea $\mathbb{F}_p[x]$ el anillo de polinomios sobre $\mathbb{F}_p$, y sea $q(x) \in \mathbb{F}_p[x]$ dado por $$ q(x) = \sum_{k=1}^{p-1} a_k x^k, $$ donde $$ a_k = k^{(p-1)/2} \bmod p. $$ Encuentra el mayor entero no negativo $n$ tal que $(x-1)^n$ divide a $q(x)$ en $\mathbb{F}_p[x]$.`,
+    String.raw`La respuesta es $\boxed{\frac{p-1}{2}}$. Define el operador $D = x\frac{d}{dx}$, donde $\frac{d}{dx}$ indica la derivación formal de polinomios. Para $n$ como en el enunciado, tenemos $q(x)=(x-1)^n r(x)$ para algún polinomio $r(x)$ en $\mathbb{F}_p$ no divisible entre $x-1$. Para $m=0,\dots,n$, por la regla del producto, $$ (D^m q)(x) \equiv n^m x^m (x-1)^{n-m} r(x) \pmod{(x-1)^{n-m+1}}. $$ Como $r(1) \neq 0$ y $n \not\equiv 0 \pmod p$ (porque $n \leq \deg(q) = p-1$), podemos identificar $n$ como el menor entero no negativo para el cual $(D^n q)(1) \neq 0$.
+
+Ahora observa que $q = D^{(p-1)/2} s$ para $$ s(x) = 1+x+\cdots+x^{p-1} = \frac{x^p-1}{x-1} = (x-1)^{p-1} $$ ya que $(x-1)^p=x^p-1$ en $\mathbb{F}_p[x]$. Por la misma lógica anterior, $(D^n s)(1)=0$ para $n=0,\dots,p-2$ pero no para $n=p-1$. Esto implica el resultado afirmado.`),
+  putnam('PUTNAM-2019-B1', 2019, 'B', 1, 'Conteo 5n+1 de cuadrados con vértices en potencias de 2', 'Combinatoria',
+    String.raw`Denota por $\mathbb{Z}^2$ el conjunto de todos los puntos $(x,y)$ del plano con coordenadas enteras. Para cada entero $n \geq 0$, sea $P_n$ el subconjunto de $\mathbb{Z}^2$ que consiste del punto $(0,0)$ junto con todos los puntos $(x,y)$ tales que $x^2+y^2=2^k$ para algún entero $k \leq n$. Determina, como función de $n$, el número de subconjuntos de cuatro puntos de $P_n$ que son los vértices de un cuadrado.`,
+    String.raw`La respuesta es $\boxed{5n+1}$. Primero determinamos el conjunto $P_n$. Sea $Q_n$ el conjunto de puntos de $\mathbb{Z}^2$ de la forma $(0,\pm 2^k)$ o $(\pm 2^k,0)$ para algún $k\leq n$. Sea $R_n$ el conjunto de puntos de $\mathbb{Z}^2$ de la forma $(\pm 2^k,\pm 2^k)$ para algún $k\leq n$ (con los signos elegidos independientemente). Se demuestra por inducción en $n$ que $$ P_n = \{(0,0)\} \cup Q_{\lfloor n/2\rfloor} \cup R_{\lfloor (n-1)/2\rfloor}, $$ usando que si $(x,y)\in P_n$, entonces $x^2+y^2\equiv 0\pmod 4$, y como todo cuadrado perfecto es congruente con 0 o 1 módulo 4, $x$ y $y$ deben ser ambos pares, así que $(x/2,y/2)\in P_{n-2}$.
+
+Identificamos ahora todos los cuadrados con vértices en $P_n$, considerando pares de vértices opuestos $(a,b)$ y $(c,d)$: si $(a,b)=(0,0)$, el otro vértice opuesto puede ser cualquier elemento de $P_n$ fuera de $P_0$, dando $4n$ cuadrados de este tipo. Si ambos vértices opuestos están en algún $Q_k$, hay exactamente un cuadrado para cada $k=0,\dots,\lfloor n/2\rfloor$ (con vértices $(0,2^k),(0,-2^k),(2^k,0),(-2^k,0)$), dando $\lfloor n/2\rfloor+1$; se puede descartar cualquier otro caso usando la desigualdad del triángulo. Si ambos están en algún $R_k$, hay exactamente un cuadrado para cada $k=0,\dots,\lfloor (n-1)/2\rfloor$, dando $\lfloor (n+1)/2\rfloor$ (este caso se reduce al anterior rotando $\pi/4$ y reescalando por $\sqrt{2}$). Finalmente, no puede haber un cuadrado con un vértice opuesto en $Q_k$ y el otro en $R_k$, ya que los vértices restantes resultarían imposibles.
+
+Sumando, obtenemos $$ 4n + \left(\left\lfloor \frac{n}{2}\right\rfloor+1\right) + \left\lfloor \frac{n+1}{2}\right\rfloor = \boxed{5n+1} $$ cuadrados, lo cual demuestra la afirmación.`),
+  putnam('PUTNAM-2019-B2', 2019, 'B', 2, 'Límite de a_n/n³ para una suma telescópica trigonométrica', 'Trigonometría',
+    String.raw`Para todo $n \geq 1$, sea $$ a_n = \sum_{k=1}^{n-1} \frac{\sin\left(\frac{(2k-1)\pi}{2n}\right)}{\cos^2\left(\frac{(k-1)\pi}{2n}\right)\cos^2\left(\frac{k\pi}{2n}\right)}. $$ Determina $$ \lim_{n \to \infty} \frac{a_n}{n^3}. $$`,
+    String.raw`La respuesta es $\boxed{\frac{8}{\pi^3}}$. Por las identidades de ángulo doble y suma-producto para el coseno, $$ 2\cos^2\left(\frac{(k-1)\pi}{2n}\right) - 2\cos^2\left(\frac{k\pi}{2n}\right) = \cos\left(\frac{(k-1)\pi}{n}\right) - \cos\left(\frac{k\pi}{n}\right) = 2\sin\left(\frac{(2k-1)\pi}{2n}\right)\sin\left(\frac{\pi}{2n}\right), $$ así que el sumando de $a_n$ se puede escribir como $$ \frac{1}{\sin\left(\frac{\pi}{2n}\right)}\left(-\frac{1}{\cos^2\left(\frac{(k-1)\pi}{2n}\right)}+\frac{1}{\cos^2\left(\frac{k\pi}{2n}\right)}\right). $$ Así, la suma telescopa y encontramos que $$ a_n = \frac{1}{\sin\left(\frac{\pi}{2n}\right)}\left(-1+\frac{1}{\cos^2\left(\frac{(n-1)\pi}{2n}\right)}\right) = -\frac{1}{\sin\left(\frac{\pi}{2n}\right)}+\frac{1}{\sin^3\left(\frac{\pi}{2n}\right)}. $$ Finalmente, como $\lim_{x\to 0}\frac{\sin x}{x}=1$, tenemos $\lim_{n\to\infty}\left(n\sin\frac{\pi}{2n}\right)=\frac{\pi}{2}$, y por lo tanto $$ \lim_{n\to\infty} \frac{a_n}{n^3} = \boxed{\frac{8}{\pi^3}}. $$`),
+  putnam('PUTNAM-2019-B4', 2019, 'B', 4, 'Valor mínimo m(f)=2ln2−1/2 independiente de f para EDPs dadas', 'Análisis',
+    String.raw`Sea $\mathcal{F}$ el conjunto de funciones $f(x,y)$ dos veces continuamente diferenciables para $x \geq 1$, $y \geq 1$ que satisfacen las siguientes dos ecuaciones (los subíndices denotan derivadas parciales): $$ xf_x + yf_y = xy\ln(xy), \qquad x^2f_{xx}+y^2f_{yy} = xy. $$ Para cada $f \in \mathcal{F}$, sea $$ m(f) = \min_{s\geq 1}\left(f(s+1,s+1)-f(s+1,s)-f(s,s+1)+f(s,s)\right). $$ Determina $m(f)$, y demuestra que no depende de la elección de $f$.`,
+    String.raw`Calculamos que $m(f) = \boxed{2\ln 2 - \frac{1}{2}}$. Etiqueta las ecuaciones dadas (1) y (2). Considerando la combinación $x\frac{\partial}{\partial x}(1)+y\frac{\partial}{\partial y}(1)-(1)-(2)$ se obtiene la ecuación $2xyf_{xy}=xy\ln(xy)+xy$, de donde $$ f_{xy} = \frac{1}{2}(\ln(x)+\ln(y)+1). $$ Ahora observamos que $$ f(s+1,s+1)-f(s+1,s)-f(s,s+1)+f(s,s) = \int_s^{s+1}\int_s^{s+1} f_{xy}\,dy\,dx = \frac{1}{2}\int_s^{s+1}\int_s^{s+1} (\ln(x)+\ln(y)+1)\,dy\,dx = \frac{1}{2}+\int_s^{s+1}\ln(x)\,dx. $$ Como $\ln(x)$ es creciente, $\int_s^{s+1}\ln(x)\,dx$ es una función creciente de $s$, así que se minimiza sobre $s\in[1,\infty)$ en $s=1$. Concluimos que $$ m(f) = \frac{1}{2}+\int_1^2 \ln(x)\,dx = \boxed{2\ln 2-\frac{1}{2}}, $$ independientemente de $f$.`),
+  putnam('PUTNAM-2019-B5', 2019, 'B', 5, 'p(2019)=F_2019−F_1010 para un polinomio que interpola Fibonacci impares', 'Teoría de Números',
+    String.raw`Sea $F_m$ el $m$-ésimo número de Fibonacci, definido por $F_1=F_2=1$ y $F_m=F_{m-1}+F_{m-2}$ para todo $m\geq 3$. Sea $p(x)$ el polinomio de grado 1008 tal que $p(2n+1)=F_{2n+1}$ para $n=0,1,2,\dots,1008$. Encuentra enteros $j$ y $k$ tales que $p(2019)=F_j-F_k$.`,
+    String.raw`Demostramos que $\boxed{(j,k)=(2019,1010)}$ es una solución válida. Más generalmente, sea $p(x)$ el polinomio de grado $N$ tal que $p(2n+1)=F_{2n+1}$ para $0\leq n\leq N$; mostraremos que $p(2N+3)=F_{2N+3}-F_{N+2}$.
+
+Define una sucesión de polinomios $p_0(x),\ldots,p_N(x)$ por $p_0(x)=p(x)$ y $p_k(x)=p_{k-1}(x)-p_{k-1}(x+2)$ para $k\geq 1$. Por inducción en $k$, se tiene que $p_k(2n+1)=F_{2n+1+k}$ para $0\leq n\leq N-k$, y que $p_k$ tiene grado a lo más $N-k$ para $k\geq 1$; así, $p_N(x)=F_{N+1}$, ya que $p_N(1)=F_{N+1}$ y $p_N$ es constante.
+
+Afirmamos que, para $0\leq k\leq N$, $p_{N-k}(2k+3)=\sum_{j=0}^k F_{N+1+j}$. Esto se demuestra por inducción en $k$: en el paso inductivo, $$ p_{N-k}(2k+3) = p_{N-k}(2k+1)+p_{N-k+1}(2k+1) = F_{N+1+k}+\sum_{j=0}^{k-1} F_{N+1+j}. $$ Así, tomando $k=N$, obtenemos $p(2N+3)=p_0(2N+3)=\sum_{j=0}^N F_{N+1+j}$.
+
+Una inducción adicional muestra que $\sum_{j=1}^m F_j = F_{m+2}-1$, así que $p(2N+3)=F_{2N+3}-F_{N+2}$, como se afirmó. En el caso $N=1008$, obtenemos $p(2019)=F_{2019}-F_{1010}$.`),
+  putnam('PUTNAM-2019-B6', 2019, 'B', 6, 'Existencia de un conjunto S perfecto en Z^n para todo n', 'Combinatoria',
+    String.raw`Sea $\mathbb{Z}^n$ la red entera en $\mathbb{R}^n$. Dos puntos de $\mathbb{Z}^n$ se llaman vecinos si difieren en exactamente 1 en una coordenada y son iguales en las demás. ¿Para qué enteros $n \geq 1$ existe un conjunto de puntos $S \subset \mathbb{Z}^n$ que satisface las siguientes dos condiciones? (1) Si $p$ está en $S$, entonces ninguno de los vecinos de $p$ está en $S$. (2) Si $p \in \mathbb{Z}^n$ no está en $S$, entonces exactamente uno de los vecinos de $p$ está en $S$.`,
+    String.raw`Tal conjunto existe para $\boxed{\text{todo } n}$. Para construir un ejemplo, define la función $f: \mathbb{Z}^n \to \mathbb{Z}/(2n+1)\mathbb{Z}$ por $$ f(x_1,\dots,x_n) = x_1+2x_2+\cdots+nx_n \pmod{2n+1}, $$ y sea $S$ la preimagen de 0.
+
+Para verificar la condición (1), observa que si $p\in S$ y $q$ es un vecino de $p$ que difiere solo en la coordenada $i$, entonces $$ f(q) = f(p)\pm i \equiv \pm i \pmod{2n+1}, $$ así que $q \notin S$ (ya que $1\leq i\leq n$ no puede dar $\pm i \equiv 0 \pmod{2n+1}$).
+
+Para verificar la condición (2), observa que si $p\in\mathbb{Z}^n$ no está en $S$, entonces existe una única elección de $i\in\{1,\dots,n\}$ tal que $f(p)$ es congruente con $+i$ o $-i$ módulo $2n+1$. El único vecino $q$ de $p$ en $S$ se obtiene entonces restando 1 de, o sumando 1 a, la $i$-ésima coordenada de $p$.`),
+]
+
+const putnam2020 = [
+  putnam('PUTNAM-2020-A1', 2020, 'A', 1, "508536 enteros divisibles por 2020 con dígitos 1's seguidos de 0's", 'Teoría de Números',
+    String.raw`¿Cuántos enteros positivos $N$ satisfacen las tres condiciones siguientes? (i) $N$ es divisible entre 2020. (ii) $N$ tiene a lo más 2020 dígitos decimales. (iii) Los dígitos decimales de $N$ son una cadena de unos consecutivos seguida de una cadena de ceros consecutivos.`,
+    String.raw`Los valores de $N$ que satisfacen (ii) y (iii) son precisamente los números de la forma $N=(10^a-10^b)/9$ para $0\leq b<a\leq 2020$; esta expresión representa el entero con $a$ dígitos que comienza con una cadena de unos y termina con $b$ ceros. Un valor $N$ de esta forma es divisible entre $2020=2^2\cdot 5\cdot 101$ si y solo si $10^b(10^{a-b}-1)$ es divisible entre cada uno de $3^2$, $2^2\cdot 5$, y $101$. La divisibilidad entre $3^2$ es trivial ya que $10\equiv 1\pmod 9$. Como $10^{a-b}-1$ es impar, la divisibilidad entre $2^2\cdot 5$ ocurre si y solo si $b\geq 2$. Finalmente, como $10^2\equiv -1\pmod{101}$, vemos que $10^{a-b}$ es congruente con $10$, $-1$, $-10$, o $1\pmod{101}$ según si $a-b$ es congruente con $1$, $2$, $3$, o $0\pmod 4$; así, $10^{a-b}-1$ es divisible entre 101 si y solo si $a-b$ es divisible entre 4.
+
+Se sigue que necesitamos contar los pares $(a,b)$ con $2\leq b<a\leq 2020$ y $4\mid a-b$. Para cada $b$ dado, hay $\lfloor\frac{2020-b}{4}\rfloor$ valores posibles de $a$. La respuesta es entonces $$ 4(504+503+\cdots+1)-504 = 504\cdot 1009 = \boxed{508536}. $$`),
+  putnam('PUTNAM-2020-A2', 2020, 'A', 2, 'Evaluación de una suma binomial doble igual a 4^k', 'Análisis',
+    String.raw`Sea $k$ un entero no negativo. Evalúa $$ \sum_{j=0}^k 2^{k-j}\binom{k+j}{j}. $$`,
+    String.raw`La respuesta es $\boxed{4^k}$. Sea $S_k$ la suma dada. Separando cada término mediante la identidad de Pascal y reindexando cuidadosamente las sumas resultantes, se obtiene la relación $$ S_k = 2S_{k-1}+\frac{S_k}{2}, $$ así que $S_k = 4S_{k-1}$. Como $S_0=1$, se sigue que $S_k = \boxed{4^k}$ para todo $k$.`),
+  putnam('PUTNAM-2020-A4', 2020, 'A', 4, 'Límite w(N)/N=1/e para casillas blancas restantes en un proceso aleatorio', 'Combinatoria',
+    String.raw`Considera una franja horizontal de $N+2$ casillas en la cual la primera y la última son negras y las $N$ casillas restantes son blancas. Elige una casilla blanca de manera uniforme al azar, elige uno de sus dos vecinos con igual probabilidad, y colorea de negro a ese vecino si aún no lo es. Repite este proceso hasta que todas las casillas blancas restantes tengan solo vecinos negros. Sea $w(N)$ el número esperado de casillas blancas restantes. Encuentra $$ \lim_{N \to \infty} \frac{w(N)}{N}. $$`,
+    String.raw`La respuesta es $\boxed{1/e}$. Se establece primero una recurrencia para $w(N)$: numerando las casillas de 1 a $N+2$ de izquierda a derecha, se calcula la probabilidad de que cada casilla sea la primera en colorearse de negro, y se observa que, una vez que la primera casilla $i$ cambia de color, la franja se divide en dos sistemas independientes de tamaños $i-2$ y $N+1-i$ (cada uno con extremos negros y el resto blanco), cuyo número esperado de casillas blancas restantes es $w(i-2)+w(N+1-i)$. Combinando esto con las probabilidades de cada $i$, y simplificando, se obtiene la recurrencia $$ w(N) = w(N-1)+\frac{w(N-2)}{N-1}. $$ Se demuestra por inducción que $$ w(N) = (N+1)\sum_{k=0}^{N+1} \frac{(-1)^k}{k!} \qquad (N\geq 0), $$ verificando el caso base ($w(0)=0$, $w(1)=1$) y el paso inductivo directamente a partir de la recurrencia. Finalmente, $$ \lim_{N\to\infty} \frac{w(N)}{N} = \lim_{N\to\infty} \frac{w(N)}{N+1} = \sum_{k=0}^\infty \frac{(-1)^k}{k!} = \boxed{\frac{1}{e}}. $$`),
+  putnam('PUTNAM-2020-A5', 2020, 'A', 5, 'Mayor n con a_n=2020 para representaciones en sumas de Fibonacci', 'Teoría de Números',
+    String.raw`Sea $a_n$ el número de conjuntos $S$ de enteros positivos para los cuales $$ \sum_{k \in S} F_k = n, $$ donde la sucesión de Fibonacci $(F_k)_{k\geq 1}$ satisface $F_{k+2}=F_{k+1}+F_k$ y comienza $F_1=1, F_2=1, F_3=2, F_4=3$. Encuentra el mayor entero $n$ tal que $a_n=2020$.`,
+    String.raw`La respuesta es $n=\boxed{F_{4040}-1}$. Usamos libremente la identidad $$ F_1+F_2+\cdots+F_{m-2} = F_m-1 \qquad (*) $$ (que se sigue por inducción sencilla en $m$), junto con los valores calculados directamente $a_1=a_2=2$, $a_3=a_4=3$.
+
+Extendemos la definición de $a_n$ fijando $a_0=1$. Un primer hecho clave: para $m>0$ y $F_m\leq n<F_{m+1}$, $$ a_n = a_{n-F_m}+a_{F_{m+1}-n-1}. \qquad (**) $$ Esto se ve considerando un conjunto $S$ con $\sum_{k\in S}F_k=n$: si $m\in S$, entonces $S\setminus\{m\}$ da una representación de $n-F_m$ (reversible, ya que $n-F_m<F_{m-1}\leq F_m$); si $m\notin S$, entonces $\{1,\dots,m-1\}\setminus S$ da una representación de $F_{m+1}-n-1$ (también reversible).
+
+Usando $(**)$ y una inducción en $m$, se demuestra que para $m\geq 2$, $$ a_{F_m} = a_{F_{m+1}-1} = \left\lfloor \frac{m+2}{2} \right\rfloor. $$ En particular, $a_n = 2020$ para $n=F_{4040}-1$.
+
+Falta mostrar que $n=F_{4040}-1$ es el mayor tal valor, es decir, que para $F_m\leq n<F_{m+1}$, $a_n \geq a_{F_m}$ (de donde, para $n>F_{4040}-1$, se tendría $a_n \geq a_{F_{4040}}=2021$). Esto también se demuestra por inducción en $m$, usando $(**)$ y separando en casos según si $\max\{n-F_m, F_{m+1}-n-1\}$ es mayor o menor que $F_{m-2}$, en cada caso acotando $a_n$ por debajo usando la hipótesis de inducción sobre valores anteriores de la sucesión $a$. Esto completa la demostración.`),
+  putnam('PUTNAM-2020-A6', 2020, 'A', 6, 'Constante óptima M=π/4 para una suma de senos ponderada', 'Trigonometría',
+    String.raw`Para un entero positivo $N$, sea $f_N$ la función definida por $$ f_N(x) = \sum_{n=0}^N \frac{N+1/2-n}{(N+1)(2n+1)} \sin((2n+1)x). $$ Determina la menor constante $M$ tal que $f_N(x) \leq M$ para todo $N$ y todo real $x$.`,
+    String.raw`La menor constante $M$ es $\boxed{\pi/4}$. Comenzamos reescribiendo $$ f_N(x) = \sum_{n=0}^N \frac{1}{2}\left(\frac{2}{2n+1}-\frac{1}{N+1}\right)\sin((2n+1)x). \qquad (\star) $$ Usando la fórmula cerrada para $\sum_{n=0}^N \sin((2n+1)x)$ (una suma telescópica de exponenciales complejas que da $\frac{1-\cos((2N+2)x)}{2\sin(x)} \geq 0$ cuando $\sin(x)>0$), se puede comparar $(\star)$ para $N$ y $N+1$ y mostrar que, para $x\in(0,\pi)$, la sucesión $\{f_N(x)\}_N$ es no decreciente.
+
+Reescribiendo $(\star)$ como $$ f_N(x) = \sum_{n=0}^N \frac{\sin((2n+1)x)}{2n+1} - \frac{1-\cos((2N+2)x)}{4(N+1)\sin(x)}, $$ y observando que el último término tiende a 0 cuando $N\to\infty$, concluimos que $\lim_{N\to\infty} f_N(x)$ es la suma de la serie de Fourier $$ \sum_{n=0}^\infty \frac{\sin((2n+1)x)}{2n+1}, $$ la cual converge, para $x\in(0,\pi)$, a la "onda cuadrada" que vale $\pi/4$ en ese intervalo. Como $\{f_N(x)\}$ es no decreciente en $(0,\pi)$ con este límite $\pi/4$, y por simetría ($f_N(x+2\pi)=f_N(x)$, $f_N(-x)=-f_N(x)$) el comportamiento en el resto de la recta se reduce a este caso, concluimos que $f_N(x)\leq M$ se cumple para $M=\pi/4$ pero no para ningún $M$ menor, como se quería.`),
+  putnam('PUTNAM-2020-B1', 2020, 'B', 1, 'S≡1990 (mod 2020) para una suma alternante por dígitos binarios', 'Teoría de Números',
+    String.raw`Para un entero positivo $n$, define $d(n)$ como la suma de los dígitos de $n$ en base 2 (por ejemplo, $d(13)=1+1+0+1=3$). Sea $$ S = \sum_{k=1}^{2020} (-1)^{d(k)} k^3. $$ Determina $S$ módulo 2020.`,
+    String.raw`Observa que $$ (1-x)(1-x^2)(1-x^4)\cdots(1-x^{1024}) = \sum_{k=0}^{2047} (-1)^{d(k)} x^k $$ y $$ x^{2016}(1-x)(1-x^2)\cdots(1-x^{16}) = \sum_{k=2016}^{2047} (-1)^{d(k)} x^k. $$ Aplicando el operador $x\frac{d}{dx}$ a ambos lados de estas dos ecuaciones tres veces, y luego evaluando en $x=1$, se muestra que $$ \sum_{k=0}^{2047} (-1)^{d(k)}k^3 = \sum_{k=2016}^{2047} (-1)^{d(k)}k^3 = 0, $$ y por lo tanto $$ \sum_{k=1}^{2015} (-1)^{d(k)}k^3 = 0. $$ Así, podemos escribir $$ S = \sum_{k=2016}^{2020} (-1)^{d(k)}k^3 = \sum_{k=0}^4 (-1)^{d(k)}(k+2016)^3 \equiv (-4)^3+(-1)(-3)^3+(-1)(-2)^3+(1)(-1)^3 = -64+27+8-1 = -30 \equiv \boxed{1990} \pmod{2020}. $$`),
+  putnam('PUTNAM-2020-B2', 2020, 'B', 2, 'Alice gana el juego de fichas si n o k es impar', 'Teoría de Números',
+    String.raw`Sean $k$ y $n$ enteros con $1 \leq k < n$. Alice y Bob juegan un juego con $k$ fichas en una fila de $n$ agujeros. Al inicio del juego, las fichas ocupan los $k$ agujeros más a la izquierda. Un movimiento legal consiste en mover una sola ficha a cualquier agujero vacío que esté más a la derecha. Los jugadores alternan turnos, comenzando Alice. El juego termina cuando las fichas están en los $k$ agujeros más a la derecha, así que quien deba jugar entonces no puede moverse y pierde. ¿Para qué valores de $n$ y $k$ tiene Alice una estrategia ganadora?`,
+    String.raw`Llamamos a este juego, con $n$ agujeros y $k$ fichas, el juego $(n,k)$. Mostraremos que Alice tiene una estrategia ganadora en el juego $(n,k)$ $\boxed{\text{si y solo si al menos uno de } n, k \text{ es impar}}$; en caso contrario, Bob tiene la estrategia ganadora.
+
+Reducimos la primera afirmación a la segunda así: si $n$ y $k$ son ambos impares, Alice puede mover la última ficha al último agujero, dejando ese agujero (y la ficha) totalmente fuera de juego, reduciendo el juego $(n,k)$ al juego $(n-1,k-1)$, donde ahora Alice tiene la estrategia ganadora por la segunda afirmación. De manera similar, si $n$ es impar pero $k$ es par, Alice puede mover la primera ficha al agujero $k+1$, reduciendo a $(n-1,k)$; y si $n$ es par pero $k$ es impar, Alice puede mover la primera ficha al último agujero, reduciendo a $(n-2,k-1)$.
+
+Ahora suponemos que $n$ y $k$ son ambos pares y describimos una estrategia ganadora para Bob. Subdivide los $n$ agujeros en $n/2$ parejas disjuntas de agujeros adyacentes. Llama buena a una configuración de $k$ fichas si, para cada pareja, ambos o ninguno de sus agujeros está ocupado; observa que la posición inicial es buena. Bob puede asegurar que, después de cada uno de sus movimientos, deja a Alice con una configuración buena: dada una configuración buena, Alice debe mover una ficha de una pareja ocupada a un agujero de una pareja desocupada; entonces Bob puede mover la otra ficha de la primera pareja al agujero restante de la segunda pareja, resultando en otra configuración buena. En particular, esto asegura que Bob siempre tiene un movimiento disponible. Como el juego debe terminar, esta es una estrategia ganadora para Bob.`),
+  putnam('PUTNAM-2020-B3', 2020, 'B', 3, 'Esperanza f(δ)=1−ln(δ) del primer índice bajo δ', 'Probabilidad',
+    String.raw`Sea $x_0=1$, y sea $\delta$ una constante con $0<\delta<1$. Iterativamente, para $n=0,1,2,\dots$, se elige un punto $x_{n+1}$ uniformemente del intervalo $[0,x_n]$. Sea $Z$ el menor valor de $n$ para el cual $x_n<\delta$. Encuentra el valor esperado de $Z$, como función de $\delta$.`,
+    String.raw`Sea $f(\delta)$ el valor esperado buscado de $Z$. Demostramos que $f(\delta) = \boxed{1-\log(\delta)}$, donde $\log$ denota el logaritmo natural.
+
+Para $c\in[0,1]$, sea $g(\delta,c)$ el valor esperado de $Z$ dado que $x_1=c$, de modo que $f(\delta) = \int_0^1 g(\delta,c)\,dc$. Claramente $g(\delta,c)=1$ si $c<\delta$. Por otro lado, si $c\geq\delta$, entonces $g(\delta,c)$ es 1 más el valor esperado que tendría $Z$ si usáramos la condición inicial $x_0=c$ en vez de $x_0=1$; reescalando el intervalo $[0,c]$ linealmente a $[0,1]$ (lo cual envía $\delta$ a $\delta/c$), ese valor esperado es $f(\delta/c)$. Es decir, para $c\geq\delta$, $g(\delta,c)=1+f(\delta/c)$. Se sigue que $$ f(\delta) = \int_0^1 g(\delta,c)\,dc = \delta+\int_\delta^1 (1+f(\delta/c))\,dc = 1+\int_\delta^1 f(\delta/c)\,dc. $$ Define $h:[1,\infty)\to\mathbb{R}$ por $h(x)=f(1/x)$; entonces $$ h(x) = 1+\int_{1/x}^1 h(cx)\,dc = 1+\frac{1}{x}\int_1^x h(c)\,dc. $$ Reescribiendo esto como $xh(x)-x=\int_1^x h(c)\,dc$ y derivando respecto a $x$ se obtiene $h(x)+xh'(x)-1=h(x)$, de donde $h'(x)=1/x$ y así $h(x)=\log(x)+C$ para alguna constante $C$. Como $h(1)=f(1)=1$, concluimos $C=1$, $h(x)=1+\log(x)$, y finalmente $$ f(\delta) = \boxed{1-\log(\delta)}. $$`),
+  putnam('PUTNAM-2020-B4', 2020, 'B', 4, 'Promedio M(2020)=1/4040 de 1/q(v) sobre caminatas aleatorias', 'Probabilidad',
+    String.raw`Sea $n$ un entero positivo, y sea $V_n$ el conjunto de $(2n+1)$-tuplas enteras $\mathbf{v}=(s_0,s_1,\cdots,s_{2n-1},s_{2n})$ para las cuales $s_0=s_{2n}=0$ y $|s_j-s_{j-1}|=1$ para $j=1,2,\cdots,2n$. Define $$ q(\mathbf{v}) = 1+\sum_{j=1}^{2n-1} 3^{s_j}, $$ y sea $M(n)$ el promedio de $\frac{1}{q(\mathbf{v})}$ sobre todos los $\mathbf{v}\in V_n$. Evalúa $M(2020)$.`,
+    String.raw`La respuesta es $\boxed{\frac{1}{4040}}$. Mostraremos el siguiente hecho más general: para cualquier número $a\neq 0$, definiendo $q(\mathbf{v})=1+\sum_{j=1}^{2n-1}a^{s_j}$, el promedio de $\frac{1}{q(\mathbf{v})}$ sobre todo $\mathbf{v}\in V_n$ es igual a $\frac{1}{2n}$, independientemente de $a$.
+
+Identifica $V_n$ con el conjunto $W_n$ de $(2n)$-tuplas $\mathbf{w}=(w_1,\ldots,w_{2n})$ con $n$ entradas iguales a $+1$ y $n$ iguales a $-1$, mediante $s_j=\sum_{i=1}^j w_i$. Define el mapeo cíclico $\phi(w_1,\ldots,w_{2n})=(w_2,\ldots,w_{2n},w_1)$; $W_n$ se descompone en órbitas disjuntas bajo $\phi$. Se puede mostrar que, para cualquier $\mathbf{w}\in W_n$, el promedio de $\frac{1}{q(f(\phi^k(\mathbf{w})))}$ sobre $k=1,\ldots,2n$ es $\frac{1}{2n}$: escribiendo $s_j$ periódicamente (con periodo $2n$, ya que $\sum_i w_i=0$), se calcula que $$ q(f(\phi^k(\mathbf{w}))) = a^{-s_k}\sum_{j=1}^{2n} a^{s_j}, $$ y por lo tanto $$ \sum_{k=1}^{2n} \frac{1}{q(f(\phi^k(\mathbf{w})))} = \sum_{k=1}^{2n} \frac{a^{s_k}}{\sum_{j=1}^{2n}a^{s_j}} = 1. $$ Como $V_n$ es una unión disjunta de las imágenes de estas órbitas, el promedio global de $\frac{1}{q(\mathbf{v})}$ sobre $\mathbf{v}\in V_n$ es también $\frac{1}{2n}$. Tomando $n=2020$, obtenemos $M(2020) = \boxed{\frac{1}{4040}}$.`),
+]
+
 const putnam2021 = [
-  putnam('PUTNAM-2021-A1', 2021, 'A', 1, 'Saltos mínimos de un saltamontes a (2021, 2021)', 'Teoría de Números', String.raw`Un saltamontes comienza en el origen en el plano coordenado y realiza una secuencia de saltos. Cada salto tiene longitud 5, y después de cada salto el saltamontes se encuentra en un punto cuyas coordenadas son ambas enteros; por lo tanto, hay 12 ubicaciones posibles para el saltamontes después del primer salto. ¿Cuál es el número mínimo de saltos necesarios para que el saltamontes alcance el punto $(2021, 2021)$?`),
-  putnam('PUTNAM-2021-A2', 2021, 'A', 2, 'Límite de g(x)/x definida por un límite en r', 'Análisis', String.raw`Para cada número real positivo $x$, sea $g(x) = \lim_{r\to 0} \left((x+1)^{r+1} - x^{r+1}\right)^{\frac{1}{r}}$. Encuentra $\lim_{x\to\infty} \frac{g(x)}{x}$.`),
-  putnam('PUTNAM-2021-A3', 2021, 'A', 3, 'Esfera con tetraedro regular de vértices enteros', 'Geometría', String.raw`Determina todos los enteros positivos $N$ para los cuales la esfera $x^2+y^2+z^2=N$ tiene inscrito un tetraedro regular cuyos vértices tienen coordenadas enteras.`),
-  putnam('PUTNAM-2021-A4', 2021, 'A', 4, 'Límite de una integral doble con simetría', 'Análisis', String.raw`Sea $I(R) = \iint_{x^2+y^2\le R^2} \left(\frac{1+2x^2}{1+x^4+6x^2y^2+y^4} - \frac{1+y^2}{2+x^4+y^4}\right) dxdy$. Encuentra $\lim_{R\to\infty} I(R)$ o demuestra que este límite no existe.`),
-  putnam('PUTNAM-2021-A5', 2021, 'A', 5, 'Sumas de potencias módulo 2021', 'Teoría de Números', String.raw`Sea $A$ el conjunto de todos los enteros $n$ tales que $1 \le n \le 2021$ y $\operatorname{mcd}(n,2021)=1$. Para cada entero no negativo $j$, sea $S(j) = \sum_{n\in A} n^j$. Determina todos los valores de $j$ tales que $S(j)$ es un múltiplo de $2021$.`),
+  putnam('PUTNAM-2021-A1', 2021, 'A', 1, 'Saltos mínimos de un saltamontes a (2021, 2021)', 'Teoría de Números',
+    String.raw`Un saltamontes comienza en el origen en el plano coordenado y realiza una secuencia de saltos. Cada salto tiene longitud 5, y después de cada salto el saltamontes se encuentra en un punto cuyas coordenadas son ambas enteros; por lo tanto, hay 12 ubicaciones posibles para el saltamontes después del primer salto. ¿Cuál es el número mínimo de saltos necesarios para que el saltamontes alcance el punto $(2021, 2021)$?`,
+    String.raw`La respuesta es $\boxed{578}$. Cada salto corresponde a sumar uno de los 12 vectores $(0,\pm 5)$, $(\pm 5,0)$, $(\pm 3,\pm 4)$, $(\pm 4,\pm 3)$ a la posición del saltamontes. Como $(2021,2021) = 288(3,4)+288(4,3)+(0,5)+(5,0)$, el saltamontes puede llegar a $(2021,2021)$ en $288+288+1+1=578$ saltos.
+
+Por otro lado, sea $z=x+y$ la suma de las coordenadas $x$ y $y$ del saltamontes, de modo que comienza en $z=0$ y termina en $z=4042$. Cada salto cambia la suma de las coordenadas $x$ y $y$ del saltamontes en a lo más $7$, y $4042 > 577 \times 7$; de esto se sigue de inmediato que el saltamontes debe dar más de $577$ saltos para llegar de $(0,0)$ a $(2021,2021)$.`),
+  putnam('PUTNAM-2021-A2', 2021, 'A', 2, 'Límite de g(x)/x definida por un límite en r', 'Análisis',
+    String.raw`Para cada número real positivo $x$, sea $g(x) = \lim_{r\to 0} \left((x+1)^{r+1} - x^{r+1}\right)^{\frac{1}{r}}$. Encuentra $\lim_{x\to\infty} \frac{g(x)}{x}$.`,
+    String.raw`El límite es $\boxed{e}$.
+
+Por la regla de L'Hôpital, tenemos $$ \begin{align*} &\lim_{r\to 0} \frac{\log((x+1)^{r+1}-x^{r+1})}{r} \\ &\quad = \lim_{r\to 0} \frac{d}{dr} \log((x+1)^{r+1}-x^{r+1}) \\ &\quad = \lim_{r\to 0} \frac{(x+1)^{r+1}\log(x+1)-x^{r+1}\log x}{(x+1)^{r+1}-x^{r+1}} \\ &\quad = (x+1)\log(x+1)-x\log x, \end{align*} $$ donde $\log$ denota el logaritmo natural. Se sigue que $g(x) = e^{(x+1)\log(x+1)-x\log x} = \frac{(x+1)^{x+1}}{x^x}$. Por lo tanto $$ \lim_{x\to\infty} \frac{g(x)}{x} = \left(\lim_{x\to\infty}\frac{x+1}{x}\right) \cdot \left(\lim_{x\to\infty} \left(1+\frac{1}{x}\right)^x\right) = 1\cdot e = e. $$`),
+  putnam('PUTNAM-2021-A3', 2021, 'A', 3, 'Esfera con tetraedro regular de vértices enteros', 'Geometría',
+    String.raw`Determina todos los enteros positivos $N$ para los cuales la esfera $x^2+y^2+z^2=N$ tiene inscrito un tetraedro regular cuyos vértices tienen coordenadas enteras.`,
+    String.raw`Los enteros $N$ con esta propiedad son los de la forma $\boxed{3m^2}$ para algún entero positivo $m$.
+
+En una dirección, para $N = 3m^2$, los puntos $$ (m,m,m), (m,-m,-m), (-m,m,-m), (-m,-m,m) $$ forman los vértices de un tetraedro regular inscrito en la esfera $x^2 + y^2 + z^2 = N$.
+
+Recíprocamente, supón que $P_i = (x_i, y_i, z_i)$ para $i=1,\dots,4$ son los vértices de un tetraedro regular inscrito. Entonces el centro de este tetraedro debe coincidir con el centro de la esfera, es decir $(0,0,0)$. En consecuencia, estos cuatro vértices junto con $Q_i = (-x_i, -y_i, -z_i)$ para $i=1,\dots,4$ forman los vértices de un cubo inscrito en la esfera. La longitud del lado de este cubo es $(N/3)^{1/2}$, así que su volumen es $(N/3)^{3/2}$; por otro lado, este volumen también es igual al determinante de la matriz con vectores fila $Q_2-Q_1, Q_3-Q_1, Q_4-Q_1$, que es un entero. Por lo tanto $(N/3)^3$ es un cuadrado perfecto, y entonces también lo es $N/3$.`),
+  putnam('PUTNAM-2021-A4', 2021, 'A', 4, 'Límite de una integral doble con simetría', 'Análisis',
+    String.raw`Sea $I(R) = \iint_{x^2+y^2\le R^2} \left(\frac{1+2x^2}{1+x^4+6x^2y^2+y^4} - \frac{1+y^2}{2+x^4+y^4}\right) dxdy$. Encuentra $\lim_{R\to\infty} I(R)$ o demuestra que este límite no existe.`,
+    String.raw`El límite existe y es igual a $\boxed{\frac{\sqrt{2}}{2} \pi \log 2}$.
+
+Primero observamos que podemos intercambiar $x$ y $y$ para obtener $$ I(R) = \iint_{x^2+y^2 \leq R^2} \left( \frac{1+2y^2}{1+x^4+6x^2y^2+y^4} - \frac{1+x^2}{2+x^4+y^4} \right)\,dx\,dy. $$ Promediando las dos expresiones para $I(R)$ obtenemos $$ I(R) = \iint_{x^2+y^2 \leq R^2} (f(x,y) - g(x,y))\,dx\,dy $$ donde $$ \begin{align*} f(x,y) &= \frac{1+x^2+y^2}{1 + x^4 + 6x^2y^2 + y^4} \\ g(x,y) &= \frac{1+x^2/2+y^2/2}{2 + x^4 + y^4}. \end{align*} $$ Ahora observa que $$f(x,y) = 2 g(x+y, x-y). $$ Así podemos escribir $$ I(R) = \iint_{R^2 \leq x^2 +y^2 \leq 2R^2} g(x,y)\,dx\,dy. $$ Para calcular esta integral, cambiamos a coordenadas polares: $$ \begin{align*} I(R) &= \int_R^{R\sqrt{2}} \int_0^{2\pi} g(r\cos \theta, r \sin \theta)r\,dr\,d\theta \\ &=  \int_R^{R\sqrt{2}} \int_0^{2\pi} \frac{1 + r^2/2}{2 + r^4(1 - (\sin^2 2\theta)/2)} r\,dr\,d\theta. \end{align*} $$ Reescalamos $r$ para eliminar el factor de $R$ de los límites de integración: $$ I(R) =  \int_1^{\sqrt{2}} \int_0^{2\pi} \frac{1 + R^2 r^2/2}{2 + R^4 r^4(1 - (\sin^2 2\theta)/2)} R^2 r\,dr\,d\theta. $$
+
+Como el integrando está uniformemente acotado para $R \gg 0$, podemos pasar el límite sobre $R$ a través de las integrales para obtener $$ \begin{align*} \lim_{R \to \infty} I(R) &= \int_1^{\sqrt{2}} \int_0^{2\pi} \frac{r^2/2}{r^4(1 - (\sin^2 2\theta)/2)} r\,dr\,d\theta \\ &= \int_1^{\sqrt{2}} \frac{dr}{r} \int_0^{2\pi} \frac{1}{2- \sin^2 2\theta} d\theta \\ &= \log \sqrt{2} \int_0^{2\pi} \frac{1}{1 + \cos^2 2\theta} d\theta \\ &= \frac{1}{2} \log 2 \int_0^{2\pi} \frac{2}{3 + \cos 4\theta} d\theta. \end{align*} $$ Falta entonces evaluar $$ \int_0^{2\pi} \frac{2}{3 + \cos 4\theta} d\theta =  2 \int_0^{\pi} \frac{2}{3 + \cos \theta} d\theta. $$ Una opción para esto es usar la sustitución de ángulo medio $t = \tan (\theta/2)$ para obtener $$ \begin{align*} \int_{-\infty}^\infty \frac{4}{3(1+t^2) + (1-t^2)}\,dt &= \int_{-\infty}^\infty \frac{2}{2+t^2}\,dt \\ &= \sqrt{2} \arctan \left( \frac{x}{\sqrt{2}} \right)^{\infty}_{-\infty} \\ &= \sqrt{2} \pi. \end{align*} $$ Combinando esto se obtiene el resultado buscado.`),
+  putnam('PUTNAM-2021-A5', 2021, 'A', 5, 'Sumas de potencias módulo 2021', 'Teoría de Números',
+    String.raw`Sea $A$ el conjunto de todos los enteros $n$ tales que $1 \le n \le 2021$ y $\operatorname{mcd}(n,2021)=1$. Para cada entero no negativo $j$, sea $S(j) = \sum_{n\in A} n^j$. Determina todos los valores de $j$ tales que $S(j)$ es un múltiplo de $2021$.`,
+    String.raw`Los valores de $j$ en cuestión son $\boxed{\text{aquellos no divisibles entre } 42 \text{ ni entre } 46}$.
+
+Primero verificamos que para $p$ primo, $$ \sum_{n=1}^{p-1} n^j \equiv 0 \pmod{p} \Leftrightarrow j \not\equiv 0 \pmod{p-1}. $$ Si $j \equiv 0 \pmod{p-1}$, entonces $n^j \equiv 1 \pmod{p}$ para cada $n$, así que $\sum_{n=1}^{p-1} n^j \equiv p-1 \pmod{p}$. Si $j \not\equiv 0 \pmod{p-1}$, podemos elegir una raíz primitiva $m$ módulo $p$, observar que $m^j \not\equiv 1 \pmod{p}$, y luego notar que $$ \sum_{n=1}^{p-1} n^j \equiv \sum_{n=1}^{p-1} (mn)^j = m^j \sum_{n=1}^{p-1} n^j \pmod{p}, $$ lo cual solo es posible si $\sum_{n=1}^{p-1} n^j \equiv 0 \pmod{p}$.
+
+Ahora observamos que la factorización prima de 2021 es $43 \times 47$, así que basta determinar cuándo $S(j)$ es divisible entre cada uno de 43 y 47. Tenemos $$ \begin{align*} S(j) &\equiv 46 \sum_{n=1}^{42} n^j \pmod{43} \\ S(j) &\equiv 42 \sum_{n=1}^{46} n^j \pmod{47}. \end{align*} $$ Como 46 y 42 son coprimos con 43 y 47 respectivamente, tenemos $$ \begin{gather*} S(j) \equiv 0 \pmod{43} \Leftrightarrow j \not\equiv 0 \pmod{42} \\ S(j) \equiv 0 \pmod{47} \Leftrightarrow j \not\equiv 0 \pmod{46}. \end{gather*} $$ Esto da el resultado buscado.`),
   putnam('PUTNAM-2021-A6', 2021, 'A', 6, '¿Es P(2) compuesto si P(x) factoriza?', 'Álgebra', String.raw`Sea $P(x)$ un polinomio cuyos coeficientes son todos $0$ o $1$. Supón que $P(x)$ se puede escribir como el producto de dos polinomios no constantes con coeficientes enteros. ¿Se sigue de esto que $P(2)$ es un entero compuesto?`),
-  putnam('PUTNAM-2021-B1', 2021, 'B', 1, 'Probabilidad de no cubrir esquinas del tablero', 'Probabilidad', String.raw`Supón que el plano está embaldosado con un tablero de ajedrez infinito de cuadrados unitarios. Si se deja caer otro cuadrado unitario sobre el plano al azar con posición y orientación independientes del embaldosado del tablero de ajedrez, ¿cuál es la probabilidad de que no cubra ninguna de las esquinas de los cuadrados del tablero de ajedrez?`),
-  putnam('PUTNAM-2021-B2', 2021, 'B', 2, 'Máximo de una suma con media geométrica', 'Análisis', String.raw`Determina el valor máximo de la suma $S = \sum_{n=1}^{\infty} \frac{n}{2^n} (a_1 a_2 \dots a_n)^{\frac{1}{n}}$ sobre todas las sucesiones $a_1, a_2, a_3, \dots$ de números reales no negativos que satisfacen $\sum_{k=1}^{\infty} a_k = 1$.`),
+  putnam('PUTNAM-2021-B1', 2021, 'B', 1, 'Probabilidad de no cubrir esquinas del tablero', 'Probabilidad',
+    String.raw`Supón que el plano está embaldosado con un tablero de ajedrez infinito de cuadrados unitarios. Si se deja caer otro cuadrado unitario sobre el plano al azar con posición y orientación independientes del embaldosado del tablero de ajedrez, ¿cuál es la probabilidad de que no cubra ninguna de las esquinas de los cuadrados del tablero de ajedrez?`,
+    String.raw`La probabilidad es $\boxed{2 - \frac{6}{\pi}}$.
+
+Coloca coordenadas de modo que el embaldosado original incluya el cuadrado (relleno) $S = \{(x,y): 0 \leq x,y \leq 1 \}$. Entonces es equivalente elegir el segundo cuadrado eligiendo primero un punto uniformemente al azar en $S$ como el centro del cuadrado, y luego eligiendo un ángulo de rotación uniformemente al azar en el intervalo $[0, \pi/2]$.
+
+Para cada $\theta \in [0, \pi/2]$, circunscribe un cuadrado $S_\theta$ alrededor de $S$ con ángulo de rotación $\theta$ respecto a $S$; este cuadrado tiene lado de longitud $\sin \theta + \cos \theta$. Dentro de $S_\theta$, dibuja el cuadrado más pequeño $S_\theta'$ que consiste de los puntos a distancia mayor que $1/2$ de cada lado de $S_\theta$; este cuadrado tiene lado de longitud $\sin \theta + \cos \theta - 1$.
+
+Ahora verificamos que un cuadrado unitario con ángulo de rotación $\theta$ no cubre ninguna esquina de $S$ si y solo si su centro está en el interior de $S_\theta'$. En una dirección, si una de las esquinas de $S$ es cubierta, entonces esa esquina está en un lado de $S_\theta$ que se interseca con el cuadrado soltado, así que el centro del cuadrado soltado está a distancia menor que $1/2$ de ese lado de $S_\theta$. Para verificar el recíproco, observa que hay dos formas de diseccionar el cuadrado $S_\theta$ en el cuadrado $S_\theta'$ más cuatro rectángulos de $\sin \theta \times \cos \theta$. Si $\theta \neq 0, \pi/4$, entonces una de estas disecciones tiene la propiedad de que cada esquina $P$ de $S$ aparece como un punto interior de un lado (no una esquina) de uno de los rectángulos $R$. Basta verificar que si el centro del cuadrado soltado está en $R$, entonces el cuadrado soltado cubre $P$; esto se sigue de que $\sin \theta$ y $\cos \theta$ son ambos a lo más 1.
+
+Se sigue que la probabilidad condicional, dado que el ángulo de rotación se elige como $\theta$, de que el cuadrado soltado no cubra ninguna esquina de $S$ es $(\sin \theta + \cos \theta - 1)^2$. Calculamos entonces la probabilidad original como la integral $$ \begin{align*} &\frac{2}{\pi} \int_0^{\pi/2} (\sin \theta + \cos \theta - 1)^2\,d\theta \\ &\quad = \frac{2}{\pi} \int_0^{\pi/2} (2 + \sin 2\theta - 2\sin \theta - 2 \cos \theta)\,d\theta\\ &\quad = \frac{2}{\pi} \left( 2 \theta - \frac{1}{2} \cos 2\theta + 2 \cos \theta - 2 \sin \theta \right)_0^{\pi/2} \\ &\quad = \frac{2}{\pi} \left( \pi + 1 - 2 - 2 \right) = 2 - \frac{6}{\pi}. \end{align*} $$`),
+  putnam('PUTNAM-2021-B2', 2021, 'B', 2, 'Máximo de una suma con media geométrica', 'Análisis',
+    String.raw`Determina el valor máximo de la suma $S = \sum_{n=1}^{\infty} \frac{n}{2^n} (a_1 a_2 \dots a_n)^{\frac{1}{n}}$ sobre todas las sucesiones $a_1, a_2, a_3, \dots$ de números reales no negativos que satisfacen $\sum_{k=1}^{\infty} a_k = 1$.`,
+    String.raw`La respuesta es $\boxed{2/3}$.
+
+Por la desigualdad MA-MG, tenemos $$ \begin{align*} 2^{n+1}(a_1\cdots a_n)^{1/n} &= \left((4a_1)(4^2a_2)\cdots (4^na_n)\right)^{1/n}\\ & \leq \frac{\sum_{k=1}^n (4^k a_k)}{n}. \end{align*} $$ Por lo tanto $$ \begin{align*} 2S &\leq \sum_{n=1}^\infty \frac{\sum_{k=1}^n (4^k a_k)}{4^n} \\ &= \sum_{n=1}^\infty \sum_{k=1}^n (4^{k-n}a_k) = \sum_{k=1}^\infty \sum_{n=k}^\infty (4^{k-n}a_k) \\ &= \sum_{k=1}^\infty \frac{4a_k}{3}  = \frac{4}{3} \end{align*} $$ y $S \leq 2/3$. La igualdad se alcanza cuando $a_k=\frac{3}{4^k}$ para todo $k$, ya que en este caso $4a_1=4^2a_2=\cdots=4^na_n$ para todo $n$.`),
   putnam('PUTNAM-2021-B3', 2021, 'B', 3, 'Círculo donde la integral de ρ se anula', 'Análisis', String.raw`Sea $h(x,y)$ una función de valor real que es dos veces continuamente diferenciable en todo $\mathbb{R}^2$ y define $\rho(x,y) = yh_x - xh_y$. Pruebe o refute: Para cualquier constante positiva $d$ y $r$ con $d > r$, existe un círculo $S$ de radio $r$ cuyo centro está a una distancia $d$ del origen tal que la integral de $\rho$ sobre el interior de $S$ es cero.`),
   putnam('PUTNAM-2021-B4', 2021, 'B', 4, 'Residuo de un producto módulo un Fibonacci', 'Teoría de Números', String.raw`Sean $F_0, F_1, \dots$ la sucesión de números de Fibonacci, con $F_0=0$, $F_1=1$, y $F_n = F_{n-1} + F_{n-2}$ para $n \ge 2$. Para $m > 2$, sea $R_m$ el residuo cuando el producto $\prod_{k=1}^{m-1} k^k$ se divide por $F_m$. Demuestra que $R_m$ también es un número de Fibonacci.`),
   putnam('PUTNAM-2021-B5', 2021, 'B', 5, 'Potencias de una matriz "muy impar"', 'Álgebra Lineal', String.raw`Se dice que una matriz de $n \times n$ con entradas enteras es muy impar si, para cada subconjunto no vacío $S$ de $\{1, 2, \dots, n\}$, la submatriz de $|S| \times |S|$ $(a_{ij})_{i,j\in S}$ tiene determinante impar. Demuestra que si $A$ es muy impar, entonces $A^k$ es muy impar para todo $k \ge 1$.`),
-  putnam('PUTNAM-2021-B6', 2021, 'B', 6, 'Cota para el valor esperado tras recortar medianas', 'Probabilidad', String.raw`Dada una lista ordenada de $3N$ números reales, podemos recortarla para formar una lista de $N$ números de la siguiente manera: dividimos la lista en $N$ grupos de 3 números consecutivos, y dentro de cada grupo, descartamos el número más alto y el más bajo, conservando solo la mediana. Considera generar un número aleatorio $X$ mediante el siguiente procedimiento: comienza con una lista de $3^{2021}$ números, extraídos independiente y uniformemente al azar entre 0 y 1. Luego recorta esta lista como se definió anteriormente, dejando una lista de $3^{2020}$ números. Luego recorta nuevamente de forma repetida hasta que solo quede un número; sea $X$ este número. Sea $\mu$ el valor esperado de $|X - 1/2|$. Muestra que $\mu \ge \frac{1}{4} \left(\frac{2}{3}\right)^{2021}$.`),
+  putnam('PUTNAM-2021-B6', 2021, 'B', 6, 'Cota para el valor esperado tras recortar medianas', 'Probabilidad',
+    String.raw`Dada una lista ordenada de $3N$ números reales, podemos recortarla para formar una lista de $N$ números de la siguiente manera: dividimos la lista en $N$ grupos de 3 números consecutivos, y dentro de cada grupo, descartamos el número más alto y el más bajo, conservando solo la mediana. Considera generar un número aleatorio $X$ mediante el siguiente procedimiento: comienza con una lista de $3^{2021}$ números, extraídos independiente y uniformemente al azar entre 0 y 1. Luego recorta esta lista como se definió anteriormente, dejando una lista de $3^{2020}$ números. Luego recorta nuevamente de forma repetida hasta que solo quede un número; sea $X$ este número. Sea $\mu$ el valor esperado de $|X - 1/2|$. Muestra que $\mu \ge \frac{1}{4} \left(\frac{2}{3}\right)^{2021}$.`,
+    String.raw`(basado en una sugerencia de Noam Elkies) Sea $f_k(x)$ la distribución de probabilidad de $X_k$, el último número que queda al recortar repetidamente una lista de $3^k$ variables aleatorias elegidas según la distribución uniforme en $[0,1]$; observa que $f_0(x) = 1$ para $x \in [0,1]$. Sea $F_k(x)=\int_0^x f_k(t)\,dt$ la función de distribución acumulada; por simetría, $F_k(\frac{1}{2}) = \frac{1}{2}$. Sea $\mu_k$ el valor esperado de $X_k - \frac{1}{2}$; entonces $\mu_0 = \frac{1}{4}$, así que bastará probar que $\mu_{k} \geq \frac{2}{3} \mu_{k-1}$ para $k > 0$.
+
+Por integración por partes y simetría, tenemos $$ \mu_k = 2 \int_0^{1/2} \left( \frac{1}{2} - x \right) f_k(x)\,dx  = 2 \int_0^{1/2} F_k(x)\,dx; $$ es decir, $\mu_k$ calcula el doble del área bajo la curva $y = F_k(x)$ para $0 \leq x \leq\frac{1}{2}$. Como $F_k$ es una función monótona de $[0, \frac{1}{2}]$ con $F_k(0) = 0$ y $F_k(\frac{1}{2}) = \frac{1}{2}$, podemos transponer los ejes para obtener $$ \mu_k = 2 \int_0^{1/2} \left( \frac{1}{2} - F_k^{-1}(y) \right)\,dy. $$
+
+Como $f_k(x)$ es la distribución de probabilidad de la mediana de tres variables aleatorias elegidas según la distribución $f_{k-1}(x)$, $$ f_k(x) = 6 f_{k-1}(x) F_{k-1}(x) ( 1-F_{k-1}(x) ) $$ o equivalentemente $$ F_k(x) = 3 F_{k-1}(x)^2 - 2 F_{k-1}(x)^3. $$ Por inducción, $F_k$ es la $k$-ésima iterada de $F_1(x) = 3x^2 -2x^3$, así que $$ F_k(x) = F_{k-1}(F_1(x)). $$ Como $f_1(t) = 6t(1-t) \leq \frac{3}{2}$ para $t \in [0,\frac{1}{2}]$, $$ \frac{1}{2} - F_1(x) = \int_x^{1/2} 6t(1-t)\,dt \leq \frac{3}{2}\left(\frac{1}{2}-x\right); $$ para $y \in [0, \frac{1}{2}]$, podemos tomar $x = F_{k}^{-1}(y)$ para obtener $$ \frac{1}{2} - F_k^{-1}(y) \geq \frac{2}{3} \left( \frac{1}{2} - F_{k-1}^{-1}(y) \right). $$ Usando que $F_k = F_{k-1}\circ F_1$ junto con la desigualdad anterior, obtenemos $$ \begin{align*} \mu_k &= 2 \int_0^{1/2} \left( \frac{1}{2} - F_k^{-1}(y) \right) \,dy \\ &\geq \frac{4}{3} \int_0^{1/2} \left( \frac{1}{2} - F_{k-1}^{-1}(y) \right) \,dy = \frac{2}{3}\mu_{k-1} \end{align*} $$ como se quería.`),
 ]
 
 const putnam2022 = [
-  putnam('PUTNAM-2022-A1', 2022, 'A', 1, 'Recta tangente única a ln(1+x²)', 'Análisis', String.raw`Determina todos los pares ordenados de números reales $(a, b)$ tales que la recta $y = ax + b$ interseca a la curva $y = \ln(1+x^2)$ en exactamente un punto.`),
-  putnam('PUTNAM-2022-A2', 2022, 'A', 2, 'Coeficientes negativos máximos de p(x)²', 'Álgebra', String.raw`Sea $n$ un entero con $n \ge 2$. Sobre todos los polinomios reales $p(x)$ de grado $n$, ¿cuál es el mayor número posible de coeficientes negativos de $p(x)^2$?`),
-  putnam('PUTNAM-2022-A3', 2022, 'A', 3, 'Sucesiones módulo p y una congruencia módulo 5', 'Teoría de Números', String.raw`Sea $p$ un número primo mayor que 5. Sea $f(p)$ el número de sucesiones infinitas $a_1, a_2, a_3, \dots$ tales que $a_n \in \{1, 2, \dots, p-1\}$ y $a_n a_{n+2} \equiv 1 + a_{n+1} \pmod{p}$ para todo $n \ge 1$. Demuestra que $f(p)$ es congruente con 0 o 2 (mód 5).`),
-  putnam('PUTNAM-2022-A4', 2022, 'A', 4, 'Valor esperado hasta la primera bajada', 'Probabilidad', String.raw`Supón que $X_1, X_2, \dots$ son números reales entre 0 y 1 elegidos independiente y uniformemente al azar. Sea $S = \sum_{i=1}^{k} X_i / 2^i$, donde $k$ es el menor entero positivo tal que $X_k < X_{k+1}$, o $k=\infty$ si no existe tal entero. Encuentra el valor esperado de $S$.`),
-  putnam('PUTNAM-2022-A5', 2022, 'A', 5, 'Juego de fichas en una fila de 2022 casillas', 'Combinatoria', String.raw`Alice y Bob juegan un juego en un tablero que consiste en una fila de 2022 cuadrados consecutivos. Se turnan colocando fichas que cubren dos cuadrados adyacentes, jugando Alice primero. Por regla, una ficha no debe cubrir un cuadrado que ya esté cubierto por otra ficha. El juego termina cuando no se puede colocar ninguna ficha según esta regla. El objetivo de Alice es maximizar el número de cuadrados descubiertos cuando termina el juego; el objetivo de Bob es minimizarlo. ¿Cuál es el mayor número de cuadrados descubiertos que Alice puede asegurar al final del juego, sin importar cómo juegue Bob?`),
-  putnam('PUTNAM-2022-A6', 2022, 'A', 6, 'Intervalos de potencias impares de longitud igual', 'Análisis', String.raw`Sea $n$ un entero positivo. Determina, en términos de $n$, el entero más grande $M$ con la siguiente propiedad: Existen números reales $x_1, \dots, x_{2n}$ con $-1 < x_1 < x_2 < \dots < x_{2n} < 1$ tales que la suma de las longitudes de los $n$ intervalos $[x_1^{2k-1}, x_2^{2k-1}], [x_3^{2k-1}, x_4^{2k-1}], \dots, [x_{2n-1}^{2k-1}, x_{2n}^{2k-1}]$ es igual a 1 para todos los enteros $k$ con $1 \le k \le m$.`),
-  putnam('PUTNAM-2022-B1', 2022, 'B', 1, 'Coeficientes de e^{P(x)} todos distintos de cero', 'Análisis', String.raw`Supón que $P(x) = a_1 x + a_2 x^2 + \dots + a_n x^n$ es un polinomio con coeficientes enteros, con $a_1$ impar. Supón que $e^{P(x)} = b_0 + b_1 x + b_2 x^2 + \dots$ para todo $x$. Demuestra que $b_k$ es distinto de cero para todo $k \ge 0$.`),
-  putnam('PUTNAM-2022-B2', 2022, 'B', 2, 'Conjuntos cerrados bajo el producto cruz', 'Álgebra Lineal', String.raw`Sea $\times$ el producto vectorial en $\mathbb{R}^3$. ¿Para qué enteros positivos $n$ existe un conjunto $S \subset \mathbb{R}^3$ con exactamente $n$ elementos tal que $S = \{v \times w : v, w \in S\}$?`),
+  putnam('PUTNAM-2022-A1', 2022, 'A', 1, 'Recta tangente única a ln(1+x²)', 'Análisis',
+    String.raw`Determina todos los pares ordenados de números reales $(a, b)$ tales que la recta $y = ax + b$ interseca a la curva $y = \ln(1+x^2)$ en exactamente un punto.`,
+    String.raw`Escribe $f(x) = \ln(1+x^2)$. Mostramos que $y=ax+b$ interseca a $y=f(x)$ en exactamente un punto si y solo si $(a,b)$ pertenece a uno de los siguientes casos: (i) $a=b=0$; (ii) $|a| \geq 1$, con $b$ arbitrario; o (iii) $0 < |a| < 1$, y además $b<\ln(1-r_-)^2-|a|r_-$ o $b>\ln(1-r_+)^2-|a|r_+$, donde $$r_\pm = \frac{1\pm\sqrt{1-a^2}}{a}.$$
+
+Como la gráfica de $y=f(x)$ es simétrica respecto al eje $y$, basta considerar el caso $a \geq 0$: $y=ax+b$ y $y=-ax+b$ intersecan a $y=f(x)$ el mismo número de veces. Para $a=0$, por la simetría de $y=f(x)$ y el hecho de que $f(x)> 0$ para todo $x\neq 0$, se sigue que la única recta $y=b$ que interseca a $y=f(x)$ exactamente una vez es la recta $y=0$.
+
+Observamos a continuación que en $[0,\infty)$, $f'(x) = \frac{2x}{1+x^2}$ crece en $[0,1]$ desde $f'(0)=0$ hasta un máximo en $f'(1)=1$, y luego decrece en $[1,\infty)$ con $\lim_{x\to\infty} f'(x)=0$. En particular, $f'(x) \leq 1$ para todo $x$ (incluyendo $x<0$, ya que entonces $f'(x)<0$) y $f'(x)$ alcanza cada valor en $(0,1)$ exactamente dos veces en $[0,\infty)$.
+
+Para $a \geq 1$, afirmamos que cualquier recta $y=ax+b$ interseca a $y=f(x)$ exactamente una vez. Deben intersecarse al menos una vez por el teorema del valor intermedio: para $x\ll 0$, $ax+b<0<f(x)$, mientras que para $x \gg 0$, $ax+b>f(x)$ ya que $\lim_{x\to\infty} \frac{\ln(1+x^2)}{x} = 0$. Por otro lado, no pueden intersecarse más de una vez: para $a>1$, esto se sigue del teorema del valor medio, ya que $f'(x)<a$ para todo $x$. Para $a=1$, supón que se intersecan en dos puntos $(x_0,y_0)$ y $(x_1,y_1)$. Entonces $$ 1 = \frac{y_1-y_0}{x_1-x_0} = \frac{\int_{x_0}^{x_1} f'(x)\,dx}{x_1-x_0} < 1 $$ ya que $f'(x)$ es continua y $f'(x) \leq 1$ con igualdad solo en un punto.
+
+Finalmente consideramos $0<a<1$. La ecuación $f'(x) = a$ tiene exactamente dos soluciones, en $x=r_-$ y $x=r_+$ para $r_{\pm}$ como se definió arriba. Si definimos $g(x) = f(x)-ax$, entonces $g'(r_\pm)=0$; $g'$ es estrictamente decreciente en $(-\infty,r_-)$, estrictamente creciente en $(r_-,r_+)$, y estrictamente decreciente en $(r_+,\infty)$; y $\lim_{x\to-\infty} g(x) = \infty$ mientras que $\lim_{x\to\infty} g(x) = -\infty$. Se sigue que $g(x)=b$ tiene exactamente una solución para $b<g(r_-)$ o $b>g(r_+)$, exactamente tres soluciones para $g(r_-)<b<g(r_+)$, y exactamente dos soluciones para $b = g(r_\pm)$. Es decir, $y=ax+b$ interseca a $y=f(x)$ en exactamente un punto si y solo si $b<g(r_-)$ o $b>g(r_+)$.`),
+  putnam('PUTNAM-2022-A2', 2022, 'A', 2, 'Coeficientes negativos máximos de p(x)²', 'Álgebra',
+    String.raw`Sea $n$ un entero con $n \ge 2$. Sobre todos los polinomios reales $p(x)$ de grado $n$, ¿cuál es el mayor número posible de coeficientes negativos de $p(x)^2$?`,
+    String.raw`La respuesta es $\boxed{2n-2}$. Escribe $p(x) = a_nx^n+\cdots+a_1x+a_0$ y $p(x)^2 = b_{2n}x^{2n}+\cdots+b_1x+b_0$. Observa que $b_0 = a_0^2$ y $b_{2n} = a_n^2$. Afirmamos que no todos los $2n-1$ coeficientes restantes $b_1,\ldots,b_{2n-1}$ pueden ser negativos, de donde el mayor número posible de coeficientes negativos es $\leq 2n-2$. En efecto, supón que $b_i <0$ para $1\leq i\leq 2n-1$. Como $b_1 = 2a_0a_1$, tenemos $a_0 \neq 0$. Supón $a_0>0$ (o si no, reemplaza $p(x)$ por $-p(x)$). Afirmamos por inducción en $i$ que $a_i < 0$ para $1\leq i\leq n$. Para $i=1$, esto se sigue de $2a_0a_1 = b_1<0$. Si $a_i<0$ para $1\leq i\leq k-1$, entonces $$ 2a_0a_k = b_k - \sum_{i=1}^{k-1} a_i a_{k-i} < b_k < 0 $$ y por lo tanto $a_k<0$, completando el paso inductivo. Pero ahora $b_{2n-1} = 2a_{n-1}a_n > 0$, contradicción.
+
+Falta mostrar que existe un polinomio $p(x)$ tal que $p(x)^2$ tiene $2n-2$ coeficientes negativos. Por ejemplo, podemos tomar $$ p(x) = n(x^n+1) - 2(x^{n-1} + \cdots + x), $$ de modo que $$ \begin{align*} p(x)^2 &= n^2(x^{2n} + x^n + 1) - 2n(x^n+1)(x^{n-1}+\cdots+x)\\ &\qquad  + (x^{n-1} + \cdots + x)^2. \end{align*} $$ Para $i\in \{1,\dots,n-1,n+1,\dots,n-1\}$, el coeficiente de $x^i$ en $p(x)^2$ es a lo más $-2n$ (proveniente del término cruzado) más $-2n+2$ (al expandir $(x^{n-1} + \cdots + x)^2$), y por lo tanto es negativo.`),
+  putnam('PUTNAM-2022-A3', 2022, 'A', 3, 'Sucesiones módulo p y una congruencia módulo 5', 'Teoría de Números',
+    String.raw`Sea $p$ un número primo mayor que 5. Sea $f(p)$ el número de sucesiones infinitas $a_1, a_2, a_3, \dots$ tales que $a_n \in \{1, 2, \dots, p-1\}$ y $a_n a_{n+2} \equiv 1 + a_{n+1} \pmod{p}$ para todo $n \ge 1$. Demuestra que $f(p)$ es congruente con 0 o 2 (mód 5).`,
+    String.raw`Vemos la sucesión $a_1,a_2,\ldots$ como elementos de $\mathbb{F}_p^\times \subset \mathbb{F}_p$. Entonces la sucesión queda determinada por los valores de $a_1$ y $a_2$, mediante la recurrencia $a_{n+2}=(1+a_{n+1})/a_n$. Usando esta recurrencia, calculamos $$ \begin{gather*} a_3=\frac{1 + a_2}{a_1}, \, a_4 = \frac{1 + a_1 + a_2}{a_1 a_2}, \\ a_5=\frac{1 + a_1}{a_2}, \, a_6 = a_1, \, a_7 = a_2  \end{gather*} $$ y así la sucesión es periódica con periodo 5.
+
+Los valores de $a_1$ y $a_2$ pueden entonces ser cualesquiera valores en $\mathbb{F}_p^\times$ siempre que $a_1\neq p-1$, $a_2\neq p-1$, y $a_1+a_2\neq p-1$. El número de elecciones para $a_1,a_2\in\{1,\ldots,p-2\}$ tales que $a_1+a_2\neq p-1$ es entonces $(p-2)^2 - (p-2)= (p-2)(p-3)$.
+
+Como $p$ no es múltiplo de 5, $(p-2)(p-3)$ es un producto de dos enteros consecutivos $a,a+1$, donde $a\not\equiv 2 \pmod{5}$. Ahora $0\cdot 1\equiv 0$, $1\cdot 2 \equiv 2$, $3\cdot 4\equiv 2$, y $4\cdot 0 \equiv 0$ (mód 5). Así, el número de sucesiones posibles $a_1,a_2,\ldots$ es 0 o 2 (mód 5), como se quería.`),
+  putnam('PUTNAM-2022-A4', 2022, 'A', 4, 'Valor esperado hasta la primera bajada', 'Probabilidad',
+    String.raw`Supón que $X_1, X_2, \dots$ son números reales entre 0 y 1 elegidos independiente y uniformemente al azar. Sea $S = \sum_{i=1}^{k} X_i / 2^i$, donde $k$ es el menor entero positivo tal que $X_k < X_{k+1}$, o $k=\infty$ si no existe tal entero. Encuentra el valor esperado de $S$.`,
+    String.raw`El valor esperado es $\boxed{2e^{1/2}-3}$.
+
+Extiende $S$ a una suma infinita incluyendo sumandos cero para $i> k$. Podemos entonces calcular el valor esperado como la suma del valor esperado del $i$-ésimo sumando sobre todo $i$. Este sumando ocurre si y solo si $X_1,\dots,X_{i-1} \in [X_i, 1]$ y $X_1,\dots,X_{i-1}$ ocurren en orden no creciente. Estos dos eventos son independientes y ocurren con probabilidades respectivas $(1-X_i)^{i-1}$ y $\frac{1}{(i-1)!}$; la esperanza de este sumando es entonces $$ \begin{align*} &\frac{1}{2^i(i-1)!} \int_0^1 t (1-t)^{i-1}\,dt \\ &\qquad = \frac{1}{2^i(i-1)!} \int_0^1 ((1-t)^{i-1} - (1-t)^i)\,dt \\ &\qquad = \frac{1}{2^i(i-1)!} \left( \frac{1}{i} - \frac{1}{i+1} \right) = \frac{1}{2^i (i+1)!}. \end{align*} $$ Sumando sobre $i$, obtenemos $$ \sum_{i=1}^\infty \frac{1}{2^i (i+1)!} = 2 \sum_{i=2}^\infty \frac{1}{2^i i!} = 2\left(e^{1/2}-1-\frac{1}{2} \right). $$`),
+  putnam('PUTNAM-2022-A5', 2022, 'A', 5, 'Juego de fichas en una fila de 2022 casillas', 'Combinatoria',
+    String.raw`Alice y Bob juegan un juego en un tablero que consiste en una fila de 2022 cuadrados consecutivos. Se turnan colocando fichas que cubren dos cuadrados adyacentes, jugando Alice primero. Por regla, una ficha no debe cubrir un cuadrado que ya esté cubierto por otra ficha. El juego termina cuando no se puede colocar ninguna ficha según esta regla. El objetivo de Alice es maximizar el número de cuadrados descubiertos cuando termina el juego; el objetivo de Bob es minimizarlo. ¿Cuál es el mayor número de cuadrados descubiertos que Alice puede asegurar al final del juego, sin importar cómo juegue Bob?`,
+    String.raw`Mostramos que el número en cuestión es igual a $\boxed{290}$. De manera más general, sea $a(n)$ (resp. $b(n)$) el resultado final óptimo para Alice (resp. Bob) moviendo primero en una posición con $n$ cuadrados consecutivos. Mostramos que $$ \begin{align*} a(n) &= \left\lfloor \frac{n}{7} \right\rfloor + a\left(n - 7\left\lfloor \frac{n}{7} \right\rfloor \right), \\ b(n) &= \left\lfloor \frac{n}{7} \right\rfloor + b\left(n - 7\left\lfloor \frac{n}{7} \right\rfloor \right), \end{align*} $$ y que los valores para $n \leq 6$ son los siguientes: $$ \begin{array}{c|cccccccccc} n & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline a(n) & 0 & 1 & 0 & 1 & 2 & 1 & 2  \\ b(n) & 0 & 1 & 0 & 1 & 0 & 1 & 0  \end{array} $$ Como $2022 \equiv 6 \pmod{7}$, esto dará $a(2022) = 2 + \lfloor \frac{2022}{7} \rfloor = 290$.
+
+Procedemos por inducción, comenzando con los casos base $n \leq 6$. Como el número de intervalos impares nunca decrece, tenemos $a(n), b(n) \geq n - 2 \lfloor \frac{n}{2} \rfloor$; observando las posibles posiciones finales, vemos que la igualdad se cumple para $n=0,1,2,3,5$. Para $n=4,6$, Alice moviendo primero puede dividir el intervalo original en dos intervalos impares, garantizando al menos dos intervalos impares en la posición final; mientras que Bob puede moverse para dejar uno o dos intervalos de longitud 2, garantizando ningún intervalo impar en la posición final.
+
+Continuamos con el paso inductivo. Supón que $n \geq 7$ y que la afirmación se conoce para todo $m < n$. En particular, esto significa que $a(m) \geq b(m)$; por lo tanto, no cambia el análisis permitir que un jugador pase su turno después del primer movimiento, ya que ambos jugadores seguirán teniendo una estrategia óptima que nunca implica pasar.
+
+Basta verificar que $$ a(n) = a(n-7) + 1, \qquad b(n) = b(n-7) + 1. $$ Moviendo primero, Alice puede dejar dos intervalos de longitud 1 y $n-3$. Esto muestra que $$ a(n) \geq 1 + b(n-3) = a(n-7) + 1. $$ Por otro lado, si Alice deja intervalos de longitud $i$ y $n-2-i$, Bob puede elegir jugar en cualquiera de estos intervalos y luego seguir la pauta de Alice a partir de entonces (ejerciendo la opción de pasar si Alice hace el último movimiento legal en uno de los intervalos). Esto muestra que $$ \begin{align*} a(n) &\leq \max\{\min\{a(i) + b(n-2-i), \\ & \qquad b(i)+a(n-2-i)\}: i =0,1,\dots,n-2\} \\ &= a(n-7)+1. \end{align*} $$
+
+Moviendo primero, Bob puede dejar dos intervalos de longitudes 2 y $n-4$. Esto muestra que $$ b(n) \leq a(n-4) = b(n-7) + 1. $$ Por otro lado, si Bob deja intervalos de longitud $i$ y $n-2-i$, Alice puede elegir jugar en cualquiera de estos intervalos y luego seguir la pauta de Bob a partir de entonces (nuevamente pasando cuando sea necesario). Esto muestra que $$ \begin{align*} b(n) &\geq \min\{\max\{a(i) + b(n-2-i), \\ & \qquad b(i)+a(n-2-i)\}: i =0,1,\dots,n-2\} \\ &= b(n-7)+1. \end{align*} $$ Esto completa la inducción.`),
+  putnam('PUTNAM-2022-A6', 2022, 'A', 6, 'Intervalos de potencias impares de longitud igual', 'Análisis',
+    String.raw`Sea $n$ un entero positivo. Determina, en términos de $n$, el entero más grande $M$ con la siguiente propiedad: Existen números reales $x_1, \dots, x_{2n}$ con $-1 < x_1 < x_2 < \dots < x_{2n} < 1$ tales que la suma de las longitudes de los $n$ intervalos $[x_1^{2k-1}, x_2^{2k-1}], [x_3^{2k-1}, x_4^{2k-1}], \dots, [x_{2n-1}^{2k-1}, x_{2n}^{2k-1}]$ es igual a 1 para todos los enteros $k$ con $1 \le k \le m$.`,
+    String.raw`El mayor $m$ posible es $\boxed{n}$. Para mostrar que $m \geq n$, tomamos $$ x_j = \cos \frac{(2n+1-j)\pi}{2n+1} \qquad (j=1,\dots,2n). $$ Es claro que $-1 < x_1 < \cdots < x_{2n} < 1$. La suma de las longitudes de los intervalos se puede interpretar como $$ \begin{align*} & -\sum_{j=1}^{2n} ((-1)^{2n+1-j} x_j)^{2k-1} \\ &= -\sum_{j=1}^{2n} \left(\cos (2n+1-j)\left(\pi + \frac{\pi}{2n+1} \right)\right)^{2k-1} \\ &= -\sum_{j=1}^{2n} \left(\cos \frac{2\pi(n+1)j}{2n+1}\right)^{2k-1}. \end{align*} $$ Para $\zeta = e^{2 \pi i (n+1)/(2n+1)}$, esto se convierte en $$ \begin{align*} &= -\sum_{j=1}^{2n} \left( \frac{\zeta^j + \zeta^{-j}}{2} \right)^{2k-1} \\ &= -\frac{1}{2^{2k-1}}\sum_{j=1}^{2n} \sum_{l=0}^{2k-1}  \binom{2k-1}{l} \zeta^{j(2k-1-2l)} \\ &= -\frac{1}{2^{2k-1}} \sum_{l=0}^{2k-1} \binom{2k-1}{l} \sum_{j=1}^{2n} \zeta^{j(2k-1-2l)}  \\ &= -\frac{1}{2^{2k-1}} \sum_{l=0}^{2k-1} \binom{2k-1}{l} (-1) = 1, \end{align*} $$ usando el hecho de que $\zeta^{2k-1-2l}$ es una raíz de unidad no trivial de orden que divide a $2n+1$.
+
+Para mostrar que $m \leq n$, usamos el siguiente lema. Decimos que un multiconjunto $\{x_1,\dots,x_m\}$ de números complejos es libre de inversos si no hay dos índices $1 \leq i \leq j \leq m$ tales que $x_i + x_j = 0$; esto implica en particular que 0 no ocurre.
+
+Lema. Sean $\{x_1,\dots,x_m\},\{y_1,\dots,y_n\}$ dos multiconjuntos libres de inversos de números complejos tales que $$ \sum_{i=1}^m x_i^{2k-1} = \sum_{i=1}^n y_i^{2k-1} \qquad (k=1,\dots,\max\{m,n\}). $$ Entonces estos dos multiconjuntos son iguales.
+
+Demostración. Podemos suponer sin pérdida de generalidad que $m \leq n$. Formamos las funciones racionales $$ f(z) = \sum_{i=1}^m \frac{x_i z}{1 - x_i^2 z^2}, \quad g(z) = \sum_{i=1}^n \frac{y_i z}{1 - y_i^2 z^2}; $$ tanto $f(z)$ como $g(z)$ tienen orden de polo total a lo más $2n$. Mientras tanto, al expandir en series de potencias alrededor de $z=0$, vemos que $f(z)-g(z)$ es divisible entre $z^{2n+1}$. En consecuencia, las dos series son iguales.
+
+Sin embargo, podemos recuperar de manera única el multiconjunto $\{x_1,\dots,x_m\}$ a partir de $f(z)$: $f$ tiene polos en $\{1/x_1^2,\dots,1/x_m^2\}$ y el residuo del polo en $z = 1/x_i^2$ determina de manera única tanto $x_i$ (es decir, su signo) como su multiplicidad. De manera similar, podemos recuperar $\{y_1,\dots,y_n\}$ a partir de $g(z)$, así que los dos multiconjuntos deben coincidir.
+
+Supón ahora, por contradicción, que tenemos un ejemplo que muestra que $m \geq n+1$. Entonces tenemos $$ 1^{2k-1} + \sum_{i=1}^n x_{2i-1}^{2k-1} = \sum_{i=1}^n x_{2i}^{2k-1} \qquad (k=1,\dots,n+1). $$ Por el lema, esto significa que los multiconjuntos $\{1,x_1,x_3,\dots,x_{2n-1}\}$ y $\{x_2,x_4,\dots,x_{2n}\}$ se vuelven iguales después de eliminar pares de inversos hasta que esto ya no sea posible. Sin embargo, de los dos multiconjuntos resultantes, el primero contiene a 1 y el segundo no, lo cual da la contradicción buscada.`),
+  putnam('PUTNAM-2022-B1', 2022, 'B', 1, 'Coeficientes de e^{P(x)} todos distintos de cero', 'Análisis',
+    String.raw`Supón que $P(x) = a_1 x + a_2 x^2 + \dots + a_n x^n$ es un polinomio con coeficientes enteros, con $a_1$ impar. Supón que $e^{P(x)} = b_0 + b_1 x + b_2 x^2 + \dots$ para todo $x$. Demuestra que $b_k$ es distinto de cero para todo $k \ge 0$.`,
+    String.raw`Demostramos que $b_k k!$ es un entero impar para todo $k \geq 0$.
+
+Como $e^{P(x)} = \sum_{n=0}^\infty \frac{(P(x))^n}{n!}$, el número $k!\,b_k$ es el coeficiente de $x^k$ en $$ (P(x))^k + \sum_{n=0}^{k-1} \frac{k!}{n!}(P(x))^n. $$ En particular, $b_0=1$ y $b_1=a_1$ son ambos impares.
+
+Supón ahora $k \geq 2$; queremos mostrar que $b_k$ es impar. El coeficiente de $x^k$ en $(P(x))^k$ es $a_1^k$. Basta mostrar que el coeficiente de $x^k$ en $\frac{k!}{n!}(P(x))^n$ es un entero par para cualquier $n<k$. Para $k$ par o $n \leq k-2$, esto se sigue de inmediato del hecho de que $\frac{k!}{n!}$ es un entero par. Para $k$ impar y $n=k-1$, tenemos $$ \begin{align*} \frac{k!}{(k-1)!}(P(x))^{k-1} &= k(a_1x+a_2x^2+\cdots)^{k-1} \\ &= k(a_1^{k-1}x^{k-1}+(k-1)a_1^{k-2}a_2x^k+\cdots) \end{align*} $$ y el coeficiente de $x^k$ es $k(k-1)a_1^{k-2}a_2$, que nuevamente es un entero par.`),
+  putnam('PUTNAM-2022-B2', 2022, 'B', 2, 'Conjuntos cerrados bajo el producto cruz', 'Álgebra Lineal',
+    String.raw`Sea $\times$ el producto vectorial en $\mathbb{R}^3$. ¿Para qué enteros positivos $n$ existe un conjunto $S \subset \mathbb{R}^3$ con exactamente $n$ elementos tal que $S = \{v \times w : v, w \in S\}$?`,
+    String.raw`Los valores posibles de $n$ son $\boxed{1 \text{ y } 7}$.
+
+Claramente el conjunto $S = \{0\}$ funciona. Supón que $S \neq \{0\}$ es un conjunto finito que satisface la condición dada; en particular, $S$ no consiste de una colección de vectores colineales, ya que de lo contrario $\{v \times w: v,w \in S\} = \{0\}$. Afirmamos que $S$ no puede contener ningún vector distinto de cero $v$ con $\|v\| \neq 1$. Supón lo contrario, y sea $w \in S$ un vector no colineal con $v$. Entonces $S$ debe contener el vector distinto de cero $u_1 = v\times w$, así como la sucesión de vectores $u_n$ definida inductivamente por $u_n = v \times u_{n-1}$. Como cada $u_n$ es ortogonal a $v$ por construcción, tenemos $\|u_n\| = \|v\| \|u_{n-1}\|$ y así $\|u_n\| = \|v\|^{n-1} \|u_1\|$. La sucesión $\|u_n\|$ consiste de números todos distintos y así $S$ es infinito, una contradicción. Esto prueba la afirmación, y así todo vector distinto de cero en $S$ es un vector unitario.
+
+Observa a continuación que cualquier par de vectores $v,w \in S$ debe ser o colineal o ortogonal: por la afirmación, $v,w$ son ambos vectores unitarios, y si $v,w$ no son colineales entonces $v\times w \in S$ debe ser un vector unitario, de donde $v\perp w$. Ahora elige cualquier par de vectores no colineales $v_1,v_2 \in S$, y escribe $v_3 = v_1 \times v_2$. Entonces $\{v_1,v_2,v_3\}$ es una base ortonormal de $\mathbb{R}^3$, y se sigue que todos estos vectores están en $S$: $0$, $v_1$, $v_2$, $v_3$, $-v_1 = v_3 \times v_2$, $-v_2 = v_1 \times v_3$, y $-v_3 = v_2 \times v_1$. Por otro lado, $S$ no puede contener ningún otro vector además de estos siete, ya que cualquier otro vector $w$ en $S$ tendría que ser simultáneamente ortogonal a $v_1,v_2,v_3$.
+
+Así, cualquier conjunto $S \neq \{0\}$ que satisfaga la condición dada debe tener la forma $\{0,\pm v_1,\pm v_2,\pm v_3\}$ donde $\{v_1,v_2,v_3\}$ es una base ortonormal de $\mathbb{R}^3$. Es claro que cualquier conjunto de esta forma sí satisface la condición dada. Concluimos que la respuesta es $n=1$ o $n=7$.`),
   putnam('PUTNAM-2022-B3', 2022, 'B', 3, 'Recoloreo iterado por distancias repetidas', 'Combinatoria', String.raw`Asigna a cada número real positivo un color, rojo o azul. Sea $D$ el conjunto de todas las distancias $d > 0$ tales que hay dos puntos del mismo color a una distancia $d$ de separación. Recolorea los reales positivos de modo que los números en $D$ sean rojos y los números que no están en $D$ sean azules. Si iteramos el proceso de recoloración, ¿terminaremos siempre con todos los números rojos después de un número finito de pasos?`),
-  putnam('PUTNAM-2022-B4', 2022, 'B', 4, 'Progresiones aritméticas cíclicas de tres términos', 'Combinatoria', String.raw`Encuentra todos los enteros $n$ con $n \ge 4$ para los cuales existe una sucesión de números reales distintos $x_1, \dots, x_n$ tal que cada uno de los conjuntos $\{x_1, x_2, x_3\}, \{x_2, x_3, x_4\}, \dots, \{x_{n-2}, x_{n-1}, x_n\}, \{x_{n-1}, x_n, x_1\}, \text{ y } \{x_n, x_1, x_2\}$ forma una progresión aritmética de 3 términos cuando se ordena de forma creciente.`),
-  putnam('PUTNAM-2022-B5', 2022, 'B', 5, 'Valor más probable de una suma aleatoria', 'Probabilidad', String.raw`Para $0 \le p \le 1/2$, sean $X_1, X_2, \dots$ variables aleatorias independientes tales que $X_i = 1$ con probabilidad $p$, $-1$ con probabilidad $p$, y $0$ con probabilidad $1-2p$, para todo $i \ge 1$. Dado un entero positivo $n$ y enteros $b, a_1, \dots, a_n$, sea $P(b, a_1, \dots, a_n)$ la probabilidad de que $a_1 X_1 + \dots + a_n X_n = b$. ¿Para qué valores de $p$ se cumple que $P(0, a_1, \dots, a_n) \ge P(b, a_1, \dots, a_n)$ para todos los enteros positivos $n$ y todos los enteros $b, a_1, \dots, a_n$?`),
-  putnam('PUTNAM-2022-B6', 2022, 'B', 6, 'Ecuación funcional f(xf(y)) + f(yf(x)) = 1 + f(x+y)', 'Álgebra', String.raw`Encuentra todas las funciones continuas $f: \mathbb{R}^+ \to \mathbb{R}^+$ tales que $f(x f(y)) + f(y f(x)) = 1 + f(x+y)$ para todo $x, y > 0$.`),
+  putnam('PUTNAM-2022-B4', 2022, 'B', 4, 'Progresiones aritméticas cíclicas de tres términos', 'Combinatoria',
+    String.raw`Encuentra todos los enteros $n$ con $n \ge 4$ para los cuales existe una sucesión de números reales distintos $x_1, \dots, x_n$ tal que cada uno de los conjuntos $\{x_1, x_2, x_3\}, \{x_2, x_3, x_4\}, \dots, \{x_{n-2}, x_{n-1}, x_n\}, \{x_{n-1}, x_n, x_1\}, \text{ y } \{x_n, x_1, x_2\}$ forma una progresión aritmética de 3 términos cuando se ordena de forma creciente.`,
+    String.raw`Los valores de $n$ en cuestión son los $\boxed{\text{múltiplos de 3 a partir de 9}}$. Observa que interpretamos "distintos" en el enunciado del problema como "distintos dos a dos" (es decir, no hay dos iguales).
+
+Primero mostramos que tal sucesión solo puede ocurrir cuando $n$ es divisible entre 3. Si $d_1$ y $d_2$ son las diferencias comunes de las progresiones aritméticas $\{x_m, x_{m+1}, x_{m+2}\}$ y $\{x_{m+1}, x_{m+2}, x_{m+3}\}$ para algún $m$, entonces $d_2 \in \{d_1, 2d_1, d_1/2\}$. Escalando podemos suponer que la menor diferencia común que ocurre es 1; en este caso, todas las diferencias comunes son enteros. Trasladando, podemos suponer que los $x_i$ son a su vez todos enteros. Observamos ahora que cualesquiera tres términos consecutivos en la sucesión tienen residuos distintos dos a dos módulo 3, forzando a que $n$ sea divisible entre 3.
+
+Observamos entonces que para cualquier $m \geq 2$, obtenemos una sucesión de la forma deseada de longitud $3m+3 = (2m-1)+1+(m+1)+2$ concatenando las progresiones aritméticas $$ \begin{gather*} (1, 3, \dots, 4m-3, 4m-1), \\ 4m-2, (4m, 4m-4, \dots, 4, 0), 2. \end{gather*} $$ Vemos que ningún término se repite observando que la primera sucesión entre paréntesis consiste de números impares; la segunda sucesión consiste de múltiplos de 4; y los números restantes $2$ y $4m-2$ son distintos (porque $m \geq 2$) pero ambos congruentes con 2 módulo 4.
+
+Falta mostrar que ninguna sucesión de este tipo ocurre con $n=6$. Podemos suponer sin pérdida de generalidad que la menor diferencia común entre las progresiones aritméticas es 1 y ocurre para $\{x_1, x_2, x_3\}$; reescalando, trasladando, e invirtiendo la sucesión según sea necesario, podemos suponer que $x_1 = 0$ y $(x_2, x_3) \in \{(1,2), (2,1)\}$. Entonces tenemos $x_4 = 3$ y $$ (x_5, x_6) \in \{(4,5), (-1, -5), (-1, 7), (5, 4), (5, 7)\}. $$ En ninguno de estos casos $\{x_5, x_6, 0\}$ forma una progresión aritmética.`),
+  putnam('PUTNAM-2022-B5', 2022, 'B', 5, 'Valor más probable de una suma aleatoria', 'Probabilidad',
+    String.raw`Para $0 \le p \le 1/2$, sean $X_1, X_2, \dots$ variables aleatorias independientes tales que $X_i = 1$ con probabilidad $p$, $-1$ con probabilidad $p$, y $0$ con probabilidad $1-2p$, para todo $i \ge 1$. Dado un entero positivo $n$ y enteros $b, a_1, \dots, a_n$, sea $P(b, a_1, \dots, a_n)$ la probabilidad de que $a_1 X_1 + \dots + a_n X_n = b$. ¿Para qué valores de $p$ se cumple que $P(0, a_1, \dots, a_n) \ge P(b, a_1, \dots, a_n)$ para todos los enteros positivos $n$ y todos los enteros $b, a_1, \dots, a_n$?`,
+    String.raw`La respuesta es $\boxed{p \leq 1/4}$. Primero mostramos que $p >1/4$ no satisface la condición deseada. Para $p>1/3$, $P(0,1) = 1-2p < p = P(1,1)$. Para $p=1/3$, se calcula fácilmente (o se sigue del siguiente cálculo) que $P(0,1,2) = 1/9 < 2/9 = P(1,1,2)$. Supón ahora que $1/4 < p < 1/3$, y considera $(b,a_1,a_2,a_3,\ldots,a_n) = (1,1,2,4,\ldots,2^{n-1})$.
+
+La única solución a $$ X_1+2X_2+\cdots+2^{n-1}X_n = 0 $$ con $X_j \in \{0,\pm 1\}$ es $X_1=\cdots=X_n=0$; así, $P(0,1,2,\ldots,2^{2n-1}) = (1-2p)^n$. Por otro lado, las soluciones a $$ X_1+2X_2+\cdots+2^{n-1}X_n = 1 $$ con $X_j \in \{0,\pm 1\}$ son $$ \begin{gather*} (X_1,X_2,\ldots,X_n) = (1,0,\ldots,0),(-1,1,0,\ldots,0), \\ (-1,-1,1,0,\ldots,0), \ldots, (-1,-1,\ldots,-1,1), \end{gather*} $$ y así $$ \begin{align*} &P(1,1,2,\ldots,2^{n-1}) \\ & = p(1-2p)^{n-1}+p^2(1-2p)^{n-2}+\cdots+p^n \\ &= p\frac{(1-2p)^{n}-p^{n}}{1-3p}. \end{align*} $$ Se sigue que la desigualdad $P(0,1,2,\ldots,2^{n-1}) \geq P(1,1,2,\ldots,2^{n-1})$ equivale a $$ p^{n+1} \geq (4p-1)(1-2p)^n, $$ pero esto es falso para $n$ suficientemente grande ya que $4p-1>0$ y $p<1-2p$.
+
+Supón ahora que $p \leq 1/4$; queremos mostrar que para $a_1,\ldots,a_n$ y $b \neq 0$ arbitrarios, $P(0,a_1,\ldots,a_n) \geq P(b,a_1,\ldots,a_n)$. Define el polinomio $$ f(x) = px+px^{-1}+1-2p,  $$ y observa que $P(b,a_1,\ldots,a_n)$ es el coeficiente de $x^b$ en $f(x^{a_1})f(x^{a_2})\cdots f(x^{a_n})$. Podemos escribir $$ f(x^{a_1})f(x^{a_2})\cdots f(x^{a_n}) = g(x)g(x^{-1}) $$ para algún polinomio real $g$: en efecto, si definimos $\alpha = \frac{1-2p+\sqrt{1-4p}}{2p} > 0$, entonces $f(x) = \frac{p}{\alpha}(x+\alpha)(x^{-1}+\alpha)$, y así podemos usar $$ g(x) = \left(\frac{p}{\alpha}\right)^{n/2} (x^{a_1}+\alpha)\cdots(x^{a_n}+\alpha). $$
+
+Basta ahora mostrar que en $g(x)g(x^{-1})$, el coeficiente de $x^0$ es al menos tan grande como el coeficiente de $x^b$ para cualquier $b \neq 0$. Como $g(x)g(x^{-1})$ es simétrico al invertir $x$, podemos suponer que $b > 0$. Si escribimos $g(x) = c_0 x^0 + \cdots + c_m x^m$, entonces los coeficientes de $x^0$ y $x^b$ en $g(x)g(x^{-1})$ son $c_0^2+c_1^2+\cdots+c_m^2$ y $c_0c_b+c_1c_{b+1}+\cdots+c_{m-b}c_m$, respectivamente. Pero $$ \begin{align*} &2(c_0c_b+c_1c_{b+1}+\cdots+c_{m-b}c_m)\\ &\leq (c_0^2+c_b^2)+(c_1^2+c_{b+1}^2)+\cdots+(c_{m-b}^2+c_m^2) \\ & \leq 2(c_0^2+\cdots+c_m^2), \end{align*} $$ y el resultado se sigue.`),
+  putnam('PUTNAM-2022-B6', 2022, 'B', 6, 'Ecuación funcional f(xf(y)) + f(yf(x)) = 1 + f(x+y)', 'Álgebra',
+    String.raw`Encuentra todas las funciones continuas $f: \mathbb{R}^+ \to \mathbb{R}^+$ tales que $f(x f(y)) + f(y f(x)) = 1 + f(x+y)$ para todo $x, y > 0$.`,
+    String.raw`Las únicas funciones de este tipo son las funciones $\boxed{f(x) = \frac{1}{1+cx} \text{ para alguna } c \geq 0 \text{ (el caso } c=0 \text{ da la función constante } f(x) = 1\text{)}}$.
+
+Observa que interpretamos $\mathbb{R}^+$ en el enunciado del problema como el conjunto de los números reales positivos, sin incluir el 0. Por conveniencia, reproducimos aquí la ecuación dada: $$ f(xf(y)) + f(yf(x)) = 1 + f(x+y) \qquad (\ast) $$
+
+Primero probamos que $$ \lim_{x \to 0^+} f(x) = 1. \qquad (\ast\ast) $$ Sea $$ L_- = \liminf_{x \to 0^+} f(x), \quad L_+ = \limsup_{x \to 0^+} f(x). $$ Para cualquier $y$ fijo, tenemos por $(\ast)$ $$ L_+ = \limsup_{x \to 0^+} f(xf(y)) \leq \limsup_{x \to0^+} (1+f(x+y)) = 1+f(y) < \infty. $$ En consecuencia, $xf(x) \to 0$ cuando $x \to 0^+$. Usando $(\ast\ast)$ con $y=x$, $$ \begin{align*} 2L_+ &= \limsup_{x \to 0^+} 2f(xf(x)) \\ &= \limsup_{x \to 0^+} (1 + f(2x)) = 1 + L_+ \\ 2L_- &= \liminf_{x \to 0^+} 2f(xf(x)) \\ &= \liminf_{x \to 0^+} (1 + f(2x)) = 1 + L_- \end{align*} $$ y así $L_- = L_+ = 1$, lo cual confirma $(\ast\ast)$.
+
+A continuación confirmamos que $$ f(x) \geq 1 \text{ para todo } x>0 \Longrightarrow f(x) = 1 \text{ para todo } x>0. \qquad (\dagger) $$ Supón que $f(x) \geq 1$ para todo $x > 0$. Para $0 < c \leq \infty$, sea $S_c = \sup\{f(x): 0 < x \leq c\}$; para $c < \infty$, $(\ast\ast)$ implica que $S_c < \infty$. Si existe $y>0$ con $f(y) > 1$, entonces de $(\ast)$ tenemos $f(x+y) - f(xf(y)) = f(yf(x)) - 1 \geq 0$; por lo tanto $$ S_c = S_{(c-y)f(y)} \qquad \left(c \geq c_0 = \frac{yf(y)}{f(y)-1}\right) $$ y (como $(c-y)f(y) - c_0 = f(y)(c-c_0)$) iterando esta construcción muestra que $S_\infty = S_c$ para cualquier $c > c_0$. En cualquier caso, deducimos que $$ f(x) \geq 1 \text{ para todo } x>0 \Longrightarrow S_\infty < \infty. \qquad (\ddagger) $$ Suponiendo todavía que $f(x) \geq 1$ para todo $x>0$, observa que de $(\ast)$ con $x=y$, $$ f(xf(x)) = \frac{1}{2}(1 + f(2x)). $$ Como $xf(x) \to 0$ cuando $x \to 0^+$ por $(\ast\ast)$ y $xf(x) \to \infty$ cuando $x \to \infty$, $xf(x)$ toma todos los valores reales positivos por el teorema del valor intermedio. Deducimos que $2S_\infty \leq 1 + S_\infty$ y por lo tanto $S_\infty = 1$; esto prueba $(\dagger)$.
+
+Podemos entonces suponer de aquí en adelante que $f(x) < 1$ para algún $x > 0$. Verificamos a continuación que $$ \lim_{x \to \infty} f(x) = 0. \qquad (\S) $$ Sea $I = \inf\{f(x): x > 0\} < 1$, elige $\epsilon \in (0, (1-I)/2)$, y elige $y>0$ tal que $f(y) < I+\epsilon$. Entonces debemos tener $xf(x) \neq y$ para todo $x$, o si no $$ 1 + I \leq 1 + f(2x) = 2f(y) < 2I + 2\epsilon, $$ contradicción. Como $xf(x) \to 0$ cuando $x \to 0^+$ por $(\ast\ast)$, tenemos $\sup\{xf(x): x > 0\} < \infty$ por el teorema del valor intermedio, lo cual da $(\S)$.
+
+Por $(\ast\ast)$ junto con $(\S)$, $f^{-1}(1/2)$ es no vacío y compacto. Podemos simplificar ahora observando que si $f(x)$ satisface la ecuación original, entonces también lo hace $f(cx)$ para cualquier $c>0$; podemos entonces suponer que el menor elemento de $f^{-1}(1/2)$ es 1, en cuyo caso debemos mostrar que $f(x) = \frac{1}{1+x}$.
+
+A continuación mostramos que $$ \lim_{x \to \infty} xf(x) = 1. \qquad (\P) $$ Para todo $x > 0$, por $(\ast)$ con $y=x$, $$ f(xf(x)) = \frac{1}{2}(1 + f(2x)) > \frac{1}{2} = f(1), \qquad (\P\P) $$ así que en particular $xf(x) \neq 1$. Como en la demostración de $(\S)$, esto implica que $xf(x) < 1$ para todo $x > 0$. Sin embargo, por $(\S)$ y $(\P\P)$ tenemos que $f(xf(x)) \to \frac{1}{2}$ cuando $x \to \infty$, lo cual da $(\P)$.
+
+Sustituyendo $y \mapsto xy$ en $(\ast)$, $$ f(xf(xy)) + f(xyf(x)) = 1 + f(x+xy). $$ Tomando el límite cuando $x \to \infty$ y aplicando $(\P)$ obtenemos $$ f(1/y) + f(y) = 1. \qquad (\clubsuit) $$ Combinando $(\ast)$ con $(\clubsuit)$ obtenemos $$ f(xf(y))=f(x+y)+f \left( \frac{1}{yf(x)} \right). $$ Multiplicamos ambos lados por $xf(y)$, y luego tomamos el límite cuando $x \to \infty$ para obtener $$ \begin{align*} 1 &= \lim_{x \to \infty} xf(y) f(x+y) + \lim_{x \to \infty} xf(y)  f\left( \frac{1}{yf(x)} \right) \\ &= f(y) + \lim_{x \to \infty} xf(y) yf(x) \\ &= f(y) + yf(y) \end{align*} $$ y despejando $f(y)$ obtenemos ahora $f(y) = \frac{1}{1+y}$, como se quería.`),
 ]
 
 const putnam2023 = [
-  putnam('PUTNAM-2023-A1', 2023, 'A', 1, 'Segunda derivada de un producto de cosenos', 'Análisis', String.raw`Para un entero positivo $n$, sea $f_n(x) = \cos(x) \cos(2x) \cos(3x) \dots \cos(nx)$. Encuentra el $n$ más pequeño tal que $|f_n''(0)| > 2023$.`),
-  putnam('PUTNAM-2023-A2', 2023, 'A', 2, 'Un polinomio que satisface p(1/k) = k²', 'Álgebra', String.raw`Sea $n$ un entero positivo par. Sea $p$ un polinomio real mónico de grado $2n$; es decir, $p(x) = x^{2n} + a_{2n-1}x^{2n-1} + \dots + a_1 x + a_0$ para algunos coeficientes reales $a_0, \dots, a_{2n-1}$. Supón que $p(1/k) = k^2$ para todos los enteros $k$ tales que $1 \le |k| \le n$. Encuentra todos los demás números reales $x$ para los cuales $p(1/x) = x^2$.`),
-  putnam('PUTNAM-2023-A3', 2023, 'A', 3, 'Menor cero de un par de funciones acopladas', 'Análisis', String.raw`Determina el número real positivo más pequeño tal que existen funciones diferenciables $f: \mathbb{R} \to \mathbb{R}$ y $g: \mathbb{R} \to \mathbb{R}$ que satisfacen (a) $f(0) > 0$, (b) $g(0) = 0$, (c) $|f'(x)| \le |g(x)|$ para todo $x$, (d) $|g'(x)| \le |f(x)|$ para todo $x$, y (e) $f(r) = 0$.`),
+  putnam('PUTNAM-2023-A1', 2023, 'A', 1, 'Segunda derivada de un producto de cosenos', 'Análisis',
+    String.raw`Para un entero positivo $n$, sea $f_n(x) = \cos(x) \cos(2x) \cos(3x) \dots \cos(nx)$. Encuentra el $n$ más pequeño tal que $|f_n''(0)| > 2023$.`,
+    String.raw`Si usamos la regla del producto para calcular $f_n''(x)$, el resultado es una suma de términos de dos tipos: términos donde dos factores distintos $\cos(m_1x)$ y $\cos(m_2x)$ han sido derivados una vez cada uno, y términos donde un solo factor $\cos(mx)$ ha sido derivado dos veces. Al evaluar en $x=0$, todos los términos del primer tipo se anulan ya que $\sin(0)=0$, mientras que el término del segundo tipo que involucra $(\cos(mx))''$ se convierte en $-m^2$. Por lo tanto $$ |f_n''(0)| = \left|-\sum_{m=1}^n m^2\right| = \frac{n(n+1)(2n+1)}{6}. $$ La función $g(n) = \frac{n(n+1)(2n+1)}{6}$ es creciente para $n\in\mathbb{N}$ y satisface $g(17)=1785$ y $g(18)=2109$. Se sigue que la respuesta es $n=\boxed{18}$.`),
+  putnam('PUTNAM-2023-A2', 2023, 'A', 2, 'Un polinomio que satisface p(1/k) = k²', 'Álgebra',
+    String.raw`Sea $n$ un entero positivo par. Sea $p$ un polinomio real mónico de grado $2n$; es decir, $p(x) = x^{2n} + a_{2n-1}x^{2n-1} + \dots + a_1 x + a_0$ para algunos coeficientes reales $a_0, \dots, a_{2n-1}$. Supón que $p(1/k) = k^2$ para todos los enteros $k$ tales que $1 \le |k| \le n$. Encuentra todos los demás números reales $x$ para los cuales $p(1/x) = x^2$.`,
+    String.raw`Los únicos otros números reales con esta propiedad son $\boxed{\pm 1/n!}$. (Observa que estos son de hecho valores distintos de $\pm 1, \dots, \pm n$ ya que $n>1$.)
+
+Define el polinomio $q(x) = x^{2n+2}-x^{2n}p(1/x) = x^{2n+2}-(a_0x^{2n}+\cdots+a_{2n-1}x+1)$. La afirmación de que $p(1/x)=x^2$ equivale (para $x\neq 0$) a la afirmación de que $x$ es una raíz de $q(x)$. Así sabemos que $\pm 1,\pm 2,\ldots,\pm n$ son raíces de $q(x)$, y podemos escribir $$ q(x) = (x^2+ax+b)(x^2-1)(x^2-4)\cdots (x^2-n^2) $$ para algún polinomio cuadrático mónico $x^2+ax+b$. Igualando los coeficientes de $x^{2n+1}$ y $x^0$ en ambos lados da $0=a$ y $-1=(-1)^n(n!)^2 b$, respectivamente. Como $n$ es par, tenemos $x^2+ax+b = x^2-(n!)^{-2}$. Concluimos que hay precisamente otros dos números reales $x$ tales que $p(1/x)=x^2$, y son $\pm 1/n!$.`),
+  putnam('PUTNAM-2023-A3', 2023, 'A', 3, 'Menor cero de un par de funciones acopladas', 'Análisis',
+    String.raw`Determina el número real positivo más pequeño tal que existen funciones diferenciables $f: \mathbb{R} \to \mathbb{R}$ y $g: \mathbb{R} \to \mathbb{R}$ que satisfacen (a) $f(0) > 0$, (b) $g(0) = 0$, (c) $|f'(x)| \le |g(x)|$ para todo $x$, (d) $|g'(x)| \le |f(x)|$ para todo $x$, y (e) $f(r) = 0$.`,
+    String.raw`La respuesta es $r=\boxed{\frac{\pi}{2}}$, lo cual claramente se alcanza tomando $f(x)=\cos x$ y $g(x)=\sin x$.
+
+Supón por contradicción que existen $f,g$ que satisfacen las condiciones dadas para algún $0 < r<\frac{\pi}{2}$. Primero observamos que podemos suponer que $f(x) \neq 0$ para $x\in [0,r)$. En efecto, por continuidad, $\{x\,|\,x\geq 0 \text{ y } f(x)=0\}$ es un subconjunto cerrado de $[0,\infty)$ y por lo tanto tiene un elemento mínimo $r'$ con $0<r'\leq r$. Después de reemplazar $r$ por $r'$, ahora tenemos $f(x)\neq 0$ para $x\in [0,r)$.
+
+A continuación observamos que $f(r)=0$ implica $g(r) \neq 0$. En efecto, define la función $k \colon \mathbb{R} \to \mathbb{R}$ por $k(x) = f(x)^2+g(x)^2$. Entonces $|k'(x)| = 2|f(x)f'(x)+g(x)g'(x))| \leq 4|f(x)g(x)| \leq 2k(x)$, donde la última desigualdad se sigue de la desigualdad MA-MG. Se sigue que $\left|\frac{d}{dx} (\log k(x))\right| \leq 2$ para $x \in [0,r)$; como $k(x)$ es continua en $x=r$, concluimos que $k(r) \neq 0$.
+
+Ahora define la función $h\colon [0,r) \to (-\pi/2,\pi/2)$ por $h(x) = \tan^{-1}(g(x)/f(x))$. Calculamos que $$ h'(x) = \frac{f(x)g'(x)-g(x)f'(x)}{f(x)^2+g(x)^2} $$ y así $$ |h'(x)| \leq \frac{|f(x)||g'(x)|+|g(x)||f'(x)|}{f(x)^2+g(x)^2} \leq \frac{|f(x)|^2+|g(x)|^2}{f(x)^2+g(x)^2} = 1. $$ Como $h(0) = 0$, tenemos $|h(x)| \leq x<r$ para todo $x\in [0,r)$. Como $r<\pi/2$ y $\tan^{-1}$ es creciente en $(-r,r)$, concluimos que $|g(x)/f(x)|$ está acotado uniformemente por arriba por $\tan r$ para todo $x\in [0,r)$. Pero esto contradice el hecho de que $f(r)=0$ y $g(r) \neq 0$, ya que $\lim_{x\to r^-} g(x)/f(x) = \infty$. Esta contradicción muestra que $r<\pi/2$ no se puede alcanzar.`),
   putnam('PUTNAM-2023-A4', 2023, 'A', 4, 'Aproximación de vectores con combinaciones enteras de un icosaedro', 'Álgebra Lineal', String.raw`Sean $v_1, \dots, v_{12}$ vectores unitarios en $\mathbb{R}^3$ desde el origen hasta los vértices de un icosaedro regular. Muestra que para cada vector $v \in \mathbb{R}^3$ y cada $\epsilon > 0$, existen enteros $a_1, \dots, a_{12}$ tales que $||a_1 v_1 + \dots + a_{12} v_{12} - v|| < \epsilon$.`),
-  putnam('PUTNAM-2023-A5', 2023, 'A', 5, 'Suma con signos alternantes en base 3', 'Teoría de Números', String.raw`Para un entero no negativo $k$, sea $f(k)$ el número de unos en la representación en base 3 de $k$. Encuentra todos los números complejos $z$ tales que $\sum_{k=0}^{3^{1010}-1} (-2)^{f(k)}(z+k)^{2023} = 0$.`),
-  putnam('PUTNAM-2023-A6', 2023, 'A', 6, 'Juego de paridad eligiendo enteros', 'Combinatoria', String.raw`Alice y Bob juegan un juego en el que se turnan eligiendo enteros del 1 al $N$. Antes de que se elija cualquier entero, Bob selecciona una meta de "par" o "impar". En el primer turno, Alice elige uno de los $N$ enteros. En el segundo turno, Bob elige uno de los enteros restantes. Continúan eligiendo alternadamente uno de los enteros que aún no ha sido elegido, hasta el turno 12, que es forzado y termina el juego. Bob gana si la paridad de $\{k \mid \text{el número } k \text{ fue elegido en el turno } k\}$ coincide con su meta. ¿Para qué valores de $N$ tiene Bob una estrategia ganadora?`),
-  putnam('PUTNAM-2023-B1', 2023, 'B', 1, 'Configuraciones alcanzables deslizando monedas', 'Combinatoria', String.raw`Considera una cuadrícula de $m \times n$ de cuadrados unitarios, indexados por $(i,j)$ con $1 \le i \le m$ y $1 \le j \le n$. Hay $(m-1)(n-1)$ monedas, que se colocan inicialmente en los cuadrados $(i,j)$ con $1 \le i \le m-1$ y $1 \le j \le n-1$. Si una moneda ocupa el cuadrado $(i,j)$ con $1 \le i \le m-1$ y $1 \le j \le n-1$ y los cuadrados $(i+1,j), (i,j+1), (i+1,j+1)$ están desocupados, un movimiento legal es deslizar la moneda de $(i,j)$ a $(i+1,j+1)$. ¿Cuántas configuraciones distintas de monedas se pueden alcanzar comenzando desde la configuración inicial mediante una secuencia (posiblemente vacía) de movimientos legales?`),
-  putnam('PUTNAM-2023-B2', 2023, 'B', 2, 'Mínimo de unos en la representación binaria de 2023n', 'Teoría de Números', String.raw`Para cada entero positivo $n$, sea $k(n)$ el número de unos en la representación binaria de $2023 \cdot n$. ¿Cuál es el valor mínimo de $k(n)$?`),
-  putnam('PUTNAM-2023-B3', 2023, 'B', 3, 'Longitud esperada de una subsucesión zigzag', 'Probabilidad', String.raw`Una sucesión $y_1, y_2, \dots, y_k$ de números reales se llama en zigzag si $k=1$, o si $y_2-y_1, y_3-y_2, \dots, y_k-y_{k-1}$ son distintos de cero y alternan en signo. Sean $X_1, X_2, \dots, X_n$ elegidos independientemente de la distribución uniforme en $[0,1]$. Sea $a(X_1, X_2, \dots, X_n)$ el valor más grande de $k$ para el cual existe una sucesión creciente de enteros $i_1, i_2, \dots, i_k$ tal que $X_{i_1}, X_{i_2}, \dots, X_{i_k}$ es en zigzag. Encuentra el valor esperado de $a(X_1, X_2, \dots, X_n)$ para $n \ge 2$.`),
-  putnam('PUTNAM-2023-B4', 2023, 'B', 4, 'Menor T para alcanzar el valor 2023', 'Análisis', String.raw`Para un entero no negativo $n$ y una sucesión estrictamente creciente de números reales $t_0, t_1, \dots, t_n$, sea $f(t)$ la función de valor real correspondiente definida para $t \ge t_0$ por las siguientes propiedades: (a) $f(t)$ es continua para $t \ge t_0$ y es dos veces diferenciable para todo $t > t_0$ distinto de $t_1, \dots, t_n$; (b) $f(t_0) = 1/2$; (c) $\lim_{t \to t_k^+} f'(t) = 0$ para $0 \le k \le n$; (d) Para $0 \le k \le n-1$, tenemos $f''(t) = k+1$ cuando $t_k < t < t_{k+1}$, y $f''(t) = n+1$ cuando $t > t_n$. Considerando todas las elecciones de $n$ y $t_0, t_1, \dots, t_n$ tales que $t_k \ge t_{k-1} + 1$ para $1 \le k \le n$, ¿cuál es el valor más pequeño posible de $T$ para el cual $f(t_0 + T) = 2023$?`),
-  putnam('PUTNAM-2023-B5', 2023, 'B', 5, 'Permutaciones que satisfacen π(π(k)) ≡ mk', 'Teoría de Números', String.raw`Determina qué enteros positivos $n$ tienen la siguiente propiedad: Para todos los enteros $M$ que son relativamente primos con $N$, existe una permutación $\pi: \{1, 2, \dots, n\} \to \{1, 2, \dots, n\}$ tal que $\pi(\pi(k)) \equiv mk \pmod{n}$ para todo $k \in \{1, 2, \dots, n\}$.`),
-  putnam('PUTNAM-2023-B6', 2023, 'B', 6, 'Determinante de una matriz de conteo de soluciones', 'Álgebra Lineal', String.raw`Sea $n$ un entero positivo. Para $i$ y $j$ en $\{1, 2, \dots, n\}$, sea $s(i,j)$ el número de pares $(a,b)$ de enteros no negativos que satisfacen $ai + bj = n$. Sea $S$ la matriz de $n \times n$ cuya entrada $(i,j)$ es $s(i,j)$. Calcula el determinante de $S$.`),
+  putnam('PUTNAM-2023-A5', 2023, 'A', 5, 'Suma con signos alternantes en base 3', 'Teoría de Números',
+    String.raw`Para un entero no negativo $k$, sea $f(k)$ el número de unos en la representación en base 3 de $k$. Encuentra todos los números complejos $z$ tales que $\sum_{k=0}^{3^{1010}-1} (-2)^{f(k)}(z+k)^{2023} = 0$.`,
+    String.raw`Los números complejos $z$ con esta propiedad son $$ \boxed{-\frac{3^{1010}-1}{2} \ \text{y} \ -\frac{3^{1010}-1}{2}\pm\frac{\sqrt{9^{1010}-1}}{4}\,i}. $$
+
+Comenzamos observando que para $n \geq 1$, tenemos la siguiente igualdad de polinomios en un parámetro $x$: $$ \sum_{k=0}^{3^n-1} (-2)^{f(k)} x^k = \prod_{j=0}^{n-1} (x^{2\cdot 3^j}-2x^{3^j}+1). $$ Esto se muestra fácilmente por inducción en $n$, usando el hecho de que para $0\leq k\leq 3^{n-1}-1$, $f(3^{n-1}+k)=f(k)+1$ y $f(2\cdot 3^{n-1}+k)=f(k)$.
+
+Ahora define un operador de "desplazamiento" $S$ en polinomios en $z$ mediante $S(p(z))=p(z+1)$; entonces podemos definir $S^m$ para todo $m\in\mathbb{Z}$ mediante $S^m(p(z))$, y en particular $S^0=I$ es el mapeo identidad. Escribe $$ p_n(z) := \sum_{k=0}^{3^n-1}(-2)^{f(k)}(z+k)^{2n+3} $$ para $n \geq 1$; se sigue que $$ \begin{align*} p_n(z) &= \prod_{j=0}^{n-1}(S^{2\cdot 3^j}-2S^{3^j}+I) z^{2n+3} \\ &= S^{(3^n-1)/2} \prod_{j=0}^{n-1}(S^{3^j}-2I+S^{-3^j}) z^{2n+3}. \end{align*} $$
+
+Observa a continuación que para cualquier $\ell$, el operador $S^\ell-2I+S^{-\ell}$ actúa sobre polinomios en $z$ de manera que disminuye el grado en $2$. Más precisamente, para $m\geq 0$, tenemos $$ \begin{align*} (S^\ell-2I+S^{-\ell})z^m &= (z+\ell)^m-2z^m+(z-\ell)^m \\ &= 2{m\choose 2}\ell^2z^{m-2}+2{m\choose 4}\ell^4z^{m-4}+O(z^{m-6}). \end{align*} $$ Usamos este cálculo general para establecer lo siguiente: para cualquier $1\leq i\leq n$, existe una constante distinta de cero $C_i$ (que depende de $n$ e $i$ pero no de $z$) tal que $$ \begin{gather*} \prod_{j=1}^{i} (S^{3^{n-j}}-2I+S^{-3^{n-j}}) z^{2n+3} \\ = C_i\left(z^{2n+3-2i}+\textstyle{\frac{(2n+3-2i)(n+1-i)}{6}}(\sum_{j=1}^i 9^{n-j})z^{2n+1-2i}\right) +O(z^{2n-1-2i}). \end{gather*} \qquad (\ast) $$ Demostrar $(\ast)$ es una inducción directa en $i$: el paso inductivo aplica $S^{3^{n-i-1}}-2I+S^{-3^{n-i-1}}$ al lado derecho de $(\ast)$, usando la fórmula general para $(S^\ell-2I+S^{-\ell})z^m$.
+
+Tomando ahora $i=n$ en $(\ast)$, encontramos que para algún $C_n$, $$ \prod_{j=0}^{n-1}(S^{3^j}-2I+S^{-3^j}) z^{2n+3} = C_n\left(z^3+\frac{9^n-1}{16}z\right). $$ Las raíces de este polinomio son $0$ y $\pm \frac{\sqrt{9^n-1}}{4} i$, y se sigue que las raíces de $p_n(z)$ son estos tres números menos $\frac{3^n-1}{2}$. En particular, cuando $n=1010$, encontramos que las raíces de $p_{1010}(z)$ son las indicadas arriba.`),
+  putnam('PUTNAM-2023-A6', 2023, 'A', 6, 'Juego de paridad eligiendo enteros', 'Combinatoria',
+    String.raw`Alice y Bob juegan un juego en el que se turnan eligiendo enteros del 1 al $N$. Antes de que se elija cualquier entero, Bob selecciona una meta de "par" o "impar". En el primer turno, Alice elige uno de los $N$ enteros. En el segundo turno, Bob elige uno de los enteros restantes. Continúan eligiendo alternadamente uno de los enteros que aún no ha sido elegido, hasta el turno 12, que es forzado y termina el juego. Bob gana si la paridad de $\{k \mid \text{el número } k \text{ fue elegido en el turno } k\}$ coincide con su meta. ¿Para qué valores de $N$ tiene Bob una estrategia ganadora?`,
+    String.raw`(Comunicado por Kai Wang) Para $\boxed{\text{todo } n}$, Bob tiene una estrategia ganadora. Observa que podemos interpretar el desarrollo del juego como la construcción de una permutación de $\{1,\dots,n\}$, y el número de veces que un entero $k$ es elegido en el turno $k$ es exactamente el número de puntos fijos de esta permutación.
+
+Para $n$ par, Bob selecciona la meta "par". Divide $\{1,\dots,n\}$ en los pares $\{1,2\},\{3,4\},\dots$; cada vez que Alice elige un entero, Bob responde con el otro entero del mismo par. Para cada par $\{2k-1,2k\}$, vemos que $2k-1$ es un punto fijo si y solo si $2k$ lo es, así que el número de puntos fijos es par.
+
+Para $n$ impar, Bob selecciona la meta "impar". En el primer turno, si Alice elige 1 o 2, entonces Bob elige el otro para transponer a la estrategia para $n-2$ (sin movimientos realizados). Podemos entonces suponer de aquí en adelante que el primer movimiento de Alice es algún $k > 2$, que Bob contrarresta con 2; en este punto hay exactamente un punto fijo.
+
+A partir de entonces, mientras Alice elija $j$ en el $j$-ésimo turno (para $j \geq 3$ impar), o bien $j+1 < k$, en cuyo caso Bob puede elegir $j+1$ para mantener impar el número de puntos fijos; o bien $j+1=k$, en cuyo caso $k$ es par y Bob puede elegir 1 para transponer a la estrategia para $n-k$ (sin movimientos realizados).
+
+De otro modo, en algún turno impar $j$, Alice no elige $j$. En este punto, el número de puntos fijos es impar, y en cada turno subsecuente Bob puede asegurar que ni su propio movimiento ni el siguiente movimiento de Alice cree un punto fijo: en cualquier turno $j$ de Bob, si $j+1$ está disponible Bob lo elige; si no, Bob tiene al menos dos opciones disponibles, así que puede elegir un valor distinto de $j$.`),
+  putnam('PUTNAM-2023-B1', 2023, 'B', 1, 'Configuraciones alcanzables deslizando monedas', 'Combinatoria',
+    String.raw`Considera una cuadrícula de $m \times n$ de cuadrados unitarios, indexados por $(i,j)$ con $1 \le i \le m$ y $1 \le j \le n$. Hay $(m-1)(n-1)$ monedas, que se colocan inicialmente en los cuadrados $(i,j)$ con $1 \le i \le m-1$ y $1 \le j \le n-1$. Si una moneda ocupa el cuadrado $(i,j)$ con $1 \le i \le m-1$ y $1 \le j \le n-1$ y los cuadrados $(i+1,j), (i,j+1), (i+1,j+1)$ están desocupados, un movimiento legal es deslizar la moneda de $(i,j)$ a $(i+1,j+1)$. ¿Cuántas configuraciones distintas de monedas se pueden alcanzar comenzando desde la configuración inicial mediante una secuencia (posiblemente vacía) de movimientos legales?`,
+    String.raw`El número de tales configuraciones es $\boxed{\binom{m+n-2}{m-1}}$.
+
+Inicialmente los cuadrados desocupados forman un camino de $(1,n)$ a $(m,1)$ que consiste de $m-1$ pasos horizontales y $n-1$ pasos verticales, y cada movimiento preserva esta propiedad. Esto produce un mapeo inyectivo del conjunto de configuraciones alcanzables al conjunto de caminos de esta forma.
+
+Como el número de tales caminos es evidentemente $\binom{m+n-2}{m-1}$ (ya que se pueden ordenar los pasos horizontales y verticales de cualquier manera), bastará mostrar que el mapeo que acabamos de escribir también es sobreyectivo; es decir, que se puede alcanzar cualquier camino de esta forma mediante una secuencia de movimientos.
+
+Esto es más fácil de ver trabajando hacia atrás. Terminando en un camino dado, si este camino no es el camino inicial, entonces contiene al menos una secuencia de cuadrados de la forma $(i,j) \to (i,j-1) \to (i+1,j-1)$. En este caso el cuadrado $(i+1,j)$ debe estar ocupado, así que podemos deshacer un movimiento reemplazando esta secuencia por $(i,j) \to (i+1,j) \to (i+1,j-1)$.`),
+  putnam('PUTNAM-2023-B2', 2023, 'B', 2, 'Mínimo de unos en la representación binaria de 2023n', 'Teoría de Números',
+    String.raw`Para cada entero positivo $n$, sea $k(n)$ el número de unos en la representación binaria de $2023 \cdot n$. ¿Cuál es el valor mínimo de $k(n)$?`,
+    String.raw`El mínimo es $\boxed{3}$.
+
+Registramos la factorización $2023 = 7\cdot 17^2$. Primero descartamos $k(n)=1$ y $k(n)=2$. Si $k(n)=1$, entonces $2023n = 2^a$ para algún $a$, lo cual claramente no puede ocurrir. Si $k(n)=2$, entonces $2023n=2^a+2^b=2^b(1+2^{a-b})$ para algún $a>b$. Entonces $1+2^{a-b} \equiv 0\pmod{7}$; pero $-1$ no es una potencia de $2$ módulo 7, ya que toda potencia de 2 es congruente con $1$, $2$, o $4 \pmod{7}$.
+
+Mostramos ahora que existe un $n$ tal que $k(n)=3$. Basta encontrar $a>b>0$ tales que 2023 divida a $2^a+2^b+1$. Primero observa que $2^2+2^1+1=7$ y $2^3 \equiv 1 \pmod{7}$; así, si $a \equiv 2\pmod{3}$ y $b\equiv 1\pmod{3}$ entonces 7 divide a $2^a+2^b+1$. Luego, $2^8+2^5+1 = 17^2$ y $2^{16\cdot 17} \equiv 1 \pmod{17^2}$ por el teorema de Euler; así, si $a \equiv 8 \pmod{16\cdot 17}$ y $b\equiv 5 \pmod{16\cdot 17}$ entonces $17^2$ divide a $2^a+2^b+1$.
+
+Hemos reducido el problema a encontrar $a,b$ tales que $a\equiv 2\pmod{3}$, $a\equiv 8\pmod{16\cdot 17}$, $b\equiv 1\pmod{3}$, $b\equiv 5\pmod{16\cdot 17}$. Pero por el teorema chino del residuo, existen enteros $a$ y $b$ que resuelven estas ecuaciones y son únicos módulo $3\cdot 16\cdot 17$. Así podemos encontrar $a,b$ que satisfagan estas congruencias; sumando múltiplos apropiados de $3\cdot 16\cdot 17$, también podemos asegurar que $a>b>1$.`),
+  putnam('PUTNAM-2023-B3', 2023, 'B', 3, 'Longitud esperada de una subsucesión zigzag', 'Probabilidad',
+    String.raw`Una sucesión $y_1, y_2, \dots, y_k$ de números reales se llama en zigzag si $k=1$, o si $y_2-y_1, y_3-y_2, \dots, y_k-y_{k-1}$ son distintos de cero y alternan en signo. Sean $X_1, X_2, \dots, X_n$ elegidos independientemente de la distribución uniforme en $[0,1]$. Sea $a(X_1, X_2, \dots, X_n)$ el valor más grande de $k$ para el cual existe una sucesión creciente de enteros $i_1, i_2, \dots, i_k$ tal que $X_{i_1}, X_{i_2}, \dots, X_{i_k}$ es en zigzag. Encuentra el valor esperado de $a(X_1, X_2, \dots, X_n)$ para $n \ge 2$.`,
+    String.raw`El valor esperado es $\boxed{\frac{2n+2}{3}}$.
+
+Divide la sucesión $X_1,\dots,X_n$ en segmentos alternantes crecientes y decrecientes, con $N$ segmentos en total. Observa que eliminar un término no puede aumentar $N$: si el término eliminado es interior a algún segmento entonces el número permanece sin cambios, mientras que si separa dos segmentos entonces uno de ellos disminuye su longitud en 1 (y posiblemente desaparece). De esto se sigue que $a(X_1,\dots,X_n) = N+1$: en una dirección, los extremos de los segmentos forman un zigzag de longitud $N+1$; en la otra, para cualquier zigzag $X_{i_1},\dots, X_{i_m}$, podemos verlo como una sucesión obtenida de $X_1,\dots,X_n$ eliminando términos, así que su número de segmentos (que manifiestamente es $m-1$) no puede exceder $N$.
+
+Para $n \geq 3$, $a(X_1,\dots,X_n) - a(X_2,\dots,X_{n})$ es 0 si $X_1, X_2, X_3$ forman una sucesión monótona y 1 en caso contrario. Como los seis posibles órdenes de $X_1,X_2,X_3$ son igualmente probables, $$ \mathbf{E}(a(X_1,\dots,X_n) - a(X_1,\dots,X_{n-1})) = \frac{2}{3}. $$ Además, siempre tenemos $a(X_1, X_2) = 2$ porque cualquier sucesión de dos elementos distintos es un zigzag. Por la linealidad de la esperanza más inducción en $n$, obtenemos $\mathbf{E}(a(X_1,\dots,X_n)) = \frac{2n+2}{3}$ como se afirmó.`),
+  putnam('PUTNAM-2023-B4', 2023, 'B', 4, 'Menor T para alcanzar el valor 2023', 'Análisis',
+    String.raw`Para un entero no negativo $n$ y una sucesión estrictamente creciente de números reales $t_0, t_1, \dots, t_n$, sea $f(t)$ la función de valor real correspondiente definida para $t \ge t_0$ por las siguientes propiedades: (a) $f(t)$ es continua para $t \ge t_0$ y es dos veces diferenciable para todo $t > t_0$ distinto de $t_1, \dots, t_n$; (b) $f(t_0) = 1/2$; (c) $\lim_{t \to t_k^+} f'(t) = 0$ para $0 \le k \le n$; (d) Para $0 \le k \le n-1$, tenemos $f''(t) = k+1$ cuando $t_k < t < t_{k+1}$, y $f''(t) = n+1$ cuando $t > t_n$. Considerando todas las elecciones de $n$ y $t_0, t_1, \dots, t_n$ tales que $t_k \ge t_{k-1} + 1$ para $1 \le k \le n$, ¿cuál es el valor más pequeño posible de $T$ para el cual $f(t_0 + T) = 2023$?`,
+    String.raw`El valor mínimo de $T$ es $\boxed{29}$.
+
+Escribe $t_{n+1} = t_0+T$ y define $s_k = t_k-t_{k-1}$ para $1\leq k\leq n+1$. En $[t_{k-1},t_k]$, tenemos $f'(t) = k(t-t_{k-1})$ y así $f(t_k)-f(t_{k-1}) = \frac{k}{2} s_k^2$. Así, si definimos $$ g(s_1,\ldots,s_{n+1}) = \sum_{k=1}^{n+1} ks_k^2, $$ entonces queremos minimizar $\sum_{k=1}^{n+1} s_k = T$ (para todos los valores posibles de $n$) sujeto a las restricciones de que $g(s_1,\ldots,s_{n+1}) = 4045$ y $s_k \geq 1$ para $k \leq n$.
+
+Primero observamos que sí se alcanza un valor mínimo para $T$. Para ver esto, observa que las restricciones $g(s_1,\ldots,s_{n+1}) = 4045$ y $s_k \geq 1$ ponen una cota superior en $n$. Para $n$ fijo, la restricción $g(s_1,\ldots,s_{n+1}) = 4045$ pone una cota superior en cada $s_k$, de donde el conjunto de $(s_1,\ldots,s_{n+1})$ sobre el cual queremos minimizar $\sum s_k$ es un subconjunto compacto de $\mathbb{R}^{n+1}$.
+
+Ahora sea $T_0$ el valor mínimo de $\sum_{k=1}^{n+1} s_k$ (sobre todo $n$ y $s_1,\ldots,s_{n+1}$), alcanzado por $(s_1,\ldots,s_{n+1}) = (s_1^0,\ldots,s_{n+1}^0)$. Observa que no puede haber otro $(s_1,\ldots,s_{n'+1})$ con la misma suma, $\sum_{k=1}^{n'+1} s_k = T_0$, que satisfaga $g(s_1,\ldots,s_{n'+1}) > 4045$; de lo contrario, la función $f$ para $(s_1,\ldots,s_{n'+1})$ satisfaría $f(t_0+T_0) > 4045$ y habría algún $T<T_0$ tal que $f(t_0+T) = 4045$ por el teorema del valor intermedio.
+
+Afirmamos que $s_{n+1}^0 \geq 1$ y $s_k^0 = 1$ para $1\leq k\leq n$. Si $s_{n+1}^0<1$ entonces $$ \begin{align*} & g(s_1^0,\ldots,s_{n-1}^0,s_n^0+s_{n+1}^0)-g(s_1^0,\ldots,s_{n-1}^0,s_n^0,s_{n+1}^0) \\ &\quad = s_{n+1}^0(2ns_n^0-s_{n+1}^0) > 0, \end{align*} $$ lo cual contradice nuestra observación del párrafo anterior. Así $s_{n+1}^0 \geq 1$. Si $s_k^0>1$ para algún $1\leq k\leq n$, entonces reemplazando $(s_k^0,s_{n+1}^0)$ por $(1,s_{n+1}^0+s_k^0-1)$ aumenta $g$: $$ \begin{align*} &g(s_1^0,\ldots,1,\ldots,s_{n+1}^0+s_k^0-1)-g(s_1^0,\ldots,s_k^0,\ldots,s_{n+1}^0) \\ &\quad= (s_k^0-1)((n+1-k)(s_k^0+1)+2(n+1)(s_{n+1}^0-1)) > 0, \end{align*} $$ nuevamente contradiciendo la observación. Esto establece la afirmación.
+
+Dado que $s_k^0 = 1$ para $1 \leq k \leq n$, tenemos $T = s_{n+1}^0 + n$ y $$ g(s_1^0,\dots,s_{n+1}^0) = \frac{n(n+1)}{2} + (n+1)(T-n)^2. $$ Igualando esto a 4045 y despejando $T$ obtenemos $$ T = n+\sqrt{\frac{4045}{n+1} - \frac{n}{2}}. $$ Para $n=9$ esto da $T = 29$; basta entonces mostrar que para todo $n$, $$ n+\sqrt{\frac{4045}{n+1} - \frac{n}{2}} \geq 29. $$ Esto es evidente para $n \geq 30$. Para $n \leq 29$, reescribe la afirmación como $$ \sqrt{\frac{4045}{n+1} - \frac{n}{2}} \geq 29-n; $$ obtenemos entonces una desigualdad equivalente elevando al cuadrado ambos lados: $$ \frac{4045}{n+1} - \frac{n}{2} \geq n^2-58n+841. $$ Eliminando denominadores, agrupando todos los términos en un lado, y factorizando, esto toma la forma $$ (9-n)(n^2 - \frac{95}{2} n + 356) \geq 0. $$ El factor cuadrático $Q(n)$ tiene un mínimo en $\frac{95}{4} = 23.75$ y satisface $Q(8) = 40, Q(10) = -19$; por lo tanto es positivo para $n \leq 8$ y negativo para $10 \leq n \leq 29$.`),
+  putnam('PUTNAM-2023-B5', 2023, 'B', 5, 'Permutaciones que satisfacen π(π(k)) ≡ mk', 'Teoría de Números',
+    String.raw`Determina qué enteros positivos $n$ tienen la siguiente propiedad: Para todos los enteros $M$ que son relativamente primos con $N$, existe una permutación $\pi: \{1, 2, \dots, n\} \to \{1, 2, \dots, n\}$ tal que $\pi(\pi(k)) \equiv mk \pmod{n}$ para todo $k \in \{1, 2, \dots, n\}$.`,
+    String.raw`La propiedad deseada se cumple si y solo si $\boxed{n = 1 \text{ o } n \equiv 2 \pmod{4}}$.
+
+Sea $\sigma_{n,m}$ la permutación de $\mathbb{Z}/n\mathbb{Z}$ inducida por la multiplicación por $m$; el problema original pregunta para qué $n$ la permutación $\sigma_{n,m}$ siempre tiene una raíz cuadrada. Para $n=1$, $\sigma_{n,m}$ es la permutación identidad y por lo tanto tiene una raíz cuadrada.
+
+A continuación identificamos cuándo una permutación general admite una raíz cuadrada.
+
+Lema. Una permutación $\sigma$ en $S_n$ se puede escribir como el cuadrado de otra permutación si y solo si para todo entero positivo par $m$, el número de ciclos de longitud $m$ en $\sigma$ es par.
+
+Demostración. Primero verificamos la dirección "solo si". Supón que $\sigma = \tau^2$. Entonces todo ciclo de $\tau$ de longitud $m$ permanece como ciclo en $\sigma$ si $m$ es impar, y se divide en dos ciclos de longitud $m/2$ si $m$ es par.
+
+Verificamos a continuación la dirección "si". Podemos particionar los ciclos de $\sigma$ en ciclos individuales de longitud impar y pares de ciclos de la misma longitud par; entonces podemos argumentar como arriba para escribir cada partición como el cuadrado de otra permutación.
+
+Supón ahora que $n>1$ es impar. Escribe $n = p^e k$ donde $p$ es un primo impar, $k$ es un entero positivo, y $\gcd(p,k) = 1$. Por el teorema chino del residuo, tenemos un isomorfismo de anillos $$ \mathbb{Z}/n\mathbb{Z} \cong \mathbb{Z}/p^e \mathbb{Z} \times \mathbb{Z}/k \mathbb{Z}. $$ Recuerda que el grupo $(\mathbb{Z}/p^e \mathbb{Z})^\times$ es cíclico; elige $m \in \mathbb{Z}$ que se reduzca a un generador de $(\mathbb{Z}/p^e \mathbb{Z})^\times$ y a la identidad en $(\mathbb{Z}/k\mathbb{Z})^\times$. Entonces $\sigma_{n,m}$ consiste de $k$ ciclos (un número impar) de longitud $p^{e-1}(p-1)$ (un número par) más algunos ciclos más cortos. Por el lema, $\sigma_{n,m}$ no tiene raíz cuadrada.
+
+Supón ahora que $n \equiv 2 \pmod{4}$. Escribe $n = 2k$ con $k$ impar, de modo que $$ \mathbb{Z}/n\mathbb{Z} \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/k\mathbb{Z}. $$ Entonces $\sigma_{n,m}$ actúa sobre $\{0\} \times \mathbb{Z}/k\mathbb{Z}$ y $\{1\} \times \mathbb{Z}/k\mathbb{Z}$ con la misma estructura de ciclos, así que toda longitud de ciclo ocurre un número par de veces. Por el lema, $\sigma_{n,m}$ tiene una raíz cuadrada.
+
+Finalmente, supón que $n$ es divisible entre 4. Para $m = -1$, $\sigma_{n,m}$ consiste de dos puntos fijos ($0$ y $n/2$) junto con $n/2-1$ ciclos (un número impar) de longitud 2 (un número par). Por el lema, $\sigma_{n,m}$ no tiene raíz cuadrada.`),
+  putnam('PUTNAM-2023-B6', 2023, 'B', 6, 'Determinante de una matriz de conteo de soluciones', 'Álgebra Lineal',
+    String.raw`Sea $n$ un entero positivo. Para $i$ y $j$ en $\{1, 2, \dots, n\}$, sea $s(i,j)$ el número de pares $(a,b)$ de enteros no negativos que satisfacen $ai + bj = n$. Sea $S$ la matriz de $n \times n$ cuya entrada $(i,j)$ es $s(i,j)$. Calcula el determinante de $S$.`,
+    String.raw`El determinante es igual a $\boxed{(-1)^{\lceil n/2 \rceil-1} 2 \lceil \frac{n}{2} \rceil}$.
+
+Para comenzar, señalamos las siguientes características de $S$: $S$ es simétrica, $S_{ij} = S_{ji}$ para todo $i,j$ (correspondiendo a $(a,b) \mapsto (b,a)$); $S_{11} = n+1$, correspondiendo a $(a,b) = (0,n),(1,n-1),\dots,(n,0)$; si $n = 2m$ es par, entonces $S_{mj} = 3$ para $j=1,m$, correspondiendo a $(a,b) = (2,0),(1,\frac{n}{2j}),(0,\frac{n}{j})$; y para $\frac{n}{2} < i \leq n$, $S_{ij} = \# (\mathbb{Z} \cap \{\frac{n-i}{j}, \frac{n}{j}\})$, correspondiendo a $(a,b) = (1, \frac{n-i}{j}), (0, \frac{n}{j})$.
+
+Sea $T$ la matriz obtenida de $S$ realizando operaciones de fila y columna de la siguiente manera: para $d=2,\dots,n-2$, resta $S_{nd}$ veces la fila $n-1$ de la fila $d$ y resta $S_{nd}$ veces la columna $n-1$ de la columna $d$; luego resta la fila $n-1$ de la fila $n$ y la columna $n-1$ de la columna $n$. Evidentemente $T$ es de nuevo simétrica y $\det(T) = \det(S)$.
+
+Examinemos la fila $i$ de $T$ para $\frac{n}{2} < i < n-1$: $$ \begin{align*} T_{i1} &= S_{i1} - S_{in} S_{(n-1)1} = 2-1\cdot 2 = 0 \\ T_{ij} &= S_{ij} - S_{in} S_{(n-1)j} - S_{nj}S_{i(n-1)}\\ & = \begin{cases} 1 & \text{si } j \text{ divide a } n-i \\ 0 & \text{en otro caso}. \end{cases} \quad (1 < j < n-1) \\ T_{i(n-1)} &= S_{i(n-1)} - S_{in} S_{(n-1)(n-1)} = 0-1\cdot0 = 0 \\ T_{in} &= S_{in} - S_{in} S_{(n-1)n} - S_{i(n-1)}  = 1 - 1\cdot1 - 0 = 0. \end{align*} $$ Recordemos ahora (por ejemplo, de la expansión de un determinante en menores) que si una matriz contiene una entrada igual a 1 que es la única entrada distinta de cero en su fila o en su columna, entonces podemos eliminar esta entrada (es decir, eliminar la fila y la columna que la contienen) al costo de multiplicar el determinante por un signo. Para simplificar la notación, no renumeramos las filas y columnas después de realizar esta operación.
+
+Verificamos a continuación que para la matriz $T$, para $i=2,\dots,\lfloor \frac{n}{2} \rfloor$ sucesivamente, es válido eliminar $(i,n-i)$ y $(n-i, i)$ al costo de multiplicar el determinante por $-1$. Es decir, cuando llegamos a la entrada $(n-i,i)$, las únicas otras entradas distintas de cero en esta fila tienen la forma $(n-i,j)$ donde $j>1$ divide a $n-i$, y esas entradas están en columnas ya eliminadas.
+
+Calculamos entonces $\det(S) = \det(T)$ como: $$ \begin{gather*} (-1)^{\lfloor n/2 \rfloor-1} \det \begin{pmatrix} n+1 & -1 & 0 \\ -1 & 0 & 1 \\ 0 & 1  & 0 \end{pmatrix} \quad \text{para $n$ impar,} \\ (-1)^{\lfloor n/2 \rfloor-1}  \det \begin{pmatrix} n+1 & -1 & 2 & 0 \\ -1 & -1 & 1 & -1 \\ 2 & 1 & 0 & 1 \\ 0 & -1 & 1 & 0 \end{pmatrix} \quad \text{para $n$ par.} \end{gather*} $$ En el caso impar, podemos eliminar las últimas dos filas y columnas (creando otra negación) y concluir de inmediato. En el caso par, las filas y columnas están etiquetadas $1, \frac{n}{2}, n-1, n$; sumando la fila/columna $n-1$ a la fila/columna $\frac{n}{2}$, producimos $$ (-1)^{\lfloor n/2 \rfloor}  \det \begin{pmatrix} n+1 & 1 & 2 & 0 \\ 1 & 1 & 1 & 0 \\ 2 & 1 & 0 & 1 \\ 0 & 0 & 1 & 0 \end{pmatrix} $$ y de nuevo podemos eliminar las últimas dos filas y columnas (creando otra negación) y leer el resultado.`),
 ]
 
 const putnam2024 = [
@@ -1236,6 +1765,1267 @@ const putnam2025 = [
   putnam('PUTNAM-2025-B4', 2025, 'B', 4, 'Cota de suma entre entradas no nulas en una matriz escalera', 'Combinatoria', String.raw`Para $n \ge 2$, sea $A = [a_{i,j}]_{i,j=1}^n$ una matriz de $n \times n$ de enteros no negativos tal que (a) $a_{i,j} = 0$ cuando $i+j \le n$, (b) $a_{i+1,j} \in \{a_{i,j}, a_{i,j}+1\}$ cuando $1 \le i \le n-1$ y $1 \le j \le n$, y (c) $a_{i,j+1} \in \{a_{i,j}, a_{i,j}+1\}$ cuando $1 \le i \le n$ y $1 \le j \le n-1$. Sea $S$ la suma de las entradas de $A$, y sea $N$ el número de entradas no nulas de $A$. Demuestra que $S \le \frac{(n+2)N}{3}$.`),
   putnam('PUTNAM-2025-B5', 2025, 'B', 5, 'Descensos del inverso modular', 'Teoría de Números', String.raw`Sea $p$ un número primo mayor que 3. Para cada $k \in \{1, \dots, p-1\}$, sea $I(k) \in \{1, 2, \dots, p-1\}$ tal que $k \cdot I(k) \equiv 1 \pmod{p}$. Demuestra que el número de enteros $k \in \{1, \dots, p-2\}$ tales que $I(k+1) < I(k)$ es mayor que $p/4 - 1$.`),
   putnam('PUTNAM-2025-B6', 2025, 'B', 6, 'Máxima constante r para un crecimiento tipo g(g(n))^r', 'Análisis', String.raw`Sea $\mathbb{N} = \{1, 2, 3, \dots\}$. Encuentra la constante real más grande tal que existe una función $g: \mathbb{N} \to \mathbb{N}$ tal que $g(n+1) - g(n) \ge (g(g(n)))^r$ para todo $n \in \mathbb{N}$.`),
+]
+
+
+// ===========================================================================
+// HMMT (Harvard-MIT Mathematics Tournament) — Febrero
+// ===========================================================================
+
+// posicion = número del problema dentro de su ronda (1 = primero).
+// ALGNT/COMB/GEO son "rondas de materia" de 10 problemas cada una; TEAM es la
+// ronda por equipos (10 problemas, algunos de demostración); GUTS es la ronda
+// de velocidad (36 problemas repartidos en 9 tandas de 4, con dificultad
+// creciente por tanda).
+function estimarHmmtIndividual(posicion) {
+  const tabla = [
+    { dificultad: 'Fácil', exito: 75 },
+    { dificultad: 'Fácil', exito: 62 },
+    { dificultad: 'Media', exito: 50 },
+    { dificultad: 'Media', exito: 40 },
+    { dificultad: 'Media', exito: 31 },
+    { dificultad: 'Media', exito: 23 },
+    { dificultad: 'Difícil', exito: 16 },
+    { dificultad: 'Difícil', exito: 11 },
+    { dificultad: 'Difícil', exito: 7 },
+    { dificultad: 'Difícil', exito: 4 },
+  ]
+  return tabla[posicion - 1]
+}
+
+function estimarHmmtTeam(posicion) {
+  const tabla = [
+    { dificultad: 'Media', exito: 55 },
+    { dificultad: 'Media', exito: 44 },
+    { dificultad: 'Media', exito: 35 },
+    { dificultad: 'Difícil', exito: 27 },
+    { dificultad: 'Difícil', exito: 20 },
+    { dificultad: 'Difícil', exito: 15 },
+    { dificultad: 'Difícil', exito: 10 },
+    { dificultad: 'Difícil', exito: 7 },
+    { dificultad: 'Difícil', exito: 4 },
+    { dificultad: 'Difícil', exito: 2 },
+  ]
+  return tabla[posicion - 1]
+}
+
+function estimarHmmtGuts(posicion) {
+  const tanda = Math.ceil(posicion / 4) // 1..9
+  const dificultad = tanda <= 3 ? 'Fácil' : tanda <= 6 ? 'Media' : 'Difícil'
+  const exito = Math.max(3, Math.round(70 - (tanda - 1) * 8))
+  return { dificultad, exito }
+}
+
+function estimarHmmt(ronda, posicion) {
+  if (ronda === 'GUTS') return estimarHmmtGuts(posicion)
+  if (ronda === 'TEAM') return estimarHmmtTeam(posicion)
+  return estimarHmmtIndividual(posicion)
+}
+
+function hmmt(codigo, año, ronda, posicion, titulo, tema, enunciado, solucion) {
+  return {
+    codigo,
+    titulo,
+    categoriaKey: `hmmt-${año}`,
+    año: String(año),
+    tema,
+    tipo: 'HMMT',
+    ...estimarHmmt(ronda, posicion),
+    enunciado,
+    solucion,
+  }
+}
+
+const hmmt2025Algnt = [
+  hmmt('HMMT-2025-ALGNT1', 2025, 'ALGNT', 1, "Divisores de 9! con dígito de unidades 1", "Teoría de Números",
+    String.raw`Calcula la suma de los divisores positivos (incluyendo 1) de $9!$ que tienen dígito de unidades $1$.`,
+    String.raw`La factorización prima de $9!$ es $2^{7} \cdot 3^{4} \cdot 5 \cdot 7$. Todo divisor de $9!$ tiene factorización prima $2^{a} \cdot 3^{b} \cdot 5^{c} \cdot 7^{d}$, donde $0 \leq a \leq 7$, $0 \leq b \leq 4$, $0 \leq c \leq 1$, y $0 \leq d \leq 1$. Si el divisor tiene dígito de unidades $1$, no puede ser divisible entre $2$ ni entre $5$, así que $a = c = 0$.
+
+Ahora dividimos en casos según el valor de $d$:
+- Si $d = 0$, el divisor es $3^{b}$ para algún $0 \leq b \leq 4$. Los divisores posibles son $1$, $3$, $9$, $27$, y $81$, de los cuales $1$ y $81$ funcionan.
+- Si $d = 1$, el divisor es $3^{b} \cdot 7$ para algún $0 \leq b \leq 4$. Los divisores posibles son entonces $7$, $3 \cdot 7$, $9 \cdot 7$, $27 \cdot 7$, y $81 \cdot 7$. De estos, solo $3 \cdot 7 = 21$ funciona.
+
+La respuesta es $1 + 21 + 81 = \boxed{103}$.`),
+  hmmt('HMMT-2025-ALGNT2', 2025, 'ALGNT', 2, "Número de cuatro dígitos con reordenamiento de raíz cuadrada", "Teoría de Números",
+    String.raw`Mark escribe la expresión $\sqrt{abcd}$ en el pizarrón, donde $abcd$ es un número de cuatro dígitos y $a \neq 0$. Derek, un niño pequeño, decide mover la $a$, cambiando la expresión de Mark a $a\sqrt{bcd}$. Sorprendentemente, las dos expresiones son iguales. Calcula el único número de cuatro dígitos $abcd$ posible.`,
+    String.raw`Sea $x = bcd$. Entonces, reescribimos la condición dada $\sqrt{abcd} = a\sqrt{bcd}$ como $$1000a + x = a^{2}x,$$ lo cual se simplifica a $$(a^{2} - 1)x = 1000a.$$ En particular, $a^{2} - 1$ divide a $1000a$. Como $\gcd(a^{2} - 1, a) = 1$, se sigue que $a^{2} - 1 \mid 1000$. El único $a \in \{1, 2, \ldots, 9\}$ que satisface esto es $a = 3$. Entonces $8x = 3000$, así que $x = 375$. Por lo tanto $abcd = \boxed{3375}$.`),
+  hmmt('HMMT-2025-ALGNT3', 2025, 'ALGNT', 3, "Producto mínimo con exponentes logarítmicos", "Álgebra",
+    String.raw`Dado que $x$, $y$, y $z$ son números reales positivos tales que $$x^{\log_{2}(yz)} = 2^{8} \cdot 3^{4}, \quad y^{\log_{2}(zx)} = 2^{9} \cdot 3^{6}, \quad \text{y} \quad z^{\log_{2}(xy)} = 2^{5} \cdot 3^{10},$$ calcula el menor valor posible de $xyz$.`,
+    String.raw`Sea $k = \log_{2} 3$ por brevedad. Tomando el logaritmo base $2$ de cada ecuación se obtiene $$(\log_{2} x)(\log_{2} y + \log_{2} z) = 8 + 4k,$$ $$(\log_{2} y)(\log_{2} z + \log_{2} x) = 9 + 6k,$$ $$(\log_{2} z)(\log_{2} x + \log_{2} y) = 5 + 10k.$$ Sumando las dos primeras ecuaciones y restando la tercera se obtiene $2 \log_{2} x \log_{2} y = 12$, así que $\log_{2} x \log_{2} y = 6$. De manera similar, obtenemos $$\log_{2} x \log_{2} y = 6,$$ $$\log_{2} y \log_{2} z = 3 + 6k,$$ $$\log_{2} z \log_{2} x = 2 + 4k.$$ Multiplicando las primeras dos ecuaciones y dividiendo entre la tercera se obtiene $(\log_{2} y)^{2} = 9$, así que $\log_{2} y = \pm 3$. Entonces, la primera y la última ecuación nos dicen que $\log_{2} x = \pm 2$ y $\log_{2} z = \pm (1 + 2k)$, con todos los signos iguales. Así $$\log_{2} x + \log_{2} y + \log_{2} z = \pm (3 + 2 + (1 + 2k)) = \pm (6 + 2k),$$ así que $$x y z = 2^{\pm (6 + 2k)} = 2^{6} \cdot 3^{2} \quad \text{o} \quad 2^{-6} \cdot 3^{-2}.$$ Claramente, la solución más pequeña es $2^{-6} \cdot 3^{-2} = \boxed{\frac{1}{576}}$.`),
+  hmmt('HMMT-2025-ALGNT4', 2025, 'ALGNT', 4, "Suma de partes enteras de recíprocos desplazados", "Teoría de Números",
+    String.raw`Sea $\lfloor z\rfloor$ el mayor entero menor o igual a $z$. Calcula $$ \sum_{j = -1000}^{1000} \left\lfloor \frac{2025}{j + 0.5} \right\rfloor. $$`,
+    String.raw`La idea clave es emparejar los términos $\left\lfloor \frac{2025}{x} \right\rfloor$ y $\left\lfloor \frac{2025}{-x} \right\rfloor$. Hay 1000 de estos pares y un término solitario, $\left\lfloor \frac{2025}{1000.5} \right\rfloor = 2$. Así, $$ \sum_{j = -1000}^{1000} \left\lfloor \frac{2025}{j + 0.5} \right\rfloor = 2 + \sum_{x \in \{0.5,1.5, \ldots , 999.5\}} \left(\left\lfloor \frac{2025}{x} \right\rfloor + \left\lfloor \frac{2025}{-x} \right\rfloor \right). $$ Como $x$ recorre el conjunto $\{0.5, 1.5, 2.5, \ldots , 999.5\}$, $2x$ recorre el conjunto $\{1, 3, 5, \ldots , 1999\}$. Este conjunto incluye los 15 divisores impares de 4050 excepto 2025. Así, hay 14 valores de $x$ para los cuales $\left\lfloor \frac{2025}{x} \right\rfloor + \left\lfloor \frac{2025}{- x} \right\rfloor$ vale 0, y los $1000 - 14 = 986$ valores restantes de $x$ hacen que valga $-1$. Por lo tanto, $$ \sum_{j = -1000}^{1000} \left\lfloor \frac{2025}{j + 0.5} \right\rfloor = 2 + \sum_{x \in \{0.5,1.5, \ldots , 999.5\}} \left(\left\lfloor \frac{2025}{x} \right\rfloor + \left\lfloor \frac{2025}{-x} \right\rfloor \right) = 2 + 986 \cdot (-1) = \boxed{-984}. $$`),
+  hmmt('HMMT-2025-ALGNT5', 2025, 'ALGNT', 5, "Polinomios mónicos enteros con valores radicales simétricos", "Teoría de Números",
+    String.raw`Sea $\mathcal{S}$ el conjunto de todos los polinomios mónicos no constantes $P$ con coeficientes enteros que satisfacen $P\left(\sqrt{3} + \sqrt{2}\right) = P\left(\sqrt{3} - \sqrt{2}\right)$. Si $Q$ es un elemento de $\mathcal{S}$ de grado mínimo, calcula el único valor posible de $Q(10) - Q(0)$.`,
+    String.raw`Primero, observa que el polinomio $x^{4} - 10x^{2} + 1$ tiene tanto a $\sqrt{3} + \sqrt{2}$ como a $\sqrt{3} - \sqrt{2}$ como raíces. Basta verificar si algún polinomio de grado a lo más 3 pertenece a $\mathcal{S}$. Supón que $f(x) = a x^{3} + b x^{2} + c x + d \in \mathcal{S}$. Calculamos $$(\sqrt{3} + \sqrt{2})^{3} - (\sqrt{3} - \sqrt{2})^{3} = 22\sqrt{2}$$ $$(\sqrt{3} + \sqrt{2})^{2} - (\sqrt{3} - \sqrt{2})^{2} = 4\sqrt{6}$$ $$(\sqrt{3} + \sqrt{2})^{1} - (\sqrt{3} - \sqrt{2})^{1} = 2\sqrt{2},$$ así que obtenemos que $$f(\sqrt{3} + \sqrt{2}) - f(\sqrt{3} - \sqrt{2}) = (22\sqrt{2})a + (4\sqrt{6})b + (2\sqrt{2})c.$$ Al resolver las dependencias lineales, es claro que $b = 0$ y $c = -11a$. Se sigue que si $f$ no es el polinomio cero, debe ser cúbico. Es entonces claro que $f(x) = x^{3} - 11x + d$ tiene grado mínimo en $\mathcal{S}$, y así $Q(10) - Q(0) = f(10) - f(0) = \boxed{890}$.`),
+  hmmt('HMMT-2025-ALGNT6', 2025, 'ALGNT', 6, "Residuo de una potencia módulo un factorial", "Teoría de Números",
+    String.raw`Sea $r$ el residuo cuando $2017^{2025!} - 1$ se divide entre $2025!$. Calcula $\frac{r}{2025!}$. (Nota que $2017$ es primo.)`,
+    String.raw`Sea $N = 2017^{2025!}$. Sea $p$ un primo que divide a $2025!$ distinto de $2017$. Sea $p^{k}$ la mayor potencia de $p$ que divide a $2025!$. Claramente, $\phi (p^{k}) = (p - 1)p^{k - 1}$ divide a $2025!$ y $\gcd (2017, p^{k}) = 1$, así que por el Teorema de Euler, $$ N \equiv 1 \pmod{p^{k}}. $$ Repitiendo para todos esos primos $p$, obtenemos $$ N \equiv 1 \pmod{2025! / 2017}. $$ Por lo tanto, $\frac{2025!}{2017} \mid N - 1$, así que $r = \frac{2025!}{2017} s$ para algún $0 \leq s < 2017$. Además, como $N \equiv 0$ (mód $2017$), tenemos $r = \frac{2025!}{2017} s \equiv -1$ (mód $2017$). Por el Teorema de Wilson, $$ \frac{2025!}{2017} = 2016! (2018)(2019)\ldots (2025) \equiv -8! \equiv 20 \pmod{2017}. $$ Por lo tanto, $s$ es negativo el inverso de $20$ (mód $2017$), que es $1311$. Nuestra respuesta es $$ \frac{r}{2025!} = \frac{(2025! / 2017)(1311)}{2025!} = \boxed{\frac{1311}{2017}}. $$`),
+  hmmt('HMMT-2025-ALGNT8', 2025, 'ALGNT', 8, "Signo del seno en la expansión binaria de 1/π", "Álgebra",
+    String.raw`Define $\operatorname{sgn}(x)$ como $1$ cuando $x$ es positivo, $-1$ cuando $x$ es negativo, y $0$ cuando $x$ es $0$. Calcula $$ \sum_{n = 1}^{\infty}\frac{\operatorname{sgn}(\sin(2^{n}))}{2^{n}}. $$ (Los argumentos de $\sin$ están en radianes.)`,
+    String.raw`Observa que cada una de las siguientes afirmaciones equivale a la siguiente.
+
+$\cdot\ \operatorname{sgn}(\sin (2^{n})) = +1$
+
+$\cdot\ 0 < 2^{n} \bmod 2\pi < \pi$
+
+$\cdot\ 0 < \frac{2^{n}}{\pi} \bmod 2 < 1$
+
+$\cdot\ $ El $n$-ésimo dígito después del punto decimal en la representación binaria de $\frac{1}{\pi}$ es $0$.
+
+De manera similar, $\operatorname{sgn}(\sin (2^{n})) = -1$ si y solo si el $n$-ésimo dígito después del punto decimal en la representación binaria de $\frac{1}{\pi}$ es $1$. En particular, si $a_{n}$ es el $n$-ésimo dígito, entonces $\operatorname{sgn}(\sin (2^{n})) = 1 - 2a_{n}$.
+
+Así, la suma buscada es $$ \sum_{n = 1}^{\infty}\frac{\operatorname{sgn}(\sin(2^{n}))}{2^{n}} = \sum_{n = 1}^{\infty}\frac{1 - 2a_{n}}{2^{n}} = \left(\sum_{n = 1}^{\infty}\frac{1}{2^{n}}\right) - 2\left(\sum_{n = 1}^{\infty}\frac{a_{n}}{2^{n}}\right) = \boxed{1 - \frac{2}{\pi}}. $$`),
+  hmmt('HMMT-2025-ALGNT10', 2025, 'ALGNT', 10, "Sistema cíclico con cuadrados complejos", "Álgebra",
+    String.raw`Sean $a$, $b$, y $c$ números complejos distintos dos a dos tales que $$a^{2} = b + 6,\quad b^{2} = c + 6,\quad \text{y}\quad c^{2} = a + 6.$$ Calcula los dos valores posibles de $a + b + c$.`,
+    String.raw`Solución 1. Observa que si cualquiera de $a$, $b$, o $c$ es $3$ o $-2$, entonces $a = b = c$, lo cual no es válido. Por lo tanto, $$(a^{2} - 9)(b^{2} - 9)(c^{2} - 9) = (b - 3)(c - 3)(a - 3)\implies (a + 3)(b + 3)(c + 3) = 1,$$ $$(a^{2} - 4)(b^{2} - 4)(c^{2} - 4) = (b + 2)(c + 2)(a + 2)\implies (a - 2)(b - 2)(c - 2) = 1.$$ Por lo tanto, $2$ y $-3$ son raíces del polinomio $(x - a)(x - b)(x - c) + 1$, y así existe algún $t$ tal que $$(x - t)(x - 2)(x + 3) = (x - a)(x - b)(x - c) + 1.$$ Comparando coeficientes se obtiene $a + b + c = t - 1$ y $ab + bc + ca = - (t + 6)$. Podemos entonces resolver para $t$ observando que $a^{2} + b^{2} + c^{2} = (b + 6) + (c + 6) + (a + 6) = a + b + c + 18$, así que $$ab + bc + ca = \frac{1}{2} ((a + b + c)^{2} - (a^{2} + b^{2} + c^{2})) = \frac{1}{2} ((a + b + c)^{2} - (a + b + c + 18)).$$ Por lo tanto, $$- (t + 6) = \frac{1}{2} ((t - 1)^{2} - (t + 17))\Longrightarrow t^{2} - t - 4 = 0\Longrightarrow t = \frac{1\pm\sqrt{17}}{2}.$$ Por lo tanto $a + b + c = \boxed{\frac{- 1\pm\sqrt{17}}{2}}$ son los dos valores posibles de $a + b + c$.
+
+Solución 2. Sea $s = a + b + c$. Restando dos ecuaciones adyacentes se obtiene $a^{2} - b^{2} = b - c$, es decir $(a - b)(a + b) = (b - c)$. Multiplicando esto y sus variantes cíclicas se obtiene $$(a + b)(b + c)(c + a) = 1.$$ Ahora, recordamos la identidad $$(a + b + c)^{3} = a^{3} + b^{3} + c^{3} + 3(a + b)(b + c)(c + a)$$ $$\qquad \Rightarrow \qquad s^{3} = a^{3} + b^{3} + c^{3} + 3.$$ Para simplificar $a^{3} + b^{3} + c^{3}$, sumamos $a$ veces la primera ecuación, $b$ veces la segunda, y $c$ veces la tercera para obtener $$a^{3} + b^{3} + c^{3} = a(b + 6) + b(c + 6) + c(a + 6)$$ $$\qquad = (ab + bc + ca) + 6s$$ $$\qquad = \frac{1}{2}\Big((a + b + c)^{2} - (a^{2} + b^{2} + c^{2})\Big) + 6s$$ $$\qquad = \frac{1}{2} s^{2} - \frac{1}{2}\Big((b + 6) + (c + 6) + (a + 6)\Big) + 6s$$ $$\qquad = \frac{1}{2} s^{2} + \frac{11}{2} s - 9.$$ Por lo tanto, $$s^{3} = \frac{1}{2} s^{2} + \frac{11}{2} s - 6 \Rightarrow \left(s - \frac{3}{2}\right)\left(s^{2} + s - 4\right) = 0.$$ En este punto, la única conjetura razonable es que $s = \frac{3}{2}$ es una solución extra, y las dos raíces restantes $s = \frac{- 1\pm\sqrt{17}}{2}$ son las respuestas posibles. Ahora justificamos esta conjetura. Supón por contradicción que $s = \frac{3}{2}$. Entonces, $$a^{2} + b^{2} + c^{2} = (b + 6) + (c + 6) + (a + 6) = \frac{39}{2}$$ $$ab + bc + ca = \frac{1}{2}\left(\frac{9}{4} -\frac{39}{2}\right) = -\frac{69}{8}.$$ Entonces, observa $$abc = (a + b + c)(ab + bc + ca) - (a + b)(b + c)(c + a)$$ $$= -\frac{207}{16} -1 = -\frac{223}{16}.$$ Por otro lado, $$(a + 6)(b + 6)(c + 6) = 216 + 36(a + b + c) + 6(ab + bc + ca) + abc$$ $$\qquad = 216 + 36\cdot \frac{3}{2} -6\cdot \frac{69}{8} -\frac{223}{16},$$ que es un número racional de denominador $16$. Pero $(a + 6)(b + 6)(c + 6) = b^{2}c^{2}a^{2} = \left(-\frac{223}{16}\right)^{2}$ tiene denominador $16^{2} = 256$, una contradicción. Así $s = \frac{3}{2}$ es imposible. (Surge de $a = b = c = \frac{1}{2}$, que satisface $(a + b)(b + c)(c + a) = 1$ pero no las condiciones dadas.)
+
+Solución 3. Restando cualesquiera dos ecuaciones adyacentes se obtiene $a^{2} - b^{2} = b - c$, lo cual equivale tanto a $(a - b)(a + b) = (b - c)$ como a $(a - b)(a + b + 1) = (a - c)$. Multiplicando cada una de estas con su variante cíclica respectiva y cancelando el factor $(a - b)(b - c)(c - a)$ (que se sabe es distinto de cero), obtenemos $$(a + b)(b + c)(c + a) = 1\quad \text{y}\quad (a + b + 1)(b + c + 1)(c + a + 1) = -1.$$ Expandiendo la última ecuación y usando las ecuaciones dadas se obtiene el siguiente resultado. $$(a + b)(b + c)(c + a) + (a^{2} + b^{2} + c^{2}) + 3(ab + bc + ca) + 2(a + b + c) + 1 = -1$$ $$1 + (b + 6 + c + 6 + a + 6) + 3(ab + bc + ca) + 2(a + b + c) + 1 = -1$$ $$3(a + b + c) + 3(ab + bc + ca) = -21$$ $$a + b + c + ab + bc + ca = -7.$$ Sea $s = a + b + c$. Podemos entonces resolver para $s$ considerando lo siguiente: $$s^{2} = (a^{2} + b^{2} + c^{2}) + 2(ab + bc + ca)$$ $$\quad = (b + 6 + c + 6 + a + 6) + 2(-7 - a - b - c)$$ $$\quad = -s + 4,$$ así que $s = \boxed{\frac{- 1\pm\sqrt{17}}{2}}$.
+
+Solución 4. Sea $s = a + b + c$ y considera el polinomio $$x + (x^{2} - 6) + ((x^{2} - 6)^{2} - 6) - s = x^{4} - 11x^{2} + x + 24 - s.$$ Este polinomio tiene raíces $a$, $b$, y $c$. Por las fórmulas de Vieta, la suma de las cuatro raíces es $0$, así que su cuarta raíz debe ser $-s$. Usando Vieta otra vez, tenemos $ab + bc + ca - sa - sb - sc = -11$. Podemos ahora resolver para $s$. $$ab + bc + ca - (a + b + c)^{2} = -11$$ $$a^{2} + b^{2} + c^{2} + ab + bc + ca = 11$$ $$\frac{1}{2} ((a + b + c)^{2} + (a^{2} + b^{2} + c^{2})) = 11$$ $$(a + b + c)^{2} + (b + 6 + c + 6 + a + 6) = 22$$ $$s^{2} + s - 4 = 0\Longrightarrow s = \boxed{\frac{-1\pm\sqrt{17}}{2}}.$$
+
+Observación. Otra forma de terminar usando este enfoque es sustituir $-s$ directamente en $x^{4} - 11x^{2} + x + 24 - s = 0$ para obtener $(s - 3)(s + 2)(x^{2} + x - 4) = 0$, y luego descartar las soluciones $s = 3$ y $s = -2$, que surgen de los valores no válidos $a = b = c = 3$ y $a = b = c = -2$. (En los casos no válidos, $s \neq a + b + c$ porque $a = b = c$ es solo una raíz única del polinomio.)`),
+]
+
+const hmmt2025Comb = [
+  hmmt('HMMT-2025-COMB1', 2025, 'COMB', 1, "Arreglos circulares con productos acotados", "Combinatoria",
+    String.raw`Calcula el número de formas de acomodar los números $1$, $2$, $3$, $4$, $5$, $6$, y $7$ alrededor de un círculo de modo que el producto de cada par de números adyacentes en el círculo sea a lo más $20$. (Las rotaciones y reflexiones cuentan como arreglos distintos.)`,
+    String.raw`Fija la posición del número $7$. Observa que los únicos números que pueden estar junto a $7$ son $1$ y $2$, así que deben ocupar las dos posiciones adyacentes a $7$.
+
+Ahora, el número $6$ solo puede ser adyacente a $1$, $2$, y $3$. Como $6$ ya no puede ser adyacente tanto a $1$ como a $2$, concluimos que $6$ debe ser adyacente a $3$ además de a $1$ o a $2$.
+
+Finalmente, los números $4$ y $5$ pueden colocarse arbitrariamente en las dos posiciones restantes.
+
+Hay $7$ elecciones para la posición del número $7$, $2$ formas de colocar $1$ y $2$ junto a él, $2$ formas de colocar $6$ y $3$, y $2$ formas de colocar $4$ y $5$, dando un total de $7 \cdot 2 \cdot 2 \cdot 2 = \boxed{56}$.`),
+  hmmt('HMMT-2025-COMB2', 2025, 'COMB', 2, "Bloqueo de caminos en una cuadrícula 3×3", "Combinatoria",
+    String.raw`Kelvin la rana está en la lily pad inferior izquierda de una cuadrícula de $3 \times 3$ de lily pads, y su casa está en la lily pad superior derecha. Solo puede saltar entre dos lily pads que sean adyacentes horizontal o verticalmente. Calcula el número de formas de quitar 4 de las lily pads de modo que las lily pads inferior izquierda y superior derecha permanezcan, pero Kelvin no pueda llegar a casa.`,
+    String.raw`En vez de eso, contamos los arreglos para los cuales Kelvin sí puede llegar a casa. Observa que, como mínimo, Kelvin debe usar 5 lily pads para llegar a casa, dejando 4 lily pads que no están en el camino. Esto significa que si quitáramos 4 lily pads y Kelvin aún pudiera llegar a casa, las lily pads no quitadas forman un camino más corto de la esquina inferior izquierda a la superior derecha. Como hay $\binom{4}{2} = 6$ de estos caminos más cortos, nuestra respuesta es $\binom{7}{4} - 6 = \boxed{29}$.`),
+  hmmt('HMMT-2025-COMB3', 2025, 'COMB', 3, "Partición de bolas etiquetadas en grupos de vecinos", "Combinatoria",
+    String.raw`Ben tiene 16 bolas etiquetadas $1$, $2$, $3$, $\ldots$, $16$, así como 4 cajas indistinguibles. Dos bolas son vecinas si sus etiquetas difieren en $1$. Calcula el número de formas de que ponga 4 bolas en cada caja de modo que cada bola esté en la misma caja que al menos uno de sus vecinos. (El orden en que se colocan las bolas no importa.)`,
+    String.raw`Cada caja debe contener un solo grupo de cuatro bolas consecutivas (por ejemplo $5$, $6$, $7$, $8$) o dos grupos de dos bolas consecutivas (por ejemplo $5$, $6$, $9$, $10$). Como todos los grupos tienen longitud par, esto significa que $1$ y $2$ están en el mismo grupo, $3$ y $4$ están en el mismo grupo, y así sucesivamente. Podemos pensar en cada uno de estos $8$ pares de bolas como una unidad individual, así que la respuesta es igual al número de formas de poner $8$ objetos en $4$ cajas indistinguibles, donde cada caja tiene $2$ objetos sin restricciones adicionales. El número de formas de hacer esto es $$ \frac{8!}{2^{4}\cdot 4!} = \boxed{105} $$`),
+  hmmt('HMMT-2025-COMB4', 2025, 'COMB', 4, "Caminos reticulares con movimientos diagonales", "Combinatoria",
+    String.raw`Sophie está en $(0,0)$ en una cuadrícula de coordenadas y quiere llegar a $(3,3)$. Si Sophie está en $(x,y)$, en un solo paso puede moverse a uno de $(x + 1, y)$, $(x, y + 1)$, $(x - 1, y + 1)$, o $(x + 1, y - 1)$. No puede volver a visitar ningún punto a lo largo de su camino, y ni su coordenada $x$ ni su coordenada $y$ pueden ser nunca menores que $0$ ni mayores que $3$. Calcula el número de formas en que Sophie puede llegar a $(3,3)$.`,
+    String.raw`![Una cuadrícula de 4x4 con líneas diagonales azules y flechas rojas etiquetadas con los números 2, 4, y 6, ilustrando los movimientos y conteos posibles entre puntos de la cuadrícula.](/imagenes-problemas/hmmt/2025/5de42bbe7b204ff4624cd4bc2816e63f.jpeg)
+
+Llamemos movimiento lateral a uno que sea hacia arriba o hacia la derecha. Entonces los movimientos laterales son los únicos que aumentan en $1$ la suma de las coordenadas de Sophie, mientras que todos los demás movimientos no cambian la suma, así que Sophie debe hacer $6$ de ellos, uno para aumentar esta suma de $i$ a $i + 1$ para cada $i \in [0, 5]$.
+
+Afirmamos que existe un único camino correspondiente a cada conjunto de $6$ movimientos laterales elegidos de esta forma. En efecto, los movimientos diagonales permiten a Sophie llegar de cualquier punto en $x + y = i$ a cualquier segundo punto en $x + y = i$ de exactamente una forma.
+
+Observa que cuando $i \leq 2$, el número de movimientos laterales que aumentan la suma de coordenadas de $i$ a $i + 1$ es $2i$, al igual que el número que la aumenta de $5 - i$ a $6 - i$. Así, la respuesta es $2 \cdot 4 \cdot 6 \cdot 6 \cdot 4 \cdot 2 = \boxed{2304}$.`),
+  hmmt('HMMT-2025-COMB5', 2025, 'COMB', 5, "Ciclo más largo en un grafo de cuadrícula", "Combinatoria",
+    String.raw`En una cuadrícula de $11 \times 11$ celdas, cada par de celdas adyacentes por lado está conectado por una puerta. Karthik quiere caminar por un camino en esta cuadrícula. Puede empezar en cualquier celda, pero debe terminar en la misma celda donde empezó, y no puede pasar por ninguna puerta más de una vez (ni siquiera en direcciones opuestas). Calcula el número máximo de puertas por las que puede pasar en tal camino.`,
+    String.raw`![Una cuadrícula de 11 por 11 con líneas gruesas resaltando un camino que forma un circuito, ilustrando un posible camino máximo a través de las puertas de la cuadrícula.](/imagenes-problemas/hmmt/2025/7a6cf169c1f9e776c88f599e1de5b658.jpeg)
+
+Esto simplemente pregunta por el circuito más largo en el grafo de adyacencia de esta cuadrícula. Observa que esta cuadrícula tiene $4 \cdot 9 = 36$ celdas de grado impar, 9 a lo largo de cada lado. Si coloreamos las celdas con colores de tablero de ajedrez de modo que las esquinas sean negras, entonces 20 de estas 36 celdas son blancas. Un circuito euleriano usa un número par de puertas de cada celda, así que al menos una puerta de cada una de estas celdas queda sin usar. Ninguna puerta conecta dos celdas blancas, así que al menos 20 puertas quedan sin usar, dejando a lo más $2 \cdot 10 \cdot 11 - 20 = \boxed{200}$ puertas cruzadas.
+
+Para ver que esto es alcanzable, primero eliminamos la celda inferior derecha y sus 2 puertas, así como la celda superior izquierda y sus 2 puertas. Esto deja 8 celdas de grado impar a lo largo de cada lado de la cuadrícula; podemos eliminar 4 puertas a lo largo de cada uno para cubrir todas las celdas de grado impar restantes, para 20 puertas eliminadas en total. El grafo resultante es conexo y no tiene celdas de grado impar, así que debe tener un circuito euleriano. Este circuito es el camino buscado.`),
+  hmmt('HMMT-2025-COMB6', 2025, 'COMB', 6, "Rectángulos sin traslape en una cuadrícula", "Combinatoria",
+    String.raw`Calcula el número de formas de elegir dos rectángulos en una cuadrícula de $5 \times 5$ de cuadrados de modo que los lados de los rectángulos estén sobre las líneas de la cuadrícula y los rectángulos no se traslapen en sus interiores, lados, o vértices. El orden en que se eligen los rectángulos no importa.`,
+    String.raw`Un rectángulo se puede especificar mediante dos intervalos, uno especificando su extensión horizontal (coordenadas $x$ de los lados izquierdo y derecho) y uno especificando su extensión vertical (coordenadas $y$ de los lados inferior y superior). Para que los rectángulos no se traslapen, necesitamos que los intervalos horizontales o los intervalos verticales sean disjuntos (posiblemente ambos).
+
+Primero, contaremos el número de formas para que los intervalos horizontales sean disjuntos. Sean estos intervalos $[a,b]$ y $[c,d]$. Como el orden de los rectángulos no importa, podemos suponer sin pérdida de generalidad que $a < c$, así que $a < b < c < d$. Entonces hay $\binom{6}{4}$ elecciones para $a$, $b$, $c$, y $d$. No hay restricciones sobre los intervalos verticales, así que el número de formas de elegirlos es $\binom{6}{2}^2$. Así, el número total de pares de rectángulos para los cuales los intervalos horizontales son disjuntos es $\binom{6}{4}\binom{6}{2}^2$.
+
+Por simetría, el número total de pares de rectángulos para los cuales los intervalos verticales son disjuntos es el mismo. Falta contar el número de formas para que tanto los intervalos horizontales como los verticales sean disjuntos. De nuevo, sean los intervalos horizontales $[a,b]$ y $[c,d]$, y sean los intervalos verticales $[e,f]$ y $[g,h]$. Podemos suponer $a < b < c < d$ sin pérdida de generalidad, así que hay $\binom{6}{4}$ formas de elegir los intervalos horizontales. Sin embargo, los casos $e < f < g < h$ y $g < h < e < f$ ahora son distintos, así que hay $2\binom{6}{4}$ formas de elegir los intervalos verticales. Por lo tanto, hay $2\binom{6}{4}^2$ pares de rectángulos para los cuales tanto los intervalos horizontales como los verticales son disjuntos.
+
+Por inclusión-exclusión, obtenemos la respuesta final de $$2 \cdot \binom{6}{4}\binom{6}{2}^2 - 2 \cdot \binom{6}{4}^2 = \boxed{6300}.$$`),
+  hmmt('HMMT-2025-COMB7', 2025, 'COMB', 7, "Arreglo de multiconjunto con espaciado balanceado", "Combinatoria",
+    String.raw`Calcula el número de formas de acomodar 3 copias de cada una de las 26 letras minúsculas del alfabeto inglés de modo que para cualesquiera dos letras distintas $x_{1}$ y $x_{2}$, el número de $x_{2}$'s entre la primera y segunda ocurrencia de $x_{1}$ sea igual al número de $x_{2}$'s entre la segunda y tercera ocurrencia de $x_{1}$.`,
+    String.raw`Primero, probamos que tal cadena se puede dividir en bloques donde cada bloque consiste en la misma subcadena escrita tres veces. Probamos el siguiente lema.
+
+Lema 1. Para cualquier letra $x_{1}$, las cadenas entre la primera y segunda ocurrencia de $x_{1}$ y entre la segunda y tercera ocurrencia de $x_{1}$ son iguales.
+
+Demostración. Llamemos $s_{1}$ y $s_{2}$ a estas dos cadenas. Sabemos que deben ser permutaciones una de la otra, y si una letra aparece dos veces en $s_{1}$, también tendría que aparecer dos veces en $s_{2}$, dando cuatro apariciones en total, lo cual es imposible. Así, ninguna letra aparece dos veces en $s_{1}$ (y de igual manera en $s_{2}$).
+
+Supongamos por contradicción que para algunas letras $x_{2}$ y $x_{3}$ en estas cadenas, $x_{2}$ aparece antes que $x_{3}$ en $s_{1}$, pero después de $x_{3}$ en $s_{2}$. Entonces, entre estas dos apariciones de $x_{2}$ (que son consecutivas, porque ninguna otra $x_{2}$ aparece ni en $s_{1}$ ni en $s_{2}$), debe haber dos $x_{3}$'s. Esto implica que también debe haber dos $x_{3}$'s entre el otro par de $x_{2}$'s consecutivas, contradicción.
+
+Concluimos que cualesquiera dos letras en $s_{1}$ y $s_{2}$ aparecen en el mismo orden en ambas cadenas, así que $s_{1} = s_{2}$.
+
+Sea la primera letra de nuestra cadena de 78 caracteres $x_{1}$, y supongamos que la siguiente aparición de $x_{1}$ es la letra número $(k + 1)$. Sean $x_{2}$, $x_{3}$, ..., $x_{k}$ las letras entre medio. Entonces, $x_{2}x_{3}\ldots x_{k}$ es la cadena entre la primera y segunda $x_{1}$'s, así que también debe ser la cadena entre la segunda y tercera $x_{1}$'s. Así, después de la segunda $x_{1}$, debemos tener $x_{2}x_{3}\ldots x_{k}x_{1}$.
+
+Ahora, entre la primera y segunda $x_{k}$'s está la cadena $x_{1}x_{2}x_{3}\ldots x_{k-1}$, así que esta también debe estar entre la segunda y tercera $x_{k}$'s. Así, después de la segunda $x_{k}$, debemos tener $x_{1}x_{2}x_{3}\ldots x_{k}$.
+
+Así, las primeras $3k$ letras son simplemente $x_{1}x_{2}x_{3}\ldots x_{k}$ repetida tres veces. Podemos quitar este bloque de $3k$ letras y repetir para mostrar que toda la cadena se puede dividir en tales bloques.
+
+Para contar el número de tales cadenas, primero observamos que hay $2^{25}$ formas de dividir las cadenas en tales bloques. Esto es porque hay 25 posibles lugares que pueden dividir dos bloques (después de la 3ra, 6ta, 9na letra, etc.), y podemos elegir cualquier subconjunto de estos para dividir bloques.
+
+La cadena queda entonces determinada de manera única por el primer tercio de cada bloque, el cual debe consistir en cada letra exactamente una vez (ya que toda la cadena es solo tres copias de estos tercios unidas). Estos tercios pueden consistir en cualquier ordenamiento de las 26 letras, así que hay $26!$ cadenas para cualquier partición dada de bloques.
+
+Concluimos que el número total de cadenas es $\boxed{2^{25}\cdot 26!}$.`),
+  hmmt('HMMT-2025-COMB8', 2025, 'COMB', 8, "Proceso de máximo en una secuencia circular", "Combinatoria",
+    String.raw`Albert escribe 2025 números $a_{1}$, ..., $a_{2025}$ en un círculo en un pizarrón. Inicialmente, cada uno de los números se elige de manera uniforme e independiente al azar en el intervalo $[0,1]$. Luego, cada segundo, reemplaza simultáneamente $a_{i}$ con $\max (a_{i - 1}, a_{i}, a_{i + 1})$ para todo $i = 1, 2, \ldots, 2025$ (donde $a_{0} = a_{2025}$ y $a_{2026} = a_{1}$). Calcula el valor esperado del número de valores distintos que quedan después de 100 segundos.`,
+    String.raw`Podemos suponer que los números iniciales son todos distintos, ya que esto ocurre con probabilidad 1. Para mayor claridad, denotamos el valor de $a_{i}$ después de $t$ segundos como $a_{i,t}$. El índice $i$ se toma mód 2025.
+
+En general, después de $k < 1012$ segundos, afirmamos que el número esperado de valores distintos que quedan es $\frac{2025}{k + 1}$. Para mostrar esto, primero probamos que, para cualquier valor que queda, sus apariciones son consecutivas. En efecto, observa que para todo $i$ y $k$,
+
+$$
+a_{i,k} = \max (a_{i - 1,k - 1}, a_{i,k - 1}, a_{i + 1,k - 1}) = \max (a_{i - 2,k - 2}, \ldots, a_{i + 2,k - 2}) = \dots = \max (a_{i - k,0}, \ldots, a_{i + k,0}).
+$$
+
+Dado un número inicial $a_{c,0}$, sean $j_{1}$ y $j_{2}$ los menores enteros positivos tales que $a_{c - j_{1},0} > a_{c,0}$ y $a_{c + j_{2},0} > a_{c,0}$. Como los números iniciales son distintos, concluimos que $a_{i,k} = a_{c,0}$ si y solo si $\{i - k, i - k + 1, \ldots, i + k\}$ contiene a $c$ pero no a $c - j_{1}$ ni a $c + j_{2}$ (mód 2025). Los índices $i$ que satisfacen esto son claramente consecutivos.
+
+Ahora considera las variables indicadoras
+
+$$
+\mathbf{1}_{i} = \left\{ \begin{array}{ll}1 & \mathrm{si~}a_{i,k}\neq a_{i + 1,k}\\ 0 & \mathrm{en~otro~caso} \end{array} \right.
+$$
+
+para $1\leq i\leq 2025$. Observa que el número de valores distintos en el tablero después de $k$ segundos es simplemente $\textstyle \sum_{i = 1}^{2025}\mathbf{1}_{i}$. Por linealidad de la esperanza, basta calcular $\mathbb{E}[\mathbf{1}_{i}]$ para cada $i$. Recuerda
+
+$$
+a_{i,k} = \max (a_{i - k,0},\ldots,a_{i + k,0})
+$$
+
+para cada $1\leq i\leq 2025$. Por lo tanto, la condición $a_{i,k}\neq a_{i + 1,k}$ se puede escribir como
+
+$$
+\max (a_{i - k,0},\ldots ,a_{i + k,0})\neq \max (a_{i + 1 - k,0},\ldots ,a_{i + 1 + k,0}).
+$$
+
+Esto ocurre si y solo si $\max (a_{i - k,0},\ldots ,a_{i + k + 1,0})$ es $a_{i - k,0}$ o $a_{i + k + 1,0}$ (ya que $a_{i - k,0}\neq a_{i + k + 1,0}$ y $2k + 2< 2025$). Como los $2k + 2$ valores $a_{i - k,0}$, ..., $a_{i + k + 1,0}$ fueron elegidos independientemente de la misma distribución, cada uno de $a_{i - k,0}$ y $a_{i + k + 1,0}$ tiene probabilidad $\frac{1}{2k + 2}$ de ser el máximo. Por lo tanto,
+
+$$
+\mathbb{E}[\mathbf{1}_{i}] = \operatorname*{Pr}[a_{i,k}\neq a_{i + 1,k}] = \frac{2}{2k + 2} = \frac{1}{k + 1}.
+$$
+
+Así, el número esperado de valores distintos es
+
+$$
+\sum_{i = 1}^{2025}\mathbb{E}[\mathbf{1}_{i}] = \frac{2025}{k + 1}.
+$$
+
+Sustituyendo $k = 100$ obtenemos la respuesta $\boxed{\frac{2025}{101}}$.`),
+  hmmt('HMMT-2025-COMB9', 2025, 'COMB', 9, "Recta aleatoria a través de un hexágono", "Geometría",
+    String.raw`Se eligen dos puntos de manera independiente y uniforme al azar dentro de un hexágono regular. Calcula la probabilidad de que una recta que pasa por ambos puntos interseque un par de lados opuestos del hexágono.`,
+    String.raw`![Dos triángulos, uno arbitrario y uno equilátero, cada uno con dos puntos etiquetados P y Q y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/8a81ca7569630248d95c5ec1aceea0a0.jpeg)
+
+Primero calculamos la probabilidad de que la recta que pasa por dos puntos aleatorios en un triángulo $ABC$ pase por los segmentos $\overline{AB}$ y $\overline{AC}$. Podemos tomar una transformación afín de los dos puntos aleatorios y del triángulo de modo que $ABC$ se vuelva equilátero. Como la distribución de los dos puntos sigue siendo uniforme e independiente, la probabilidad de que la recta interseque dos lados dados cualesquiera es $\frac{1}{3}$ por simetría.
+
+Ahora calculamos la probabilidad de que la recta que pasa por dos puntos aleatorios en un rectángulo $ABCD$ pase por los lados opuestos $\overline{AB}$ y $\overline{CD}$.
+
+![Un cuadrado con vértices etiquetados A, B, C, y D, dos puntos P y Q adentro, una línea punteada que pasa por ellos, y un triángulo sombreado ABC.](/imagenes-problemas/hmmt/2025/dfc8a60ea45461cffaf3d402c804534e.jpeg)
+
+Si la recta pasa por $\overline{AB}$ y $\overline{BC}$, los puntos deben estar ambos en el triángulo $ABC$, cuya área es la mitad de la de $ABCD$. Dado esto, la probabilidad de que la recta pase por esos dos lados es $\frac{1}{3}$, como se calculó antes. Así, la probabilidad de que la recta pase por $\overline{AB}$ y $\overline{BC}$ es $\left(\frac{1}{2}\right)^2 \cdot \frac{1}{3} = \frac{1}{12}$. Lo mismo ocurre para los otros pares de lados adyacentes. Por simetría, la recta tiene la misma probabilidad de pasar por cualquiera de los dos pares de lados opuestos, cada uno con probabilidad $\frac{1}{2}\left(1 - 4 \cdot \frac{1}{12}\right) = \frac{1}{3}$.
+
+![Un hexágono regular con un rectángulo central sombreado, dos puntos P y Q adentro, y una línea punteada que pasa por ellos.](/imagenes-problemas/hmmt/2025/58ef8107152d81b6f3825726280a35e3.jpeg)
+
+Regresamos ahora al problema original. Si la recta pasa por un par de lados opuestos, entonces ambos puntos deben estar en el rectángulo formado por estos lados, que tiene área $\frac{2}{3}$ de la del hexágono. Dado esto, la probabilidad de que la recta pase por esos dos lados es $\frac{1}{3}$ como se calculó antes. Así, la probabilidad de que la recta pase por el par dado de lados opuestos es $\left(\frac{2}{3}\right)^2 \cdot \frac{1}{3} = \frac{4}{27}$. Por lo tanto, la probabilidad de que la recta pase por cualquiera de los tres pares de lados opuestos es $3 \cdot \frac{4}{27} = \boxed{\frac{4}{9}}$.`),
+  hmmt('HMMT-2025-COMB10', 2025, 'COMB', 10, "Caminatas aleatorias que se fusionan en un círculo", "Combinatoria",
+    String.raw`La circunferencia de un círculo está dividida en $45$ arcos, cada uno de longitud $1$. Inicialmente, hay $15$ serpientes, cada una de longitud $1$, ocupando cada tercer arco. Cada segundo, cada serpiente se mueve independientemente un arco a la izquierda o un arco a la derecha, cada uno con probabilidad $\frac{1}{2}$. Si dos serpientes llegan a tocarse, se fusionan para formar una sola serpiente que ocupa los arcos de ambas serpientes anteriores, y la serpiente fusionada se mueve como una sola serpiente. Calcula el número esperado de segundos hasta que quede solo una serpiente.`),
+]
+
+const hmmt2025Geo = [
+  hmmt('HMMT-2025-GEO1', 2025, 'GEO', 1, "Distancia de un vértice a un triángulo equilátero interior", "Geometría",
+    String.raw`Los triángulos equiláteros $\triangle ABC$ y $\triangle DEF$ se dibujan de manera que los puntos $B$, $E$, $F$, y $C$ están sobre una recta en ese orden, y el punto $D$ está dentro del triángulo $\triangle ABC$. Si $BE = 14$, $EF = 15$, y $FC = 16$, calcula $AD$.`,
+    String.raw`![Diagrama con dos triángulos equiláteros, ABC y DEF, con los puntos B, E, F, y C colineales, y D dentro del triángulo ABC. Se dibujan los segmentos AX y DX, con X en AC.](/imagenes-problemas/hmmt/2025/a6173614c1296050c66bb92f443fe679.jpeg)
+
+Extiende $DE$ hasta que se encuentre con $AC$ en $X$. Observa que $ABEX$ y $DFCX$ son trapecios isósceles (ambos con ángulos base de $60^\circ$), así que tenemos
+
+$AX = BE = 14$
+
+$DX = FC = 16$
+
+y $\angle AXD = 120^\circ$
+
+Por la Ley de Cosenos en $\triangle ADX$, la respuesta es
+
+$$
+AD = \sqrt{AX^2 + DX^2 - 2 \cos(120^\circ) \cdot AX \cdot DX}
+$$
+
+$$
+= \sqrt{14^2 + 16^2 + 14 \cdot 16} = \boxed{26}.
+$$`),
+  hmmt('HMMT-2025-GEO2', 2025, 'GEO', 2, "Cuadrado a partir de puntas de estalactitas y estalagmitas", "Geometría",
+    String.raw`En una cueva bidimensional con un piso y un techo paralelos, dos estalactitas de longitudes $16$ y $36$ cuelgan perpendicularmente del techo, mientras que dos estalagmitas de alturas $25$ y $49$ crecen perpendicularmente desde el piso. Si las puntas de estas cuatro estructuras forman los vértices de un cuadrado en algún orden, calcula la altura de la cueva.`,
+    String.raw`Observa que la diferencia de alturas entre las dos estalactitas no es igual a la diferencia de alturas entre las estalagmitas. Esto nos dice que las dos estalactitas forman un par de vértices opuestos del cuadrado, y lo mismo para las estalagmitas. Como el punto medio de cada par de estructuras debe coincidir, sabemos que está a $\frac{16 + 36}{2} = 26$ del techo por las estalactitas, y a $\frac{25 + 49}{2} = 37$ del piso por las estalagmitas. Por lo tanto, la altura de la cueva es simplemente la suma de estos dos valores, es decir $\boxed{63}$.
+
+![Un cuadrado inscrito entre dos rectas paralelas que representan el piso y el techo de la cueva, con cuatro segmentos verticales desde el piso y el techo tocando los vértices del cuadrado.](/imagenes-problemas/hmmt/2025/fd62624cfb0627a2adc3480c4bc66874.jpeg)`),
+  hmmt('HMMT-2025-GEO3', 2025, 'GEO', 3, "Producto de distancias de un punto a los vértices de un cuadrado", "Geometría",
+    String.raw`El punto $P$ está dentro del cuadrado $ABCD$ de modo que las áreas de $\triangle PAB$, $\triangle PBC$, $\triangle PCD$, y $\triangle PDA$ son $1$, $2$, $3$, y $4$, en algún orden. Calcula $PA \cdot PB \cdot PC \cdot PD$.`,
+    String.raw`Sean $h_{1}$, $h_{2}$, $h_{3}$, y $h_{4}$ las longitudes de las alturas desde $P$ a los lados $AB$, $BC$, $CD$, y $DA$, respectivamente. Entonces, el enunciado del problema implica que $\{h_{1}, h_{2}, h_{3}, h_{4}\} = \{x, 2x, 3x, 4x\}$ para algún $x$. Además, el área del cuadrado es $1 + 2 + 3 + 4 = 10$, así que tenemos
+$$h_{1} + h_{3} = \sqrt{10} = h_{2} + h_{4}.$$
+Por lo tanto, o bien $\{h_{1}, h_{3}\} = \{x, 4x\}$ y $\{h_{2}, h_{4}\} = \{2x, 3x\}$, o bien $\{h_{2}, h_{4}\} = \{x, 4x\}$ y $\{h_{1}, h_{3}\} = \{2x, 3x\}$. En cualquier caso, de lo anterior obtenemos $5x = \sqrt{10}$, y terminamos usando el Teorema de Pitágoras:
+$$PA \cdot PB \cdot PC \cdot PD = \sqrt{x^{2} + (2x)^{2}} \cdot \sqrt{(2x)^{2} + (4x)^{2}} \cdot \sqrt{(4x)^{2} + (3x)^{2}} \cdot \sqrt{(3x)^{2} + x^{2}}$$
+$$\qquad = 50\sqrt{10}x^{4}$$
+$$\qquad = (50\sqrt{10}) \cdot \left(\frac{2}{5}\right)^{2}$$
+$$\qquad = \boxed{8\sqrt{10}}.$$`),
+  hmmt('HMMT-2025-GEO4', 2025, 'GEO', 4, "Producto de segmentos de cuerda en semicírculos anidados", "Geometría",
+    String.raw`Un semicírculo está inscrito en otro semicírculo si el diámetro del semicírculo menor es una cuerda del semicírculo mayor, y el arco del semicírculo menor es tangente al diámetro del semicírculo mayor.
+
+El semicírculo $S_{1}$ está inscrito en un semicírculo $S_{2}$, el cual está inscrito en otro semicírculo $S_{3}$. Los radios de $S_{1}$ y $S_{3}$ son $1$ y $10$, respectivamente, y los diámetros de $S_{1}$ y $S_{3}$ son paralelos. Los extremos del diámetro de $S_{3}$ son $A$ y $B$, y el arco de $S_{2}$ es tangente a $AB$ en $C$. Calcula $AC \cdot CB$.
+
+![Un diagrama que muestra tres semicírculos anidados S1, S2, y S3, con S1 inscrito en S2 y S2 inscrito en S3. Los diámetros de S1 y S3 son paralelos, y los puntos A, B, y C están marcados en el diámetro de S3.](/imagenes-problemas/hmmt/2025/6fc5d1b7698693176f0318294751a3ba.jpeg)`,
+    String.raw`![Un diagrama geométrico con tres semicírculos anidados S1, S2, y S3, mostrando los centros P, Q, R, el punto de intersección V, y los puntos A, B, y C sobre el diámetro. Líneas de construcción adicionales conectan estos puntos.](/imagenes-problemas/hmmt/2025/663200b55e5c280cca76a457c7d2b8f7.jpeg)
+
+Sean $P$, $Q$, y $R$ los puntos medios de los diámetros (es decir, el centro de los arcos circulares) de $S_{3}$, $S_{2}$, y $S_{1}$, respectivamente. Observa que si fijamos $S_{3}$, la ubicación de $S_{2}$ queda determinada de manera única por el ángulo entre los diámetros de $S_{2}$ y $S_{3}$. Lo mismo ocurre para $S_{2}$ y $S_{1}$. Así, las figuras $S_{3} \cup S_{2}$ y $S_{2} \cup S_{1}$ son semejantes. Esto nos da que el radio de $S_{2}$ es $\sqrt{10}$.
+
+Para calcular la respuesta, definimos $V$ como cualquiera de las dos intersecciones de los arcos de $S_{2}$ y $S_{3}$. Por el Teorema de Pitágoras, $PQ = \sqrt{PV^{2} - VQ^{2}} = \sqrt{100 - 10} = \sqrt{90}$. Por el Teorema de Pitágoras otra vez, $PC = \sqrt{PQ^{2} - QC^{2}} = \sqrt{90 - 10} = \sqrt{80}$. Así $AC \cdot CB = (10 + PC)(10 - PC) = 100 - PC^{2} = \boxed{20}$.`),
+  hmmt('HMMT-2025-GEO5', 2025, 'GEO', 5, "Intersección de círculos en un triángulo equilátero", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo equilátero de lado $6$. Sea $P$ un punto dentro del triángulo $\triangle ABC$ tal que $\angle BPC = 120^\circ$. El círculo con diámetro $\overline{AP}$ se encuentra de nuevo con el circuncírculo de $\triangle ABC$ en $X \neq A$. Dado que $AX = 5$, calcula $XP$.`,
+    String.raw`![Un diagrama del triángulo equilátero ABC inscrito en un círculo, con los puntos A, B, C, A', P, y X marcados. Se muestran el círculo con diámetro AP y un arco punteado que pasa por B y C, y X está marcado en el circuncírculo de modo que AX = 5.](/imagenes-problemas/hmmt/2025/bd8399251a351972a45c43c96e817f24.jpeg)
+
+Sea $A'$ el antípoda de $A$. Como $\angle AXA' = 90^\circ$, tenemos que $X$, $P$, y $A'$ son colineales. Como $\angle BPC = 120^\circ$ y $\angle BA'C = 180^\circ - \angle BAC = 120^\circ$, se sigue que $P$ está en el círculo con centro $A'$ que pasa por $B$ y $C$, así que $A'P = \frac{BC}{\sqrt{3}} = 2\sqrt{3}$ y $AA' = 2A'B = 4\sqrt{3}$. Por el Teorema de Pitágoras, $XA' = \sqrt{(4\sqrt{3})^2 - 5^2} = \sqrt{23}$, así que la respuesta es $XA' - PA' = \boxed{\sqrt{23} - 2\sqrt{3}}$.`),
+  hmmt('HMMT-2025-GEO6', 2025, 'GEO', 6, "Área a partir de los circuncentros de un trapecio", "Geometría",
+    String.raw`El trapecio $ABCD$, con $AB \parallel CD$, tiene lados de longitud $AB = 11$, $BC = 8$, $CD = 19$, y $DA = 4$. Calcula el área del cuadrilátero convexo cuyos vértices son los circuncentros de $\triangle ABC$, $\triangle BCD$, $\triangle CDA$, y $\triangle DAB$.`,
+    String.raw`![Un trapecio etiquetado ABCD con los circuncentros OA, OB, OC, y OD marcados adentro. Líneas punteadas indican mediatrices y un cuadrilátero sombreado conecta los circuncentros.](/imagenes-problemas/hmmt/2025/b89478beaacda454384b1b3adf2b03df.jpeg)
+
+Sean $O_{A}$, $O_{B}$, $O_{C}$, y $O_{D}$ los circuncentros de $\triangle BCD$, $\triangle CDA$, $\triangle DAB$, y $\triangle ABC$, respectivamente. Observa que $O_{B}O_{C}$ es la mediatriz de $\overline{AD}$. De manera similar, $O_{B}O_{D} \perp AC$ y $O_{C}O_{D} \perp AB$. Como $AB \parallel CD$, tenemos $O_{C}O_{D} \perp CD$. Entonces, $\triangle O_{B}O_{C}O_{D} \stackrel{\star}{\sim} \triangle ADC$, ya que sus lados correspondientes son perpendiculares. Del mismo modo, $\triangle O_{D}O_{A}O_{B} \stackrel{\star}{\sim} \triangle CBA$, así que $O_{A}O_{B}O_{C}O_{D} \stackrel{\star}{\sim} BADC$.
+
+Por lo tanto, solo necesitamos calcular el área de $ABCD$ y la razón de semejanza entre los dos trapecios. Traza una recta paralela a $\overline{AD}$ que pase por $B$. Sea $X$ el punto donde esta recta interseca a $\overline{CD}$. Entonces, $BX = AD = 4$, $CB = 8$, y $CX = CD - AB = 8$. La altura $h$ de $ABCD$ está dada por
+$$
+h = d(B, \overline{XC}) = \frac{2[\triangle BXC]}{XC} = \frac{BX \cdot d(C, \overline{BX})}{XC} = \frac{4\sqrt{8^2 - 2^2}}{8} = \sqrt{15}.
+$$
+Por otro lado, la altura de $O_{A}O_{B}O_{C}O_{D}$ es la distancia entre las mediatrices de $\overline{AB}$ y $\overline{CD}$, que pasan por los puntos medios $M$ de $\overline{AB}$ y $N$ de $\overline{CD}$. Sean $A'$ y $M'$ las proyecciones de $A$ y $M$ sobre $\overline{CD}$, respectivamente. Entonces, la altura de $O_{A}O_{B}O_{C}O_{D}$ está dada por
+$$
+M'N = DN - DM' = \frac{CD}{2} - \frac{AB}{2} - DA' = \frac{19 - 11}{2} - \sqrt{4^2 - h^2} = 3.
+$$
+Por lo tanto, la razón de semejanza entre los dos trapecios es $\frac{3}{\sqrt{15}}$. Sabemos que el área de $ABCD$ es $\frac{1}{2}(11 + 19)\sqrt{15} = 15\sqrt{15}$, así que el área de $O_{A}O_{B}O_{C}O_{D}$ es $\left(\frac{3}{\sqrt{15}}\right)^2 \cdot 15\sqrt{15} = \boxed{9\sqrt{15}}$.`),
+  hmmt('HMMT-2025-GEO7', 2025, 'GEO', 7, "Razón de áreas con una condición de ángulos", "Geometría",
+    String.raw`El punto $P$ está dentro del triángulo $\triangle ABC$ de modo que $\angle ABP = \angle ACP$. Dado que $AB = 6$, $AC = 8$, $BC = 7$, y $\frac{BP}{PC} = \frac{1}{2}$, calcula $\frac{|BPC|}{|ABC|}$.
+
+(Aquí, $[XYZ]$ denota el área de $\triangle XYZ$.)`,
+    String.raw`Solución 1. ![Un triángulo ABC con el punto P adentro, bisectrices de ángulo trazadas, y los puntos D, D', E, E' marcados sobre el lado BC. Se muestran rectas paralelas y marcas de ángulos.](/imagenes-problemas/hmmt/2025/0f8d285c7902e9de79a6c8453e3fe343.jpeg)
+
+Sean $D$ y $E$ los puntos donde las bisectrices interna y externa de $\angle BAC$ se encuentran con $BC$. De manera similar, sean $D'$ y $E'$ los puntos donde las bisectrices interna y externa de $\angle BPC$ se encuentran con $BC$. La condición de ángulos implica que $AD\parallel PD'$ y $AE\parallel PE'$. Así, los triángulos $ADE$ y $PD'E'$ son homotéticos. Por lo tanto, la razón buscada es $\frac{DE}{D'E'}$. Aplicaciones repetidas del teorema de la bisectriz dan
+
+$$
+BD = 7 \cdot \frac{6}{6 + 8} = 3,
+$$
+$$
+BE = 7 \cdot \frac{6}{8 - 6} = 21,
+$$
+$$
+BD' = 7 \cdot \frac{1}{1 + 2} = \frac{7}{3},
+$$
+$$
+BE' = 7 \cdot \frac{1}{2 - 1} = 7,
+$$
+así que $DE = 24$ y $D'E' = 28 / 3$. Por lo tanto, la respuesta es $\frac{28 / 3}{24} = \boxed{\frac{7}{18}}$.
+
+Solución 2.
+
+![Un triángulo ABC con el punto P adentro, los puntos E y F marcados, y un círculo punteado que pasa por B, C, E, y F. Se muestran marcas de ángulos.](/imagenes-problemas/hmmt/2025/81c307a05321f49518a124cd36d44fda.jpeg)
+
+Sean $D = AP\cap BC$, $E = BP\cap AC$ y $F = CP\cap AB$. Entonces, $BCEF$ es cíclico, así que por potencia de un punto, $\frac{AE}{AF} = \frac{AB}{AC} = \frac{3}{4}$. Sean $AE = 3x$ y $AF = 4x$. Entonces,
+
+$$
+\triangle PFB \sim \triangle PEC \Longrightarrow \frac{BF}{CE} = \frac{BP}{CP} \Longrightarrow \frac{6 - 4x}{8 - 3x} = \frac{1}{2}.
+$$
+Resolviendo para $x$ se obtiene $x = \frac{4}{5}$, así que $AF = \frac{16}{5}$, $FB = \frac{14}{5}$, $AE = \frac{12}{5}$, y $EC = \frac{40}{5}$. Por el teorema de Ceva en $\triangle ABC$ y el punto $P$, tenemos
+
+$$
+\frac{BD}{DC} = \frac{AE}{EC} \cdot \frac{BF}{FA} = \frac{AE}{AF} \cdot \frac{BF}{CE} = \frac{3}{4} \cdot \frac{1}{2} = \frac{3}{8}.
+$$
+Finalmente, por el teorema de Menelao en $\triangle ADC$ y la recta $BE$, obtenemos que
+
+$$
+\frac{AP}{PD} = \frac{CB}{BD} \cdot \frac{AE}{EC} = \frac{11}{3} \cdot \frac{12}{28} = \frac{11}{7},
+$$
+lo cual implica que $\frac{|BPC|}{|ABC|} = \boxed{\frac{7}{18}}$.
+
+Solución 3.
+
+Usamos coordenadas baricéntricas respecto a $\triangle ABC$. De $\angle ABP = \angle ACP$, obtenemos
+
+$$
+\frac{|ABP|}{|ACP|} = \frac{AB \cdot BP}{AC \cdot CP} = \frac{3}{8},
+$$
+así que $P$ tiene coordenada $(- :8:3)$. Sea $Q$ el conjugado isogonal de $P$, así que $Q$ está en la mediatriz de $BC$. Por el teorema de la razón de Steiner, $Q$ tiene coordenada $(- :8^2 / 8:6^2 / 3) = (- :8:12) = (- :2:3)$. Sea la coordenada $(t:2:3)$ para algún número real $t$. Entonces, recordando la ecuación de la mediatriz:
+
+$$
+a^2(z - y) + x(c^2 - b^2) = 0
+$$
+$$
+\Rightarrow 7^2(3 - 2) + t(6^2 - 8^2) = 0,
+$$
+así que $t = \frac{7^2(3 - 2)}{8^2 - 6^2} = \frac{7}{4}$. Por lo tanto, el punto $Q$ tiene coordenadas $(7:8:12)$, así que el punto $P$ tiene coordenadas $(7^2 / 7:8^2 / 8:6^2 / 12) = (7:8:3)$. Por lo tanto, $|BPC| / |ABC| = \boxed{\frac{7}{18}}$.`),
+  hmmt('HMMT-2025-GEO8', 2025, 'GEO', 8, "Distancia de punto medio en un trapecio cíclico", "Geometría",
+    String.raw`Sea $ABCD$ un trapecio isósceles tal que $CD > AB = 4$. Sea $E$ un punto en la recta $CD$ tal que $DE = 2$ y $D$ está entre $E$ y $C$. Sea $M$ el punto medio de $\overline{AE}$. Dado que los puntos $A$, $B$, $C$, $D$, y $M$ están en un círculo de radio $5$, calcula $MD$.`,
+    String.raw`![Un diagrama del trapecio isósceles ABCD inscrito en un círculo, con los puntos E y D' marcados en la extensión de CD, M como punto medio de AE, y varios segmentos y etiquetas que ilustran las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/99272909b8e7b4116af394fdccc3eb87.jpeg)
+
+Sea $D'$ la reflexión de $D$ sobre $M$. Entonces, $ADED'$ es un paralelogramo. Por lo tanto, $D'A = 2$, así que $D'B = 6$. Así, si $D'M = MD = x$, entonces la potencia de un punto en $D'$ da $x \cdot (2x) = 2 \cdot 6$, así que $x = \boxed{\sqrt{6}}$.`),
+  hmmt('HMMT-2025-GEO9', 2025, 'GEO', 9, "Rectángulo con restricciones de circunradio", "Geometría",
+    String.raw`Sea $ABCD$ un rectángulo con $BC = 24$. El punto $X$ está dentro del rectángulo de modo que $\angle AXB = 90^{\circ}$. Dado que los triángulos $\triangle AXD$ y $\triangle BXC$ son ambos acutángulos y tienen circunradios $13$ y $15$, respectivamente, calcula $AB$.`,
+    String.raw`Solución 1. Sea $M$ el punto medio de $AB$. Sean $O_{1}$ y $O_{2}$ los circuncentros de $\triangle AXD$ y $\triangle BXC$, respectivamente. Como $O_{1}M$ es la mediatriz de $AX$ y $O_{2}M$ es la mediatriz de $BX$, obtenemos que $\angle O_{1}MO_{2} = 90^{\circ}$.
+
+Sean $P_{1}$ y $P_{2}$ las proyecciones de $O_{1}$ y $O_{2}$ sobre el segmento $AB$, respectivamente, y sea $AB = 2x$. Por el Teorema de Pitágoras, $P_{1}A = \sqrt{O_{1}A^{2} - O_{1}P_{1}^{2}} = \sqrt{15^{2} - 12^{2}} = 5$, así que $MP_{1} = MA - P_{1}A = x - 5$. De igual manera, $MP_{2} = MB - \sqrt{15^{2} - 12^{2}} = x - 9$. Como $\triangle MP_{1}O_{1} \sim \triangle O_{2}P_{2}M$, sabemos que
+$$(x - 5)(x - 9) = MP_{1} \cdot MP_{2} = O_{2}P_{2} \cdot P_{1}O_{1} = 12^{2}.$$
+Resolviendo esto, obtenemos $x = 7 + 2\sqrt{37}$, lo cual implica que $AB = 2x = \boxed{14 + 4\sqrt{37}}$. (La condición de que $\triangle AXD$ y $\triangle BXC$ sean acutángulos descarta $14 - 4\sqrt{37}$.)
+
+![Un rectángulo ABCD con el punto X adentro, circuncírculos trazados por AXD y BXC, y los puntos O1, O2, M, P1, y P2 etiquetados. Se resaltan perpendiculares y segmentos clave.](/imagenes-problemas/hmmt/2025/73c875021da9d1a19da0890bf095a65e.jpeg)
+
+Solución 2. ![Un rectángulo ABCD con el punto X adentro, circuncírculos por AXD y BXC, y los puntos P y Q sobre CD. Se muestran diámetros y perpendiculares, con segmentos clave resaltados.](/imagenes-problemas/hmmt/2025/666d9c083cfaee5f174d61d41f0513fe.jpeg)
+
+Sea $P$ el antípoda de $A$ en $\odot (AXD)$ y $Q$ el antípoda de $B$ en $\odot (BXC)$. De $\angle PDA = \angle QCB = 90^{\circ}$, obtenemos que $P$ y $Q$ están sobre $CD$. Además, de $\angle PXA = 90^{\circ}$, obtenemos que $P \in BX$, y de manera similar $Q \in AX$.
+
+Al ser un diámetro, $AP = 2 \cdot 13 = 26$, así que por el Teorema de Pitágoras, $DP = \sqrt{26^{2} - 24^{2}} = 10$. De manera similar, $BQ = 30$ y $CQ = \sqrt{30^{2} - 24^{2}} = 18$. Sea $AB = x$, obtenemos $PQ = x - 28$. El cuadrilátero $ABQP$ tiene diagonales perpendiculares, así que $AB^{2} + PQ^{2} = AP^{2} + BQ^{2}$, lo cual significa que $x^{2} + (x - 28)^{2} = 26^{2} + 30^{2}$.
+
+Resolviendo esta ecuación cuadrática se obtiene $x = \boxed{14 + 4\sqrt{37}}$. (La condición de que $\triangle AXD$ y $\triangle BXC$ sean acutángulos descarta $14 - 4\sqrt{37}$.)`),
+  hmmt('HMMT-2025-GEO10', 2025, 'GEO', 10, "Un plano corta un prisma en un hexágono", "Geometría",
+    String.raw`Un plano $\mathcal{P}$ interseca un prisma rectangular en un hexágono que tiene lados de longitud $45$, $66$, $63$, $55$, $54$, y $77$, en ese orden. Calcula la distancia del centro del prisma rectangular a $\mathcal{P}$.`,
+    String.raw`Solución 1. Traslada $\mathcal{P}$ de modo que contenga al centro. La intersección del plano trasladado con el prisma rectangular es un hexágono centralmente simétrico. Sean sus lados de longitud $a$, $b$, $c$, $a$, $b$, y $c$, en ese orden. Entonces, para algunos $t_{a}$, $t_{b}$, y $t_{c}$, los lados del hexágono antes de la traslación eran
+$$(a - t_{a}, b + t_{b}, c - t_{c}, a + t_{a}, b - t_{b}, c + t_{c}) = (45, 66, 63, 55, 54, 77),$$
+de donde se sigue que $t_{a} = 5$, $t_{b} = 6$, y $t_{c} = 7$.
+
+Ahora, una traslación de un plano se puede escribir de una de tres formas equivalentes: se puede ver como una traslación en la dirección $x$ por una distancia $d_{x}$, una traslación en la dirección $y$ por una distancia $d_{y}$, o una traslación en la dirección $z$ por una distancia $d_{z}$ (con los ejes coordenados elegidos como se muestra abajo).
+
+![Un prisma rectangular intersecado por un plano formando un hexágono, con las longitudes de los lados etiquetadas y los vectores de traslación dx, dy, dz mostrados.](/imagenes-problemas/hmmt/2025/aa24b6ffd361094bfb5582485f15d72d.jpeg)
+
+Como se muestra arriba, podemos expresar $t_{a}$, $t_{b}$, y $t_{c}$ en términos de $d_{x}$, $d_{y}$, y $d_{z}$ usando el Teorema de Pitágoras, lo cual da $t_{a} = \sqrt{d_{y}^{2} + d_{z}^{2}}$, $t_{b} = \sqrt{d_{z}^{2} + d_{x}^{2}}$, y $t_{c} = \sqrt{d_{x}^{2} + d_{y}^{2}}$. Por lo tanto,
+$$(d_{x}^{2}, d_{y}^{2}, d_{z}^{2}) = \left(\frac{5^{2} + 6^{2} - 7^{2}}{2}, \frac{6^{2} + 7^{2} - 5^{2}}{2}, \frac{7^{2} + 5^{2} - 6^{2}}{2}\right) = (6, 30, 19).$$
+Podemos dibujar una pirámide recta con catetos $d_{x}$, $d_{y}$, y $d_{z}$ que tiene al centro del prisma como vértice, con la cara opuesta en $\mathcal{P}$. Entonces, la altura de esta pirámide, es decir la distancia del centro a $\mathcal{P}$, es
+$$\sqrt{\frac{1}{d_{x}^{-2} + d_{y}^{-2} + d_{z}^{-2}}} = \sqrt{\frac{1}{6^{-1} + 30^{-1} + 19^{-1}}} = \boxed{\sqrt{\frac{95}{24}}}.$$
+
+Solución 2. Sean los vértices del hexágono $ABCDEF$, donde $AB = 45$, $BC = 66$, etc. Observa que $AB \parallel DE$, $BC \parallel EF$, y $CD \parallel FA$. Sea $O$ el centro del prisma, y sean $M$, $N$, y $P$ los puntos medios de $AD$, $BE$, y $CF$, respectivamente.
+
+![Un hexágono con los vértices etiquetados y los lados marcados, los puntos medios M, N, P marcados, y un triángulo MNP resaltado en el centro.](/imagenes-problemas/hmmt/2025/f74d2aed280dfd51da731ca27ca6a400.jpeg)
+
+La observación clave es que $MN$ es la línea media entre $AB$ y $DE$. Por lo tanto, el plano $OMN$ es el plano medio entre las caras del prisma que contienen los lados $AB$ y $DE$. De manera similar, los planos $OMP$ y $ONP$ son los otros dos planos medios del prisma. Así, $OM$, $ON$, y $OP$ son mutuamente ortogonales.
+
+Observa
+$$MN = \frac{|AB - DE|}{2} = 5, \quad NP = \frac{|BC - EF|}{2} = 6, \quad \text{y} \quad PM = \frac{|CD - FA|}{2} = 7,$$
+así que por la fórmula de Herón, podemos calcular el área de $MNP$ como $\sqrt{9(9 - 5)(9 - 6)(9 - 7)} = 6\sqrt{6}$.
+
+Además, si $x = OM$, $y = ON$, y $z = OP$, entonces,
+$$x^{2} + y^{2} = 5^{2}, \quad y^{2} + z^{2} = 6^{2}, \quad \text{y} \quad z^{2} + x^{2} = 7^{2}.$$
+Resolviendo este sistema de ecuaciones se obtiene $x = \sqrt{19}$, $y = \sqrt{6}$, y $z = \sqrt{30}$. Por lo tanto, si $d$ es la distancia de $O$ al plano $MNP$ (es decir, la respuesta), el volumen del tetraedro $OMNP$ se puede escribir como
+$$\frac{1}{6} \cdot \sqrt{19} \cdot \sqrt{6} \cdot \sqrt{30} = \frac{1}{3} \cdot (6\sqrt{6}) \cdot d,$$
+así que
+$$d = \frac{\sqrt{19 \cdot 6 \cdot 30}}{2 \cdot 6 \sqrt{6}} = \boxed{\sqrt{\frac{95}{24}}}.$$`),
+]
+
+const hmmt2025Team = [
+  hmmt('HMMT-2025-TEAM1', 2025, 'TEAM', 1, "MCD de recíprocos en progresión aritmética", "Teoría de Números",
+    String.raw`Sean $a$, $b$, y $c$ enteros positivos distintos dos a dos tales que $\frac{1}{a}$, $\frac{1}{b}$, $\frac{1}{c}$ es una sucesión aritmética creciente en ese orden. Demuestra que $\gcd(a, b) > 1$.`,
+    String.raw`Solución 1. Observa que $\frac{1}{a} + \frac{1}{c} = \frac{2}{b}$, así que $b(a + c) = 2ac$, y por lo tanto $a \mid b(a + c)$. Si suponemos que $\gcd(a, b) = 1$, entonces debemos tener $a \mid a + c$, así que $a \mid c$. Sin embargo, $\frac{1}{a} < \frac{1}{c}$, así que $a > c$, contradicción. Por lo tanto, $\gcd(a, b) > 1$, como se quería.
+
+Solución 2. Observa que $\frac{2}{b} - \frac{1}{a} = \frac{1}{c}$, así que $(2a - b)c = ab$ y por lo tanto $2a - b \mid ab$. Si suponemos que $\gcd(a, b) = 1$, entonces $\gcd(2a - b, a) = 1$, así que $2a - b \mid b$. Entonces $2a - b \mid (2a - b) + b = 2a$, así que $2a - b \mid \gcd(2a, b) \leq 2$. Por lo tanto $2a - b \leq 2$. Pero $a > b$, contradicción. Por lo tanto, $\gcd(a, b) > 1$, como se quería.`),
+  hmmt('HMMT-2025-TEAM2', 2025, 'TEAM', 2, "Poliominós con perímetro y área fijos", "Combinatoria",
+    String.raw`Un poliominó es una figura conexa construida al unir uno o más cuadrados unitarios lado con lado. Determina, con demostración, el número de poliominós no congruentes sin huecos, con perímetro $180$ y área $2024$.`,
+    String.raw`Define la caja delimitadora de un poliominó como el rectángulo axialmente alineado más pequeño que contiene a todo el poliominó. Supón que un poliominó que satisface las condiciones dadas tiene una caja delimitadora de dimensiones $w \times h$.
+
+Afirmación 1. $w + h \leq 90$.
+
+Demostración. El poliominó tiene al menos $2w$ lados horizontales y al menos $2h$ lados verticales. Además, tiene un perímetro de $180$. Por lo tanto, $2w + 2h \leq 180$, así que $w + h \leq 90$.
+
+Afirmación 2. Las dimensiones de la caja delimitadora son $44 \times 46$, $45 \times 45$, o $46 \times 44$.
+
+Demostración. Observa que $hw \geq 2024$ ya que contiene al poliominó de área $2024$. Supón por contradicción que $h + w \leq 89$. Entonces,
+$$
+(h - w)^2 = (h + w)^2 - 4hw \leq 89^2 - 4 \cdot 2024 = -175,
+$$
+contradicción. Por lo tanto, $h + w = 90$, así que podemos escribir $(h,w) = (45 + x,45 - x)$. Entonces, $2025 - x^2 = hw \geq 2024$ implica que $x \in \{-1,0,1\}$, como se quería.
+
+En el primer y tercer caso, la caja delimitadora tiene área $2024$, así que debe ser el poliominó completo, dándonos el rectángulo $44 \times 46$ (y su rotación) como una posible respuesta. En el segundo caso, la caja delimitadora tiene área $2025$, así que se debe quitar una celda para formar el poliominó. Quitar la celda de una esquina produce un poliominó con perímetro $180$, y quitar cualquier otra celda produce un poliominó con perímetro mayor que $180$. Por lo tanto, la única otra posibilidad es un cuadrado de $45 \times 45$ al que le falta una esquina. Así, la respuesta es $\boxed{2}$.`),
+  hmmt('HMMT-2025-TEAM3', 2025, 'TEAM', 3, "Lugar geométrico del circuncentro con una bisectriz", "Geometría",
+    String.raw`Sean $\omega_{1}$ y $\omega_{2}$ dos círculos que se intersecan en los puntos distintos $A$ y $B$. El punto $X$ varía sobre $\omega_{1}$, y el punto $Y$ sobre $\omega_{2}$ se elige de modo que $AB$ biseca el ángulo $\angle XAY$. Demuestra que, cuando $X$ varía sobre $\omega_{1}$, el circuncentro de $\triangle AXY$ (si existe) varía sobre una recta fija.`,
+    String.raw`Solución 1. ![Dos círculos que se intersecan con centros O1 y O2, intersecándose en los puntos A y B. Se traza el triángulo AXY con su circuncentro O marcado, junto con segmentos y ángulos relevantes resaltados.](/imagenes-problemas/hmmt/2025/d98306254a4727f82e4d13898cfcfd32.jpeg)
+
+Sean $O_{1}$, $O_{2}$, y $O$ los centros de $\omega_{1}$, $\omega_{2}$, y el circuncírculo de $\triangle AXY$, respectivamente. Afirmamos que el triángulo $O O_{1}O_{2}$ es isósceles con $O O_{1} = O O_{2}$, y por lo tanto, en particular, $O$ siempre está en la mediatriz de $O_{1}O_{2}$.
+
+Para esto, observa que $O O_{1} \perp A X$ y $O_{1}O_{2} \perp A B$, así que $\angle O O_{1}O_{2} = \angle X A B$. De manera análoga, $\angle O O_{2}O_{1} = \angle Y A B$. Así que en efecto $O O_{1}O_{2}$ es isósceles, y terminamos.
+
+Solución 2. ![Dos diagramas: a la izquierda, el triángulo AXY inscrito en un círculo con los puntos M, N, y A' marcados; a la derecha, una configuración invertida con los puntos P, Q, N*, A, X*, Y*, M*, y B* etiquetados, mostrando rectas e intersecciones.](/imagenes-problemas/hmmt/2025/ae48eed2043117eba1dbe2e28f2c5e1a.jpeg)
+
+Sea $A^{\prime}$ el antípoda de $A$ en el círculo $(A X Y)$. Basta mostrar que $A^{\prime}$ está en una recta fija. Mostraremos que esta recta es paralela a $A B$.
+
+Sea $M$ la segunda intersección de la recta $A B$ con el círculo $(A X Y)$, y sea $N$ el antípoda de $M$ en este círculo. Como $A M A^{\prime}N$ es un rectángulo con $N$ sobre la recta que pasa por $A$ perpendicular a $A B$, basta mostrar que $N$ es fijo (independiente de $X$ y $Y$).
+
+Para esto, toma una inversión en $A$ con radio arbitrario, denotando las imágenes con $\bullet \mapsto \bullet^{*}$.
+
+Observa que $X^{*}$ y $Y^{*}$ están sobre las rectas fijas $\ell_{1} = \omega_{1}^{*}$ y $\ell_{2} = \omega_{2}^{*}$. Sea $\ell$ la recta que pasa por $A$ perpendicular a $A B^{*}$, y supón que $\ell_{1}$ y $\ell_{2}$ intersecan a $\ell$ en $P$ y $Q$, respectivamente.
+
+Como $\angle X A B = \angle B A Y$, tenemos $\angle X^{*}A B^{*} = \angle B^{*}A Y^{*}$. Los círculos $\omega_{1}$, $\omega_{2}$, y $(A X Y)$ se transforman en las rectas $B^{*}X^{*}$, $B^{*}Y^{*}$, y $X^{*}Y^{*}$. Como $A N \perp A B$, se sigue que $N^{*}$ es la intersección de $X^{*}Y^{*}$ y $\ell$.
+
+Finalmente, observa que $(N^{*},A;P,Q)\stackrel {B^{*}}{=}(N^{*},M^{*};X,Y)$ es un haz armónico, ya que $A M^{*}$ biseca $\angle X^{*}A Y^{*}$ y $\angle M^{*}A N^{*} = 90^{\circ}$. Como $A$, $P$, y $Q$ son fijos, también lo es $N^{*}$. Así $N$ es fijo, y $O$ está en la mediatriz de $A N$, que también es fija.`),
+  hmmt('HMMT-2025-TEAM4', 2025, 'TEAM', 4, "Torres con ataques acotados en una cuadrícula", "Combinatoria",
+    String.raw`Jerry coloca a lo más una torre en cada celda de una cuadrícula de $2025 \times 2025$ celdas. Una torre ataca a otra torre si las dos torres están en la misma fila o columna y no hay otras torres entre ellas.
+
+Determina, con demostración, el número máximo de torres que Jerry puede colocar en la cuadrícula de modo que ninguna torre ataque a 4 otras torres.`,
+    String.raw`Solución 1. La respuesta es $2024 \times 4 = \boxed{8096}$. De manera más general, para una cuadrícula de $n \times n$, la respuesta es $4n - 4$. Llamemos buena a una torre que ataca a lo más a 3 otras torres.
+
+Usamos la siguiente observación en ambas partes de la solución: una torre en el borde de la cuadrícula debe ser buena.
+
+Cota inferior: Coloca torres en las $4n - 4$ celdas del borde de la cuadrícula. Por la observación anterior, toda torre es buena.
+
+Cota superior: Considera cualquier colocación válida de torres, y supón que existe una torre que no está en el borde. Podemos mover esta torre al borde mediante un movimiento usual de torre, ya que esta torre es buena y por lo tanto el camino hacia una de las cuatro celdas del borde en su fila o columna debe estar vacío.
+
+Después de este movimiento, afirmamos que la colocación de torres sigue siendo válida. En efecto:
+- la torre movida ahora está en el borde, así que por la observación anterior, debe ser buena;
+- cualquier torre que solía atacar a esta torre no puede atacar a más torres después del movimiento, así que esas torres deben seguir siendo buenas;
+- cualquier torre atacada en la posición final debe estar o bien:
+  - en la dirección opuesta al movimiento, en cuyo caso atacaba a la torre movida tanto antes como después del movimiento (así que sigue siendo buena), o
+  - perpendicular a la dirección del movimiento, en cuyo caso es una torre del borde y debe ser siempre buena.
+
+Repitiendo el proceso anterior, siempre podemos pasar de cualquier posición buena a una donde todas las torres estén en el borde. Esto implica que el número de torres en cualquier posición buena es a lo más $4n - 4$. Cuando $n = 2025$, la respuesta es $4n - 4 = \boxed{8096}$.
+
+Solución 2. Considera el conjunto de todas las torres que son la más a la izquierda o más a la derecha en su fila, o la más arriba o más abajo en su columna. Observa que este conjunto debe incluir a toda torre, ya que cualquier torre que no esté en este conjunto ataca a una torre en las 4 direcciones.
+
+Cada columna aporta a lo más 2 torres a este conjunto, y cada fila aporta a lo más 2 torres. Podemos ignorar sin problema las filas superior e inferior en este conteo, ya que cualquier torre en la fila superior o inferior ya es la torre más arriba o más abajo en su columna. Así, el número de torres en el conjunto es a lo más $2 \cdot (2025 + 2025 - 2) = \boxed{8096}$, lo cual se puede construir como se vio antes.`),
+  hmmt('HMMT-2025-TEAM5', 2025, 'TEAM', 5, "Altura del ortocentro y un ángulo recto", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo acutángulo con ortocentro $H$. Los puntos $E$ y $F$ están en los segmentos $\overline{AC}$ y $\overline{AB}$, respectivamente, de modo que $\angle EHF = 90^\circ$. Sea $X$ el pie de la altura desde $H$ a $\overline{EF}$. Demuestra que $\angle BXC = 90^\circ$.`,
+    String.raw`Solución 1. ![Diagrama del triángulo ABC con ortocentro H, los puntos E y F sobre AC y AB, X como el pie desde H a EF, y varios círculos y cuadriláteros cíclicos resaltados.](/imagenes-problemas/hmmt/2025/034f5986e2970ee1d6cd8c5f3ebb9d68.jpeg)
+
+Usamos $\angle$ para denotar ángulos dirigidos. Sean $Y$ y $Z$ los pies de las alturas desde $B$ y $C$ a $AC$ y $AB$, respectivamente. Entonces $\angle HZF = \angle HXF = 90^\circ$, así que $HZFX$ es cíclico. De manera similar, $HYEX$ es cíclico. Por lo tanto,
+
+$$
+\angle BYX = \angle HYX = \angle HEX = \angle FHX = \angle FZX = \angle BZX.
+$$
+Así, $BZXY$ es cíclico. Un argumento simétrico muestra que $C$ también está en este círculo. Se sigue que $\angle BXC = \angle BYC = 90^\circ$, como se quería.
+
+Solución 2. Sea $T$ el pie de la altura desde $A$ a $BC$. Para cualquier punto $X$, sea $X'$ la imagen de $X$ bajo la inversión negativa en $H$ con radio $\sqrt{HA \cdot HT}$. Entonces $B'$ y $C'$ son los pies de las alturas desde $B$ y $C$ a los lados $AC$ y $AB$, respectivamente.
+
+Afirmación 1. $\angle BX'C = 90^\circ$.
+
+Demostración. Como $HX \perp EF$ y $HE \perp HF$, el cuadrilátero $HE'X'F'$ es un rectángulo. Observa que $\angle BE'H = \angle EB'H = 90^\circ$ y $\angle X'E'H = 90^\circ$. En consecuencia, $X'$, $B$, y $E'$ son colineales. De manera similar, $X'$, $C$, y $F'$ son colineales. Entonces, $\angle BX'C = \angle E'X'F' = 90^\circ$, como se quería.
+
+De la afirmación, $X'$ está en el círculo con diámetro $BC$ (en el cual también están $B'$ y $C'$). Como este círculo es invariante bajo la inversión, $X$ también está en el círculo con diámetro $BC$, y $\angle BXC = 90^\circ$.
+
+![Diagrama del triángulo ABC con los puntos E, F, H, X, y sus inversos E', F', X' mostrados, incluyendo un círculo que pasa por B, C, E', F', y X'.](/imagenes-problemas/hmmt/2025/fce69e9afe523959d3e7279c83798c3e.jpeg)
+
+Solución 3. Comenzamos probando el siguiente lema.
+
+Lema 2. Sea $ABCD$ un cuadrilátero y $P$ un punto tal que $\angle APB + \angle CPD = 180^\circ$. Entonces, los pies de las alturas desde $P$ a cada lado de $ABCD$ son concíclicos.
+
+Demostración. Sean $P_A, P_B, P_C, P_D$ los pies de las alturas desde $P$ a $AB$, $BC$, $CD$, y $DA$ respectivamente. Observa que el cuadrilátero $P_AP P_BB$ es cíclico. Persiguiendo ángulos,
+
+$$
+\begin{align*}
+\angle P_D P_A P_B + \angle P_B P_C P_D &= \angle P_D P_A P + \angle P P_A P_B + \angle P_B P_C P + \angle P P_C P_D \\
+&= \angle P_D A P + \angle P B P_B + \angle P_B C P + \angle P D P_D \\
+&= (180^\circ - \angle APD) + (180^\circ - \angle BPC) \\
+&= \angle BPA + \angle DPC \\
+&= 180^\circ.
+\end{align*}
+$$
+Por lo tanto, $P_A P_B P_C P_D$ es cíclico como se quería.
+
+![Diagrama del triángulo ABC con los puntos E, F, H, X, y un círculo que pasa por B, C, Y, y Z, con perpendiculares y cuadriláteros cíclicos indicados.](/imagenes-problemas/hmmt/2025/566f3a0c1030d06209b8a6b669b29550.jpeg)
+
+Sea $P_{\infty}$ el punto al infinito sobre la recta $AC$. Sean $Y$ y $Z$ los pies de las alturas desde $H$ a $AB$ y $AC$, respectivamente. Observa que $\angle EHF + \angle BHP_{\infty} = 90^\circ + 90^\circ = 180^\circ$. Así, los pies de las alturas desde $H$ a $EF$, $EB$, $BP_{\infty}$, y $CP_{\infty}$ son concíclicos. En otras palabras, $XYZB$ es cíclico. Como $BCYZ$ es un cuadrilátero cíclico, concluimos que $X$ está en este círculo, lo cual da $\angle BXC = 90^\circ$ como se quería.
+
+Observación. Aquí hay otra forma de demostrar el lema.
+
+Es bien sabido que, con la condición dada, existe un punto $P'$ que es el conjugado isogonal de $P$ respecto al cuadrilátero $ABCD$. Sean $P_A$, $P_B$, $P_C$, y $P_D$ los pies de las alturas desde $P$ a $AB$, $BC$, $CD$, y $DA$, respectivamente, y sea $Q$ el pie de la altura desde $P'$ a $AB$. Como $P$ y $P'$ son conjugados isogonales respecto al triángulo formado por las rectas $AB$, $BC$, y $CD$, tenemos que $P_A P_B P_C Q$ es cíclico. De manera similar, como $P$ y $P'$ también son conjugados isogonales respecto al triángulo formado por las rectas $DA$, $AB$, y $BC$, tenemos que $P_D P_A P_B Q$ es cíclico. En consecuencia, $P_A P_B P_C P_D$ es cíclico como se quería.`),
+  hmmt('HMMT-2025-TEAM6', 2025, 'TEAM', 6, "Condición de punto fijo en el círculo unitario", "Álgebra",
+    String.raw`Los números complejos $\omega_{1}$, $\ldots$, $\omega_{n}$ tienen todos magnitud $1$. Sea $z$ un número complejo distinto de $\omega_{1}$, $\ldots$, $\omega_{n}$ tal que
+$$
+\frac{z + \omega_{1}}{z - \omega_{1}} + \dots + \frac{z + \omega_{n}}{z - \omega_{n}} = 0.
+$$
+Demuestra que $|z| = 1$.`,
+    String.raw`Solución 1. Mostramos que no puede existir ninguna solución $z$ fuera del círculo unitario. Primero, eliminamos $|z| > 1$.
+
+Afirmación 1. Para todo $j$ y $|z| > 1$, la parte real de $\frac{z + \omega_{j}}{z - \omega_{j}}$ es positiva.
+
+Demostración. Usamos geometría. Observa que $\omega_{j}$ y $-\omega_{j}$ son antípodas en el círculo unitario. Como $z$ está fuera del círculo unitario, se sigue que $\angle \omega_{j}z(-\omega_{j})$ es agudo. Pero esto significa que el número complejo $\frac{z + \omega_{j}}{z - \omega_{j}}$ está estrictamente en el primer o cuarto cuadrante del plano complejo y por lo tanto tiene parte real positiva, como se quería.
+
+Es entonces claro que siempre que $|z| > 1$, la suma $\sum_{j = 1}^{n} \frac{z + \omega_{j}}{z - \omega_{j}}$ tiene parte real positiva y por lo tanto no puede ser $0$. El caso donde $|z| < 1$ es análogo, excepto que $\angle \omega_{j}z(-\omega_{j})$ es obtuso en su lugar, así que $\frac{z + \omega_{j}}{z - \omega_{j}}$ tiene parte real negativa para todo $j$. Por lo tanto, toda solución $z$ de la ecuación original debe satisfacer $|z| = 1$.
+
+Solución 2. Mostramos, de manera más general, que para cualesquiera enteros positivos $k$, $a_{1}$, $\ldots$, $a_{k}$, y $\omega_{j}$ distintos en el círculo unitario, la ecuación
+$$
+\sum_{j = 1}^{k} a_{j} \left(\frac{z + \omega_{j}}{z - \omega_{j}}\right) = 0
+$$
+tiene $k$ soluciones distintas en el círculo unitario. El problema original se sigue entonces al consolidar $\omega_{j}$'s duplicadas. Sin pérdida de generalidad, supón que $\omega_{1}$, $\ldots$, $\omega_{k}$ están en este orden yendo en sentido horario alrededor del círculo unitario.
+
+Afirmación 2. Hay una solución en el arco (en sentido horario) de $\omega_{j}$ a $\omega_{j + 1}$ para todo $j$ (donde $\omega_{k + 1} = \omega_{1}$).
+
+Demostración. Primero, $\omega_{j}$ y $-\omega_{j}$ son antípodas en el círculo unitario, así que si $z$ está en el círculo unitario, $\angle \omega_{j}z(-\omega_{j}) = 90^{\circ}$. Esto significa que $\frac{z + \omega_{j}}{z - \omega_{j}}$ es puramente imaginario. Ahora considera la parte imaginaria del lado izquierdo de la ecuación, que es una función real y continua en el arco estrictamente entre $\omega_{j}$ y $\omega_{j + 1}$ para cada $j$. En particular, cuando $z$ se aproxima a $\omega_{j + 1}$ desde la dirección horaria, esta función se aproxima a $\infty$. Por otro lado, cuando $z$ se aproxima a $\omega_{j}$ desde la dirección antihoraria, esta función se aproxima a $-\infty$. Por el Teorema del Valor Intermedio, debe haber una solución en este arco, como se quería.
+
+Se sigue que hay al menos $k$ soluciones en el círculo unitario. Pero la ecuación equivale a un polinomio de grado $k$. Por lo tanto, hay exactamente $k$ soluciones, todas las cuales están en el círculo unitario.`),
+  hmmt('HMMT-2025-TEAM7', 2025, 'TEAM', 7, "Disección de un cuadrado en triángulos 30-75-75", "Geometría",
+    String.raw`Determina, con demostración, si un cuadrado se puede disecar en un número finito de triángulos (no necesariamente congruentes), cada uno con ángulos interiores $30^{\circ}$, $75^{\circ}$, y $75^{\circ}$.`,
+    String.raw`Solución 1. Supón por contradicción que existe tal disección. Tiene exactamente la mitad de ángulos de $30^{\circ}$ que de ángulos de $75^{\circ}$.
+
+Alrededor de cualquier punto de intersección salvo los vértices del cuadrado, los únicos ángulos que pueden aparecer son $30^{\circ}$, $75^{\circ}$, y $180^{\circ}$. Las únicas combinaciones de estos que suman $180^{\circ}$ o $360^{\circ}$ son
+$$6 \cdot 30^{\circ} = 180^{\circ},$$
+$$30^{\circ} + 2 \cdot 75^{\circ} = 180^{\circ},$$
+$$180^{\circ} = 180^{\circ},$$
+$$12 \cdot 30^{\circ} = 360^{\circ},$$
+$$7 \cdot 30^{\circ} + 2 \cdot 75^{\circ} = 360^{\circ},$$
+$$2 \cdot 30^{\circ} + 4 \cdot 75^{\circ} = 360^{\circ},$$
+$$6 \cdot 30^{\circ} + 180^{\circ} = 360^{\circ},$$
+$$30^{\circ} + 2 \cdot 75^{\circ} + 180^{\circ} = 360^{\circ},$$
+$$180^{\circ} + 180^{\circ} = 360^{\circ}.$$
+En particular, alrededor de cualquiera de estos puntos, hay al menos la mitad de ángulos de $30^{\circ}$ que de ángulos de $75^{\circ}$.
+
+Sin embargo, los vértices del cuadrado deben estar rodeados cada uno por tres ángulos de $30^{\circ}$ y ningún ángulo de $75^{\circ}$, ya que no hay otra forma de obtener una suma de $90^{\circ}$. Así, el número total de ángulos de $30^{\circ}$ en la disección debe ser al menos 12 más que la mitad del número de ángulos de $75^{\circ}$, contradicción.
+
+Por lo tanto, $\boxed{\text{no existe tal disección}}$.
+
+Solución 2. De nuevo supón por contradicción que existe una disección. Interpreta la disección como un grafo $G$, donde los vértices del grafo son los vértices de todos los triángulos, y las aristas conectan cada par de vértices consecutivos a lo largo de un segmento de recta.
+
+Llamemos plano a un vértice si está en la frontera del cuadrado (incluyendo sus esquinas) o en el interior de un lado de algún triángulo. Sea $X$ el número de vértices planos y $Y$ el número de vértices no planos en $G$. Sean $E$ y $F$ el número de aristas y caras (triángulos) en la disección, respectivamente. Entonces $(X + Y) - E + F = 1$.
+
+Observando las combinaciones de ángulos en la primera solución, vemos que cualquier vértice no plano debe tener al menos 6 aristas incidentes, y cualquier vértice plano debe tener al menos 4. Así $2E \geq 6Y + 4X$, así que $E \geq 3Y + 2X$.
+
+La suma de los ángulos de todos los $F$ triángulos es $\pi F$. Alrededor de cualquier vértice no plano, tales ángulos suman $2\pi$. Alrededor de cualquier vértice plano, los ángulos suman $\pi$, con la excepción de las cuatro esquinas del cuadrado, donde suman $\pi/2$ en su lugar. Así
+$$F\pi = (X - 4)\pi + 4(\pi/2) + Y(2\pi) = (X + 2Y - 2)\pi,$$
+así que $F = X + 2Y - 2$. Esto significa
+$$X + Y - E + F \leq (X + Y) - (3Y + 2X) + (X + 2Y - 2) = -2,$$
+contradicción. Por lo tanto, $\boxed{\text{no existe tal disección}}$.`),
+  hmmt('HMMT-2025-TEAM8', 2025, 'TEAM', 8, "Círculo tangente al incentro y un ángulo recto", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo con incentro $I$. El incírculo del triángulo $\triangle ABC$ toca $\overline{BC}$ en $D$. Sea $M$ el punto medio de $\overline{BC}$, y sea $L \neq A$ el segundo punto donde la recta $AI$ encuentra al circuncírculo del triángulo $\triangle ABC$. Sea $\omega$ el círculo centrado en $L$ tangente a $AB$ y $AC$. Si $\omega$ interseca al segmento $\overline{AD}$ en el punto $P$, demuestra que $\angle IPM = 90^{\circ}$.`,
+    String.raw`Solución 1. Sean $X$ y $Y$ el punto inferior y superior de $\omega$ (es decir, las tangentes a $\omega$ en $X$ y $Y$ son paralelas a $BC$, y $Y$ y $A$ están del mismo lado de $BC$). Observa que $A$, $P$, $D$, y $X$ son colineales por homotecia entre el incírculo y $\omega$. La afirmación clave es la siguiente.
+
+Afirmación 1. La recta $IY$ es tangente a $\omega$.
+
+Demostración. Sea la recta por $I$ paralela a $BC$ la que encuentra a $AB$ y $AC$ en $B'$, $C'$, respectivamente. Observa que $B'L$ es la mediatriz de $BI$, así que $B'L$ biseca externamente a $\angle AB'C'$. De manera similar, $C'L$ biseca externamente a $\angle AC'B'$. Por lo tanto, $L$ es el excentro de $\triangle AB'C'$, lo cual significa que $B'C'$ es tangente a $\omega$.
+
+![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, punto L en el circuncírculo, círculo omega centrado en L tangente a AB y AC, y varios puntos y rectas auxiliares incluyendo B', C', D, P, X, y Y.](/imagenes-problemas/hmmt/2025/9d25c968fd58984cde61b27542d89c49.jpeg)
+
+Ahora, observamos que $LY \perp BC$, así que $L$, $Y$, y $M$ son colineales (sobre la mediatriz de $BC$). Como $\angle YPX = 90^{\circ}$ y $\angle YMD = 90^{\circ}$, $PDMY$ es cíclico. Sin embargo, $IYMD$ es un rectángulo, así que $IPDMY$ es un pentágono cíclico. Por lo tanto, $\angle IPM = \angle IDM = 90^{\circ}$.
+
+Solución 2. Sean $E$ y $F$ los puntos donde el incírculo toca a $AC$ y $AB$, respectivamente. Sea $X$ la intersección de $DI$ con $EF$. Sea $D'$ la otra intersección de $AD$ con el incírculo.
+
+Afirmación 2. $PM \parallel D'X$.
+
+Demostración. Considera la homotecia en $A$ que envía $\omega$ al incírculo. Envía $L$ a $I$ y $P$ a $D'$. Además, es bien sabido que $X$ está en $AM$. Como $IX \parallel LM$, la homotecia también envía $M$ a $X$. Estos hechos implican que $D'X \parallel PM$.
+
+![Un diagrama geométrico del triángulo ABC con incírculo, incentro I, punto medio M de BC, los puntos D, D', X, T, T', y P, mostrando varias rectas y segmentos relevantes para la solución.](/imagenes-problemas/hmmt/2025/3588a05bc805619ce4de2b7bfb81bb3c.jpeg)
+
+Sea $T$ el antípoda de $D$ en el incírculo. Sea $T'$ la segunda intersección de $AT$ con el incírculo. Como $X$ está en la polar de $A$ respecto al incírculo, por el teorema de Brocard, $D'$, $X$, y $T'$ son colineales. Es bien sabido que $AT \parallel IM$. Por lo tanto, $\angle DPM = \angle DD'X = \angle DD'T' = \angle DTT' = \angle DIM$. En consecuencia, $IMDP$ es cíclico, y $\angle IPM = \angle IDM = 90^{\circ}$.
+
+Solución 3. Sea $\omega$ tangente a $AB$ y $AC$ en $E$ y $F$, respectivamente. Observa que estos son los pies de las alturas desde $L$ a $AB$ y $AC$, y $L$ está en el circuncírculo de $\triangle ABC$ por el Hecho 5. Como $M$ es claramente el pie desde $L$ a $BC$, se sigue que $E$, $F$, y $M$ son colineales sobre la recta de Simson de $L$ respecto a $\triangle ABC$.
+
+Por último, queremos que $P$ esté en el círculo con diámetro $IM$. Este círculo interseca a $EF$ de nuevo en el pie desde $M$ a $AI$, que es el punto medio de $EF$. Sea este punto $M'$. Considera la homotecia que envía el incírculo a $\omega$. Esta claramente envía $D$ a la segunda intersección de $AD$ y $\omega$, que es $P'$, y envía $I$ a $L$. Observa que $AP \cdot AP' = AE^2 = AM \cdot AL$, ya que el círculo con diámetro $LE$ es tangente a $AE$. Así, $PP'M'L$ es cíclico. Como $ID \parallel LP'$, $I$ está en $M'L$, y $D$ está en $PP'$. Por el teorema de Reim, también tenemos que $PDM'I$ es cíclico. Como $IM$ es un diámetro de $(DM'I)$, tenemos $\angle IPM = 90^{\circ}$.
+
+![Un diagrama geométrico del triángulo ABC con incírculo, circuncírculo, incentro I, punto medio M de BC, los puntos L, P, P', E, F, y M', con varias rectas y círculos que ilustran las relaciones en la solución.](/imagenes-problemas/hmmt/2025/bd8de87f9a899904f1b27f0c1c33d28a.jpeg)`),
+  hmmt('HMMT-2025-TEAM9', 2025, 'TEAM', 9, "Primos que admiten una ecuación funcional periódica", "Teoría de Números",
+    String.raw`Sea $\mathbb{Z}$ el conjunto de los enteros. Determina, con demostración, todos los primos $p$ para los cuales existe una función $f\colon \mathbb{Z}\to \mathbb{Z}$ tal que para todo entero $x$,
+
+$f(x + p) = f(x)$ y $p$ divide a $f(x + f(x)) - x$.`,
+    String.raw`Los primos que funcionan son $\boxed{p = 5 \text{ y los primos } p \text{ para los cuales } 5 \text{ es un residuo cuadrático módulo } p}$.
+
+Trabajamos en $\mathbb{F}_p$, viendo a $f$ como un mapeo de $\mathbb{F}_p$ en sí mismo. Claramente, $p = 2$ no funciona. Para $p > 2$ tal que $5$ es un residuo cuadrático módulo $p$, así como para $p = 5$ mismo, existe algún $\alpha$ tal que $(2\alpha + 1)^2\equiv 5$ (mód $p$). Tomando $f(x) = \alpha x$ entonces funciona porque
+
+$$
+f(x + f(x)) - x = (\alpha^2 + \alpha -1)x = \frac{1}{4}\left((2\alpha +1)^2 - 5\right)x\equiv 0\pmod {p}.
+$$
+
+Para probar que ningún otro primo satisface las condiciones del enunciado, observa que $f$ es sobreyectiva, ya que para cualquier $x$, $f(x + f(x)) = x$. Como $\mathbb{F}_p$ es finito, $f$ es biyectiva. Sustituyendo $x = f(y)$ se obtiene
+
+$$
+f(f(y) + f(f(y))) = f(y)\implies f(y) + f(f(y)) = y.
+$$
+
+Como $f$ es biyectiva, existe $z\in \mathbb{F}_p$ tal que $f(z) = 0$, entonces $z = f(z + f(z)) = f(z) = 0$. Por lo tanto, $f(0) = 0$. Este es el único punto fijo, ya que cualquier punto fijo $d$ satisfaría $d = f(d) + f(f(d)) = 2d$, lo cual es imposible si $d \neq 0$. Por lo tanto, los residuos restantes forman ciclos no triviales $y$, $f(y)$, $f(f(y))$, etc. Si el ciclo que contiene a $y$ tiene longitud $n$, entonces
+
+$$
+\begin{array}{rl}
+& f^{-1}(y) = y + f(y),\\
+& f^{-2}(y) = f^{-1}(y) + y = 2y + f(y),\\
+& \qquad \vdots\\
+& f^{-(n - 1)}(y) = f(y) = F_ny + F_{n - 1}f(y),\\
+& \qquad y = F_{n + 1}y + F_n f(y),
+\end{array} \quad (\text{por inducción})
+$$
+
+donde $F_k$ es el $k$-ésimo número de Fibonacci. Como $y \neq 0$ y $f(y) \neq 0$, las últimas dos ecuaciones nos dicen que
+
+$$
+F_n^2 \equiv \left(\frac{(1 - F_{n - 1})f(y)}{y}\right) \left(\frac{(1 - F_{n + 1})y}{f(y)}\right) \equiv (F_{n + 1} - 1)(F_{n - 1} - 1) \pmod {p}.
+$$
+
+Sea $A = F_{n + 1} - 1$ y $B = F_{n - 1} - 1$ por brevedad. La última ecuación se convierte en
+
+$$
+(A - B)^2 \equiv AB \equiv \frac{1}{4} ((A + B)^2 - (A - B)^2) \pmod {p} \Longrightarrow (A + B)^2 \equiv 5(A - B)^2 \pmod {p}.
+$$
+
+Como $5$ no es residuo cuadrático, esto implica que $F_{n + 1} \equiv F_{n - 1} \equiv 1 \pmod {p}$. Por lo tanto, si $d$ es el menor entero positivo tal que $F_d \equiv 0 \pmod {p}$ y $F_{d + 1} \equiv 1 \pmod {p}$, entonces la sucesión de Fibonacci es periódica módulo $p$ con periodo $d$, así que $d \mid n$. La suma de todas las longitudes de ciclo (excluyendo el punto fijo $0$) es $p - 1$, así que $d \mid p - 1$. El siguiente lema bien conocido nos dará una contradicción.
+
+Lema 1. Si $5$ no es residuo cuadrático módulo un primo $p$, entonces $p \nmid F_{p - 1}$.
+
+Demostración 1. Recuerda la fórmula de Binet,
+
+$$
+F_{p - 1} = \frac{1}{\sqrt{5}} \left(\left(\frac{1 + \sqrt{5}}{2}\right)^{p - 1} - \left(\frac{1 - \sqrt{5}}{2}\right)^{p - 1}\right).
+$$
+
+Multiplicando ambos lados por $2^{p - 1}$ y expandiendo mediante el teorema del binomio, tenemos
+
+$$
+2^{p - 1}F_{p - 1} = 2\sum_{k = 0}^{\frac{p - 3}{2}}5^{k}\binom{p - 1}{2k + 1}.
+$$
+
+Sin embargo, $\binom{p- 1}{2k+1} \equiv(- 1)^{2k+1} \equiv- 1 \pmod{p}$ para todo $k$, así que
+
+$$
+p \mid F_{p - 1} \quad \text{si y solo si} \quad p \left| \sum_{k = 0}^{\frac{p - 3}{2}} 5^{k} = \frac{5^{\frac{p - 1}{2}} - 1}{5 - 1} \right.
+$$
+
+Por lo tanto $p \mid F_{p - 1}$ si y solo si $5^{\frac{p - 1}{2}} \equiv 1 \pmod {p}$, lo cual no se cumple si $5$ no es residuo cuadrático módulo $p$, como se quería.
+
+Demostración 2. Trabajamos en $\mathbb{F}_{p^{2}} = \mathbb{F}_{p}[\sqrt{5}]$. Como $5$ no es residuo cuadrático, obtenemos que $(\sqrt{5})^{p} = - \sqrt{5}$. Usando el hecho de que $(a + b)^{p} = a^{p} + b^{p}$ (porque todos los demás términos tienen coeficiente divisible entre $p$), obtenemos que
+
+$$
+\left(\frac{1 + \sqrt{5}}{2}\right)^{p} = \frac{1 - \sqrt{5}}{2} \implies \left(\frac{1 + \sqrt{5}}{2}\right)^{p - 1} = \left(\frac{1 - \sqrt{5}}{2}\right)^{2} = \frac{3 - \sqrt{5}}{2}.
+$$
+
+De manera similar, $\left(\frac{1 - \sqrt{5}}{2}\right)^{p - 1} = \frac{3 + \sqrt{5}}{2}$. Por lo tanto, por la fórmula de Binet,
+
+$$
+F_{p - 1} = \frac{1}{\sqrt{5}}\left(\left(\frac{1 + \sqrt{5}}{2}\right)^{p - 1} - \left(\frac{1 - \sqrt{5}}{2}\right)^{p - 1}\right)
+= \frac{1}{\sqrt{5}}\left(\frac{3 - \sqrt{5}}{2} -\frac{3 + \sqrt{5}}{2}\right) = -1,
+$$
+
+así que no es divisible entre $p$.
+
+Por lo tanto, $F_{p - 1} \neq 0$ (mód $p$) si $5$ no es residuo cuadrático módulo $p$, lo cual contradice $d \mid p - 1$ de arriba. Esto completa la solución.`),
+  hmmt('HMMT-2025-TEAM10', 2025, 'TEAM', 10, "MCD de una suma de cuadrados y un producto", "Teoría de Números",
+    String.raw`Determina, con demostración, todos los valores posibles de $\gcd (a^{2} + b^{2} + c^{2}, abc)$ sobre todas las ternas de enteros positivos $(a, b, c)$.`,
+    String.raw`Los valores posibles son $\boxed{n \geq 1 \text{ tales que } \nu_p(n) \text{ es par para todo primo } p \equiv 3 \pmod 4}$.
+
+Primero, mostramos que ningún otro $n$ funciona. Si existiera un primo $p \equiv 3$ (mód $4$) tal que $\nu_{p}(n) = 1$, entonces $p \mid abc$; sin pérdida de generalidad, supón que $p$ divide a $a$. Entonces, $p^{2} \mid a^{2}$ y $p \mid a^{2} + b^{2} + c^{2}$, así que $p \mid b^{2} + c^{2}$. Como $p$ es $3$ módulo $4$, $-1$ no es residuo cuadrático módulo $p$, así que $b^{2} \equiv -c^{2}$ (mód $p$) solo tiene la solución trivial $(b, c) = 0$. Por lo tanto $p \mid b$ y $p \mid c$, así que $p^{2} \mid n$. Esto contradice $\nu_{p}(n) = 1$, así que no existen soluciones fuera del conjunto de soluciones afirmado.
+
+Ahora, damos la construcción. Sea $n$ en el conjunto de soluciones afirmado. Procedemos en dos pasos.
+
+Paso 1 (Paso local). Para cada primo $p$ que divide a $n$, construiremos $a, b$, y $c$ módulo $p^{\nu_{p}(n) + 1}$ tales que $\nu_{p}(\gcd (a^{2} + b^{2} + c^{2}, abc)) = \nu_{p}(n)$.
+
+Tenemos un par de casos.
+- Si $\nu_{p}(n) = 2k$ para algún entero positivo $k$, elige $a = p^{k}$, $b = p^{k}$, y $c = p^{k + 1}$ para $p \neq 2$ y elige $a = b = c = p^{k}$ para $p = 2$.
+- Si $p \not\equiv 3$ (mód $4$) y $\nu_{p}(n) = 2k + 1$ para algún entero no negativo $k$, entonces por el teorema de Navidad de Fermat, hay enteros positivos $x$ y $y$ tales que $x^{2} + y^{2} = p$. Entonces elige $a = x p^{k}$, $b = y p^{k}$, y $c = p^{k + 1}$.
+- Si $p \equiv 3$ (mód $4$) y $\nu_{p}(n) = 2k + 1$ para algún entero no negativo $k$, entonces $k \geq 1$ por suposición. Sean $x$ y $y$ enteros positivos tales que $\nu_{p}(x^{2} + y^{2} + 1) = 1$. (Esto es bastante estándar. Para recordar brevemente la demostración, observa que existen $x$ y $y$ que satisfacen $x^{2} + 1 \equiv -y^{2}$ (mód $p$) porque algún residuo cuadrático debe ser adyacente a un no residuo cuadrático, y forzar $x^{2} + 1 \not\equiv -y^{2}$ (mód $p^{2}$) se puede lograr sumando múltiplos apropiados de $p$ a $x$ o $y$.) Entonces, elige $a = x p^{k}$, $b = y p^{k}$, y $c = p^{k}$.
+
+Paso 2 (Paso global). Dadas soluciones $(a_{p}, b_{p}, c_{p})$ módulo $p^{\nu_{p}(n) + 1}$ para cada primo $p \mid n$, construimos una solución $(a, b, c)$ que funciona sobre los enteros positivos.
+
+Por el Teorema Chino del Residuo, podemos elegir enteros positivos $a, b$, y $c$ tales que para todo primo $p \mid n$, $(a, b, c) \equiv (a_{p}, b_{p}, c_{p}) \pmod {p^{\nu_{p}(n) + 1}}$. Ahora, necesitamos modificar esta construcción para asegurar que ningún otro primo divida a $\gcd (a^{2} + b^{2} + c^{2}, abc)$.
+
+Para cada primo $p \mid c$ con $p \nmid n$, modificamos $a$ y $b$ (agregando relaciones de congruencia adicionales) de modo que $p$ no divida a $a^{2} + b^{2}$. Entonces, $p$ no divide a $\gcd (a^{2} + b^{2} + c^{2}, abc)$ para ningún primo $p$ tal que $p \mid c$ y $p \nmid n$. Sea
+$$N = \prod_{p \mid c n} p^{\nu_{p}(n) + 1},$$
+$$S = \{\text{primos } p \text{ tales que } p \mid ab \text{ pero } p \nmid c n\},$$
+$$P = \prod_{p \in S} p^{\varphi (N)} \equiv 1 \pmod {N}.$$
+En particular, en este punto solo hemos fijado residuos de $a, b, c$ módulo $N$. Ahora, sean $a_{1} = a P$ y $b_{1} = b P$. Esto mantiene todas nuestras condiciones módulo $N$. Ahora afirmamos que $(a_{1}, b_{1}, c)$ funciona. Para probar esto, fija un primo $p$, y observa que
+
+si $p$ divide a $c n$, entonces como $a' \equiv a$ (mód $N$) y $b' \equiv b$ (mód $N$), tenemos $\nu_{p}(\gcd (a_{1}^{2} + b_{1}^{2} + c^{2}, a_{1} b_{1} c)) = \nu_{p}(n)$ por nuestra construcción de $(a, b, c)$.
+
+si $p \in S$, entonces observamos que $p$ divide a $a_{1}^{2} + b_{1}^{2}$, pero no a $c^{2}$, así que $p$ no divide a $a_{1}^{2} + b_{1}^{2} + c^{2}$.
+
+si $p \notin S$ y $p \nmid c n$, entonces $p$ no divide a $a_{1} b_{1} c$.
+
+Esto concluye la demostración.`),
+]
+
+const hmmt2025Guts = [
+  hmmt('HMMT-2025-GUTS1', 2025, 'GUTS', 1, "Números primos 'cassowary' pandigitales de 9 dígitos", "Teoría de Números",
+    String.raw`Llama cassowary a un número de 9 dígitos si usa cada uno de los dígitos $1$ al $9$ exactamente una vez. Calcula el número de cassowaries que son primos.`,
+    String.raw`Todo cassowary es divisible entre $3$, ya que la suma de sus dígitos es $1 + 2 + \dots + 9 = 45$. Como todos estos números son divisibles entre $3$ y mayores que $3$, ninguno de ellos es primo. Así, hay $\boxed{0}$ cassowaries primos.`),
+  hmmt('HMMT-2025-GUTS2', 2025, 'GUTS', 2, "Fracciones anidadas con recíprocos", "Álgebra",
+    String.raw`Calcula
+$$
+\frac{20 + \frac{1}{25 - \frac{1}{20}}}{25 + \frac{1}{20 - \frac{1}{25}}}.
+$$`,
+    String.raw`Podemos usar el hecho de que
+$$
+x + \frac{1}{y - \frac{1}{x}} = x + \frac{x}{xy - 1} = \frac{x^2 y}{xy - 1}.
+$$
+Tomando $x = 20$, $y = 25$ y viceversa en la expresión anterior, obtenemos
+$$
+\frac{x + \frac{1}{y - \frac{1}{x}}}{y + \frac{1}{x - \frac{1}{y}}} = \frac{x^2 y}{x y^2} = \frac{x}{y} = \boxed{\frac{4}{5}}.
+$$`),
+  hmmt('HMMT-2025-GUTS3', 2025, 'GUTS', 3, "Probabilidad condicional con sumas de dados", "Combinatoria",
+    String.raw`Jacob lanza dos dados justos de seis caras. Si los resultados de estos lanzamientos son iguales, lanza un tercer dado justo de seis caras. Calcula la probabilidad de que la suma de los resultados de todos los dados que lanzó sea par.`,
+    String.raw`Hay una probabilidad de $\frac{1}{2} - \frac{1}{6} = \frac{1}{3}$ de que obtenga un número par sin sacar dobles: sea cual sea el primer lanzamiento, hay una probabilidad de $\frac{1}{2}$ de que el segundo lanzamiento sea de paridad opuesta, y restamos la probabilidad de $\frac{1}{6}$ de que el segundo lanzamiento sea igual.
+
+Hay una probabilidad de $\frac{1}{6} \cdot \frac{1}{2} = \frac{1}{12}$ de que saque dobles y luego lance un número par.
+
+Sumando $\frac{1}{3}$ y $\frac{1}{12}$ obtenemos $\boxed{\frac{5}{12}}$.`),
+  hmmt('HMMT-2025-GUTS4', 2025, 'GUTS', 4, "Partición del área de un triángulo equilátero", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo equilátero de lado $4$. Entre todos los puntos $P$ dentro del triángulo $\triangle ABC$ que satisfacen $[PAB] + [PAC] = [PBC]$, calcula la menor longitud posible de $PA$.
+
+(Aquí, $[XYZ]$ denota el área del triángulo $\triangle XYZ$.)`,
+    String.raw`![Un triángulo equilátero ABC con un punto P adentro. El triángulo está dividido en dos regiones por una línea punteada roja paralela a BC, y un segmento rojo conecta A con P. Las regiones PAB y PBC están sombreadas en colores distintos.](/imagenes-problemas/hmmt/2025/69fadc0b114370291d5cfb809590a975.jpeg)
+
+La condición de área implica $[ABC] = 2[PBC]$. Por lo tanto, $P$ está en la línea media desde $A$ del triángulo $\triangle ABC$. Así, el menor valor posible de $PA$ es la distancia de $A$ a esta línea media. Esto se alcanza tomando $P$ como el pie de la perpendicular desde $A$ a la línea media. Esta distancia es la mitad de la altura de $ABC$, que tiene lado $4$, así que la respuesta es $\frac{1}{2} (2\sqrt{3}) = \boxed{\sqrt{3}}$.`),
+  hmmt('HMMT-2025-GUTS5', 2025, 'GUTS', 5, "Círculo máximo inscrito en una región con valor absoluto anidado", "Geometría",
+    String.raw`Calcula el mayor radio posible de un círculo contenido en la región definida por $|x + |y|| \leq 1$ en el plano coordenado.`,
+    String.raw`![Un plano coordenado que muestra la región definida por |x + |y|| ≤ 1 sombreada, con un círculo rojo inscrito adentro de la región, tangente a las fronteras y pasando por el punto (-1, 0).](/imagenes-problemas/hmmt/2025/2694b339b7413b14bf3ffd174cfea391.jpeg)
+
+Después de dibujar la gráfica, es claro que el círculo debe pasar por $(-1, 0)$ y ser tangente a $y = x - 1$ y $y = -x + 1$. Sea $r$ el radio de este círculo, tenemos $r\sqrt{2} + r = 2$, así que $\boxed{r = 2\sqrt{2} - 2}$.`),
+  hmmt('HMMT-2025-GUTS6', 2025, 'GUTS', 6, "Triángulo equilátero con una condición de punto medio", "Geometría",
+    String.raw`Sea $\triangle ABC$ un triángulo equilátero. El punto $D$ está en el segmento $\overline{BC}$ tal que $BD = 1$ y $DC = 4$. Los puntos $E$ y $F$ están en los rayos $\overrightarrow{AC}$ y $\overrightarrow{AB}$, respectivamente, de modo que $D$ es el punto medio de $\overline{EF}$. Calcula $EF$.`,
+    String.raw`![Un diagrama geométrico que muestra el triángulo equilátero ABC con el punto D sobre BC, los puntos E y F sobre los rayos AC y AB, y la reflexión C' de C sobre D. El segmento EF pasa por D, y varios segmentos están marcados con símbolos de congruencia.](/imagenes-problemas/hmmt/2025/932a7555b8a60afcb53d5e3fcf9e922c.jpeg)
+
+Sea $C'$ la reflexión de $C$ sobre $D$. Entonces, $\overline{EC} \parallel \overline{C'F}$ ya que $ECFC'$ es un paralelogramo. Así, $BFC'$ es un triángulo equilátero, así que $BF = BC' = 3$ y $\angle FBD = 120^\circ$. Por la Ley de Cosenos, obtenemos $DF = \sqrt{3^2 + 3 \cdot 1 + 1^2} = \sqrt{13}$ y $EF = \boxed{2\sqrt{13}}$.`),
+  hmmt('HMMT-2025-GUTS7', 2025, 'GUTS', 7, "Factores primos de un cociente exponencial", "Teoría de Números",
+    String.raw`El número
+$$
+\frac{9^{9} - 8^{8}}{1001}
+$$
+es un entero. Calcula la suma de sus factores primos.`,
+    String.raw`Observa
+$$
+9^{9} - 8^{8} = 27^{6} - 16^{6}
+$$
+$$
+= (27^{2} - 16^{2})(27^{4} + 27^{2} \cdot 16^{2} + 16^{4})
+$$
+$$
+= (27 - 16)(27 + 16)(27^{2} - 27 \cdot 16 + 16^{2})(27^{2} + 27 \cdot 16 + 16^{2})
+$$
+$$
+= 11 \cdot 43 \cdot 553 \cdot 1417.
+$$
+Las factorizaciones restantes se motivan por el hecho de que $1001 = 7 \cdot 11 \cdot 13$. Vemos que $553 = 7 \cdot 79$ y $1417 = 13 \cdot 109$, así que la respuesta es $43 + 79 + 109 = \boxed{231}$.`),
+  hmmt('HMMT-2025-GUTS8', 2025, 'GUTS', 8, "Tableros de ajedrez con un número fijo de celdas negras", "Teoría de Números",
+    String.raw`Un tablero de ajedrez es una cuadrícula rectangular de celdas coloreadas de negro y blanco tal que la esquina superior izquierda es negra y no hay dos celdas del mismo color que compartan un lado. Dos tableros de ajedrez son distintos si y solo si tienen un número distinto de filas o columnas. Por ejemplo, un tablero de $20 \times 25$ y uno de $25 \times 20$ se consideran distintos.
+
+Calcula el número de tableros de ajedrez distintos que tienen exactamente 41 celdas negras.`,
+    String.raw`Como hay una esquina negra en el tablero, el número de casillas blancas es a lo más el número de casillas negras. Así, el tablero tiene 40 o 41 casillas blancas. Por lo tanto, queremos calcular el número de pares ordenados $(r,c)$ con producto 81 o 82. Como $81 = 3^{4}$ tiene 5 divisores y $82 = 41 \cdot 2$ tiene 4 divisores, hay $\boxed{9}$ tableros de ajedrez con exactamente 41 celdas negras.`),
+  hmmt('HMMT-2025-GUTS9', 2025, 'GUTS', 9, "Segmento aleatorio en los cuadriláteros de un hexágono", "Geometría",
+    String.raw`Sean $P$ y $Q$ puntos elegidos de manera uniforme e independiente al azar dentro de un hexágono regular $ABCDEF$. Calcula la probabilidad de que el segmento $\overline{PQ}$ esté completamente contenido en al menos uno de los cuadriláteros $ABCD$, $BCDE$, $CDEF$, $DEFA$, $EFAB$, o $FABC$.`,
+    String.raw`![Un hexágono regular dividido en seis triángulos por líneas desde el centro O hasta cada vértice, con los puntos P y Q marcados y un segmento PQ trazado. Los triángulos ABO y DEO están sombreados, y los cuadriláteros están implícitos visualmente.](/imagenes-problemas/hmmt/2025/0d46ba45e4b43766265ed8aab827c8da.jpeg)
+
+Sea $O$ el centro del hexágono. Sin pérdida de generalidad, supón que $P$ está en $\triangle ABO$. Entonces, el segmento $PQ$ está completamente contenido en uno de los cuadriláteros dados si y solo si $Q$ no está en $\triangle DEO$. La probabilidad de que $Q$ esté en $\triangle DEO$ es $\frac{|DEO|}{|ABCDEF|} = \frac{1}{6}$, así que la respuesta es $\boxed{\frac{5}{6}}$.`),
+  hmmt('HMMT-2025-GUTS10', 2025, 'GUTS', 10, "Perímetro máximo de un pentágono en la disección de un cuadrado", "Geometría",
+    String.raw`Un cuadrado de lado $1$ se diseca en dos pentágonos congruentes. Calcula el supremo del perímetro de uno de estos pentágonos.`,
+    String.raw`![Un cuadrado ABCD se divide en dos pentágonos congruentes mediante dos líneas punteadas que conectan los puntos Y cerca de A y X cerca de C, con los pentágonos sombreados en colores distintos.](/imagenes-problemas/hmmt/2025/a779607648888b3176dd8192def6d28b.jpeg)
+
+Sean $P_{1}$ y $P_{2}$ los dos pentágonos congruentes. Sea $p(P)$ el perímetro del polígono $P$.
+
+Damos una cota superior para $p(P_{1}) + p(P_{2})$. Observa que, como un cuadrado tiene cuatro lados, al menos cuatro lados de $P_{1}$ y $P_{2}$ combinados están sobre los lados del cuadrado. Estos lados tienen longitud total a lo más $4$, el perímetro de $ABCD$.
+
+Cada uno de los lados restantes tiene longitud a lo más $\sqrt{2}$, ya que la mayor longitud posible de un segmento dentro de $ABCD$ es $\sqrt{2}$. Hay a lo más $6$ lados restantes, así que
+$$
+p(P_{1}) + p(P_{2}) \leq 4 + 6\sqrt{2}.
+$$
+Como $P_{1}$ y $P_{2}$ son congruentes, esto implica
+$$
+p(P_{1}) = p(P_{2}) \leq \boxed{2 + 3\sqrt{2}}.
+$$
+Este supremo se puede alcanzar colocando $X$ cerca de $C$ y $Y$ cerca de $A$, como se ve en el diagrama.`),
+  hmmt('HMMT-2025-GUTS12', 2025, 'GUTS', 12, "Ángulos interiores de polígonos con un valor faltante", "Teoría de Números",
+    String.raw`Holden tiene una colección de polígonos. Escribe una lista con la medida de cada ángulo interior de cada uno de sus polígonos. Escribe la lista $30^{\circ}$, $50^{\circ}$, $60^{\circ}$, $70^{\circ}$, $90^{\circ}$, $100^{\circ}$, $120^{\circ}$, $160^{\circ}$, y $x^{\circ}$, en algún orden. Calcula $x$.`,
+    String.raw`Trabajamos en grados. La suma de los 9 ángulos es $680 + x$. La suma de los ángulos en un polígono de $n$ lados es $180(n - 2) \equiv 180n$ mód $360$. Como hay 9 ángulos, los polígonos tienen un total de 9 lados, así que la suma de los 9 ángulos debe ser $9 \cdot 180 \equiv 180$ mód $360$. Así $680 + x \equiv 180$ mód $360$, así que $x \equiv 220$ mód $360$. Como $0 < x < 360$, sabemos que $x = \boxed{220}$.`),
+  hmmt('HMMT-2025-GUTS13', 2025, 'GUTS', 13, "Números 'ascendentes' divisibles entre 11", "Teoría de Números",
+    String.raw`Un número es ascendente si sus dígitos en base 10 son no decrecientes al leerlos de izquierda a derecha. Calcula el número de enteros positivos menores que $10^{6}$ que son a la vez ascendentes y múltiplos de 11.`,
+    String.raw`Para que un número $d_{5}d_{4}d_{3}d_{2}d_{1}d_{0}$ (permitiendo ceros a la izquierda) sea ascendente y múltiplo de 11, debemos tener
+$$d_{5} \leq d_{4} \leq d_{3} \leq d_{2} \leq d_{1} \leq d_{0},$$
+$$d_{0} - d_{1} + d_{2} - d_{3} + d_{4} - d_{5} \equiv 0 \pmod{11}.$$
+Observa que $d_{0} - d_{1}$, $d_{2} - d_{3}$, y $d_{4} - d_{5}$ son todos no negativos. Así,
+$$0 \leq (d_{0} - d_{1}) + (d_{2} - d_{3}) + (d_{4} - d_{5})$$
+$$\leq (d_{0} - d_{1}) + (d_{1} - d_{2}) + (d_{2} - d_{3}) + (d_{3} - d_{4}) + (d_{4} - d_{5})$$
+$$= d_{0} - d_{5}$$
+$$\leq 9.$$
+Por lo tanto,
+$$(d_{0} - d_{1}) + (d_{2} - d_{3}) + (d_{4} - d_{5}) = 0,$$
+lo cual solo puede ocurrir cuando $d_{0} = d_{1}$, $d_{2} = d_{3}$, y $d_{4} = d_{5}$, es decir, el número tiene la forma $aabbcc$. Podemos verificar fácilmente que todos los números de la forma $aabbcc$ con dígitos $a \leq b \leq c$ satisfacen nuestras condiciones, así que simplemente tenemos que contarlos.
+
+Hay $\binom{12}{3} = 220$ de estas ternas de dígitos $(a,b,c)$. Sin embargo, una de estas ternas es $(0,0,0)$, que corresponde al número 0. Así nuestra respuesta es $220 - 1 = \boxed{219}$.`),
+  hmmt('HMMT-2025-GUTS14', 2025, 'GUTS', 14, "Paralelogramo doblado en un pentágono regular", "Geometría",
+    String.raw`Un paralelogramo $P$ se puede doblar sobre una recta de modo que la figura resultante sea un pentágono regular de lado $1$. Calcula el perímetro de $P$.`,
+    String.raw`![Un diagrama que muestra un pentágono regular ABCDE con un paralelogramo CDE'D' adjunto, y la región ABDE reflejada sobre AB para formar ABD'E'.](/imagenes-problemas/hmmt/2025/49af5caed6e82e485305f9f5f5390039.jpeg)
+
+En el pentágono regular $ABCDE$ (etiquetado en sentido horario), refleja $ABDE$ sobre $AB$ para obtener $ABD'E'$. Entonces, $CDE'D'$ es uno de tales paralelogramos $P$. La longitud de $CD'$ es
+$$
+CB + BD = 1 + 2\cos \angle CBD = 1 + 2\cos (\pi /5) = 1 + \frac{\sqrt{5} + 1}{2} = \frac{\sqrt{5} + 3}{2}.
+$$
+Por lo tanto, el perímetro del paralelogramo buscado es
+$$
+2\left(1 + \frac{\sqrt{5} + 3}{2}\right) = \boxed{5 + \sqrt{5}}.
+$$`),
+  hmmt('HMMT-2025-GUTS15', 2025, 'GUTS', 15, "Triángulo rectángulo inscrito en un equilátero", "Geometría",
+    String.raw`El triángulo rectángulo $\triangle DEF$ con $\angle D = 90^{\circ}$ y $\angle F = 30^{\circ}$ está inscrito en el triángulo equilátero $\triangle ABC$ de modo que $D$, $E$, y $F$ están en los segmentos $\overline{BC}$, $\overline{CA}$, y $\overline{AB}$, respectivamente. Dado que $BD = 7$ y $DC = 4$, calcula $DE$.`,
+    String.raw`Solución 1. ![Un triángulo equilátero ABC con un triángulo rectángulo inscrito DEF, donde D está sobre BC, E está sobre CA, y F está sobre AB. El ángulo recto está en D.](/imagenes-problemas/hmmt/2025/ddd982a2b8a39ca0e846cc3a28985b3e.jpeg)
+
+De $\angle E = 60^{\circ}$, obtenemos que $\angle AEF = 120^{\circ} - \angle CED = \angle CDE$. Por lo tanto, $\triangle AEF \sim \triangle CDE$. Como $EF:DE = 2:1$, la razón de semejanza debe ser $2:1$, así que $AE = 2CD = 8$. Recuerda que $ABC$ tiene lado $7 + 4 = 11$, así que $EC = 11 - 8 = 3$. La Ley de Cosenos en $\triangle CDE$ da $DE^2 = 3^2 + 4^2 - 3\cdot 4 = 13$, así que $DE = \boxed{\sqrt{13}}$.
+
+Solución 2. ![El mismo triángulo equilátero ABC con el triángulo inscrito DEF, y un círculo que pasa por D, E, F. El punto X está marcado sobre AC, y se muestra una perpendicular punteada desde D hasta AC.](/imagenes-problemas/hmmt/2025/6bdde14db96ad51963d491cef9d82b2a.jpeg)
+
+Sea $X$ el segundo punto donde $\odot (DEF)$ se encuentra con $AC$. Entonces, $\angle FXA = 180^{\circ} - \angle FXE = \angle FDE = 90^{\circ}$ y $\angle XDC = 180^{\circ} - \angle DCX - \angle DXC = 120^{\circ} - \angle DXE = 120^{\circ} - \angle DFE = 90^{\circ}$. Se sigue que $CX = 2CD = 8$, así que $AX = 11 - CX = 3$, y $AF = 2AX = 6$. Así, la Ley de Cosenos en $\triangle AEF$ da $EF = \sqrt{8^2 + 6^2 - 8\cdot 6} = 2\sqrt{13}$, lo cual implica que $DE = \boxed{\sqrt{13}}$.`),
+  hmmt('HMMT-2025-GUTS16', 2025, 'GUTS', 16, "Distancia esperada en el conjunto de Cantor", "Combinatoria",
+    String.raw`El conjunto de Cantor se define como el conjunto de números reales $x$ tales que $0 \leq x < 1$ y el dígito $1$ no aparece en la expansión en base $3$ de $x$. Se seleccionan dos números de manera uniforme e independiente al azar del conjunto de Cantor. Calcula el valor esperado de su diferencia absoluta.
+
+(Formalmente, se puede elegir un número $x$ uniformemente al azar del conjunto de Cantor eligiendo primero un número real $y$ uniformemente al azar del intervalo $[0,1)$, escribiéndolo en binario, leyendo sus dígitos como si estuvieran en base $3$, y definiendo $x$ como $2$ veces el resultado.)`,
+    String.raw`Sea $d$ el valor esperado de la diferencia absoluta. Observa que el conjunto de Cantor está formado por dos copias más pequeñas de sí mismo, cada una escalada por un factor de $3$. Hay una probabilidad de $\frac{1}{2}$ de que los dos números elegidos estén en la misma copia, en cuyo caso el valor esperado de su diferencia absoluta es $\frac{1}{3} d$. De lo contrario, podemos escribirlos como $\frac{2 + x}{3}$ y $\frac{y}{3}$ para $x$ y $y$ elegidos independiente y uniformemente al azar en el conjunto de Cantor. Su diferencia es $\frac{2 + (x - y)}{3}$, que por simetría tiene valor esperado $\frac{2}{3}$. Así
+$$
+d = \frac{1}{2}\cdot \frac{1}{3} d + \frac{1}{2}\cdot \frac{2}{3} \Rightarrow d = \boxed{\frac{2}{5}}.
+$$`),
+  hmmt('HMMT-2025-GUTS17', 2025, 'GUTS', 17, "Cuadrática más una sucesión geométrica", "Álgebra",
+    String.raw`Sea $f$ un polinomio cuadrático con coeficientes reales, y sea $g_{1}$, $g_{2}$, $g_{3}$, ... una progresión geométrica de números reales. Define $a_{n} = f(n) + g_{n}$. Dado que $a_{1}$, $a_{2}$, $a_{3}$, $a_{4}$, y $a_{5}$ son iguales a $1$, $2$, $3$, $14$, y $16$, respectivamente, calcula $\frac{g_{2}}{g_{1}}$.`,
+    String.raw`Usaremos el método de diferencias finitas. Define $b_{n} = a_{n + 3} - 3a_{n + 2} + 3a_{n + 1} - a_{n}$. Como $f$ es cuadrático, la tercera diferencia finita de $f$ es cero. Así, $b_{n} = g_{n + 3} - 3g_{n + 2} + 3g_{n + 1} - g_{n}$. Sea $r$ la razón común de la sucesión geométrica, obtenemos que $b_{n} = (r^{3} - 3r^{2} + 3r - 1)g_{n}$. Así, $b_{n}$ es un múltiplo constante de $g_{n}$. Por lo tanto, la razón $\frac{g_{2}}{g_{1}} = \frac{b_{2}}{b_{1}}$. Calculando $b_{1} = 14 - 3\cdot 3 + 3\cdot 2 - 1 = 10$ y $b_{2} = 16 - 3\cdot 14 + 3\cdot 3 - 3\cdot 2 = -19$, obtenemos
+
+$$
+\frac{g_{2}}{g_{1}} = \frac{b_{2}}{b_{1}} = \boxed{\frac{19}{10}}.
+$$`),
+  hmmt('HMMT-2025-GUTS18', 2025, 'GUTS', 18, "Valor esperado de una iteración de permutación", "Combinatoria",
+    String.raw`Sea $f:\{1,2,3,\ldots ,9\} \to \{1,2,3,\ldots ,9\}$ una permutación elegida uniformemente al azar entre las $9!$ permutaciones posibles. Calcula el valor esperado de $\underbrace{f(f(\cdots f(f(1))\cdots))}_{2025\ f\text{'s}}$.`,
+    String.raw`Primero calculamos la probabilidad de que $f(1) = 1$. Observa que $f(1) = 1$ si y solo si $1$ es parte de un ciclo cuya longitud divide a $2025$.
+
+Afirmamos que, para cualquier $k$ dado, la probabilidad de que $1$ esté en un ciclo de longitud $k$ es $\frac{1}{9}$. En efecto, la probabilidad de que $f(1) \neq 1$ es $\frac{8}{9}$. Dado esto, quedan $8$ valores posibles para $f(f(1))$, así que la probabilidad de que $f(f(1)) \neq 1$ es $\frac{7}{8}$, y así sucesivamente. Finalmente, quedan $10 - k$ valores posibles para $f^{k}(1)$, así que la probabilidad de que $f^{k}(1) = 1$ dadas todas las suposiciones anteriores es $\frac{1}{10 - k}$. Así, la probabilidad de que $1$ esté en un ciclo de longitud $k$ es
+$$
+\frac{8}{9} \cdot \frac{7}{8} \cdot \frac{10 - k}{11 - k} \cdot \frac{1}{10 - k} = \frac{1}{9}.
+$$
+Por lo tanto, la probabilidad de que $f^{2025}(1) = 1$ es la probabilidad de que $1$ esté en un ciclo de longitud $1$, $3$, $5$, o $9$, que es $\frac{4}{9}$.
+Si $f(1) \neq 1$, entonces $f(1)$ tiene la misma probabilidad de ser cualquiera de $2$ a $9$ por simetría, promediando $5.5$.
+Por lo tanto, el valor esperado de $f(1)$ es
+$$
+\frac{4}{9} \cdot 1 + \frac{5}{9} \cdot 5.5 = \boxed{\frac{7}{2}}.
+$$`),
+  hmmt('HMMT-2025-GUTS19', 2025, 'GUTS', 19, "Subconjuntos balanceados con una condición modular", "Teoría de Números",
+    String.raw`Un subconjunto $S$ de $\{1,2,3,\ldots ,2025\}$ se llama balanceado si para todos los elementos $a$ y $b$ en $S$, existe un elemento $c$ en $S$ tal que $2025$ divide a $a + b - 2c$. Calcula el número de subconjuntos balanceados no vacíos.`,
+    String.raw`Trabajamos mód $2025$, así que la condición se convierte en que para cualesquiera $a$, $b \in S$, tenemos $\frac{a + b}{2} \in S$.
+
+Primero, probamos que $S$ debe ser una progresión aritmética. Observa que si $S$ es balanceado, entonces también lo es el desplazamiento $S + k = \{s + k \mid s \in S\}$ para todo $k$, así que podemos suponer que $0 \in S$. Sea $s$ un elemento de $S$ tal que $d = \gcd (s, 2025)$ es mínimo. Observa que para cualquier $t \in S$, tenemos $\frac{t}{2} = \frac{0 + t}{2} \in S$. Así, $\frac{s}{2^n}$ está en $S$ para todo $n$. Como $\gcd (2, 2025) = 1$, esto implica que $2^n s \bmod 2025 \in S$ para todo $n$. Probamos la siguiente afirmación.
+
+Afirmación 1. Para todo entero positivo $m$, tenemos $ms \in S$.
+
+Demostración. Procedemos por inducción en el número de 1's en la representación binaria de $m$.
+
+Caso base: $m$ tiene un 1 en binario, así que $m$ es una potencia de 2. Entonces $ms \in S$ como se observó arriba.
+
+Paso inductivo: Supón que la afirmación se cumple para todo $m$ que tenga $k$ 1's en su representación binaria. Supón que $m$ tiene $k + 1$ 1's en su representación binaria. Sea $2^{n}$ la mayor potencia de 2 que es a lo más $m$. Entonces $m - 2^{n}$ tiene $k$ 1's en su representación binaria, así que $2(m - 2^{n})$ también. Por la hipótesis de inducción, $2(m - 2^{n})s \in S$. Además, $2^{n + 1}s \in S$, así que
+$$
+m s = \frac{2^{n + 1}s + 2(m - 2^{n})s}{2} \in S,
+$$
+como se quería.
+
+Se sigue que todo múltiplo de $s$ está en $S$. Los múltiplos de $s$ son precisamente los múltiplos de $d$, así que $S$ contiene todo múltiplo de $d$. Ahora supón por contradicción que $S$ contiene algún elemento $t$ que no es múltiplo de $d$, así que podemos escribir $t = cd + r$ tal que $0 < r < d$. Entonces $2t \in S$, así que
+$$
+r = \frac{2t + (- 2c)d}{2} \in S.
+$$
+Pero entonces $\gcd (r, 2025) \leq r < d$, contradiciendo la minimalidad de $d$. Así $S$ es precisamente los múltiplos de $d$.
+
+Se puede verificar que para cualquier $d \mid 2025$, el conjunto de múltiplos de $d$ es balanceado. En efecto, como $d$ es impar, para cualesquiera $ad$, $bd \in S$, su promedio $\frac{(a + b)d}{2}$ es múltiplo de $d$ y por lo tanto también está en $S$. Así, cualquier desplazamiento de tal conjunto también es balanceado; como se vio arriba, estos clasifican todos los conjuntos balanceados. Para cada $d \mid 2025$, hay $d$ elecciones para $S$, así que la respuesta es
+$$
+\sum_{d \mid 2025} d = \frac{3^5 - 1}{2} \cdot \frac{5^3 - 1}{4} = \boxed{3751}.
+$$`),
+  hmmt('HMMT-2025-GUTS20', 2025, 'GUTS', 20, "Múltiplos de 7 con dígitos menores que 3", "Teoría de Números",
+    String.raw`Calcula el 100º menor múltiplo positivo de $7$ cuyos dígitos en base $10$ son todos estrictamente menores que $3$.`,
+    String.raw`Construimos una biyección que preserva el orden entre los múltiplos positivos de $7$ en base $10$ cuyos dígitos son todos menores que $3$, y los múltiplos positivos de $7$. Para cualquier múltiplo de $7$ en base $10$ con dígitos todos menores que $3$, lo interpretamos como un número en base $3$ y lo convertimos a un decimal en base $10$, el cual será múltiplo de $7$. Por ejemplo, $1022$ se transformaría en $1022_3 = 35_{10}$.
+
+Primero mostramos que este es un mapeo válido. Sea $a_n \ldots a_1 a_0$ un múltiplo arbitrario de $7$ (en base $10$) cuyos dígitos son todos menores que $3$. Esto tiene una interpretación natural en base $3$, y convertir esta interpretación a base $10$ da
+$$
+a_n \ldots a_1 a_{0_3} = a_n \cdot 3^n + \cdots + a_1 \cdot 3^1 + a_0 \cdot 3^0 \equiv a_n \cdot 10^n + \cdots + a_1 \cdot 10^1 + a_0 \cdot 10^0 = a_n \ldots a_1 a_0 \pmod{7},
+$$
+que es múltiplo de $7$.
+
+Este mapeo es una inyección porque el cambio de base es una inyección, y este mapeo también es una sobreyección porque para cualquier múltiplo de $7$ en base $10$, podemos convertirlo a base $3$ e interpretar este número como un decimal en base $10$. (Invirtiendo los pasos anteriores, vemos que el número decimal resultante es múltiplo de $7$.) Además, para dos múltiplos positivos de $7$ cuyos dígitos son menores que $3$, el mayor tendrá una representación en base $3$ mayor, así que este mapeo preserva el orden.
+
+Así, este mapeo es una biyección que preserva el orden entre los múltiplos de $7$ en base $10$ con dígitos menores que $3$ y los múltiplos de $7$ en base $3$. Por lo tanto, la respuesta es la preimagen del 100º menor múltiplo positivo de $7$, que es igual a $700_{10} = \boxed{221221}_{3}$.`),
+  hmmt('HMMT-2025-GUTS21', 2025, 'GUTS', 21, "Un número de cinco dígitos como un cuadrado", "Teoría de Números",
+    String.raw`Calcula el único entero positivo de 5 dígitos $abcde$ tal que $a \neq 0$, $c \neq 0$, y
+$$abcde = (ab + cde)^2.$$`,
+    String.raw`Sea $ab = X$ y $cde = Y$. La ecuación original equivale a $1000X + Y = (X + Y)^2$. Tomando esto módulo 999, obtenemos $(X + Y)^2 \equiv X + Y \pmod{999}$. Por lo tanto, $27 \cdot 37 = 999$ divide a $(X + Y)(X + Y - 1)$. Como $\gcd(X + Y, X + Y - 1) = 1$, cada uno de 27 y 37 puede dividir a lo más a uno de $X + Y$ y $X + Y - 1$. Por lo tanto, $X + Y$ es 0 o 1 módulo 27, así como 0 o 1 módulo 37.
+
+Por el Teorema Chino del Residuo, los cuatro residuos posibles para $X + Y$ módulo 999 son 0, 1, 297, y 703. Como $(X + Y)^2 = abcde$ debe ser un entero de 5 dígitos, sabemos que $100 \leq X + Y \leq 316$, así que el único valor posible para $X + Y$ es 297. Así, la respuesta es $(X + Y)^2 = 297^2 = \boxed{88209}$.`),
+  hmmt('HMMT-2025-GUTS22', 2025, 'GUTS', 22, "Valor mínimo de un producto simétrico abc", "Álgebra",
+    String.raw`Sean $a$, $b$, y $c$ números reales tales que $a^2(b + c) = 1$, $b^2(c + a) = 2$, y $c^2(a + b) = 5$. Dado que hay tres valores posibles para $abc$, calcula el menor valor posible de $abc$.`,
+    String.raw`Sea $x = abc$. Multiplicando todas las ecuaciones y simplificando se obtiene
+$$(abc)^2 (a + b)(b + c)(c + a) = 10,$$
+$$(abc)^2 \left(a^2(b + c) + b^2(c + a) + c^2(a + b) + 2abc\right) = 10,$$
+$$x^2 (1 + 2 + 5 + 2x) = 10,$$
+$$x^2 (x + 4) = 5.$$
+La cúbica resultante se factoriza como $(x - 1)(x^2 + 5x + 5) = 0$. Por lo tanto, el menor valor posible de $abc$ es $\boxed{\frac{-5 - \sqrt{5}}{2}}$.`),
+  hmmt('HMMT-2025-GUTS23', 2025, 'GUTS', 23, "Círculo tangente a los lados de un hexágono y a dos rectas", "Geometría",
+    String.raw`El hexágono regular $ABCDEF$ tiene lado $2$. El círculo $\omega$ está dentro del hexágono y es tangente a los segmentos $\overline{AB}$ y $\overline{AF}$. Existen dos rectas perpendiculares tangentes a $\omega$ que pasan por $C$ y $E$, respectivamente. Dado que estas dos rectas no se intersecan sobre la recta $AD$, calcula el radio de $\omega$.`,
+    String.raw`Solución 1. ![Un hexágono regular etiquetado ABCDEF con un círculo inscrito tangente a los lados AB y AF. El centro del círculo está marcado O. Se trazan dos rectas tangentes rojas desde los puntos C y E, que se encuentran en el punto P fuera del círculo. Se etiquetan un arco punteado y varios puntos.](/imagenes-problemas/hmmt/2025/dcb968f470d9995223369f2d83efd4f0.jpeg)
+
+Sea $O$ el centro de $\omega$, y sea $P$ el punto donde se intersecan las dos rectas tangentes. Observa que $O$ está en la bisectriz externa de $\angle CPE$ porque las tangentes son simétricas respecto a la recta $PO$. Además, $O$ está en la mediatriz de $CE$ por simetría. Por el Hecho 5, $COPE$ es cíclico y $\angle COE = 90^{\circ}$. Para terminar, observa que $\angle COD = 45^{\circ}$. Trazando la altura $CH$ hacia $AD$ obtenemos $OH = CH = \sqrt{3}$. Así, $AO = AH - OH = 3 - \sqrt{3}$. La respuesta buscada es entonces $\frac{\sqrt{3}}{2} \cdot AO = \boxed{\frac{3\sqrt{3} - 3}{2}}$.
+
+Solución 2. Otra forma de obtener $\angle COE = 90^{\circ}$ es la siguiente.
+Sea $\omega$ tangente a las rectas desde $C$ y $E$ en $Q$ y $R$, respectivamente. Observa que $OC = OE$ (ya que $O$ está en la mediatriz de $CE$) y $OQ = OR$, así que $\triangle OCQ \cong \triangle OER$. Entonces $\angle COE = \angle QOR = 90^{\circ}$.`),
+  hmmt('HMMT-2025-GUTS24', 2025, 'GUTS', 24, "Polinomio factorial módulo 101²", "Teoría de Números",
+    String.raw`Para cualquier entero $x$, sea
+$$
+  f(x) = 100! \left(1 + x + \frac{x^{2}}{2!} + \frac{x^{3}}{3!} + \dots + \frac{x^{100}}{100!}\right).
+$$
+Se elige un entero positivo $a$ tal que $f(a) - 20$ es divisible entre $101^{2}$. Calcula el residuo cuando $f(a + 101)$ se divide entre $101^{2}$.`,
+    String.raw`Solución 1. Por el teorema del binomio,
+$$
+(a + 101)^{n} \equiv a^{n} + \binom{n}{1} a^{n - 1}101 = a^{n} + 101n a^{n - 1} \pmod {101^{2}}.
+$$
+Usando esto obtenemos (todas las congruencias son módulo $101^{2}$)
+$$
+\begin{align*}
+f(a + 101) &= 100!\sum_{n = 0}^{100}\frac{(a + 101)^{n}}{n!} \\
+&\equiv 100!\sum_{n = 0}^{100}\left(\frac{a^{n}}{n!} +\frac{101n a^{n - 1}}{n!}\right) \\
+&\equiv f(a) + 100!\cdot 101\sum_{n = 1}^{100}\frac{a^{n - 1}}{(n - 1)!} \\
+&\equiv f(a) + 101f(a) - 100!\cdot 101\frac{a^{100}}{100!} \\
+&\equiv f(a) + 101(f(a) - 1) \\
+&\equiv 20 + 101(20 - 1) = \boxed{1939}\quad (\mathrm{mod}\ 101^{2}).
+\end{align*}
+$$
+
+Solución 2. La solución anterior se puede ver como una consecuencia del lema de Hensel de la siguiente manera. Como $101$ es primo, para cualquier entero $x$ no divisible entre $101$, tenemos que
+$$
+f^{\prime}(x) = 100!\left(1 + x + \frac{x^{2}}{2!} +\dots +\frac{x^{99}}{99!}\right) = f(x) - x^{100}\equiv f(x) - 1\pmod {101}.
+$$
+Claramente $101 \nmid a$. Por lo tanto, por el lema de Hensel, obtenemos que
+$$
+f(a + 101) \equiv f(a) + 101f^{\prime}(a) \equiv 20 + 101 \cdot 19 \equiv \boxed{1939} \pmod {101^{2}}.
+$$`),
+  hmmt('HMMT-2025-GUTS25', 2025, 'GUTS', 25, "Trapecio con restricciones de bisectriz de ángulo", "Geometría",
+    String.raw`Sea $ABCD$ un trapecio tal que $AB \parallel CD$, $AD = 13$, $BC = 15$, $AB = 20$, y $CD = 34$. El punto $X$ está dentro del trapecio de modo que $\angle XAB = 2\angle XBA$ y $\angle XDC = 2\angle XCD$. Calcula $XD - XA$.`,
+    String.raw`![Un trapecio etiquetado ABCD con AB paralelo a CD, y los puntos interiores X, P, y Q marcados. Se muestran varias marcas de ángulos y de congruencia, ilustrando las relaciones geométricas descritas.](/imagenes-problemas/hmmt/2025/7a6b1d63c0cdadfc836209379f9acbdc.jpeg)
+
+Construye el punto $P$ sobre $AB$ tal que $XA = XP$ y el punto $Q$ sobre $CD$ tal que $XD = XQ$. La condición de ángulos da $QC = XQ = XD$ y $PB = XP = XA$. Además, $ADQP$ es un trapecio isósceles.
+
+Sea $S$ la proyección de $A$ sobre $CD$, y sea $T$ sobre $CD$ tal que $AT \parallel BC$. Entonces $ADT$ es un triángulo 13-14-15, así que $DS = 5$. Por lo tanto, $QD - PA = 10$. Finalmente, obtenemos
+$$
+XD - XA = QC - PB = (34 - QD) - (20 - PA) = 14 - 10 = \boxed{4}.
+$$`),
+  hmmt('HMMT-2025-GUTS26', 2025, 'GUTS', 26, "Diamantes azules esperados tras un proceso aleatorio", "Combinatoria",
+    String.raw`Isabella tiene una bolsa con 20 diamantes azules y 25 diamantes morados. Repite el siguiente proceso 44 veces: saca un diamante de la bolsa de manera uniforme al azar, y luego pone un diamante azul y un diamante morado en la bolsa. Calcula el número esperado de diamantes azules en la bolsa después de las 44 repeticiones.`,
+    String.raw`Sean $a = 20$ y $b = 25$ los números iniciales de diamantes azules y morados, respectivamente, y sea $c = 44$ el número de veces que Isabella realiza la operación. Supón que en algún momento la bolsa contiene $x$ diamantes azules y $y$ diamantes morados, con $x + y = z$ diamantes en total. Después de un paso, la bolsa tendrá $z + 1$ diamantes. El cambio esperado en el número de diamantes azules en este paso es $(- x / z) + 1 = y / z$, y de igual manera esta cantidad para los diamantes morados es $x / z$. Así, el cambio esperado en la diferencia entre el número de diamantes azules y morados es $(y - x) / z$. Como esta diferencia era inicialmente $x - y$, el valor esperado de esta diferencia se multiplica por $(z - 1) / z$ en cada paso (sin importar $x - y$). Como $z$ comienza en $a + b$ y termina en $a + b + c$, la diferencia esperada después de $c$ operaciones es
+$$
+(a - b)\cdot \prod_{z = a + b}^{a + b + c - 1}\frac{z - 1}{z} = \frac{(a + b - 1)(a - b)}{(a + b + c - 1)},
+$$
+y como el número total de diamantes es $a + b + c$, el número esperado de diamantes azules al final es
+$$
+\frac{a + b + c}{2} + \frac{(a + b - 1)(a - b)}{2(a + b + c - 1)}.
+$$
+Sustituyendo $a = 20$, $b = 25$, y $c = 44$ obtenemos la respuesta, $\boxed{\frac{173}{4}}$.`),
+  hmmt('HMMT-2025-GUTS27', 2025, 'GUTS', 27, "MCD de expresiones exponenciales", "Teoría de Números",
+    String.raw`Calcula el número de pares ordenados $(m, n)$ de enteros positivos impares, ambos menores que $80$, tales que
+$$\gcd (4^{m} + 2^{m} + 1, 4^{n} + 2^{n} + 1) > 1.$$`,
+    String.raw`Primero, caracterizamos todos los pares ordenados de enteros positivos generales (no necesariamente impares) $(m, n)$ tales que $\gcd (4^{m} + 2^{m} + 1, 4^{n} + 2^{n} + 1) > 1$. Afirmamos que $(m, n)$ funciona si y solo si
+- $m$ y $n$ son ambos pares, o
+- $\nu_{3}(m) = \nu_{3}(n)$.
+
+Demostración de la necesidad. Supón que $p$ es un primo que divide tanto a $4^{m} + 2^{m} + 1$ como a $4^{n} + 2^{n} + 1$. Si $p = 3$, $m$ y $n$ deben ser ambos pares. De aquí en adelante supón que $p \neq 3$. Sea $d$ el orden de $2$ módulo $p$. Entonces, como $p \mid 2^{3m} - 1$, encontramos que $d \mid 3m$. Además, no podemos tener $p \mid 2^{m} - 1$. De lo contrario, por levantamiento del exponente (y $p \neq 3$),
+$$
+\nu_{p}(2^{3m} - 1) = \nu_{p}(2^{m} - 1) + \nu_{p}(3) = \nu_{p}(2^{m} - 1) \implies \nu_{p}(4^{m} + 2^{m} + 1) = 0.
+$$
+Los dos resultados anteriores implican $\nu_{3}(d) = \nu_{3}(m) + 1$. De manera similar, $\nu_{3}(d) = \nu_{3}(n) + 1$, así que $\nu_{3}(m) = \nu_{3}(n)$.
+
+Demostración de la suficiencia. Si $m$ y $n$ son ambos pares, entonces $3$ divide tanto a $4^{m} + 2^{m} + 1$ como a $4^{n} + 2^{n} + 1$. Si $\nu_{3}(m) = \nu_{3}(n) = k$, entonces afirmamos que $4^{3^{k}} + 2^{3^{k}} + 1$ divide tanto a $4^{m} + 2^{m} + 1$ como a $4^{n} + 2^{n} + 1$. En efecto, observa que, como polinomios, $x^{2} + x + 1$ divide a $x^{2\ell} + x^{\ell} + 1$ cuando $3 \nmid \ell$. Sustituyendo $x = 2^{3^{k}}$ con $\ell = m / 3^{k}$ y $\ell = n / 3^{k}$ se obtiene el resultado buscado.
+
+Extracción de la respuesta. Contamos los pares de enteros impares $(m,n)$ menores que $80$ con $\nu_{3}(m) = \nu_{3}(n)$. De todos los enteros en el conjunto $\{1,3,5,\ldots ,79\}$, hay $27$, $9$, $3$, y $1$ de ellos que tienen $\nu_{3}$ igual a $0$, $1$, $2$, y $3$, respectivamente. Por lo tanto, la respuesta es $27^{2} + 9^{2} + 3^{2} + 1^{2} = \boxed{820}$.`),
+  hmmt('HMMT-2025-GUTS28', 2025, 'GUTS', 28, "Función recursiva con piso y techo", "Teoría de Números",
+    String.raw`Sea $f$ una función de los enteros no negativos a los enteros no negativos tal que $f(0) = 0$ y
+$$
+  f(m) = f\left(\left\lfloor \frac{m}{2} \right\rfloor\right) + \left\lceil \frac{m}{2} \right\rceil^2
+$$
+para todo entero positivo $m$. Calcula
+$$
+  \frac{f(1)}{1 \cdot 2} + \frac{f(2)}{2 \cdot 3} + \frac{f(3)}{3 \cdot 4} + \dots + \frac{f(31)}{31 \cdot 32}.
+$$
+(Aquí, $\lfloor z\rfloor$ es el mayor entero menor o igual a $z$, y $\lceil z\rceil$ es el menor entero mayor o igual a $z$.)`,
+    String.raw`Solución 1. Para todo entero positivo $n$, sea $\omega(n) = f(n) - f(n - 1)$. Afirmamos que $\omega(n)$ es el mayor divisor impar de $n$ para todo $n > 0$. En efecto, para todo entero positivo $k$, tenemos
+
+$$
+  \omega(2k) = f(2k) - f(2k - 1) = f(k) + k^2 - (f(k - 1) + k^2) = f(k) - f(k - 1) = \omega(k)
+$$
+y
+$$
+  \omega(2k + 1) = f(2k + 1) - f(2k) = f(k) + (k + 1)^2 - (f(k) + k^2) = 2k + 1.
+$$
+Por inducción en los enteros positivos, $\omega(n)$ es en efecto el mayor divisor impar de $n$.
+
+Ahora podemos reescribir la suma como
+$$
+  \sum_{n = 1}^{31} \frac{f(n)}{n(n + 1)} = \sum_{n = 1}^{31} \left( \frac{f(n)}{n} - \frac{f(n)}{n + 1} \right ) = \left( \sum_{n = 1}^{30} \frac{f(n) - f(n - 1)}{n} \right ) - \frac{f(31)}{32}.
+$$
+Observa que usando la definición recursiva original, podemos calcular
+$$
+  f(31) = 16^2 + 8^2 + 4^2 + 2^2 + 1^2 = 341.
+$$
+Además, también vemos que $\frac{f(n) - f(n - 1)}{n} = \frac{\omega(n)}{n} = 2^{-\nu_2(n)}$, donde $2^{\nu_2(n)}$ es la mayor potencia de $2$ que divide a $n$. Así, nuestra suma buscada es
+$$
+  \left( \sum_{n = 1}^{31} 2^{-\nu_2(n)} \right ) - \frac{341}{32} = 16 \cdot 2^{-0} + 8 \cdot 2^{-1} + 4 \cdot 2^{-2} + 2 \cdot 2^{-3} + 1 \cdot 2^{-4} - \frac{341}{32} = \boxed{\frac{341}{32}}.
+$$
+
+Solución 2. De la recursión original, para todo entero positivo $n$, tenemos
+$$
+  \frac{f(2n)}{2n(2n + 1)} = \frac{f(n) + n^2}{2n(2n + 1)} = \frac{f(n)}{2n(2n + 1)} + \frac{n}{2(2n + 1)}
+$$
+y
+$$
+  \frac{f(2n + 1)}{(2n + 1)(2n + 2)} = \frac{f(n) + (n + 1)^2}{(2n + 1)(2n + 2)} = \frac{f(n)}{(2n + 1)(2n + 2)} + \frac{n + 1}{2(2n + 1)}.
+$$
+Sumando estas dos ecuaciones se obtiene
+$$
+  \frac{f(2n)}{2n(2n + 1)} + \frac{f(2n + 1)}{(2n + 1)(2n + 2)} = \frac{f(n)}{2n(n + 1)} + \frac{1}{2}.
+$$
+Así, si $T(n) = \sum_{k = 1}^n \frac{f(k)}{k(k + 1)}$, tenemos
+$$
+  T(2n + 1) = \sum_{k = 1}^{2n + 1} \frac{f(k)}{k(k + 1)} = \frac{f(1)}{1 \cdot 2} + \sum_{m = 1}^n \left( \frac{f(2m)}{2m(2m + 1)} + \frac{f(2m + 1)}{(2m + 1)(2m + 2)} \right )
+$$
+$$
+  = \frac{1}{2} + \sum_{m = 1}^n \left( \frac{f(m)}{2m(m + 1)} + \frac{1}{2} \right )
+$$
+$$
+  = \frac{n + 1}{2} + \frac{1}{2} T(n).
+$$
+Comenzando desde $T(1) = 1$, podemos calcular $T(3) = \frac{5}{4}$, $T(7) = \frac{21}{8}$, $T(15) = \frac{85}{16}$, y finalmente, $T(31) = \boxed{\frac{341}{32}}$.`),
+  hmmt('HMMT-2025-GUTS29', 2025, 'GUTS', 29, "Semejanza de un círculo con distancias fijas", "Geometría",
+    String.raw`Los puntos $A$ y $B$ están en el círculo $\omega$ con centro $O$. Sea $X$ un punto dentro de $\omega$. Supón que $XO = 2\sqrt{2}$, $XA = 1$, $XB = 3$, y $\angle AXB = 90^{\circ}$. Los puntos $Y$ y $Z$ están en $\omega$ tales que $Y \neq A$ y los triángulos $\triangle AXB$ y $\triangle YXZ$ son semejantes con la misma orientación. Calcula $XY$.`,
+    String.raw`Solución 1. Considera una rotación alrededor de $X$ por $90^{\circ}$ seguida de una homotecia de razón $\frac{1}{3}$ que envía $B$ a $A$. Esto envía $\omega$ a $\omega'$ con radio $\frac{1}{3}$ del radio de $\omega$ y centro $O'$. Como $A$ es la imagen de $B$ bajo esta rotación, sabemos que $A$ está en ambos círculos; el mismo argumento muestra que $Y$ debe estar en ambos círculos. Así, $Y$ es la reflexión de $A$ sobre $OO'$. En particular, esto significa que $XY = AX'$, donde $X'$ es la reflexión de $X$ sobre $OO'$.
+
+Sea $M$ el punto medio de $AB$. Observa que como $\triangle OXO'$ $\sim$ $\triangle BXA$, también tenemos $\triangle XOX'$ $\sim$ $\triangle XMA$, ya que ambos son isósceles y $\angle XOX' = 2\angle XOO' = 2\angle XBA = \angle XMA$. Esto implica que $\triangle XOM \sim \triangle XX'A$. Así, sabemos que $AX' = OM \cdot \frac{XA}{XM} = \frac{2}{\sqrt{10}} OM$. Falta calcular $OM$; observando que la distancia entre $O$ y el pie desde $X$ a $AB$ es $\frac{2}{5}\sqrt{10}$, y que la altura de $\triangle AXY$ tiene longitud $\frac{3}{10}\sqrt{10}$, obtenemos que la distancia de $O$ a $AB$ es
+
+$$
+\frac{3}{10}\sqrt{10} + \sqrt{\left(2\sqrt{2}\right)^2 - \left(\frac{2}{5}\sqrt{10}\right)^2} = \frac{11}{10}\sqrt{10}
+$$
+
+por el Teorema de Pitágoras, lo cual significa que $XY = AX' = \boxed{\frac{11}{5}}$.
+
+Solución 2. ![Un diagrama geométrico que muestra dos círculos con los puntos A, B, X, Y, Z, O, M, N, P, y X' etiquetados. Se marcan varios segmentos y un ángulo recto en X, ilustrando las relaciones descritas.](/imagenes-problemas/hmmt/2025/79e94bdb5b607f1c5bb5ad0a8ff2bf6a.jpeg)
+
+Sea $M$ el punto medio de $AB$. Primero encontraremos $MO$.
+
+Sea $P$ el punto donde la bisectriz interna de $\angle A X B$ interseca a $\odot (A X B)$. Por Ptolomeo, $X P = 2\sqrt{2} = X O$. Sea $X'$ el pie de la altura desde $X$ a $M O$. Observa que $O$ es la reflexión de $P$ a través de $X X'$. Por el área de $\triangle A X B$, tenemos $X'M = \frac{3}{\sqrt{10}}$. Por lo tanto,
+
+$$
+M O = O X' + X'M = X'P + X'M = 2X'M + M P = \frac{11\sqrt{10}}{10}.
+$$
+
+Por la semejanza espiral $\triangle X A B \mapsto \triangle X Y Z$, tenemos que $A Y \perp B Z$ y $\angle A O B + \angle Y O Z = 90^{\circ}$. Por lo tanto, $\triangle X A M \sim \triangle X Y N$ donde $N$ es el punto medio de $Y Z$. Así, $Y Z = \frac{11\sqrt{10}}{5}$ y $X Y = \boxed{\frac{11}{5}}$.`),
+  hmmt('HMMT-2025-GUTS30', 2025, 'GUTS', 30, "Sistema con raíces cuadradas simétricas", "Álgebra",
+    String.raw`Sean $a$, $b$, y $c$ números reales que satisfacen el sistema de ecuaciones
+$$a\sqrt{1 + b^{2}} + b\sqrt{1 + a^{2}} = \frac{3}{4},$$
+$$b\sqrt{1 + c^{2}} + c\sqrt{1 + b^{2}} = \frac{5}{12},$$
+y
+$$c\sqrt{1 + a^{2}} + a\sqrt{1 + c^{2}} = \frac{21}{20}.$$
+
+Calcula $a$.`,
+    String.raw`Solución 1. Recuerda que las funciones $\sinh(x) = \frac{e^{x} - e^{-x}}{2}$ y $\cosh(x) = \frac{e^{x} + e^{-x}}{2}$ satisfacen la relación
+$$\sinh(x + y) = \sinh(x)\cosh(y) + \cosh(x)\sinh(y) = \sinh(x)\sqrt{1 + \sinh(y)^{2}} + \sinh(y)\sqrt{1 + \sinh(x)^{2}}.$$
+Como $\sinh$ es sobreyectiva, podemos hacer la sustitución $a = \sinh(x)$, $b = \sinh(y)$, y $c = \sinh(z)$, lo cual convierte las ecuaciones en
+$$\sinh(x + y) = \frac{2 - \frac{1}{2}}{2},$$
+$$\sinh(y + z) = \frac{\frac{3}{2} - \frac{2}{3}}{2},$$
+$$\sinh(z + x) = \frac{\frac{5}{2} - \frac{2}{5}}{2}.$$
+Así, $x + y = \log(2)$, $y + z = \log(3 / 2)$, y $z + x = \log(5 / 2)$. Resolviendo estas ecuaciones se obtiene $x = \log(\sqrt{10 / 3})$, así que
+$$a = \frac{1}{2}\left(\sqrt{\frac{10}{3}} - \sqrt{\frac{3}{10}}\right) = \boxed{\frac{7}{2\sqrt{30}}}$$
+
+Solución 2.
+Podemos encontrar números reales positivos $x$, $y$, y $z$ tales que $a = \frac{x^{2} - 1}{2x}$, $b = \frac{y^{2} - 1}{2y}$, y $c = \frac{z^{2} - 1}{2z}$. Entonces, la primera ecuación se convierte en
+$$\frac{x^{2} - 1}{2x} \cdot \frac{y^{2} + 1}{2y} + \frac{y^{2} - 1}{2y} \cdot \frac{x^{2} + 1}{2x} = \frac{3}{4},$$
+lo cual se simplifica a
+$$xy - \frac{1}{xy} = \frac{3}{2},$$
+de donde se sigue que $xy = 2$. De manera similar, $yz - \frac{1}{yz} = \frac{5}{6}$ y $zx - \frac{1}{zx} = \frac{21}{10}$, así que $yz = \frac{3}{2}$ y $zx = \frac{5}{2}$. Así $x = \sqrt{(2 \cdot \frac{5}{2}) / (\frac{3}{2})} = \sqrt{\frac{10}{3}}$, y
+$$a = \frac{(10 / 3) - 1}{2\sqrt{10 / 3}} = \boxed{\frac{7}{2\sqrt{30}}}$$`),
+  hmmt('HMMT-2025-GUTS31', 2025, 'GUTS', 31, "Círculo tangente a una parábola y a una curva cúbica", "Geometría",
+    String.raw`Existe un único círculo que es tangente a la parábola $y = x^{2}$ en dos puntos y también tangente a la curva $x = \sqrt{\frac{y^{3}}{1 - y}}$. Calcula el radio de este círculo.`,
+    String.raw`![Un plano coordenado que muestra una parábola que abre hacia arriba, un círculo tangente a la parábola en dos puntos, y otra curva tangente al mismo círculo. También se muestra el círculo unitario como un círculo punteado.](/imagenes-problemas/hmmt/2025/8ed7b13c95d2c464ecbb46a164de476c.jpeg)
+
+Podemos elevar al cuadrado ambos lados de la segunda curva para obtener $x^{2} = \frac{y^{3}}{1 - y}$, lo cual se reordena a
+$$
+\frac{x^{2}}{(x^{2} + y^{2})^{2}} = \frac{y}{x^{2} + y^{2}}.
+$$
+Esta relación implica que las curvas $y = x^{2}$ y $x^{2} = \frac{y^{3}}{1 - y}$ se corresponden entre sí bajo una inversión respecto al círculo unitario $x^{2} + y^{2} = 1$. Por lo tanto, el círculo único que buscamos debe ser invariante bajo la inversión respecto a $x^{2} + y^{2} = 1$.
+
+Como el círculo es tangente a $y = x^{2}$, sabemos que el círculo tiene la forma
+$$
+x^{2} + (y - y_{0})^{2} = r^{2}.
+$$
+Sabemos que la longitud de la tangente desde $(0,0)$ a este círculo es $1$. Como la distancia de $(0,0)$ al centro del círculo es $y_{0}$, el Teorema de Pitágoras da $r^{2} + 1 = y_{0}^{2}$.
+
+Como la parábola $y = x^{2}$ es tangente a este círculo en dos puntos distintos, la ecuación $x^{2} + (x^{2} - y_{0})^{2} = r^{2} = y_{0}^{2} - 1$ debe tener dos raíces dobles. Por lo tanto,
+$$
+x^{2} + (x^{2} - y_{0})^{2} - (y_{0}^{2} - 1) = x^{4} - (2y_{0} - 1)x^{2} + 1
+$$
+debe ser un cuadrado perfecto, así que $2y_{0} - 1 = 2 \implies y_{0} = \frac{3}{2}$.
+
+Esto significa $r^{2} = y_{0}^{2} - 1 = \frac{5}{4}$, así que el radio del círculo es $\boxed{\frac{\sqrt{5}}{2}}$.`),
+  hmmt('HMMT-2025-GUTS32', 2025, 'GUTS', 32, "Visitas esperadas a la línea x+y máxima", "Combinatoria",
+    String.raw`En el plano coordenado, un lazo reticular cerrado de longitud $2n$ es una sucesión de puntos reticulares $P_{0}, P_{1}, P_{2}, \ldots , P_{2n}$ tales que $P_{0}$ y $P_{2n}$ son ambos el origen y $P_{i}P_{i + 1} = 1$ para cada $i$. Se elige un lazo reticular cerrado de longitud $2026$ de manera uniforme al azar entre todos esos lazos. Sea $k$ el mayor entero tal que la recta $\ell$ de ecuación $x + y = k$ pasa por al menos un punto del lazo. Calcula el número esperado de índices $i$ tales que $0 \leq i \leq 2025$ y $P_{i}$ está en $\ell$.
+(Un punto reticular es un punto con coordenadas enteras.)`,
+    String.raw`Afirmamos que si $2026$ se reemplaza por $2n$, la respuesta es $\frac{2n}{n + 1}$.
+
+Escribe el camino como una sucesión de movimientos $U$, $D$, $L$, y $R$. Las sucesiones posibles que pueden resultar son precisamente aquellas con un número igual de $U$'s y $D$'s, y un número igual de $R$'s y $L$'s. Primero proyectamos esta sucesión en una sola dimensión convirtiendo cada $U$ y $R$ en un $1$, y cada $D$ y $L$ en un $-1$. La sucesión resultante tendrá un número igual de $1$'s y $-1$'s.
+
+Afirmamos que cada una de estas sucesiones de $n$ $1$'s y $n$ $-1$'s corresponde al mismo número de lazos reticulares cerrados. En efecto, dada tal sucesión, se puede construir un lazo reticular correspondiente reemplazando todos los $1$'s por $U$'s y $R$'s, y todos los $-1$'s por $D$'s y $L$'s, de modo que haya un número igual de $U$'s y $D$'s. Nada en este proceso de reemplazo depende del orden, así que el número de formas de crear este lazo no depende de la sucesión inicial.
+
+Podemos ver que cada uno de los $1$'s mueve el camino hacia $\ell$ y los $-1$'s lo alejan. Por lo tanto, podemos pensar en el camino como una caminata unidimensional, que empieza y termina en el mismo lugar, donde los puntos sobre $\ell$ corresponden exactamente a los máximos de esta caminata unidimensional.
+
+Usando números de Catalan, la probabilidad de que cualquier punto dado esté en el máximo es
+$$
+\frac{\frac{1}{n + 1}\binom{2n}{n}}{\binom{2n}{n}} = \frac{1}{n + 1},
+$$
+y así, por linealidad, el número esperado de $i \in [0, 2025]$ tales que $P_{i}$ está en $\ell$ es $\frac{2n}{n + 1}$.
+
+Sustituyendo $n = 1013$ se obtiene la respuesta final de $\boxed{\frac{1013}{507}}$.`),
+  hmmt('HMMT-2025-GUTS34', 2025, 'GUTS', 34, "Área esperada de un 12-gono aleatorio", "Geometría",
+    String.raw`Sobre el perímetro de un círculo unitario, se eligen 12 puntos de manera uniforme e independiente al azar. Estima el valor esperado del área del 12-gono convexo formado por estos puntos.
+
+Envía un número positivo $E$ escrito en decimal. Si la respuesta correcta es $A$, recibirás $\mathrm{round}\left(20e^{-15|E - A|}\right)$ puntos.`,
+    String.raw`Calculamos la respuesta exacta dada arriba. Sea $n = 12$, y sean $\theta_{1}, \theta_{2}, \ldots, \theta_{n}$ generados uniformemente al azar de modo que $\theta_{1} + \cdots + \theta_{n} = 2\pi$. Estamos tratando de estimar
+
+$$
+\mathbb{E}\left[\frac{1}{2}\sum_{i = 1}^{n}\sin (\theta_{i})\right] = \frac{1}{2}\sum_{i = 1}^{n}\mathbb{E}[\sin (\theta_{i})].
+$$
+
+Hacemos esto calculando la distribución marginal de $\theta_{i}$, la cual es proporcional al área de la sección transversal $n - 2$ dimensional
+
+$$
+\sum_{j\neq i}\theta_{j} = 2\pi -\theta_{i}.
+$$
+
+El volumen de esta sección transversal es proporcional a $(2\pi - \theta_{i})^{n - 2}$. Así, la distribución de probabilidad marginal de $\theta_{i}$ se puede escribir como
+
+$$
+p(\theta_{i}) = C(2\pi -\theta_{i})^{n - 2}
+$$
+
+para alguna constante $C$. Podemos resolver para $C$ porque sabemos que $\int_{0}^{2\pi}p(\theta_{i})d\theta_{i} = 1$. El resultado es que
+
+$$
+p(\theta_{i}) = \frac{n - 1}{2\pi}\left(1 - \frac{\theta_{i}}{2\pi}\right)^{n - 2}.
+$$
+
+Así, la cantidad que buscamos estimar es
+
+$$
+\mathbb{E}\left[\frac{1}{2}\sum_{i = 1}^{n}\sin \theta_{i}\right] = \frac{n}{2}\mathbb{E}[\sin \theta_{i}]
+$$
+$$
+\qquad = n\int_{0}^{2\pi}p(\theta_{i})\sin \theta_{i}d\theta_{i}
+$$
+$$
+\qquad = \frac{n(n - 1)}{4\pi}\int_{0}^{2\pi}\left(1 - \frac{\theta}{2\pi}\right)^{n - 2}\sin \theta d\theta
+$$
+$$
+\qquad = \frac{33}{\pi}\int_{0}^{2\pi}\left(1 - \frac{\theta}{2\pi}\right)^{10}\sin \theta d\theta.
+$$
+
+Podemos integrar esto usando integración tabular por partes, derivando repetidamente el factor polinomial e integrando repetidamente el factor trigonométrico (alternando $\sin\theta$, $\cos\theta$, $-\sin\theta$, $-\cos\theta$, con signos que se van alternando). Al calcular el producto, observa que cualquier término de la forma $C\left(1 - \frac{\theta}{2\pi}\right)^{n} \sin \theta$ se anula al evaluar la integral definida de $0$ a $2\pi$. Por lo tanto, el valor buscado es
+
+$$
+\frac{33}{\pi}\left((1 - \frac{\theta}{2\pi})^{10} - \frac{45}{2\pi^{2}}\left(1 - \frac{\theta}{2\pi}\right)^{8} + \frac{315}{\pi^{4}}\left(1 - \frac{\theta}{2\pi}\right)^{6} - \frac{4725}{2\pi^{6}}\left(1 - \frac{\theta}{2\pi}\right)^{4}
++ \frac{14175}{2\pi^{8}}\left(1 - \frac{\theta}{2\pi}\right)^{2} + \frac{14175}{4\pi^{10}}\right)\cos \theta \bigg|_{0}^{2\pi}
+$$
+
+$$
+\qquad = \frac{33}{\pi}\left(1 - \frac{45}{2\pi^{2}} +\frac{315}{\pi^{4}} -\frac{4725}{2\pi^{6}} +\frac{14175}{2\pi^{8}}\right)
+$$
+$$
+\qquad = \boxed{\frac{33}{\pi} -\frac{1485}{2\pi^{3}} +\frac{10395}{\pi^{5}} -\frac{155925}{\pi^{7}} +\frac{467775}{2\pi^{9}}}
+$$`),
+  hmmt('HMMT-2025-GUTS36', 2025, 'GUTS', 36, "Construcción de enteros a partir de treses y cincos", "Álgebra",
+    String.raw`Ethan inicialmente escribe algunos números en un pizarrón, cada uno de los cuales es un $3$ o un $5$. Luego, repetidamente elige dos números y los reemplaza por su suma, diferencia, producto, o cociente (si el divisor es distinto de cero). Sea $f(n)$ el número mínimo de números que Ethan debe escribir inicialmente para poder eventualmente escribir el número $n$. Por ejemplo, $f(2025) \leq 6$ porque Ethan podría empezar con $3$, $3$, $3$, $3$, $5$, y $5$ en el pizarrón, y luego multiplicar repetidamente dos números a la vez para eventualmente obtener $2025$.
+
+Envía una 8-tupla ordenada de enteros separados por comas correspondiente a los valores de $f(164)$, $f(187)$, $f(191)$, $f(224)$, $f(255)$, $f(286)$, $f(374)$, y $f(479)$, en ese orden, o una X para cualquier valor que prefieras dejar en blanco. Por ejemplo, si crees que $f(164) = 9$ y $f(224) = 8$, deberías enviar "9, X, X, 8, X, X, X, X". Ganarás $\left|0.6^{W} \cdot \frac{(C + 1)^{2}}{4}\right|$ puntos, donde $C$ es el número de respuestas correctas que envías y $W$ es el número de respuestas incorrectas (no en blanco).`,
+    String.raw`Las siguientes expresiones representan formas óptimas para que Ethan construya cada uno de los 8 números dados.
+
+$$164 = 3(5(5 + 5) + 3) + 5$$
+
+$$187 = 3(3 + 5)(3 + 5) - 5$$
+
+$$191 = 5 \cdot 5(3 + 5) - 3 \cdot 3$$
+
+$$224 = (3 + 5)(5 \cdot 5 + 3)$$
+
+$$255 = 5 \cdot 5(5 + 5) + 5$$
+
+$$286 = (3 + 5 + 5)(5 \cdot 5 - 3)$$
+
+$$374 = 3 \cdot 5 \cdot 5 \cdot 5 - 3 / 3 = 3 \cdot 5 \cdot 5 \cdot 5 - 5 / 5$$
+
+$$479 = (5 \cdot 5 - 3)(5 \cdot 5 - 3) - 5 = (3 - 5 \cdot 5)(3 - 5 \cdot 5) - 5$$
+
+Se puede verificar mediante un programa de cómputo que estas son óptimas (es decir, que dan el valor mínimo de números usados para cada $f(n)$).`),
+]
+
+export const hmmt2025 = [
+  ...hmmt2025Algnt,
+  ...hmmt2025Comb,
+  ...hmmt2025Geo,
+  ...hmmt2025Team,
+  ...hmmt2025Guts,
 ]
 
 export const problemas = [
@@ -1271,9 +3061,16 @@ export const problemas = [
   ...putnam2012,
   ...putnam2013,
   ...putnam2014,
+  ...putnam2015,
+  ...putnam2016,
+  ...putnam2017,
+  ...putnam2018,
+  ...putnam2019,
+  ...putnam2020,
   ...putnam2021,
   ...putnam2022,
   ...putnam2023,
   ...putnam2024,
   ...putnam2025,
+  ...hmmt2025,
 ]

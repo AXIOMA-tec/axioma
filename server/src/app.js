@@ -17,6 +17,7 @@ import authRoutes from './routes/auth.routes.js'
 import categoriesRoutes from './routes/categories.routes.js'
 import problemsRoutes from './routes/problems.routes.js'
 import commentsRoutes from './routes/comments.routes.js'
+import misComentariosRoutes from './routes/misComentarios.routes.js'
 import miembrosRoutes from './routes/miembros.js'
 import eventosRoutes from './routes/eventos.js'
 import galeriaRoutes from './routes/galeria.js'
@@ -64,6 +65,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/categories', categoriesRoutes)
 app.use('/api/problems', problemsRoutes)
 app.use('/api/problems/:problemId/comments', commentsRoutes)
+app.use('/api/comments', misComentariosRoutes)
 app.use('/api/equipo', miembrosRoutes)
 app.use('/api/eventos', eventosRoutes)
 app.use('/api/galeria', galeriaRoutes)
