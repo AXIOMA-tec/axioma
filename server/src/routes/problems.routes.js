@@ -17,12 +17,27 @@
 
 import { Router } from 'express'
 import Problem from '../models/Problem.js'
+import Comment from '../models/Comment.js'
 
 const router = Router()
 
+// Con cientos de problemas, nadie los resuelve todos — para que la gente
+// encuentre dónde ya hay conversación (en vez de abrir uno por uno a
+// adivinar), cada problema de la lista trae cuántos comentarios tiene. Un
+// solo aggregate() para contarlos todos de un jalón, en vez de una consulta
+// de Comment por cada problema (que con 400+ problemas sería 400+
+// consultas).
 router.get('/', async (req, res) => {
-  const problems = await Problem.find().sort({ createdAt: -1 })
-  res.json(problems)
+  const [problems, conteos] = await Promise.all([
+    Problem.find().sort({ createdAt: -1 }),
+    Comment.aggregate([{ $group: { _id: '$problem', total: { $sum: 1 } } }]),
+  ])
+  const totalPorProblema = new Map(conteos.map((c) => [c._id.toString(), c.total]))
+  const problemsConComentarios = problems.map((p) => ({
+    ...p.toObject(),
+    totalComentarios: totalPorProblema.get(p._id.toString()) ?? 0,
+  }))
+  res.json(problemsConComentarios)
 })
 
 router.get('/count', async (req, res) => {
