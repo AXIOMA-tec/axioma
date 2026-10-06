@@ -350,7 +350,7 @@ function CategoryFilter({ raices, problemas, seleccionadas, onToggle }) {
   )
 }
 
-function ComentarioItem({ comentario, esPropio, onEliminar }) {
+function ComentarioItem({ comentario, puedeBorrar, onEliminar }) {
   const fecha = new Date(comentario.createdAt).toLocaleString('es-MX', {
     day: 'numeric',
     month: 'short',
@@ -372,9 +372,11 @@ function ComentarioItem({ comentario, esPropio, onEliminar }) {
           <p className="text-xs text-neutral-500">
             <span className="font-medium text-neutral-950">{username}</span> · {fecha}
           </p>
-          {/* Solo el autor ve este botón — el backend también lo exige por su
-              cuenta (ver comments.routes.js). */}
-          {esPropio && (
+          {/* Lo ve el autor del comentario, o un administrador (para
+              moderar) — el backend exige exactamente lo mismo por su
+              cuenta (ver comments.routes.js), así que esto es solo para
+              no mostrar un botón que de todos modos fallaría. */}
+          {puedeBorrar && (
             <button
               type="button"
               onClick={onEliminar}
@@ -517,7 +519,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
                 <ComentarioItem
                   key={c._id}
                   comentario={c}
-                  esPropio={Boolean(auth && c.author?._id === auth.user.id)}
+                  puedeBorrar={Boolean(auth && (c.author?._id === auth.user.id || auth.user.isAdmin))}
                   onEliminar={() => handleEliminarComentario(c._id)}
                 />
               ))}
@@ -755,7 +757,20 @@ function ProblemaRow({ problema, onOpen }) {
         <span className="block text-base text-neutral-950 sm:text-lg">
           {formatearTitulo(problema)}
         </span>
-        <span className="mt-0.5 block text-xs text-neutral-500">{problema.tema}</span>
+        <span className="mt-0.5 flex items-center gap-2 text-xs text-neutral-500">
+          {problema.tema}
+          {/* Con cientos de problemas, esto es lo que le dice a alguien
+              "aquí ya hay conversación" sin tener que abrir cada uno. */}
+          {problema.totalComentarios > 0 && (
+            <span className="inline-flex items-center gap-1 whitespace-nowrap text-neutral-400">
+              <span aria-hidden="true">💬</span>
+              {problema.totalComentarios}
+              <span className="sr-only">
+                {problema.totalComentarios === 1 ? 'comentario' : 'comentarios'}
+              </span>
+            </span>
+          )}
+        </span>
       </span>
       <span
         aria-hidden="true"
