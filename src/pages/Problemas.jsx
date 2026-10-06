@@ -112,7 +112,7 @@ const TEMAS = [
   'Probabilidad',
   'Teoría de Números',
 ]
-const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional', 'HMMT']
+const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional', 'HMMT', 'CIIM']
 
 // Contexto corto de cada concurso — se muestra solo al entrar a su carpeta
 // raíz (no en cada año/subcarpeta), para quien no sabe qué es "HMMT" u
@@ -123,6 +123,7 @@ const CONTEXTO_CONCURSO = {
   'OMUM Primera Ronda': 'La primera fase de la Olimpiada Mexicana Universitaria de Matemáticas: un examen clasificatorio que decide quién representa a su universidad en el Concurso Nacional.',
   'OMUM Nacional': 'La fase final de la Olimpiada Mexicana Universitaria de Matemáticas, donde compiten los clasificados de universidades de todo el país.',
   HMMT: 'Harvard-MIT Mathematics Tournament: uno de los torneos de matemáticas de preparatoria más grandes del mundo, con rondas individuales, por equipo, y la famosa ronda "Guts" cronometrada.',
+  CIIM: 'Competencia Iberoamericana Interuniversitaria de Matemáticas: un concurso universitario por equipos entre países de Iberoamérica, con sede distinta cada año. Dos días de examen con tres problemas de demostración cada uno.',
 }
 
 // ---------------------------------------------------------------------------
