@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useBloquearScroll } from '../hooks/useBloquearScroll'
 import Counter from '../components/motion/Counter'
 import { EASE, staggerContainer } from '../components/motion/variants'
@@ -112,7 +112,7 @@ const TEMAS = [
   'Probabilidad',
   'Teoría de Números',
 ]
-const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional', 'HMMT']
+const TIPOS = ['Putnam', 'OMUM Primera Ronda', 'OMUM Nacional', 'HMMT', 'CIIM']
 
 // Contexto corto de cada concurso — se muestra solo al entrar a su carpeta
 // raíz (no en cada año/subcarpeta), para quien no sabe qué es "HMMT" u
@@ -123,6 +123,7 @@ const CONTEXTO_CONCURSO = {
   'OMUM Primera Ronda': 'La primera fase de la Olimpiada Mexicana Universitaria de Matemáticas: un examen clasificatorio que decide quién representa a su universidad en el Concurso Nacional.',
   'OMUM Nacional': 'La fase final de la Olimpiada Mexicana Universitaria de Matemáticas, donde compiten los clasificados de universidades de todo el país.',
   HMMT: 'Harvard-MIT Mathematics Tournament: uno de los torneos de matemáticas de preparatoria más grandes del mundo, con rondas individuales, por equipo, y la famosa ronda "Guts" cronometrada.',
+  CIIM: 'Competencia Iberoamericana Interuniversitaria de Matemáticas: un concurso universitario por equipos entre países de Iberoamérica, con sede distinta cada año. Dos días de examen con tres problemas de demostración cada uno.',
 }
 
 // ---------------------------------------------------------------------------
@@ -350,7 +351,7 @@ function CategoryFilter({ raices, problemas, seleccionadas, onToggle }) {
   )
 }
 
-function ComentarioItem({ comentario, esPropio, onEliminar }) {
+function ComentarioItem({ comentario, puedeBorrar, onEliminar }) {
   const fecha = new Date(comentario.createdAt).toLocaleString('es-MX', {
     day: 'numeric',
     month: 'short',
@@ -372,9 +373,11 @@ function ComentarioItem({ comentario, esPropio, onEliminar }) {
           <p className="text-xs text-neutral-500">
             <span className="font-medium text-neutral-950">{username}</span> · {fecha}
           </p>
-          {/* Solo el autor ve este botón — el backend también lo exige por su
-              cuenta (ver comments.routes.js). */}
-          {esPropio && (
+          {/* Lo ve el autor del comentario, o un administrador (para
+              moderar) — el backend exige exactamente lo mismo por su
+              cuenta (ver comments.routes.js), así que esto es solo para
+              no mostrar un botón que de todos modos fallaría. */}
+          {puedeBorrar && (
             <button
               type="button"
               onClick={onEliminar}
@@ -517,7 +520,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
                 <ComentarioItem
                   key={c._id}
                   comentario={c}
-                  esPropio={Boolean(auth && c.author?._id === auth.user.id)}
+                  puedeBorrar={Boolean(auth && (c.author?._id === auth.user.id || auth.user.isAdmin))}
                   onEliminar={() => handleEliminarComentario(c._id)}
                 />
               ))}
@@ -755,7 +758,20 @@ function ProblemaRow({ problema, onOpen }) {
         <span className="block text-base text-neutral-950 sm:text-lg">
           {formatearTitulo(problema)}
         </span>
-        <span className="mt-0.5 block text-xs text-neutral-500">{problema.tema}</span>
+        <span className="mt-0.5 flex items-center gap-2 text-xs text-neutral-500">
+          {problema.tema}
+          {/* Con cientos de problemas, esto es lo que le dice a alguien
+              "aquí ya hay conversación" sin tener que abrir cada uno. */}
+          {problema.totalComentarios > 0 && (
+            <span className="inline-flex items-center gap-1 whitespace-nowrap text-neutral-400">
+              <span aria-hidden="true">💬</span>
+              {problema.totalComentarios}
+              <span className="sr-only">
+                {problema.totalComentarios === 1 ? 'comentario' : 'comentarios'}
+              </span>
+            </span>
+          )}
+        </span>
       </span>
       <span
         aria-hidden="true"
@@ -957,6 +973,66 @@ function Encabezado({ auth, onLogout, listo, totalProblemas, totalTemas, totalCo
   )
 }
 
+// Cuántos se ven aquí antes de mandar a "Ver todos" — con subidas
+// semanales, en un año ya son 52 tarjetas: mostrar todas amontonaría el
+// tope de la página. El resto vive en /recursos (ver RecursosPage.jsx),
+// agrupado por año como una carpeta por año.
+const RECURSOS_VISIBLES = 6
+
+// Documentos descargables (PDFs de exámenes semanales, material de
+// asesores) — se agregan desde /admin/recursos. A diferencia de los
+// problemas de la lista de abajo, esto es un archivo completo para
+// descargar, no algo que se pueda buscar/filtrar/comentar por separado
+// (ver el modelo Recurso.js para la explicación completa). Si no hay
+// ninguno, la sección no se muestra — no tiene caso un encabezado vacío.
+function Recursos({ recursos }) {
+  if (recursos.length === 0) return null
+  // El GET los manda ordenados ascendente (orden, id) — los últimos del
+  // arreglo son los más nuevos, por eso .slice(-N).reverse() en vez de
+  // simplemente los primeros N.
+  const recientes = [...recursos].slice(-RECURSOS_VISIBLES).reverse()
+  const hayMas = recursos.length > RECURSOS_VISIBLES
+  return (
+    <section className="border-b border-neutral-950 bg-white">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <p className={labelClass}>Recursos</p>
+          {hayMas && (
+            <Link
+              to="/recursos"
+              className={`text-xs uppercase tracking-[0.2em] text-neutral-600 underline underline-offset-4 hover:text-neutral-950 ${focusRing}`}
+            >
+              Ver todos ({recursos.length}) →
+            </Link>
+          )}
+        </div>
+        <ul className="flex flex-wrap gap-4">
+          {recientes.map((recurso) => (
+            <li key={recurso._id}>
+              <a
+                href={recurso.archivo}
+                target="_blank"
+                rel="noreferrer"
+                className={`group flex max-w-xs items-center gap-4 border border-neutral-950 px-5 py-4 transition-colors hover:bg-[#FFB401] ${focusRing}`}
+              >
+                <span aria-hidden="true" className="text-2xl">↓</span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium text-neutral-950">{recurso.titulo}</span>
+                  {recurso.descripcion && (
+                    <span className="block truncate text-xs text-neutral-500 group-hover:text-neutral-800">
+                      {recurso.descripcion}
+                    </span>
+                  )}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
 // Un mensaje de estado (cargando, vacío, error) con el mismo lenguaje plano.
 function Estado({ children, tono = 'neutro' }) {
   return (
@@ -993,6 +1069,10 @@ export default function Problemas() {
   const [errorCarga, setErrorCarga] = useState(null)
 
   const [categorias, setCategorias] = useState([])
+  // Documentos descargables (PDFs de exámenes, material de asesores) — ver
+  // /admin/recursos. Independiente de los problemas: si falla, la sección
+  // simplemente no se muestra, en vez de romper el archivo de problemas.
+  const [recursos, setRecursos] = useState([])
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false) // solo en móvil
   const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
@@ -1014,6 +1094,10 @@ export default function Problemas() {
     apiFetch('/api/categories')
       .then(setCategorias)
       .catch(() => setCategorias([]))
+
+    apiFetch('/api/recursos')
+      .then(setRecursos)
+      .catch(() => setRecursos([]))
   }, [])
 
   const { raices: arbolCategorias, byId: categoriasPorId } = useMemo(
@@ -1304,6 +1388,8 @@ export default function Problemas() {
         totalTemas={temasCubiertos}
         totalConcursos={concursosCubiertos}
       />
+
+      <Recursos recursos={recursos} />
 
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 pb-32 sm:px-8 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-16">
         {/* Columna de filtros: en escritorio se queda fija (sticky) con su

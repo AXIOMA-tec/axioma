@@ -59,4 +59,9 @@ export const api = {
   actualizarFoto: (id, datos, token) =>
     apiFetch(`/api/galeria/${id}`, { method: 'PATCH', body: datos, token }),
   borrarFoto: (id, token) => apiFetch(`/api/galeria/${id}`, { method: 'DELETE', token }),
+  getRecursos: () => fetchJSON('/api/recursos'),
+  crearRecurso: (datos, token) => apiFetch('/api/recursos', { method: 'POST', body: datos, token }),
+  actualizarRecurso: (id, datos, token) =>
+    apiFetch(`/api/recursos/${id}`, { method: 'PATCH', body: datos, token }),
+  borrarRecurso: (id, token) => apiFetch(`/api/recursos/${id}`, { method: 'DELETE', token }),
 }

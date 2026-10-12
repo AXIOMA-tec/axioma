@@ -99,7 +99,10 @@ router.delete('/:commentId', requireAuth, async (req, res) => {
     return res.status(404).json({ error: 'Ese comentario no existe.' })
   }
 
-  if (comment.author.toString() !== req.userId) {
+  // Puede borrarlo quien lo escribió, o un administrador (para moderar
+  // comentarios con groserías u otro contenido que no debería quedarse).
+  const esAutor = comment.author.toString() === req.userId
+  if (!esAutor && !req.user.isAdmin) {
     return res.status(403).json({ error: 'Solo puedes borrar tus propios comentarios.' })
   }
 

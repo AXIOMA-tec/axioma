@@ -84,6 +84,15 @@ export const categorias = [
 
   { key: 'hmmt', name: 'HMMT', parent: null },
   { key: 'hmmt-2025', name: '2025', parent: 'hmmt' },
+
+  { key: 'ciim', name: 'CIIM', parent: null },
+  { key: 'ciim-2017', name: '2017', parent: 'ciim' },
+  { key: 'ciim-2018', name: '2018', parent: 'ciim' },
+  { key: 'ciim-2019', name: '2019', parent: 'ciim' },
+  { key: 'ciim-2020', name: '2020', parent: 'ciim' },
+  { key: 'ciim-2022', name: '2022', parent: 'ciim' },
+  { key: 'ciim-2023', name: '2023', parent: 'ciim' },
+  { key: 'ciim-2024', name: '2024', parent: 'ciim' },
 ]
 
 // posicion = lugar del problema dentro de su ronda/sección (1 = primero).
@@ -3028,6 +3037,203 @@ export const hmmt2025 = [
   ...hmmt2025Guts,
 ]
 
+
+// ===========================================================================
+// CIIM (Competencia Iberoamericana Interuniversitaria de Matemáticas)
+// ===========================================================================
+
+// Igual que Putnam: dos días de examen con tres problemas cada uno, problema 3
+// de cada día es el más difícil. Reutilizamos la misma tabla de estimarPutnam
+// (misma forma de examen, mismo criterio "el 1 es más accesible que el último")
+// en vez de inventar una nueva sin ninguna base. Estos problemas no traen
+// solución oficial en la fuente (son solo el examen), así que ese campo queda
+// sin usar.
+function ciim(codigo, año, posicion, titulo, tema, enunciado, solucion) {
+  return {
+    codigo,
+    titulo,
+    categoriaKey: `ciim-${año}`,
+    año: String(año),
+    tema,
+    tipo: 'CIIM',
+    ...estimarPutnam(posicion),
+    enunciado,
+    solucion,
+  }
+}
+
+const ciim2017 = [
+  ciim('CIIM-2017-1', 2017, 1, "Números complejos raíces de un polinomio de coeficientes positivos", "Álgebra",
+    String.raw`Determine todos los números complejos $w = a + bi$ con $a, b \in \mathbb{R}$, tales que existe un polinomio $p(z)$ con coeficientes reales y positivos que cumple $p(w) = 0$.`),
+  ciim('CIIM-2017-2', 2017, 2, "Función nula forzada por una cota logarítmica en la derivada", "Análisis",
+    String.raw`Sea $f : \mathbb{R} \to \mathbb{R}$ una función derivable tal que $f(0) = 0$ y $|f'(x)| \leq |f(x) \cdot \log |f(x)||$ para cada $x \in \mathbb{R}$ que cumple $0 < |f(x)| < 1/2$. Demuestre que $f(x) = 0$ para todo $x \in \mathbb{R}$.`),
+  ciim('CIIM-2017-3', 2017, 3, "Coincidencias consecutivas en una función completamente multiplicativa", "Álgebra",
+    String.raw`Sean $G$ un grupo abeliano finito y $f : \mathbb{Z}^+ \to G$ una función completamente multiplicativa (es decir, $f(mn) = f(m)f(n)$ para cualesquiera enteros positivos $m, n$). Demuestre que existen infinitos enteros positivos $k$ tales que $f(k) = f(k+1)$.`),
+  ciim('CIIM-2017-4', 2017, 4, "Coincidencia de listas de reales acotadas por sumas de potencias", "Análisis",
+    String.raw`Sean $m, n$ enteros positivos y $a_1, \dots, a_m, b_1, \dots, b_n$ números reales positivos tales que para todo entero positivo $k$ se tiene que $$\left|(a_1^k + \dots + a_m^k) - (b_1^k + \dots + b_n^k)\right| \leq Ck^N,$$ para ciertos $C$ y $N$ fijos. Demuestre que existen $l \leq m, n$ y permutaciones $\sigma$ de $\{1, \dots, m\}$ y $\tau$ de $\{1, \dots, n\}$, tales que
+
+1. $a_{\sigma(i)} = b_{\tau(i)}$ para $1 \leq i \leq l$,
+2. $a_{\sigma(i)}, b_{\tau(i)} \leq 1$ para $i > l$.`),
+  ciim('CIIM-2017-5', 2017, 5, "Conjuntos discernientes de enteros y la cardinalidad de sus faltantes primos", "Teoría de Números",
+    String.raw`Sea $S$ un conjunto de enteros. Dado un real positivo $r$, decimos que $S$ es un conjunto $r$-discerniente, si para cualquier pareja $m, n$ de enteros distintos y mayores a uno que satisfacen $\left|\frac{m-n}{m+n}\right| < r$, existen un $a \in S$ y un $k \geq 1$ tal que $a^k$ divide a $m$ pero no divide a $n$, o $a^k$ divide a $n$ pero no divide a $m$.
+
+1. Demuestre que para cualquier $r > 0$ todos los conjuntos $r$-discernientes tienen una infinidad de elementos primos.
+2. Para cada $r > 0$ determine la mayor cardinalidad posible de $P \setminus S$ donde $P$ es el conjunto de todos los primos y $S \subset P$ es un conjunto $r$-discerniente.`),
+  ciim('CIIM-2017-6', 2017, 6, "Estrategia del cazador para atrapar un conejo invisible en un grafo", "Combinatoria",
+    String.raw`Sea $G$ un grafo simple, conexo y finito. Un cazador y un conejo invisible juegan sobre el grafo $G$. El conejo está inicialmente en un vértice $w_0$. En la $k$-ésima jugada (para $k \geq 0$) el cazador escoge libremente un vértice $v_k$. Si $v_k = w_k$, el conejo es capturado y el juego acaba. En el caso contrario, el conejo se mueve invisiblemente por una arista de $w_k$ hacia $w_{k+1}$ ($w_k$ y $w_{k+1}$ son adyacentes y por lo tanto distintos) y continúa el juego. El cazador conoce estas reglas y conoce el grafo $G$. Después de la $k$-ésima jugada él sabe si $w_k \neq v_k$, pero no recibe ninguna otra información.
+
+Caracterice los grafos $G$ para los cuales el cazador tiene una estrategia que garantice que él capture al conejo en a lo sumo $N$ jugadas para algún $N$ entero positivo. Aquí $N$ debe depender solamente de $G$ y la estrategia debe funcionar independientemente de la posición inicial y la trayectoria del conejo.
+
+Nota: Un grafo es simple si sus aristas no son direccionadas, toda arista une dos vértices distintos y entre dos vértices hay a lo sumo una arista. Un grafo simple es finito si tiene un número finito de vértices. Un grafo simple es conexo si entre cualesquiera dos vértices hay un camino (formado por aristas) uniendo los dos vértices.`),
+]
+
+const ciim2018 = [
+  ciim('CIIM-2018-1', 2018, 1, "Matriz racional de orden 6 con suma de entradas 2018", "Álgebra Lineal",
+    String.raw`Demuestre que existe una matriz de $2 \times 2$ de orden 6 con entradas racionales, tal que la suma de todas sus entradas sea 2018.
+
+Nota: El orden de una matriz $A$ (si existe) es el menor entero positivo $n$ tal que $A^n = I$, donde $I$ es la matriz identidad.`),
+  ciim('CIIM-2018-2', 2018, 2, "Polinomio en dos variables que anula a (p(t), q(t))", "Álgebra",
+    String.raw`Sean $p(x)$ y $q(x)$ polinomios reales no constantes de grado a lo sumo $n$ ($n > 1$). Pruebe que existe un polinomio $F(x,y)$ no nulo en dos variables con coeficientes reales, de grado menor o igual a $2n-2$, tal que $F(p(t), q(t)) = 0$, para todo $t \in \mathbb{R}$.`),
+  ciim('CIIM-2018-3', 2018, 3, "Paridad del número de clases módulo m bajo x~2^t x", "Teoría de Números",
+    String.raw`Sea $m$ impar y $\mathbb{Z}_m$ el anillo de los enteros módulo $m$. Definimos una relación de equivalencia en $\mathbb{Z}_m$ dada por $x \sim y$ si existe un natural $t$ tal que $y = 2^t x$. Determine todos los valores de $m$ tales que el número de clases de equivalencia sea par.`),
+  ciim('CIIM-2018-4', 2018, 4, "Mínimo producto de raíces extremas de f(x)−s", "Álgebra",
+    String.raw`Sean $\alpha < 0 < \beta$ números reales y considere el polinomio $f(x) = x(x-\alpha)(x-\beta)$. Sea $S$ el conjunto de números reales $s$ tales que el polinomio $f(x) - s$ tiene tres raíces reales. Para $s \in S$ sea $p(s)$ el producto de la menor y la mayor raíz del polinomio $f(x) - s$. Determine el menor valor posible de $p(s)$ al variar $s$ en $S$ y los valores de $s$ correspondientes.`),
+  ciim('CIIM-2018-5', 2018, 5, "Puntos de [0,1]³ estables bajo una transformación con senos", "Análisis",
+    String.raw`Considere la transformación $$T(x,y,z) = (\operatorname{sen} y + \operatorname{sen} z - \operatorname{sen} x,\ \operatorname{sen} z + \operatorname{sen} x - \operatorname{sen} y,\ \operatorname{sen} x + \operatorname{sen} y - \operatorname{sen} z).$$ Determine todos los puntos $(x,y,z) \in [0,1]^3$ para los cuales $T^{(n)}(x,y,z) \in [0,1]^3$ para todo $n \geq 1$.
+
+Nota: $T^{(n)} = \underbrace{T \circ T \circ T \circ \cdots \circ T}_{n \text{ veces}}$.`),
+  ciim('CIIM-2018-6', 2018, 6, "Subsucesión con límite en los índices sumados", "Análisis",
+    String.raw`Sea $(x_n)$ una sucesión de números reales en el intervalo $[0,1]$. Pruebe que existe una sucesión creciente $0 < n_1 < n_2 < n_3 < \cdots$ de enteros positivos, tal que existe el límite $$\lim_{i,j \to \infty} x_{n_i + n_j}.$$ Es decir, existe un número real $L$ tal que, para todo $\varepsilon > 0$ existe un entero positivo $N$ de manera que si $i,j > N$, entonces $|x_{n_i+n_j} - L| < \varepsilon$.`),
+]
+
+const ciim2019 = [
+  ciim('CIIM-2019-1', 2019, 1, "Soluciones enteras de x^z + y^z = z", "Teoría de Números",
+    String.raw`Determinar todas las soluciones en números enteros $x, y, z$ de la ecuación $$x^z + y^z = z.$$`),
+  ciim('CIIM-2019-2', 2019, 2, "Mayor longitud de una cadena en {0,1}^n bajo sumas parciales", "Combinatoria",
+    String.raw`Consideramos el conjunto $$\{0,1\}^n = \{X = (x_1, x_2, \dots, x_n) : x_i \in \{0,1\}, 1 \leq i \leq n\}.$$ Decimos que $X > Y$ si $X \neq Y$ y se cumplen las $n$ desigualdades $$x_1 \geq y_1, \quad x_1+x_2 \geq y_1+y_2, \quad \dots, \quad x_1+x_2+\cdots+x_n \geq y_1+y_2+\cdots+y_n.$$ Definimos una cadena de longitud $k$ como un subconjunto $\{Z_1, \dots, Z_k\} \subseteq \{0,1\}^n$ de elementos distintos que satisfacen $Z_1 > Z_2 > \cdots > Z_k$. Determinar la mayor longitud posible de una cadena.`),
+  ciim('CIIM-2019-3', 2019, 3, "Proporción de subconjuntos con suma ponderada grande", "Combinatoria",
+    String.raw`Sea $\{a_n\}_{n \in \mathbb{N}}$ una sucesión de números reales no nulos. Para $m \geq 1$, definimos: $$X_m = \left\{ X \subseteq \{0,1,\dots,m-1\} : \left|\sum_{x \in X} a_x\right| > \frac{1}{m} \right\}.$$ Demostrar que $$\lim_{n \to \infty} \frac{|X_n|}{2^n} = 1.$$`),
+  ciim('CIIM-2019-4', 2019, 4, "Juego de Ana y Bob evitando el par a, a*g en un grupo", "Álgebra",
+    String.raw`Sea $(G, *)$ un grupo de $n > 1$ elementos y $g \in G$ un elemento distinto de la unidad. Ana y Bob juegan con el grupo $G$ de la siguiente forma: empezando con Ana y jugando de forma alternada, cada jugador selecciona un elemento de $G$ que no haya sido escogido antes, hasta que cada elemento de $G$ haya sido elegido o un jugador haya escogido los elementos $a$ y $a*g$ para algún $a \in G$. En ese caso se dice que el jugador pierde y su oponente gana.
+
+a) Si $n$ es impar, demostrar que, independientemente del elemento $g$, uno de los dos jugadores tiene una estrategia que le asegure ganar sin importar cómo juega su oponente, y determinar cuál jugador posee tal estrategia.
+
+b) Si $n$ es par, demostrar que existe un elemento $g \in G$ para el cual ninguno de los jugadores posee una estrategia que le asegure ganar.
+
+Nota: Un grupo $(G,*)$ es un conjunto $G$ con una operación binaria $* : G \times G \to G$ que cumple las siguientes propiedades: (i) $*$ es asociativa: $\forall a,b,c \in G$, $(a*b)*c = a*(b*c)$; (ii) existe una unidad $e \in G$ tal que $\forall a \in G$, $a*e = e*a = a$; (iii) existen inversos: $\forall a \in G$, $\exists a^{-1} \in G$ tal que $a*a^{-1} = a^{-1}*a = e$.`),
+  ciim('CIIM-2019-5', 2019, 5, "Matriz entera con inversas enteras al sumar múltiplos de la identidad", "Álgebra Lineal",
+    String.raw`Sea $\{k_1, k_2, \dots, k_m\}$ un conjunto de $m$ números enteros. Demostrar que existe una matriz $m \times m$ con entradas enteras $A$ tal que las matrices $A + k_j I$, $1 \leq j \leq m$, son invertibles y sus inversas tienen entradas enteras (aquí $I$ denota la matriz identidad).`),
+  ciim('CIIM-2019-6', 2019, 6, "Funciones inyectivas multiplicativas con divisibilidad en sumas de cuadrados", "Teoría de Números",
+    String.raw`Determinar todas las funciones inyectivas $f : \mathbb{Z}^+ \to \mathbb{Z}^+$, tales que para cada pareja de enteros positivos $(m,n)$ se cumplen las condiciones:
+
+a) $f(mn) = f(m)f(n)$
+b) $f(m^2+n^2) \mid f(m^2) + f(n^2)$.`),
+]
+
+const ciim2020 = [
+  ciim('CIIM-2020-1', 2020, 1, "Razón constante entre área de sector y triángulo máximo bajo x^α", "Análisis",
+    String.raw`Sea $\alpha > 1$ y considere la función $f(x) = x^\alpha$ para $x \geq 0$. Para $t > 0$, defina $M(t)$ como la mayor área que alcanza un triángulo con vértices $(0,0)$, $(s, f(s))$ y $(t, f(t))$ para $s \in (0,t)$. Sea $A(t)$ el área de la región delimitada por el segmento con extremos $(0,0)$ y $(t, f(t))$ y por el gráfico de $y = f(x)$.
+
+(a) Demuestre que $A(t)/M(t)$ no depende de $t$. Denotamos este valor por $c(\alpha)$. Determine $c(\alpha)$.
+
+(b) Determine el rango de valores de $c(\alpha)$ cuando $\alpha$ varía en el intervalo $(1, +\infty)$.`),
+  ciim('CIIM-2020-2', 2020, 2, "Triplas pitagóricas con una condición cúbica adicional", "Teoría de Números",
+    String.raw`Determine todas las triplas de enteros positivos $(a,b,c)$ que satisfacen el siguiente sistema de ecuaciones: $$\begin{cases} a^2+b^2=c^2 \\ a^3+b^3+1=(c-1)^3 \end{cases}.$$`),
+  ciim('CIIM-2020-3', 2020, 3, "Máximo tamaño de la unión bajo condiciones de solapamiento entre conjuntos", "Combinatoria",
+    String.raw`Sean $m, r, s, t$ enteros positivos tales que $m \geq s+1$ y $r \geq t$. Considere $m$ conjuntos $A_1, A_2, \dots, A_m$ con $r$ elementos cada uno. Suponga que para todo $1 \leq i \leq m$, existen por lo menos $t$ elementos de $A_i$ que pertenecen, cada uno de ellos, a por lo menos $s$ conjuntos $A_j$ con $j \neq i$. Determine el mayor número posible de elementos del conjunto $A_1 \cup A_2 \cup \cdots \cup A_m$.`),
+  ciim('CIIM-2020-4', 2020, 4, "Sucesión única de coeficientes para expandir P(x) vía x^j P^(j)(x)", "Álgebra",
+    String.raw`Para todo polinomio $P(x)$ con coeficientes reales, se definen $$P_0 = P(0) \quad \text{y} \quad P_j(x) = x^j \cdot P^{(j)}(x),$$ donde $P^{(j)}$ representa la $j$-ésima derivada de $P$ para $j \geq 1$.
+
+(a) Demuestre que existe una única sucesión de reales $b_0, b_1, b_2, \dots$ tal que para todo polinomio $P(x)$ con coeficientes reales y todo $x$ real, se cumple que $$P(x) = b_0 P_0 + \sum_{k \geq 1} b_k P_k(x) = b_0 P_0 + b_1 P_1(x) + b_2 P_2(x) + \cdots.$$
+
+(b) Calcule el valor de la serie $\displaystyle\sum_{n=0}^\infty b_n$.`),
+  ciim('CIIM-2020-5', 2020, 5, "Ciclo periódico de una recursión racional con x_2021=x_1", "Análisis",
+    String.raw`Determine todos los números reales positivos $x_1, x_2, \dots, x_{2021}$ tales que $$x_{i+1} = \frac{x_i^3+2}{3x_i^2}$$ para $i = 1,2,\dots,2020$ y además $x_{2021} = x_1$.`),
+  ciim('CIIM-2020-6', 2020, 6, "Conjunto con suma de recíprocos divergente pero suma dispersa", "Teoría de Números",
+    String.raw`Para un conjunto $A$ se define $A+A = \{a+b : a,b \in A\}$. Determine si existe un conjunto $A$ de enteros positivos tal que $$\sum_{a \in A} \frac{1}{a} = +\infty \quad \text{y} \quad \lim_{n \to \infty} \frac{|(A+A) \cap \{1,2,\dots,n\}|}{n} = 0.$$`),
+]
+
+const ciim2022 = [
+  ciim('CIIM-2022-1', 2022, 1, "Sucesión con área de sector constante bajo la parábola", "Análisis",
+    String.raw`Dada la función $f(x) = x^2$, se define el sector de $f$ desde $a$ hasta $b$ como la región acotada entre la gráfica de $y = f(x)$ y el segmento de recta que une los puntos $(a, f(a))$ y $(b, f(b))$. Se define la sucesión creciente $x_0, x_1, \dots$, con $x_0 = 0$ y $x_1 = 1$, que cumple que el área del sector de $f$ desde $x_n$ hasta $x_{n+1}$ es constante para $n \geq 0$. Determinar el valor de $x_n$ en función de $n$.`),
+  ciim('CIIM-2022-2', 2022, 2, "Matriz ortogonal forzada por longitudes unitarias iteradas", "Álgebra Lineal",
+    String.raw`Sea $v \in \mathbb{R}^2$ un vector de longitud 1 y sea $A$ una matriz $2 \times 2$ con entradas reales tal que:
+
+(i) Los vectores $Av$, $A^2v$ y $A^3v$ también son de longitud 1.
+
+(ii) El vector $A^2v$ no es igual ni a $\pm v$ ni a $\pm Av$.
+
+Demostrar que $A^tA = I_2$.
+
+Nota: $A^t$ denota la traspuesta de la matriz $A$, e $I_2$ es la matriz identidad de tamaño $2 \times 2$.`),
+  ciim('CIIM-2022-3', 2022, 3, "Cota para la distancia del punto límite en una espiral de triángulos equiláteros", "Geometría",
+    String.raw`Danielle dibuja en el plano un punto $O$ y un conjunto de puntos $\mathcal{P} = \{P_0, P_1, \dots, P_{2022}\}$ tales que $$\angle P_0OP_1 = \angle P_1OP_2 = \cdots = \angle P_{2021}OP_{2022} = \alpha, \quad 0 < \alpha < \pi,$$ donde los ángulos se miden en sentido antihorario, y para $0 \leq n \leq 2022$ se cumple que $OP_n = r^n$ con $r > 1$ un número real dado. Luego obtiene nuevos conjuntos de puntos en el plano iterando el siguiente proceso: dado un conjunto de puntos $\{A_0, A_1, \dots, A_n\}$ en el plano, construye un nuevo conjunto de puntos $\{B_0, B_1, \dots, B_{n-1}\}$ de modo que $A_kA_{k+1}B_k$ sea un triángulo equilátero orientado en sentido horario para $0 \leq k \leq n-1$. Después de realizar el proceso 2022 veces a partir del conjunto $\mathcal{P}$, Danielle obtiene un único punto $X$. Si $d$ es la distancia de $X$ al punto $O$, demostrar que $$(r-1)^{2022} \leq d \leq (r+1)^{2022}.$$`),
+  ciim('CIIM-2022-4', 2022, 4, "Permutaciones con sumas de ventanas consecutivas múltiplos de n", "Combinatoria",
+    String.raw`Dado un entero positivo $n$, determinar cuántas permutaciones $\sigma$ del conjunto $\{1,2,\dots,2022n\}$ tienen la siguiente propiedad: para cada $i \in \{1,2,\dots,2021n+1\}$, el número $$\sigma(i) + \sigma(i+1) + \cdots + \sigma(i+n-1)$$ es múltiplo de $n$.`),
+  ciim('CIIM-2022-5', 2022, 5, "Límite de una sucesión de vectores normalizados definida recursivamente", "Análisis",
+    String.raw`Se define en el plano la sucesión de vectores $v_1, v_2, \dots$, mediante los valores iniciales $v_1 = (1,0)$, $v_2 = (-1/\sqrt{2}, 1/\sqrt{2})$ y la relación $$v_n = \frac{v_{n-1}+v_{n-2}}{\|v_{n-1}+v_{n-2}\|},$$ para $n \geq 3$. Demostrar que la sucesión es convergente y determinar su límite.
+
+Nota: La expresión $\|v\|$ denota la longitud del vector $v$.`),
+  ciim('CIIM-2022-6', 2022, 6, "Desigualdad entre el número de divisores de (n+1)! y de n!", "Teoría de Números",
+    String.raw`Dado un entero positivo $m$, sea $d(m)$ la cantidad de divisores positivos de $m$. Demostrar que para todo entero positivo $n$ se cumple que $$d((n+1)!) \leq 2d(n!).$$`),
+]
+
+const ciim2023 = [
+  ciim('CIIM-2023-1', 2023, 1, "Convergencia de una serie de potencias de la parte fraccionaria", "Análisis",
+    String.raw`Determine todos los pares de reales positivos $(a,b)$ con $a < b$ tales que la siguiente serie $$\sum_{k=1}^\infty \int_a^b \{x\}^k \, dx = \int_a^b \{x\}\,dx + \int_a^b \{x\}^2\,dx + \int_a^b \{x\}^3\,dx + \cdots$$ sea convergente, y determine su valor en función de $a$ y $b$.
+
+Nota: $\{x\} = x - \lfloor x \rfloor$ denota la parte fraccionaria de $x$.`),
+  ciim('CIIM-2023-2', 2023, 2, "Mayor entero representable con dígitos en k dados", "Combinatoria",
+    String.raw`Un fabricante de juguetes tiene a su disposición $k$ dados, cada uno con 6 caras en blanco. En cada cara de cada uno de estos dados el fabricante debe dibujar uno de los dígitos $0,1,2,\dots,9$.
+
+Determine (en función de $k$) el mayor entero $n$ tal que el fabricante pueda dibujar dígitos en los $k$ dados de modo que, para cualquier entero positivo $r \leq n$, sea posible elegir algunos de los $k$ dados y formar con ellos la representación decimal de $r$.
+
+Nota: Los dígitos 6 y 9 son distinguibles: aparecen como $\underline{6}$ y $\underline{9}$.`),
+  ciim('CIIM-2023-3', 2023, 3, "Entradas nulas en una sucesión de matrices simétricas bajo sumas de autovalores", "Álgebra Lineal",
+    String.raw`Dada una matriz $A$ real simétrica $3 \times 3$, definimos $f(A)$ como una matriz $3 \times 3$ con los mismos autovectores de $A$ tal que si $A$ tiene autovalores $a,b,c$, entonces $f(A)$ tiene autovalores $b+c, c+a, a+b$ (en ese orden). Definimos una sucesión de matrices reales simétricas $A_0, A_1, A_2, \dots$ de $3 \times 3$ tales que $A_{n+1} = f(A_n)$ para $n \geq 0$. Si la matriz $A_0$ no tiene ninguna entrada nula, determine el número máximo de índices $j \geq 0$ para los cuales la matriz $A_j$ tiene alguna entrada nula.`),
+  ciim('CIIM-2023-4', 2023, 4, "Límite superior de σ(n^2023) respecto a σ(n)^2023", "Teoría de Números",
+    String.raw`Para un entero positivo $n$, $\sigma(n)$ denota la suma de los divisores positivos de $n$. Determine $$\limsup_{n \to \infty} \frac{\sigma(n^{2023})}{(\sigma(n))^{2023}}.$$
+
+Nota: Dada una sucesión $(a_n)$ de números reales, decimos que $\limsup_{n\to\infty} a_n = +\infty$ si $(a_n)$ no está acotada superiormente, y, en caso contrario, $\limsup_{n\to\infty} a_n$ es la menor constante $C$ tal que, para todo real $K > C$, existe un entero positivo $N$ con $a_n < K$ para todo $n > N$.`),
+  ciim('CIIM-2023-5', 2023, 5, "Enteros n para los que un polinomio ciclotómico-like tiene raíz unitaria", "Álgebra",
+    String.raw`Dado un entero positivo $k > 1$, determine todos los enteros positivos $n$ tales que el polinomio $$P(z) = z^n + \sum_{j=0}^{2^{k}-2} z^j = 1+z+z^2+\cdots+z^{2^k-2}+z^n$$ tiene una raíz compleja $w$ tal que $|w|=1$.`),
+  ciim('CIIM-2023-6', 2023, 6, "Exponente asintótico del conteo de sucesiones con suma de potencias acotada", "Combinatoria",
+    String.raw`Sea $n$ un entero positivo. Definimos $f(n)$ como el número de sucesiones finitas $(a_1,a_2,\dots,a_k)$ de enteros positivos tales que $a_1 < a_2 < a_3 < \cdots < a_k$ y $$a_1 + a_2^2 + a_3^3 + \cdots + a_k^k \leq n.$$ Determine constantes positivas $\alpha$ y $C$ tales que $$\lim_{n\to\infty} \frac{f(n)}{n^\alpha} = C.$$`),
+]
+
+const ciim2024 = [
+  ciim('CIIM-2024-1', 2024, 1, "Sucesiones a_n para las que las integrales iteradas se anulan en 0", "Análisis",
+    String.raw`Sea $(a_n)_{n \geq 1}$ una sucesión de números reales. Se define la sucesión de funciones reales $(f_n)_{n \geq 0}$ tal que para todo $x \in \mathbb{R}$ se cumple que: $$f_0(x) = 1 \qquad \text{y} \qquad f_n(x) = \int_{a_n}^x f_{n-1}(t)\,dt \quad \text{para } n \geq 1.$$ Determinar todas las posibles sucesiones $(a_n)_{n\geq 1}$ tales que $f_n(0) = 0$ para todo $n \geq 2$.
+
+Nota: No necesariamente se cumple que $f_1(0) = 0$.`),
+  ciim('CIIM-2024-2', 2024, 2, "Tamaño máximo de matriz simétrica con determinante acotado", "Álgebra Lineal",
+    String.raw`Sea $n$ un entero positivo y sea $M_n$ el conjunto de matrices invertibles, con entradas enteras y tamaño $n \times n$.
+
+a) Hallar el mayor valor posible de $n$ tal que existe una matriz simétrica $A \in M_n$ que satisface $$\det(A^{20}+A^{24}) < 2024.$$
+
+b) Demostrar que para todo $n$ existe una matriz $B \in M_n$ tal que $$\det(B^{20}+B^{24}) < 2024.$$`),
+  ciim('CIIM-2024-3', 2024, 3, "Enteros k alcanzables como suma de φ(a)/a con piso 2024", "Teoría de Números",
+    String.raw`Dado un entero positivo $n$, sea $\phi(n)$ el número de enteros positivos menores o iguales que $n$ que son primos relativos con $n$. Hallar todos los posibles enteros positivos $k$ para los cuales existen enteros positivos $1 < a_1 < a_2 < \cdots < a_k$ tales que $$\left\lfloor \frac{\phi(a_1)}{a_1} + \frac{\phi(a_2)}{a_2} + \cdots + \frac{\phi(a_k)}{a_k} \right\rfloor = 2024.$$
+
+Nota: La función $\lfloor x \rfloor$ denota al mayor entero menor o igual que $x$.`),
+  ciim('CIIM-2024-4', 2024, 4, "Límite cúbico de la suma de áreas de triángulos a puntos reticulares", "Análisis",
+    String.raw`Dados los puntos $O = (0,0)$ y $A = (2024,-2024)$ en el plano. Para $n$ entero positivo, Damián dibuja todos los puntos de coordenadas enteras $B_{i,j} = (i,j)$ con $0 \leq i,j \leq n$ y calcula el área de cada triángulo $OAB_{i,j}$. Sea $S(n)$ la suma de las $(n+1)^2$ áreas calculadas anteriormente. Hallar el siguiente límite: $$\lim_{n\to\infty} \frac{S(n)}{n^3}.$$`),
+  ciim('CIIM-2024-5', 2024, 5, "Densidad máxima sin tres celdas negras consecutivas en un tablero 3×N", "Combinatoria",
+    String.raw`Un tablero $3 \times N$ tiene inicialmente todas sus casillas pintadas de blanco. Sea $a(N)$ el número máximo de casillas que se pueden pintar de negro de manera que no haya tres casillas consecutivas (de forma horizontal, vertical o diagonal) pintadas de color negro. Demostrar que $\lim_{N\to\infty} \frac{a(N)}{N}$ existe y determinar su valor.`),
+  ciim('CIIM-2024-6', 2024, 6, "Convergencia de la serie de partes fraccionarias de n!·x para x irracional", "Teoría de Números",
+    String.raw`Dado un número real $x$, se define la serie $$S(x) = \sum_{n=1}^\infty \{n! \cdot x\},$$ donde $\{s\} = s - \lfloor s \rfloor$ es la parte fraccionaria del número $s$. Determinar si existe algún número irracional $x$ para el cual $S(x)$ converge.`),
+]
+
+export const ciimProblemas = [
+  ...ciim2017,
+  ...ciim2018,
+  ...ciim2019,
+  ...ciim2020,
+  ...ciim2022,
+  ...ciim2023,
+  ...ciim2024,
+]
+
 export const problemas = [
   ...omumPrimeraRonda,
   ...omumNacional,
@@ -3073,4 +3279,5 @@ export const problemas = [
   ...putnam2024,
   ...putnam2025,
   ...hmmt2025,
+  ...ciimProblemas,
 ]

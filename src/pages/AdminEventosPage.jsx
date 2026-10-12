@@ -287,18 +287,28 @@ function AdminEventosPage() {
     cargarEventos()
   }
 
-  // Intercambia el "orden" de un evento con su vecino DENTRO DEL MISMO
-  // GRUPO (próximo o pasado), para subirlo o bajarlo una posición — mismo
-  // patrón que "mover" en AdminGaleriaPage.jsx.
+  // Sube o baja un evento una posición DENTRO DE SU GRUPO (próximo o
+  // pasado). No basta con intercambiar el `orden` de los dos vecinos como en
+  // la galería: aquí varios eventos pueden tener el MISMO `orden` (los que
+  // venían de la lista original, y los que se restauraron después), y
+  // intercambiar dos números iguales no cambia nada — el botón parecía no
+  // hacer caso. Por eso se reacomoda el grupo completo y se le reasigna
+  // 1, 2, 3… según la nueva posición; solo se guardan los que cambiaron.
   const mover = async (evento, direccion) => {
     const delGrupo = eventos.filter((e) => e.tipo === evento.tipo)
     const indice = delGrupo.findIndex((e) => e._id === evento._id)
-    const vecino = delGrupo[indice + direccion]
-    if (!vecino) return
-    await Promise.all([
-      api.actualizarEvento(evento._id, { orden: vecino.orden }, auth.token),
-      api.actualizarEvento(vecino._id, { orden: evento.orden }, auth.token),
-    ])
+    const destino = indice + direccion
+    if (destino < 0 || destino >= delGrupo.length) return
+
+    const nuevoOrden = [...delGrupo]
+    ;[nuevoOrden[indice], nuevoOrden[destino]] = [nuevoOrden[destino], nuevoOrden[indice]]
+
+    await Promise.all(
+      nuevoOrden
+        .map((e, i) => ({ e, orden: i + 1 }))
+        .filter(({ e, orden }) => e.orden !== orden)
+        .map(({ e, orden }) => api.actualizarEvento(e._id, { orden }, auth.token)),
+    )
     cargarEventos()
   }
 
