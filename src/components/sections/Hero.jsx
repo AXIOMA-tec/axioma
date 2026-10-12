@@ -86,7 +86,7 @@ export default function Hero() {
         >
           <motion.div variants={word}>
             <img
-              src="/axioma-logo-hero.png"
+              src="/axioma-logo-hero.webp"
               alt="Axioma"
               className="h-auto max-h-[31svh] w-[min(88vw,860px)] object-contain drop-shadow-[0_0_45px_rgba(255,180,1,0.35)]"
             />
