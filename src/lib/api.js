@@ -48,6 +48,8 @@ export const api = {
   // Para "Tus comentarios" en /perfil: requiere sesión (el backend saca el
   // autor del token, no se manda por aquí).
   getMisComentarios: (token) => apiFetch('/api/comments/mine', { token }),
+  // Para "Tus problemas resueltos" en /perfil.
+  getMisResueltos: (token) => apiFetch('/api/resueltos/mine', { token }),
   // Solo para administradores (ver /admin/eventos y /admin/galeria):
   // requieren el token de sesión, y el servidor rechaza a quien no tenga
   // isAdmin.

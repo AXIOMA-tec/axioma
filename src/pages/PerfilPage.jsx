@@ -32,6 +32,8 @@ function PerfilPage() {
   const [error, setError] = useState(null)
   const [comentarios, setComentarios] = useState(null) // null = todavía cargando
   const [errorComentarios, setErrorComentarios] = useState(null)
+  const [resueltos, setResueltos] = useState(null) // null = todavía cargando
+  const [errorResueltos, setErrorResueltos] = useState(null)
 
   const token = auth?.token
   useEffect(() => {
@@ -62,6 +64,22 @@ function PerfilPage() {
       })
       .catch((err) => {
         if (activo) setErrorComentarios(err.message)
+      })
+    return () => {
+      activo = false
+    }
+  }, [token])
+
+  useEffect(() => {
+    if (!token) return
+    let activo = true
+    api
+      .getMisResueltos(token)
+      .then((data) => {
+        if (activo) setResueltos(data)
+      })
+      .catch((err) => {
+        if (activo) setErrorResueltos(err.message)
       })
     return () => {
       activo = false
@@ -173,6 +191,67 @@ function PerfilPage() {
                     </Link>
                     <p className="mt-2 line-clamp-2 text-sm text-brand-900/70">{c.body}</p>
                     <p className="mt-2 text-xs text-brand-400">{formatearFecha(c.createdAt)}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Tu progreso: mismo patrón que "Tus comentarios" — marcar un
+              problema en Problemas.jsx lo agrega aquí, para llevar un
+              registro de avance sin hacer pública la lista (eso se decidió
+              a propósito, ver comentarios). Cada fila trae su propia
+              casilla de color: verde = resuelto, ámbar = en progreso. */}
+          <div className="mt-8 overflow-hidden rounded-2xl border border-brand-200 bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-brand-100 p-6">
+              <h2 className="text-lg font-semibold text-brand-900">Tu progreso</h2>
+              {resueltos && resueltos.length > 0 && (
+                <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-900/70">
+                  {resueltos.length}
+                </span>
+              )}
+            </div>
+
+            {resueltos === null && !errorResueltos && (
+              <p className="p-6 text-sm text-brand-500">Cargando…</p>
+            )}
+            {errorResueltos && (
+              <p className="p-6 text-sm text-red-700">No se pudieron cargar: {errorResueltos}</p>
+            )}
+            {resueltos?.length === 0 && (
+              <p className="p-6 text-sm text-brand-900/60">
+                Todavía no has marcado ningún problema como resuelto o en progreso.{' '}
+                <Link to="/problemas" className="underline decoration-brand-300 underline-offset-4 hover:text-brand-900">
+                  Ve al archivo
+                </Link>{' '}
+                y márcalo cuando le entres a uno.
+              </p>
+            )}
+            {resueltos && resueltos.length > 0 && (
+              <ul className="divide-y divide-brand-100">
+                {resueltos.map((r) => (
+                  <li key={r._id} className="flex items-start gap-3 p-6">
+                    <span
+                      aria-hidden="true"
+                      className={`mt-1.5 h-2 w-2 shrink-0 ${
+                        r.estado === 'en_progreso' ? 'bg-amber-400' : 'bg-emerald-600'
+                      }`}
+                    />
+                    <div className="min-w-0">
+                      <Link
+                        to={r.problem ? `/problemas?p=${r.problem.codigo}` : '/problemas'}
+                        className="text-sm font-medium text-brand-900 underline decoration-brand-300 underline-offset-4 hover:text-brand-600"
+                      >
+                        {r.problem
+                          ? `${r.problem.tipo} ${r.problem.año} — Problema ${numeroProblema(r.problem.codigo)}`
+                          : 'Problema eliminado'}
+                      </Link>
+                      <p className="mt-1 text-xs text-brand-500">
+                        {r.estado === 'en_progreso' ? 'En progreso' : 'Resuelto'}
+                        {' · '}
+                        {formatearFecha(r.createdAt)}
+                      </p>
+                    </div>
                   </li>
                 ))}
               </ul>

@@ -103,6 +103,13 @@ const FORMULA_BASILEA = katex.renderToString(
 )
 
 const AÑOS = ['2021', '2022', '2023', '2024', '2025', '2026']
+
+// Filtro "Mi progreso" (solo con sesión): los mismos valores que guarda el
+// backend en Resuelto.estado, con la etiqueta que ve la gente.
+const ESTADOS_FILTRO = [
+  { valor: 'resuelto', etiqueta: 'Resueltos' },
+  { valor: 'en_progreso', etiqueta: 'En progreso' },
+]
 const TEMAS = [
   'Álgebra',
   'Álgebra Lineal',
@@ -405,7 +412,7 @@ function ComentarioItem({ comentario, puedeBorrar, onEliminar }) {
 //  - ProblemaDetalle: enunciado + comentarios + formulario. Se monta de nuevo
 //    con cada problema (key={problema._id}), así que su estado arranca limpio.
 // ---------------------------------------------------------------------------
-function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpired }) {
+function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpired, onEstadoChange }) {
   // Arranca en `true` a propósito: "recién montado" siempre significa "aún no
   // llegan los comentarios de este problema".
   const [comentarios, setComentarios] = useState([])
@@ -413,6 +420,13 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
   const [nuevoComentario, setNuevoComentario] = useState('')
   const [enviandoComentario, setEnviandoComentario] = useState(false)
   const [errorComentario, setErrorComentario] = useState(null)
+
+  // Arranca con lo que ya trajo la lista (estadoPorMi, ver
+  // problems.routes.js): null, 'en_progreso' o 'resuelto'. Como ProblemaPanel
+  // monta este componente con key={problema._id}, cada problema arranca
+  // limpio, sin heredar el estado del anterior.
+  const [estado, setEstado] = useState(problema.estadoPorMi ?? null)
+  const [guardandoEstado, setGuardandoEstado] = useState(false)
 
   useEffect(() => {
     let cancelado = false
@@ -439,6 +453,28 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
       if (err.status === 401) onAuthExpired()
       // Un 403/404 aquí sería raro (alguien lo borró en otra pestaña) — no
       // vale la pena una UI especial para ese caso.
+    }
+  }
+
+  // Clic en la casilla que ya está activa -> la quita (DELETE, vuelve a sin
+  // marcar). Clic en la otra -> la pone en ese estado (POST con { estado }),
+  // sin importar si ya había una marca distinta puesta antes: el backend es
+  // idempotente, siempre deja el documento con el estado que se mandó.
+  const handleElegirEstado = async (nuevoEstado) => {
+    setGuardandoEstado(true)
+    const destino = estado === nuevoEstado ? null : nuevoEstado
+    try {
+      await apiFetch(`/api/problems/${problema._id}/resuelto`, {
+        method: destino ? 'POST' : 'DELETE',
+        token: auth.token,
+        body: destino ? { estado: destino } : undefined,
+      })
+      setEstado(destino)
+      onEstadoChange?.(problema._id, destino)
+    } catch (err) {
+      if (err.status === 401) onAuthExpired()
+    } finally {
+      setGuardandoEstado(false)
     }
   }
 
@@ -490,9 +526,47 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
             {formatearTitulo(problema)}
           </h3>
 
-          <p className="mt-5 text-[11px] uppercase tracking-[0.15em] text-neutral-500">
-            {problema.tipo} · {problema.año}
-          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-neutral-500">
+              {problema.tipo} · {problema.año}
+            </p>
+
+            {/* Solo con sesión: sin login no hay a quién atribuirle el
+                avance (igual que los comentarios, que piden AuthForm). Dos
+                casillas en vez de un solo botón de sí/no — se puede estar
+                "en progreso" antes de llegar a "resuelto", y dan clic en la
+                que ya está activa para quitar la marca. */}
+            {auth && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleElegirEstado('en_progreso')}
+                  disabled={guardandoEstado}
+                  aria-pressed={estado === 'en_progreso'}
+                  className={`border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] transition-colors disabled:opacity-50 ${focusRing} ${
+                    estado === 'en_progreso'
+                      ? 'border-neutral-950 bg-amber-400 text-neutral-950'
+                      : 'border-neutral-950 bg-white text-neutral-950 hover:bg-neutral-100'
+                  }`}
+                >
+                  En progreso
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleElegirEstado('resuelto')}
+                  disabled={guardandoEstado}
+                  aria-pressed={estado === 'resuelto'}
+                  className={`border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] transition-colors disabled:opacity-50 ${focusRing} ${
+                    estado === 'resuelto'
+                      ? 'border-neutral-950 bg-emerald-600 text-white hover:bg-emerald-700'
+                      : 'border-neutral-950 bg-white text-neutral-950 hover:bg-neutral-100'
+                  }`}
+                >
+                  Resuelto
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* div, no <p>: una fórmula en "display mode" se renderiza como un
               <div>, y un <div> no puede vivir dentro de un <p> en HTML. */}
@@ -584,7 +658,16 @@ function NavButton({ onClick, disabled, label, pressed, children }) {
 // `contexto` = { posicion, total, anterior, siguiente } — dónde está este
 // problema dentro de la lista que se estaba viendo (resultados filtrados, la
 // carpeta abierta, etc.), para poder ir al de antes / al de después.
-function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess, onAuthExpired }) {
+function ProblemaPanel({
+  problema,
+  contexto,
+  onIr,
+  onClose,
+  auth,
+  onAuthSuccess,
+  onAuthExpired,
+  onEstadoChange,
+}) {
   const [enlaceCopiado, setEnlaceCopiado] = useState(false)
   // Opcional: agranda el panel a toda la pantalla y el texto crece con él.
   // Se mantiene al pasar de un
@@ -728,6 +811,7 @@ function ProblemaPanel({ problema, contexto, onIr, onClose, auth, onAuthSuccess,
           auth={auth}
           onAuthSuccess={onAuthSuccess}
           onAuthExpired={onAuthExpired}
+          onEstadoChange={onEstadoChange}
         />
       </motion.aside>
     </motion.div>
@@ -769,6 +853,21 @@ function ProblemaRow({ problema, onOpen }) {
               <span className="sr-only">
                 {problema.totalComentarios === 1 ? 'comentario' : 'comentarios'}
               </span>
+            </span>
+          )}
+          {/* Solo aparece si tú (con sesión) le pusiste una marca a este
+              problema — ver estadoPorMi en problems.routes.js. Una casilla
+              de color en vez de un ícono: verde = resuelto, ámbar = en
+              progreso. */}
+          {problema.estadoPorMi && (
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-neutral-500">
+              <span
+                aria-hidden="true"
+                className={`h-2 w-2 shrink-0 ${
+                  problema.estadoPorMi === 'resuelto' ? 'bg-emerald-600' : 'bg-amber-400'
+                }`}
+              />
+              {problema.estadoPorMi === 'resuelto' ? 'Resuelto' : 'En progreso'}
             </span>
           )}
         </span>
@@ -1083,12 +1182,21 @@ export default function Problemas() {
   // si inicias sesión aquí, el Navbar cambia a "Perfil", y viceversa.
   const { auth, login: handleAuthSuccess, logout: handleLogout } = useAuth()
 
+  // Aparte del resto (carpetas, recursos): esta sí depende de la sesión —
+  // con token manda en qué quedó cada problema para ti
+  // (estadoPorMi en cada uno, ver problems.routes.js), así que hay que
+  // volver a pedirla si inicias/cierras sesión sin recargar la página. No se
+  // vuelve a poner "cargando" en true en ese refetch: ya hay una lista en
+  // pantalla, y taparla de nuevo solo por iniciar sesión se vería peor que
+  // dejarla como está hasta que llegue la actualizada.
   useEffect(() => {
-    apiFetch('/api/problems')
+    apiFetch('/api/problems', { token: auth?.token })
       .then(setProblemas)
       .catch((err) => setErrorCarga(err.message))
       .finally(() => setCargando(false))
+  }, [auth])
 
+  useEffect(() => {
     // Las carpetas se piden aparte: si esta llamada falla, preferimos que la
     // lista de problemas siga funcionando (solo sin carpetas).
     apiFetch('/api/categories')
@@ -1130,6 +1238,12 @@ export default function Problemas() {
   const temas = useMemo(() => searchParams.getAll('tema'), [searchParams])
   const tipos = useMemo(() => searchParams.getAll('tipo'), [searchParams])
   const busqueda = searchParams.get('q') ?? ''
+  // Sin sesión no hay progreso que filtrar: si alguien llega con ?estado=… en
+  // un enlace compartido, se ignora en vez de mostrar una lista vacía.
+  const estados = useMemo(
+    () => (auth ? searchParams.getAll('estado') : []),
+    [searchParams, auth],
+  )
 
   // Carpetas marcadas como FILTRO (casillas, varias a la vez).
   const categoriasSeleccionadas = useMemo(
@@ -1198,6 +1312,16 @@ export default function Problemas() {
     else actualizarParams({ p: null }, { replace: true })
   }
 
+  // El cambio de estado (en progreso / resuelto / sin marcar) pasa por aquí
+  // para que la lista (ProblemaRow, la casilla de color) se actualice al
+  // instante — sin esto, el cambio solo se vería en el panel abierto hasta
+  // el próximo refetch de /api/problems.
+  const actualizarEstadoEnLista = (problemaId, nuevoEstado) => {
+    setProblemas((prev) =>
+      prev.map((p) => (p._id === problemaId ? { ...p, estadoPorMi: nuevoEstado } : p)),
+    )
+  }
+
   // Atajo "/" para ir directo al buscador (como en GitHub o Google).
   useEffect(() => {
     const alPresionar = (event) => {
@@ -1245,6 +1369,7 @@ export default function Problemas() {
       if (años.length && !años.includes(p.año)) return false
       if (temas.length && !temas.includes(p.tema)) return false
       if (tipos.length && !tipos.includes(p.tipo)) return false
+      if (estados.length && !estados.includes(p.estadoPorMi)) return false
       // Si se marcó alguna carpeta, el problema debe caer dentro de ella o
       // de alguna de sus subcarpetas.
       if (categoriasSeleccionadas.length && !categoriasEfectivas.has(p.category)) {
@@ -1252,7 +1377,16 @@ export default function Problemas() {
       }
       return true
     })
-  }, [problemas, idsBusqueda, años, temas, tipos, categoriasSeleccionadas, categoriasEfectivas])
+  }, [
+    problemas,
+    idsBusqueda,
+    años,
+    temas,
+    tipos,
+    estados,
+    categoriasSeleccionadas,
+    categoriasEfectivas,
+  ])
 
   // Estadísticas del encabezado y conteos del sidebar: se calculan solas a
   // partir de los problemas ya cargados, no son datos nuevos.
@@ -1265,11 +1399,21 @@ export default function Problemas() {
     return { años: contar('año'), temas: contar('tema'), tipos: contar('tipo') }
   }, [problemas])
 
+  // Cuántos problemas hay en cada estado de progreso (solo se muestra con
+  // sesión, ver el grupo "Mi progreso" del sidebar).
+  const conteosEstado = useMemo(
+    () => ({
+      resuelto: problemas.filter((p) => p.estadoPorMi === 'resuelto').length,
+      en_progreso: problemas.filter((p) => p.estadoPorMi === 'en_progreso').length,
+    }),
+    [problemas],
+  )
+
   // Llave que cambia con cada filtro: al dársela a la lista, React la vuelve a
   // montar y la animación de entrada se repite en cada filtrado.
   const filtrosKey = useMemo(
-    () => JSON.stringify({ años, temas, tipos, categoriasSeleccionadas }),
-    [años, temas, tipos, categoriasSeleccionadas],
+    () => JSON.stringify({ años, temas, tipos, estados, categoriasSeleccionadas }),
+    [años, temas, tipos, estados, categoriasSeleccionadas],
   )
 
   // -------------------------------------------------------------------
@@ -1285,16 +1429,21 @@ export default function Problemas() {
     años.length > 0 ||
     temas.length > 0 ||
     tipos.length > 0 ||
+    estados.length > 0 ||
     categoriasSeleccionadas.length > 0
   const totalFiltros =
     (hayBusqueda ? 1 : 0) +
     años.length +
     temas.length +
     tipos.length +
+    estados.length +
     categoriasSeleccionadas.length
 
   const limpiarFiltros = () =>
-    actualizarParams({ anio: [], tema: [], tipo: [], carpetas: [], q: null }, { replace: true })
+    actualizarParams(
+      { anio: [], tema: [], tipo: [], estado: [], carpetas: [], q: null },
+      { replace: true },
+    )
 
   // Etiquetas quitables de los filtros activos (van arriba de los resultados).
   const etiquetasActivas = [
@@ -1304,6 +1453,11 @@ export default function Problemas() {
     ...años.map((v) => ({ key: `año-${v}`, label: v, quitar: () => alternarParam('anio')(v) })),
     ...temas.map((v) => ({ key: `tema-${v}`, label: v, quitar: () => alternarParam('tema')(v) })),
     ...tipos.map((v) => ({ key: `tipo-${v}`, label: v, quitar: () => alternarParam('tipo')(v) })),
+    ...estados.map((v) => ({
+      key: `estado-${v}`,
+      label: ESTADOS_FILTRO.find((e) => e.valor === v)?.etiqueta ?? v,
+      quitar: () => alternarParam('estado')(v),
+    })),
     ...categoriasSeleccionadas.map((id) => ({
       key: `cat-${id}`,
       label: categoriasPorId.get(id)?.name ?? 'Carpeta',
@@ -1355,6 +1509,16 @@ export default function Problemas() {
         : carpetaAbierta
           ? contarProblemas(carpetaAbierta, problemas)
           : problemas.length
+
+  // Progreso en lo que se está viendo ahora mismo (los resultados filtrados,
+  // o la carpeta abierta) — no tiene sentido en la vista de carpetas, ahí
+  // cada fila es un concurso entero, no un problema.
+  const listaVistaActual =
+    vista === 'filtros' ? problemasFiltrados : vista === 'problemas' ? problemasDeCarpeta : []
+  const resueltosEnVista = listaVistaActual.filter((p) => p.estadoPorMi === 'resuelto').length
+  const enProgresoEnVista = listaVistaActual.filter((p) => p.estadoPorMi === 'en_progreso').length
+  const mostrarProgreso =
+    Boolean(auth) && vista !== 'carpetas' && resueltosEnVista + enProgresoEnVista > 0
 
   const listo = !cargando && !errorCarga
 
@@ -1420,6 +1584,24 @@ export default function Problemas() {
                 </button>
               )}
             </div>
+            {/* Mi progreso: solo con sesión, porque el estado es de cada
+                persona. Va arriba de todo, es lo más personal del filtro. */}
+            {auth && (
+              <div className="border-t border-neutral-950 pb-5 pt-3">
+                <h3 className={`${labelClass} mb-2`}>Mi progreso</h3>
+                <div className="flex flex-col">
+                  {ESTADOS_FILTRO.map((estado) => (
+                    <CheckRow
+                      key={estado.valor}
+                      label={estado.etiqueta}
+                      checked={estados.includes(estado.valor)}
+                      onChange={() => alternarParam('estado')(estado.valor)}
+                      count={conteosEstado[estado.valor]}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
             <FilterGroup
               title="Año"
               options={AÑOS}
@@ -1502,9 +1684,46 @@ export default function Problemas() {
 
               <div className="flex items-end justify-between gap-6 border-b border-neutral-950 pb-3">
                 <h2 className="text-3xl leading-none text-neutral-950 sm:text-4xl">{tituloVista}</h2>
-                <p className="shrink-0 text-sm tabular-nums text-neutral-500">
-                  {cantidadVista} {cantidadVista === 1 ? 'problema' : 'problemas'}
-                </p>
+                <div className="flex shrink-0 flex-col items-end gap-1.5">
+                  <p className="text-sm tabular-nums text-neutral-500">
+                    {cantidadVista} {cantidadVista === 1 ? 'problema' : 'problemas'}
+                  </p>
+                  {/* Cuántos de estos ya marcaste tú — mismas casillas de
+                      color que cada fila y el panel, para que se lea como
+                      el mismo concepto en todo /problemas. */}
+                  {mostrarProgreso && (
+                    <div className="flex flex-col items-end gap-1.5">
+                      <div className="flex items-center gap-3 text-xs tabular-nums text-neutral-500">
+                        {/* El texto de cada span ya es su propio nombre
+                            accesible; solo el cuadrito de color necesita
+                            aria-hidden para que un lector de pantalla no lo
+                            anuncie aparte. */}
+                        {resueltosEnVista > 0 && (
+                          <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                            <span aria-hidden="true" className="h-2 w-2 bg-emerald-600" />
+                            {resueltosEnVista} resuelto{resueltosEnVista === 1 ? '' : 's'}
+                          </span>
+                        )}
+                        {enProgresoEnVista > 0 && (
+                          <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                            <span aria-hidden="true" className="h-2 w-2 bg-amber-400" />
+                            {enProgresoEnVista} en progreso
+                          </span>
+                        )}
+                      </div>
+                      <div aria-hidden="true" className="flex h-1 w-16 bg-neutral-200">
+                        <span
+                          className="block h-full bg-emerald-600 transition-[width] duration-300 ease-out"
+                          style={{ width: `${(resueltosEnVista / cantidadVista) * 100}%` }}
+                        />
+                        <span
+                          className="block h-full bg-amber-400 transition-[width] duration-300 ease-out"
+                          style={{ width: `${(enProgresoEnVista / cantidadVista) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Contexto del concurso: solo en la carpeta raíz de cada uno
@@ -1627,6 +1846,7 @@ export default function Problemas() {
             auth={auth}
             onAuthSuccess={handleAuthSuccess}
             onAuthExpired={handleLogout}
+            onEstadoChange={actualizarEstadoEnLista}
           />
         )}
       </AnimatePresence>
