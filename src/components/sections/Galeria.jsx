@@ -53,18 +53,18 @@ function Foto({ imagen, indice, onOpen }) {
       onClick={() => onOpen(indice)}
       aria-label={`Ver foto ${numero(indice)}: ${imagen.alt}`}
       style={{ aspectRatio: imagen.ratio }}
-      className="group relative h-56 shrink-0 overflow-hidden rounded-2xl border border-brand-200 bg-brand-100 text-left shadow-md transition-shadow duration-300 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900 sm:h-72 lg:h-80"
+      className="group relative h-56 shrink-0 overflow-hidden border border-brand-200 bg-brand-100 text-left transition-shadow duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900 sm:h-72 lg:h-80"
     >
       <div className="flex h-full w-full items-center justify-center transition-transform duration-700 ease-out group-hover:scale-105">
         <Contenido imagen={imagen} />
       </div>
 
-      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium tabular-nums tracking-[0.1em] text-brand-900 shadow-sm">
+      <span className="absolute left-3 top-3 bg-white/90 px-2.5 py-1 text-[11px] font-medium tabular-nums tracking-[0.1em] text-brand-900 ">
         {numero(indice)}
       </span>
 
       {/* Pie que sube desde abajo al pasar el mouse. */}
-      <span className="absolute inset-x-3 bottom-3 translate-y-[calc(100%+12px)] rounded-xl bg-brand-900/90 px-3 py-2 text-xs leading-snug text-white transition-transform duration-300 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0">
+      <span className="absolute inset-x-3 bottom-3 translate-y-[calc(100%+12px)] bg-brand-900/90 px-3 py-2 text-xs leading-snug text-white transition-transform duration-300 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0">
         {imagen.alt}
       </span>
     </button>
@@ -99,7 +99,7 @@ function BotonVisor({ onClick, disabled, label, children }) {
       disabled={disabled}
       aria-label={label}
       title={label}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 text-white transition-colors hover:bg-white hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-default disabled:border-white/25 disabled:text-white/25 disabled:hover:bg-transparent disabled:hover:text-white/25"
+      className="flex h-10 w-10 items-center justify-center border border-white/70 text-white transition-colors hover:bg-white hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-default disabled:border-white/25 disabled:text-white/25 disabled:hover:bg-transparent disabled:hover:text-white/25"
     >
       {children}
     </button>
@@ -156,7 +156,7 @@ function Visor({ imagenes, indice, onIr, onClose }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: EASE }}
           style={{ aspectRatio: imagen.ratio }}
-          className="cursor-boundary flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-2xl bg-brand-100 shadow-2xl"
+          className="cursor-boundary flex max-h-full max-w-full items-center justify-center overflow-hidden bg-brand-100 "
           onClick={(e) => e.stopPropagation()}
         >
           <Contenido imagen={imagen} />

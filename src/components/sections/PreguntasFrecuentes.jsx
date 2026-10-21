@@ -62,7 +62,7 @@ const PREGUNTAS = [
 export default function PreguntasFrecuentes() {
   return (
     <div className="w-full text-left">
-      <h3 className="mb-3 text-center text-[11px] font-medium uppercase tracking-[0.2em] text-white/60">
+      <h3 className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-white/60">
         Preguntas frecuentes
       </h3>
       <div className="border-t border-white/30">

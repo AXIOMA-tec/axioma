@@ -3,7 +3,8 @@ import { fadeUp, revealProps, staggerContainer } from '../motion/variants'
 import FloatingSymbol from '../motion/FloatingSymbol'
 
 // Sección chiquita entre Equipo y Eventos (sin id propio: no es un destino
-// de navegación, solo un respiro). Dos razones para existir:
+// de navegación, solo un respiro), sobre una franja oscura para que no se
+// confunda con el final de Equipo. Dos razones para existir:
 //   1. Todo el sitio hasta aquí es bastante formal — esto le baja el tono
 //      un rato y juega con el nombre del club.
 //   2. Equipo y Eventos son dos secciones con fondo blanco y mucho padding
@@ -23,11 +24,11 @@ import FloatingSymbol from '../motion/FloatingSymbol'
 const ROJO = '#B70B0D'
 const NARANJA = '#E57505'
 const DORADO = '#FFB401'
-// El dorado de marca (#FFB401) tal cual es casi ilegible como TEXTO sobre
-// blanco (contraste ~1.8:1); esta versión más oscura da ~5.9:1. El sello de
-// abajo sigue usando el dorado real de fondo — ahí el texto es oscuro
-// encima, así que el contraste no es problema.
-const DORADO_TEXTO = '#8A5A00'
+// La sección va sobre fondo oscuro (para separarla de Equipo, que es claro,
+// y que los sellos de color resalten). El dorado y el naranja de marca se
+// leen bien como texto sobre ese fondo, pero el rojo de marca (#B70B0D) no
+// (contraste ~2.6:1): para el texto se usa esta versión más clara.
+const ROJO_TEXTO = '#FF6B63'
 
 // Tres axiomas de verdad (no inventados), traducidos a algo que se lea
 // fácil y le saque una sonrisa a quien no es de matemáticas. Cada uno lleva
@@ -40,7 +41,7 @@ const AXIOMAS = [
     simbolo: '=',
     fondo: DORADO,
     textoSello: 'text-brand-900',
-    color: DORADO_TEXTO,
+    color: DORADO,
     nombre: 'Axioma de identidad',
     formula: 'a = a',
     texto: 'Todo es igual a sí mismo. Hasta un axioma tiene su ego.',
@@ -60,7 +61,7 @@ const AXIOMAS = [
     simbolo: '∈',
     fondo: ROJO,
     textoSello: 'text-white',
-    color: ROJO,
+    color: ROJO_TEXTO,
     nombre: 'Axioma de elección',
     texto: 'Si tienes infinitas cajas con al menos un calcetín cada una, puedes elegir un calcetín de cada caja.',
     formula: 'Zermelo, 1904',
@@ -73,14 +74,14 @@ function ColumnaAxioma({ axioma }) {
       variants={fadeUp}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
-      className="flex flex-col items-center gap-3 border-brand-200 px-4 py-5 text-center sm:border-l sm:py-0 sm:first:border-l-0"
+      className="flex flex-col items-center gap-3 border-white/15 px-4 py-5 text-center sm:border-l sm:py-0 sm:first:border-l-0"
     >
       {/* El sello: plano y sólido, no un ícono suave en un círculo — mismo
           lenguaje que los botones del Hero/Contacto (sin esquinas
           redondeadas). */}
       <span
         aria-hidden="true"
-        style={{ backgroundColor: axioma.fondo, boxShadow: '6px 6px 0 0 rgba(15, 23, 42, 0.15)' }}
+        style={{ backgroundColor: axioma.fondo, boxShadow: '6px 6px 0 0 rgba(255, 255, 255, 0.14)' }}
         className={`flex h-16 w-16 shrink-0 items-center justify-center font-serif text-3xl italic ${axioma.textoSello}`}
       >
         {axioma.simbolo}
@@ -88,28 +89,28 @@ function ColumnaAxioma({ axioma }) {
       <p style={{ color: axioma.color }} className="text-xs font-bold uppercase tracking-[0.15em]">
         {axioma.formula}
       </p>
-      <h3 className="font-display text-lg leading-tight text-brand-900">{axioma.nombre}</h3>
-      <p className="max-w-xs text-sm leading-relaxed text-brand-900/70">{axioma.texto}</p>
+      <h3 className="font-display text-lg leading-tight text-white">{axioma.nombre}</h3>
+      <p className="max-w-xs text-sm leading-relaxed text-white/70">{axioma.texto}</p>
     </motion.div>
   )
 }
 
 export default function AxiomaCurioso() {
   return (
-    <section className="relative overflow-hidden bg-brand-50 py-12">
-      <FloatingSymbol symbol="∀" className="pointer-events-none absolute left-[6%] top-[10%] text-3xl text-brand-900/10 sm:text-4xl" delay={0} duration={7} rotate={-6} />
-      <FloatingSymbol symbol="∴" className="pointer-events-none absolute right-[8%] bottom-[10%] text-3xl text-brand-900/10 sm:text-4xl" delay={0.6} duration={8} rotate={8} />
-      <FloatingSymbol symbol="∃" className="pointer-events-none absolute right-[20%] top-[8%] text-2xl text-brand-900/10 sm:text-3xl" delay={1} duration={6.5} rotate={-4} />
+    <section className="relative overflow-hidden bg-[#120303] py-16">
+      <FloatingSymbol symbol="∀" className="pointer-events-none absolute left-[6%] top-[10%] text-3xl text-white/10 sm:text-4xl" delay={0} duration={7} rotate={-6} />
+      <FloatingSymbol symbol="∴" className="pointer-events-none absolute right-[8%] bottom-[10%] text-3xl text-white/10 sm:text-4xl" delay={0.6} duration={8} rotate={8} />
+      <FloatingSymbol symbol="∃" className="pointer-events-none absolute right-[20%] top-[8%] text-2xl text-white/10 sm:text-3xl" delay={1} duration={6.5} rotate={-4} />
 
       <motion.div
         className="relative mx-auto max-w-5xl px-4 sm:px-6"
         variants={staggerContainer(0.12)}
         {...revealProps}
       >
-        <motion.p variants={fadeUp} className="text-center text-xs font-medium uppercase tracking-[0.2em] text-brand-500">
+        <motion.p variants={fadeUp} className="text-center text-xs font-medium uppercase tracking-[0.2em] text-white/60">
           Por si te preguntabas de dónde viene el nombre
         </motion.p>
-        <motion.h2 variants={fadeUp} className="font-display mt-2 mb-8 text-center text-3xl text-brand-900 sm:text-4xl">
+        <motion.h2 variants={fadeUp} className="font-display mt-2 mb-10 text-center text-3xl text-white sm:text-4xl">
           Un axioma es una verdad que no necesita demostrarse
         </motion.h2>
 

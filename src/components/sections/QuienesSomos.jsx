@@ -73,7 +73,8 @@ const STATS = [
   },
 ]
 
-// Imagen grupal. Tiene una "hoja" suave desplazada detrás y un leve efecto
+// Imagen grupal. Tiene un bloque dorado sólido desplazado detrás (plano, sin
+// esquinas redondeadas ni sombras, igual que el resto del sitio) y un leve efecto
 // "magnético" en 2D: se desplaza unos píxeles hacia el cursor. Sin
 // transforms 3D, que cuestan en equipos sin GPU buena.
 function ImagenMagnetica() {
@@ -98,14 +99,14 @@ function ImagenMagnetica() {
     <motion.div variants={popIn()} className="relative">
       <div
         aria-hidden="true"
-        className="absolute inset-0 translate-x-3 translate-y-3 rounded-3xl bg-brand-200/70 sm:translate-x-4 sm:translate-y-4"
+        className="absolute inset-0 translate-x-3 translate-y-3 bg-[#FFB401] sm:translate-x-4 sm:translate-y-4"
       />
       <motion.div
         ref={ref}
         onMouseMove={alMoverMouse}
         onMouseLeave={reiniciar}
         style={{ x: translateX, y: translateY }}
-        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl border border-brand-200 bg-brand-100 shadow-lg"
+        className="relative flex aspect-[4/3] items-center justify-center overflow-hidden border border-brand-900 bg-brand-100"
       >
         {/* Foto real: presentación "Nuestro Axioma" ante el club. La imagen
             es más ancha que este recuadro (4:3), así que object-cover
@@ -145,7 +146,7 @@ function CifraBanda({ stat }) {
           CSS (arriba) hacen que tanto el estado normal como el :hover sean
           clases de Tailwind de verdad, y no un `style` inline que ganaría
           siempre y dejaría al hover sin efecto.*/}
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--acento-suave)] text-[var(--acento)] transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-6 group-hover:bg-[var(--acento)] group-hover:text-white">
+      <span className="flex h-12 w-12 items-center justify-center bg-[var(--acento-suave)] text-[var(--acento)] transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-6 group-hover:bg-[var(--acento)] group-hover:text-white">
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -224,7 +225,8 @@ export default function QuienesSomos() {
                 escribiría el club. Sin dos puntos ni guion largo a
                 propósito, para que no suene a texto de IA. */}
             <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
-              Axioma es el club de matemáticas del Tec de Monterrey. Es el
+              Axioma es el club de matemáticas del Tec de Monterrey y el
+              capítulo estudiantil de la Sociedad Matemática Mexicana. Es el
               punto de encuentro para estudiantes apasionados por resolver
               problemas, enseñar y competir. Formamos talento matemático de
               forma seria y constante, para elevar el prestigio académico

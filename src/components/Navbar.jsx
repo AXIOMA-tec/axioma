@@ -133,15 +133,24 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            {/* Dorado y plano, como los botones principales del sitio: es lo
-                más importante de la página y se distingue de los links que
-                solo bajan por la portada. */}
+            {/* Plano y destacado, como los botones principales del sitio: es
+                lo más importante de la página y se distingue de los links
+                que solo bajan por la portada. Sobre secciones claras va
+                relleno de dorado; sobre las oscuras (Inicio y Contacto, que
+                ya traen su propio botón dorado "Únete") va solo con
+                contorno, para que no compitan dos dorados a la vez. Cuando
+                ya estás EN Problemas también va con contorno: ya llegaste, no
+                hace falta que llame la atención. */}
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
               aria-current={enProblemas ? 'page' : undefined}
-              className={`${FOCUS_RING} border border-[#FFB401] bg-[#FFB401] px-3 py-1 text-sm font-medium text-neutral-950 transition-colors hover:bg-transparent ${
-                tone === 'light' ? 'hover:text-white' : 'hover:text-neutral-950'
+              className={`${FOCUS_RING} border px-3 py-1 text-sm font-medium transition-colors ${
+                tone === 'light'
+                  ? 'border-[#FFB401] bg-transparent text-[#FFB401] hover:bg-[#FFB401] hover:text-[#120303]'
+                  : enProblemas
+                    ? 'border-[#FFB401] bg-transparent text-neutral-950 hover:bg-[#FFB401]'
+                    : 'border-[#FFB401] bg-[#FFB401] text-neutral-950 hover:bg-transparent'
               }`}
             >
               {ROUTE_LINK.label}

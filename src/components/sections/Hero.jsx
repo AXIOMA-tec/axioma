@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MeshGradient } from '@paper-design/shaders-react'
 import FloatingSymbol from '../motion/FloatingSymbol'
-import DrawnCurve from '../motion/DrawnCurve'
 import { EASE, staggerContainer } from '../motion/variants'
 import { UNETE_URL } from '../../lib/contacto'
 
@@ -10,8 +9,9 @@ import { UNETE_URL } from '../../lib/contacto'
 // Fondo animado con shaders (@paper-design/shaders-react) usando la
 // paleta de marca Axioma: rojo profundo #B70B0D, naranja #E57505 y
 // amarillo dorado #FFB401.
-// Encima del fondo: símbolos matemáticos flotantes, curva paramétrica
-// decorativa y entrada del texto en stagger (features de la v2).
+// Encima del fondo: dos símbolos matemáticos flotantes y entrada del texto
+// en stagger. El protagonista es el logo; debajo, un mensaje corto y discreto
+// y dos acciones (una principal, "Únete", y una secundaria).
 // TODO equipo: ajustar copy si cambia el mensaje.
 
 const fadeUp = {
@@ -35,7 +35,7 @@ export default function Hero() {
     <section
       id="inicio"
       data-navbar-tone="light"
-      className="relative flex h-svh min-h-[600px] scroll-mt-16 flex-col items-center justify-center gap-[clamp(1rem,3svh,2rem)] overflow-hidden bg-[#120303] px-4 pb-20 pt-20 text-center sm:px-6"
+      className="relative flex min-h-svh scroll-mt-16 flex-col items-center justify-center gap-[clamp(1rem,3svh,2rem)] overflow-hidden bg-[#120303] px-4 pb-24 pt-28 text-center sm:px-6"
     >
       {/* Fondo shader: mesh gradient animado en la paleta Axioma */}
       <div className="pointer-events-none absolute inset-0">
@@ -52,14 +52,10 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#120303]/75 via-[#120303]/35 to-[#120303]/85" />
       </div>
 
-      {/* Símbolos matemáticos flotando sobre el shader, recoloreados en
-          dorado/naranja translúcido para que se lean sobre el fondo oscuro */}
-      <FloatingSymbol symbol="π" className="pointer-events-none absolute left-[10%] top-[22%] text-4xl text-[#FFB401]/40 sm:text-5xl" delay={0} duration={7} rotate={-8} />
-      <FloatingSymbol symbol="∑" className="pointer-events-none absolute right-[12%] top-[18%] text-5xl text-[#E57505]/40 sm:text-6xl" delay={0.4} duration={6} rotate={6} />
-      <FloatingSymbol symbol="∞" className="pointer-events-none absolute left-[16%] bottom-[24%] text-4xl text-[#FFB401]/40 sm:text-5xl" delay={0.8} duration={8} rotate={4} />
-      <FloatingSymbol symbol="√" className="pointer-events-none absolute right-[18%] bottom-[20%] text-4xl text-[#E57505]/40 sm:text-5xl" delay={1.2} duration={6.5} rotate={-5} />
-      <FloatingSymbol symbol="∫" className="pointer-events-none absolute left-[6%] top-[52%] text-3xl text-[#FFB401]/30 sm:text-4xl" delay={0.6} duration={9} rotate={10} />
-      <FloatingSymbol symbol="θ" className="pointer-events-none absolute right-[7%] top-[55%] text-3xl text-[#E57505]/30 sm:text-4xl" delay={1} duration={7.5} rotate={-10} />
+      {/* Solo dos símbolos: con seis el fondo se llenaba de ruido y le
+          quitaba protagonismo al mensaje. */}
+      <FloatingSymbol symbol="π" className="pointer-events-none absolute left-[8%] top-[10%] text-3xl text-[#FFB401]/40 sm:left-[10%] sm:top-[22%] sm:text-5xl" delay={0} duration={7} rotate={-8} />
+      <FloatingSymbol symbol="∑" className="pointer-events-none absolute right-[16%] top-[10%] text-3xl text-[#E57505]/40 sm:right-[12%] sm:top-[18%] sm:text-6xl" delay={0.4} duration={6} rotate={6} />
 
       <motion.div
         initial="hidden"
@@ -68,13 +64,9 @@ export default function Hero() {
         transition={{ duration: 0.7, ease: 'easeOut' }}
         className="relative flex flex-col items-center gap-4"
       >
-        <span
-          className="inline-block bg-clip-text text-xs font-semibold uppercase tracking-[0.3em] text-transparent sm:text-sm"
-          style={{
-            backgroundImage:
-              'linear-gradient(135deg, #FFB401 0%, #E57505 45%, #B70B0D 100%)',
-          }}
-        >
+        {/* Dorado sólido: antes era un degradado que terminaba en rojo, y esa
+            parte se perdía sobre el fondo rojo oscuro. */}
+        <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#FFB401] sm:text-sm">
           Asociación X Interés Olímpico Matemático · Tec de Monterrey
         </span>
 
@@ -88,22 +80,27 @@ export default function Hero() {
             <img
               src="/axioma-logo-hero.webp"
               alt="Axioma"
-              className="h-auto max-h-[31svh] w-[min(88vw,860px)] object-contain drop-shadow-[0_0_45px_rgba(255,180,1,0.35)]"
+              className="h-auto max-h-[34svh] w-[min(88vw,860px)] object-contain drop-shadow-[0_0_45px_rgba(255,180,1,0.35)]"
             />
           </motion.div>
 
-          <motion.p variants={word} className="max-w-2xl text-base text-white/85 sm:text-lg lg:text-xl">
-            Capítulo Estudiantil oficial de la Sociedad Matemática Mexicana (SMM). Un espacio dedicado al entrenamiento de alto rendimiento, la divulgación STEM y la resolución de problemas lógicos de nivel olímpico.
+          {/* El mensaje, corto y con la voz del propio cartel de los
+              entrenamientos. Va discreto (letra normal, tamaño medio) para
+              que el protagonista siga siendo el logo y no el titular. */}
+          <motion.h1
+            variants={word}
+            className="max-w-3xl text-xl font-normal leading-snug tracking-wide text-white/90 sm:text-2xl lg:text-3xl"
+          >
+            Ven a mejorar y entrenar tus mates
+          </motion.h1>
+
+          <motion.p variants={word} className="max-w-xl text-base text-white/65 sm:text-lg">
+            Problemas de nivel olímpico, para cualquier carrera y sin necesidad de experiencia previa.
           </motion.p>
         </motion.div>
       </motion.div>
 
-      {/* Curva paramétrica decorativa que se dibuja al cargar la sección,
-          recoloreada a dorado para leerse sobre el fondo oscuro */}
-      <DrawnCurve className="hidden h-20 w-64 text-[#FFB401]/70 [@media(min-height:820px)]:block sm:w-80" />
-
-      {/* Dos acciones a la vista desde la primera pantalla: "Únete" es la
-          principal (relleno degradado) y "Ver problemas" la secundaria. */}
+      {/* Una acción principal ("Únete") y una secundaria ("Ver problemas"). */}
       <motion.div
         initial="hidden"
         animate="visible"

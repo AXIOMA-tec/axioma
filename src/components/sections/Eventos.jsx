@@ -89,7 +89,7 @@ function EventCard({ evento }) {
       className="flex w-64 shrink-0 snap-center flex-col gap-3 sm:w-72"
     >
       <div
-        className={`relative flex aspect-[3/4] items-center justify-center overflow-hidden rounded-2xl border border-dashed border-brand-300 bg-brand-100 text-xs text-brand-400 shadow-lg transition-all duration-300 ${
+        className={`relative flex aspect-[3/4] items-center justify-center overflow-hidden border border-dashed border-brand-300 bg-brand-100 text-xs text-brand-400 transition-all duration-300 ${
           esProximo ? '' : 'grayscale opacity-70'
         }`}
       >
@@ -100,16 +100,16 @@ function EventCard({ evento }) {
         )}
 
         {esProximo ? (
-          <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-brand-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+          <span className="absolute left-3 top-3 flex items-center gap-1.5 bg-brand-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
             <motion.span
-              className="h-1.5 w-1.5 rounded-full bg-white"
+              className="h-1.5 w-1.5 bg-white"
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
             />
             Próximo
           </span>
         ) : (
-          <span className="absolute left-3 top-3 rounded-full bg-brand-900/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+          <span className="absolute left-3 top-3 bg-brand-900/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
             Pasado
           </span>
         )}
@@ -187,7 +187,7 @@ function EventCarousel({ eventos }) {
           type="button"
           onClick={() => scrollByCard(-1)}
           aria-label="Eventos anteriores"
-          className="absolute -left-4 top-[38%] hidden -translate-y-1/2 rounded-full bg-white p-2 shadow-md transition-transform hover:scale-110 sm:flex"
+          className="absolute -left-4 top-[38%] hidden -translate-y-1/2 bg-white p-2 transition-transform hover:scale-110 sm:flex"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-brand-900">
             <path d="m15 18-6-6 6-6" />
@@ -199,7 +199,7 @@ function EventCarousel({ eventos }) {
           type="button"
           onClick={() => scrollByCard(1)}
           aria-label="Más eventos"
-          className="absolute -right-4 top-[38%] hidden -translate-y-1/2 rounded-full bg-white p-2 shadow-md transition-transform hover:scale-110 sm:flex"
+          className="absolute -right-4 top-[38%] hidden -translate-y-1/2 bg-white p-2 transition-transform hover:scale-110 sm:flex"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-brand-900">
             <path d="m9 18 6-6-6-6" />
@@ -241,7 +241,7 @@ export default function Eventos() {
         <motion.div
           variants={fadeUp}
           {...revealProps}
-          className="mb-12 flex flex-col items-center gap-4 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center shadow-sm sm:flex-row sm:text-left"
+          className="mb-12 flex flex-col items-center gap-4 border border-brand-200 bg-brand-50 p-6 text-center sm:flex-row sm:text-left"
         >
           <span
             aria-hidden="true"

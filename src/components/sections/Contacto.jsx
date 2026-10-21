@@ -57,78 +57,74 @@ export default function Contacto() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#120303]/75 via-[#120303]/35 to-[#120303]/85" />
       </div>
 
+      {/* Dos columnas en escritorio: a la izquierda quién somos y cómo
+          escribirnos (título, botón, correo, redes) y a la derecha las
+          preguntas frecuentes. En celular se apilan y el botón queda ANTES de
+          las preguntas, porque es la acción principal. */}
       <motion.div
         variants={staggerContainer(0.12)}
         {...revealProps}
-        className="relative mx-auto flex max-w-2xl flex-col items-center gap-6"
+        className="relative mx-auto grid max-w-5xl items-center gap-12 text-center lg:grid-cols-2 lg:gap-16 lg:text-left"
       >
-        <motion.h2
-          variants={fadeUp}
-          className="text-5xl text-white drop-shadow-[0_0_25px_rgba(229,117,5,0.45)] sm:text-6xl"
-        >
-          Únete a Axioma
-        </motion.h2>
+        <div className="flex flex-col items-center gap-6 lg:items-start">
+          <motion.h2 variants={fadeUp} className="text-5xl text-white sm:text-6xl">
+            Únete a Axioma
+          </motion.h2>
 
-        <motion.p variants={fadeUp} className="max-w-lg text-lg text-white/85">
-          Escríbenos y te contamos cómo participar en los entrenamientos, los
-          cursos de los sábados y los concursos.
-        </motion.p>
+          <motion.p variants={fadeUp} className="max-w-lg text-lg text-white/85">
+            Escríbenos y te contamos cómo participar en los entrenamientos y los concursos.
+          </motion.p>
 
-        <motion.div variants={fadeUp} className="w-full">
-          <PreguntasFrecuentes />
-        </motion.div>
-
-        <motion.div variants={fadeUp} className="flex flex-col items-center gap-5">
-          <a
-            href={UNETE_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="group inline-flex items-center gap-3 border border-[#FFB401] bg-[#FFB401] px-7 py-3.5 text-xs font-medium uppercase tracking-[0.18em] text-[#120303] transition-colors duration-300 hover:border-white hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-          >
-            Únete aquí
-            <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-              →
-            </span>
-          </a>
-
-          {/* El correo completo a la vista: se puede leer y copiar. */}
-          <a
-            href={`mailto:${CORREO}`}
-            className="break-all text-base font-medium text-white underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white sm:text-lg"
-          >
-            {CORREO}
-          </a>
-        </motion.div>
-
-        <motion.div variants={fadeUp} className="mt-2 flex justify-center gap-8">
-          {REDES.map((red) => (
+          <motion.div variants={fadeUp} className="flex flex-col items-center gap-5 lg:items-start">
             <a
-              key={red.label}
-              href={red.href}
+              href={UNETE_URL}
               target="_blank"
               rel="noreferrer"
-              aria-label={red.label}
-              className="rounded-full transition-transform hover:scale-110 hover:drop-shadow-[0_0_16px_rgba(183,11,13,0.6)]"
+              className="group inline-flex items-center gap-3 border border-[#FFB401] bg-[#FFB401] px-7 py-3.5 text-xs font-medium uppercase tracking-[0.18em] text-[#120303] transition-colors duration-300 hover:border-white hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
-              {red.svg ? (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  role="img"
-                  aria-label={red.label}
-                  className="h-12 w-12 p-1.5 text-white drop-shadow-[0_0_10px_rgba(255,180,1,0.35)]"
-                >
-                  <path d={red.svg} />
-                </svg>
-              ) : (
-                <img
-                  src={red.icon}
-                  alt={red.label}
-                  className="h-12 w-12 object-contain drop-shadow-[0_0_10px_rgba(255,180,1,0.35)]"
-                />
-              )}
+              Únete aquí
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
             </a>
-          ))}
+
+            {/* El correo completo a la vista: se puede leer y copiar. */}
+            <a
+              href={`mailto:${CORREO}`}
+              className="break-all text-base font-medium text-white underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white sm:text-lg"
+            >
+              {CORREO}
+            </a>
+          </motion.div>
+
+          {/* Redes: cuadros planos con borde, igual que los botones del
+              sitio (antes eran círculos con resplandor). */}
+          <motion.div variants={fadeUp} className="flex justify-center gap-3">
+            {REDES.map((red) => (
+              <a
+                key={red.label}
+                href={red.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={red.label}
+                className="flex h-12 w-12 items-center justify-center border border-white/35 text-white transition-colors hover:border-[#FFB401] hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              >
+                {red.svg ? (
+                  <svg viewBox="0 0 24 24" fill="currentColor" role="img" aria-label={red.label} className="h-6 w-6">
+                    <path d={red.svg} />
+                  </svg>
+                ) : (
+                  <img src={red.icon} alt={red.label} className="h-6 w-6 object-contain" />
+                )}
+              </a>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Panel de fondo casi sólido: las preguntas se leen sobre un color
+            fijo, no sobre el fondo animado, que cansa y baja el contraste. */}
+        <motion.div variants={fadeUp} className="border border-white/20 bg-[#120303]/85 p-5 backdrop-blur-sm sm:p-7">
+          <PreguntasFrecuentes />
         </motion.div>
       </motion.div>
 

@@ -161,11 +161,10 @@ const MIEMBROS_RESPALDO = [
   },
 ]
 
-// Diseño: tarjetas suaves y rectas (mismo lenguaje que Quiénes Somos y
-// Eventos), alineadas. Los dos primeros miembros (presidencia) van más
-// grandes, en una fila propia; el resto en filas de 3 en escritorio y de 2
-// en móvil (así la sección no se hace interminable en el celular). Una fila
-// incompleta siempre queda centrada, sin importar cuántos miembros haya.
+// Diseño: cuadrícula plana y editorial. Los dos primeros miembros
+// (presidencia) van destacados, en una fila propia con la foto a un lado; el
+// resto en filas de 3 en escritorio y de 2 en móvil (así la sección no se
+// hace interminable en el celular).
 
 const iniciales = (nombre) =>
   nombre
@@ -198,6 +197,63 @@ const ICONOS = {
   ),
 }
 
+// Estilo de esta sección: plano, igual que los botones y /problemas. Sin
+// círculos, sin esquinas redondeadas, sin sombras. Antes eran tarjetas con
+// foto circular y aro (la plantilla genérica de "equipo"), y una segunda
+// versión con las fotos teñidas de sepia, que se sentía como periódico
+// antiguo. Ahora las fotos van a todo color y lo que las une es un bloque
+// sólido de la paleta de marca desplazado detrás de cada una, el mismo
+// recurso de "sello" de Quiénes Somos y de los axiomas.
+
+// Dorado, naranja y rojo de marca, en ese orden, repetidos por cada persona.
+const ACENTOS = ['#FFB401', '#E57505', '#B70B0D']
+
+const CARGO_CLASS = 'text-[11px] font-medium uppercase tracking-[0.18em] text-brand-900/65'
+
+const botonPlanoClass =
+  'inline-flex items-center gap-2 border border-brand-900 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-brand-900 transition-colors hover:bg-[#FFB401] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900'
+
+// Retrato rectangular a todo color, con un bloque de color sólido
+// desplazado detrás. Al pasar el mouse (o al enfocar con teclado) la foto se
+// corre un poco hacia arriba a la izquierda y deja ver más del bloque. El
+// padre debe llevar la clase `group`. El tamaño y la proporción los pone
+// quien lo usa en `className` (ej. "aspect-square w-full").
+function Retrato({ src, nombre, acento, className = '' }) {
+  return (
+    <div className={`relative ${className}`}>
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3"
+        style={{ backgroundColor: acento }}
+      />
+      <div className="relative h-full w-full overflow-hidden bg-brand-100 transition-transform duration-300 group-focus-within:-translate-x-1 group-focus-within:-translate-y-1 group-hover:-translate-x-1 group-hover:-translate-y-1">
+        {src ? (
+          <img
+            src={src}
+            alt={nombre}
+            loading="lazy"
+            className="h-full w-full object-cover object-[50%_20%]"
+          />
+        ) : (
+          <span className="flex h-full w-full items-center justify-center font-display text-4xl text-brand-400">
+            {iniciales(nombre)}
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Cargo con un cuadrito del color de esa persona delante.
+function Cargo({ rol, acento }) {
+  return (
+    <p className={`${CARGO_CLASS} flex items-center gap-2`}>
+      <span aria-hidden="true" className="h-2 w-2 shrink-0" style={{ backgroundColor: acento }} />
+      {rol}
+    </p>
+  )
+}
+
 function EnlaceSocial({ href, red, nombre }) {
   if (!href) return null
   const etiqueta = { linkedin: 'LinkedIn', github: 'GitHub', mail: 'Correo' }[red]
@@ -205,11 +261,10 @@ function EnlaceSocial({ href, red, nombre }) {
   return (
     <a
       href={href}
-      // El correo se abre en la app de correo; las redes, en pestaña nueva.
       {...(esCorreo ? {} : { target: '_blank', rel: 'noreferrer' })}
       aria-label={`${etiqueta} de ${nombre}`}
       title={esCorreo ? href.replace('mailto:', '') : undefined}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-brand-200 bg-brand-50 text-brand-900/70 sm:h-10 sm:w-10 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
+      className="flex h-9 w-9 items-center justify-center border border-brand-900/25 text-brand-900/70 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
     >
       <svg
         viewBox="0 0 24 24"
@@ -227,13 +282,23 @@ function EnlaceSocial({ href, red, nombre }) {
   )
 }
 
-// Panel lateral con la coordinación de un director (mismo patrón que el panel
-// de Problemas: entra desde la derecha, Esc o click fuera lo cierran, y la
-// página de atrás no se desplaza mientras está abierto).
+function Enlaces({ miembro }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <EnlaceSocial href={miembro.email ? `mailto:${miembro.email}` : ''} red="mail" nombre={miembro.nombre} />
+      <EnlaceSocial href={miembro.linkedin} red="linkedin" nombre={miembro.nombre} />
+      <EnlaceSocial href={miembro.github} red="github" nombre={miembro.nombre} />
+    </div>
+  )
+}
+
+// Panel con la coordinación de un director (se abre desde su tarjeta).
 function PanelCoordinacion({ director, onClose }) {
   const cerrarRef = useRef(null)
   useBloquearScroll()
 
+  // Al abrir, el foco pasa al botón de cerrar (accesibilidad: un diálogo no
+  // debe dejar el foco detrás de él).
   useEffect(() => {
     cerrarRef.current?.focus()
   }, [])
@@ -246,27 +311,13 @@ function PanelCoordinacion({ director, onClose }) {
     return () => window.removeEventListener('keydown', alPresionar)
   }, [onClose])
 
+  // "Dirección de Finanzas" -> "Coordinación de Finanzas"; si el cargo no
+  // empieza así, "Equipo de <cargo>".
   const titulo = director.rol.startsWith('Dirección de')
     ? director.rol.replace('Dirección de', 'Coordinación de')
     : `Equipo de ${director.rol}`
 
-  // Con 1 persona, una sola columna ancha. Con 2 o 4, grid parejo de 2
-  // columnas (2x2 con 4: así no queda una fila "coja" con una sola tarjeta
-  // huérfana a la izquierda y espacio vacío a su derecha, que es lo que
-  // pasaba antes al forzar 3 columnas con 4 personas). Con 3, 5, 6+, hasta
-  // 3 columnas en pantallas grandes.
-  const numCoordinadores = director.coordinadores.length
-  const columnas =
-    numCoordinadores === 1
-      ? ''
-      : numCoordinadores === 2 || numCoordinadores === 4
-        ? 'sm:grid-cols-2'
-        : 'sm:grid-cols-2 lg:grid-cols-3'
-
-  // Con 3 columnas los nombres largos ("Angel Everardo Rodríguez Guevara")
-  // se sentían amontonados en max-w-3xl: la ventana crece un poco más para
-  // darle a cada tarjeta el ancho que necesita.
-  const anchoMaximo = numCoordinadores === 3 || numCoordinadores >= 5 ? 'max-w-4xl' : 'max-w-3xl'
+  const solo = director.coordinadores.length === 1
 
   return (
     <motion.div
@@ -274,25 +325,25 @@ function PanelCoordinacion({ director, onClose }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[60] flex cursor-pointer items-center justify-center bg-brand-900/50 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[60] flex cursor-pointer items-center justify-center bg-brand-900/60 p-4 sm:p-8"
       onClick={onClose}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.96, y: 16 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.97, y: 8 }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 8 }}
         transition={{ duration: 0.35, ease: EASE }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
-        className={`cursor-boundary flex max-h-[85vh] w-full flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ${anchoMaximo}`}
+        className={`cursor-boundary flex max-h-[88vh] w-full flex-col overflow-hidden border-2 border-brand-900 bg-white ${
+          solo ? 'max-w-xl' : 'max-w-3xl'
+        }`}
         onClick={(event) => event.stopPropagation()}
       >
-        <header className="flex shrink-0 items-start justify-between gap-4 border-b border-brand-200 p-6">
+        <header className="flex shrink-0 items-start justify-between gap-4 border-b-2 border-brand-900 p-5 sm:p-6">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand-900/50">
-              Dirige {director.nombre}
-            </p>
+            <p className={CARGO_CLASS}>Dirige {director.nombre}</p>
             <h3 id="titulo-coordinacion" className="mt-2 font-display text-2xl leading-tight text-brand-900">
               {titulo}
             </h3>
@@ -302,187 +353,141 @@ function PanelCoordinacion({ director, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brand-200 text-brand-900/70 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
+            className="flex h-10 w-10 shrink-0 items-center justify-center border border-brand-900 text-brand-900 transition-colors hover:bg-[#FFB401] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
           >
             ✕
           </button>
         </header>
 
-        {/* Una tarjeta por coordinador, con la foto como protagonista.
-            Entran con un ligero escalonado, para que el reflector se sienta
-            vivo aunque solo haya 1 o 2 personas. */}
+        {/* Tarjetas compactas: foto cuadrada a un lado y nombre, cargo y
+            redes al otro. Así los enlaces se ven sin tener que bajar (con la
+            foto arriba y los enlaces hasta abajo, había que hacer scroll
+            para llegar a ellos). */}
         <motion.ul
           variants={staggerContainer(0.06)}
           initial="hidden"
           animate="show"
-          className={`grid gap-4 overflow-y-auto overscroll-contain p-6 ${columnas}`}
+          className={`grid gap-x-6 gap-y-7 overflow-y-auto overscroll-contain p-5 pb-7 sm:p-6 sm:pb-8 ${
+            solo ? '' : 'sm:grid-cols-2'
+          }`}
         >
-          {director.coordinadores.map((c, i) => (
-            <motion.li
-              key={`${c.nombre}-${i}`}
-              variants={fadeUp}
-              className="flex flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-5 text-center sm:p-6"
-            >
-              <div className="rounded-full border border-brand-200 bg-white p-1.5">
-                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-3xl text-brand-400 sm:h-32 sm:w-32">
-                  {c.foto ? (
-                    <img src={c.foto} alt={c.nombre} className="h-full w-full object-cover" />
-                  ) : (
-                    iniciales(c.nombre)
+          {director.coordinadores.map((c, i) => {
+            const acento = ACENTOS[i % ACENTOS.length]
+            return (
+              <motion.li key={`${c.nombre}-${i}`} variants={fadeUp} className="group flex items-center gap-5">
+                <Retrato
+                  src={c.foto}
+                  nombre={c.nombre}
+                  acento={acento}
+                  className="aspect-square w-28 shrink-0 sm:w-32"
+                />
+                <div className="flex min-w-0 flex-col gap-2">
+                  <div>
+                    <p className="font-display text-base leading-tight text-brand-900 sm:text-lg">{c.nombre}</p>
+                    <div className="mt-1.5">
+                      <Cargo rol={c.rol || 'Coordinación'} acento={acento} />
+                    </div>
+                  </div>
+                  {c.email && (
+                    <a
+                      href={`mailto:${c.email}`}
+                      className="break-all text-sm text-brand-900/70 underline decoration-brand-300 underline-offset-4 transition-colors hover:text-brand-900 hover:decoration-brand-900"
+                    >
+                      {c.email}
+                    </a>
                   )}
+                  <div className="flex gap-2">
+                    <EnlaceSocial href={c.linkedin} red="linkedin" nombre={c.nombre} />
+                    <EnlaceSocial href={c.github} red="github" nombre={c.nombre} />
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex flex-col items-center gap-2">
-                <p className="font-display text-base leading-tight tracking-wide text-brand-900 sm:text-lg">{c.nombre}</p>
-                <p className="rounded-full bg-white px-3 py-1 text-xs font-medium text-brand-900/70 ring-1 ring-brand-200">
-                  {c.rol || 'Coordinación'}
-                </p>
-              </div>
-
-              {/* Contacto: correo (se puede leer y copiar), LinkedIn y GitHub. */}
-              <div className="mt-1 flex flex-col items-center gap-2 text-sm">
-                {c.email && (
-                  <a
-                    href={`mailto:${c.email}`}
-                    className="break-all text-brand-900/70 underline decoration-brand-300 underline-offset-4 transition-colors hover:text-brand-900 hover:decoration-brand-900"
-                  >
-                    {c.email}
-                  </a>
-                )}
-                <div className="flex gap-2">
-                  <EnlaceSocial href={c.linkedin} red="linkedin" nombre={c.nombre} />
-                  <EnlaceSocial href={c.github} red="github" nombre={c.nombre} />
-                </div>
-              </div>
-            </motion.li>
-          ))}
+              </motion.li>
+            )
+          })}
         </motion.ul>
       </motion.div>
     </motion.div>
   )
 }
 
-function MemberCard({ miembro, destacado, onAbrir }) {
-  const coordinadores = miembro.coordinadores ?? []
+function BotonCoordinacion({ miembro, onAbrir }) {
+  const total = miembro.coordinadores?.length ?? 0
+  if (total === 0) return null
+  // Solo los directores con coordinadores llevan este botón: abre el panel
+  // con su coordinación.
   return (
-    <motion.div
-      variants={fadeUp}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.3, ease: EASE }}
-      className={`group flex w-[calc(50%-8px)] flex-col items-center gap-3 rounded-2xl border border-brand-200 bg-white p-4 text-center shadow-md transition-shadow duration-300 hover:shadow-xl sm:w-[calc(50%-12px)] sm:gap-4 sm:p-7 ${
-        destacado ? 'lg:w-[calc(50%-12px)]' : 'lg:w-[calc(33.333%-16px)]'
-      }`}
-    >
-      {/* Marco tipo "doble aro" alrededor de la foto. */}
-      <div className="rounded-full border border-brand-200 p-1.5 transition-colors duration-300 group-hover:border-brand-900">
-        <div
-          className={`flex items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-brand-400 ${
-            destacado ? 'h-24 w-24 text-2xl sm:h-32 sm:w-32 sm:text-3xl lg:h-40 lg:w-40 lg:text-4xl' : 'h-24 w-24 text-2xl sm:h-32 sm:w-32 sm:text-3xl'
-          }`}
-        >
-          {miembro.foto ? (
-            <img
-              src={miembro.foto}
-              alt={miembro.nombre}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-          ) : (
-            iniciales(miembro.nombre)
-          )}
-        </div>
-      </div>
-
-      <div className="flex flex-col items-center gap-2">
-        <h3
-          className={`font-display leading-tight tracking-wide text-brand-900 ${
-            destacado ? 'text-lg sm:text-xl lg:text-2xl' : 'text-base sm:text-lg'
-          }`}
-        >
-          {miembro.nombre}
-        </h3>
-        <p className="rounded-full bg-brand-100 px-3 py-1 text-[11px] font-medium text-brand-900/70 sm:text-xs">
-          {miembro.rol}
-        </p>
-      </div>
-
-      {/* Enlaces y botón siempre pegados al fondo de la tarjeta: así quedan
-          alineados entre tarjetas de la misma fila aunque el nombre ocupe
-          más o menos líneas. */}
-      <div className="mt-auto flex flex-col items-center gap-3 pt-1">
-        <div className="flex gap-2">
-          <EnlaceSocial href={miembro.email ? `mailto:${miembro.email}` : ''} red="mail" nombre={miembro.nombre} />
-          <EnlaceSocial href={miembro.linkedin} red="linkedin" nombre={miembro.nombre} />
-          <EnlaceSocial href={miembro.github} red="github" nombre={miembro.nombre} />
-        </div>
-
-        {/* Solo los directores con coordinadores llevan este botón: abre el
-            panel lateral con su coordinación. */}
-        {coordinadores.length > 0 && (
-          <button
-            type="button"
-            onClick={() => onAbrir(miembro)}
-            className="inline-flex items-center gap-2 rounded-full border border-brand-200 px-3 py-1.5 text-xs font-medium text-brand-900/80 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900"
-          >
-            <span className="flex -space-x-1.5" aria-hidden="true">
-              {coordinadores.slice(0, 3).map((c, i) => (
-                <span
-                  key={`${c.nombre}-${i}`}
-                  className="flex h-5 w-5 items-center justify-center rounded-full border border-white bg-brand-200 font-display text-[8px] text-brand-900"
-                >
-                  {iniciales(c.nombre)}
-                </span>
-              ))}
-            </span>
-            Ver coordinación · {coordinadores.length}
-          </button>
-        )}
-      </div>
-    </motion.div>
+    <button type="button" onClick={() => onAbrir(miembro)} className={botonPlanoClass}>
+      <span>
+        <span className="max-sm:hidden">Ver </span>
+        <span className="sm:hidden">C</span>
+        <span className="max-sm:hidden">c</span>oordinación · {total}
+      </span>
+      <span aria-hidden="true">→</span>
+    </button>
   )
 }
 
-// Tarjeta horizontal para Asesores: foto del mismo tamaño que un director
-// normal (no se agranda), pero el layout es foto-a-la-izquierda /
-// texto-a-la-derecha en vez de apilado y centrado — así una tarjeta tan
-// ancha como la de Hugo/Lucero no deja espacio vacío alrededor de un
-// contenido chico, sin necesidad de agrandar nada.
-function AsesorCard({ miembro }) {
+// Presidencia y vicepresidencia: tarjeta más grande, con la foto ancha
+// (horizontal) y el nombre grande debajo. La foto es claramente mayor que la
+// de las direcciones (cuadradas y más chicas), así la jerarquía se ve sin
+// necesitar etiquetas.
+function MiembroDestacado({ miembro, acento, onAbrir }) {
   return (
-    <motion.div
-      variants={fadeUp}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.3, ease: EASE }}
-      className="group flex w-full items-center gap-5 rounded-2xl border border-brand-200 bg-white p-5 text-left shadow-md transition-shadow duration-300 hover:shadow-xl sm:w-[calc(50%-12px)] sm:gap-6 sm:p-7"
-    >
-      <div className="shrink-0 rounded-full border border-brand-200 p-1.5 transition-colors duration-300 group-hover:border-brand-900">
-        <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-display text-2xl text-brand-400 sm:h-28 sm:w-28 sm:text-3xl">
-          {miembro.foto ? (
-            <img
-              src={miembro.foto}
-              alt={miembro.nombre}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-          ) : (
-            iniciales(miembro.nombre)
-          )}
+    <motion.article variants={fadeUp} className="group col-span-2 flex flex-col lg:col-span-3">
+      <Retrato src={miembro.foto} nombre={miembro.nombre} acento={acento} className="mr-2 mb-2 aspect-[4/3] sm:mr-3 sm:mb-3" />
+      <div className="mt-5 flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Cargo rol={miembro.rol} acento={acento} />
+          <h3 className="font-display text-2xl leading-[1.05] text-brand-900 sm:text-3xl">{miembro.nombre}</h3>
+        </div>
+        <Enlaces miembro={miembro} />
+        <div>
+          <BotonCoordinacion miembro={miembro} onAbrir={onAbrir} />
         </div>
       </div>
+    </motion.article>
+  )
+}
 
-      <div className="flex min-w-0 flex-col items-start gap-2">
-        <h3 className="font-display text-lg leading-tight tracking-wide text-brand-900 sm:text-xl">
-          {miembro.nombre}
-        </h3>
-        <p className="rounded-full bg-brand-100 px-3 py-1 text-[11px] font-medium text-brand-900/70 sm:text-xs">
-          {miembro.rol}
-        </p>
-        <div className="mt-1 flex gap-2">
-          <EnlaceSocial href={miembro.email ? `mailto:${miembro.email}` : ''} red="mail" nombre={miembro.nombre} />
-          <EnlaceSocial href={miembro.linkedin} red="linkedin" nombre={miembro.nombre} />
-          <EnlaceSocial href={miembro.github} red="github" nombre={miembro.nombre} />
+function MiembroCard({ miembro, acento, onAbrir }) {
+  return (
+    <motion.article variants={fadeUp} className="group flex flex-col lg:col-span-2">
+      <Retrato src={miembro.foto} nombre={miembro.nombre} acento={acento} className="mr-2 mb-2 aspect-square sm:mr-3 sm:mb-3" />
+      <div className="flex flex-1 flex-col gap-3 pt-4">
+        <div className="flex flex-col gap-2">
+          <h3 className="font-display text-base leading-tight text-brand-900 sm:text-lg">{miembro.nombre}</h3>
+          <Cargo rol={miembro.rol} acento={acento} />
+        </div>
+        {/* Enlaces y botón pegados al fondo: quedan alineados entre tarjetas
+            de la misma fila aunque el nombre ocupe más o menos líneas. */}
+        <div className="mt-auto flex flex-col items-start gap-3 pt-1">
+          <Enlaces miembro={miembro} />
+          <BotonCoordinacion miembro={miembro} onAbrir={onAbrir} />
         </div>
       </div>
-    </motion.div>
+    </motion.article>
+  )
+}
+
+// Asesores: horizontales y más compactos. Guían al club pero no son parte de
+// la jerarquía estudiantil.
+function AsesorCard({ miembro, acento }) {
+  return (
+    <motion.article variants={fadeUp} className="group flex items-center gap-6">
+      <Retrato
+        src={miembro.foto}
+        nombre={miembro.nombre}
+        acento={acento}
+        className="mr-2 mb-2 aspect-square w-32 shrink-0 sm:mr-3 sm:mb-3 sm:w-40"
+      />
+      <div className="flex min-w-0 flex-col gap-3">
+        <div className="flex flex-col gap-2">
+          <Cargo rol={miembro.rol} acento={acento} />
+          <h3 className="font-display text-xl leading-tight text-brand-900 sm:text-2xl">{miembro.nombre}</h3>
+        </div>
+        <Enlaces miembro={miembro} />
+      </div>
+    </motion.article>
   )
 }
 
@@ -492,46 +497,64 @@ export default function Equipo() {
   const cerrarPanel = useCallback(() => setDirectorAbierto(null), [])
 
   // Los asesores (esAsesor: true) van aparte, con su propio encabezado al
-  // final — guían al club pero no son parte de la jerarquía estudiantil
-  // (presidencia → direcciones → coordinaciones), así que mezclarlos en la
-  // misma fila mandaría el mensaje equivocado sobre dónde "quedan" en el
-  // organigrama.
+  // final: guían al club pero no son parte de la jerarquía estudiantil
+  // (presidencia, direcciones, coordinaciones), así que mezclarlos en la
+  // misma cuadrícula mandaría el mensaje equivocado sobre dónde "quedan" en
+  // el organigrama.
   const directores = miembros.filter((m) => !m.esAsesor)
   const asesores = miembros.filter((m) => m.esAsesor)
 
   return (
-    <section
-      id="equipo"
-      className="mx-auto max-w-6xl scroll-mt-16 px-4 py-24 sm:px-6"
-    >
+    <section id="equipo" className="mx-auto max-w-6xl scroll-mt-16 px-4 py-24 sm:px-6">
       <SectionHeader
         titulo="Conoce al Equipo"
         descripcion="Las personas que organizan entrenamientos, concursos y todo lo demás en Axioma."
       />
 
+      {/* Cuadrícula de 6 columnas en escritorio: los dos primeros ocupan 3
+          cada uno (los destacados) y los demás 2 (tres por fila). */}
       <motion.div
-        className="flex flex-wrap justify-center gap-4 sm:gap-6"
+        className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-6 lg:grid-cols-6 lg:gap-x-8"
         variants={staggerContainer(0.08)}
         {...revealProps}
+        // La cuadrícula es muy alta (sobre todo en celular): con el umbral
+        // normal (25% visible) nunca alcanzaba a "aparecer" hasta hacer más
+        // scroll y la sección se veía en blanco.
+        viewport={{ once: true, amount: 0.03 }}
       >
-        {directores.map((miembro, indice) => (
-          <MemberCard
-            key={miembro.id}
-            miembro={miembro}
-            destacado={indice < 2}
-            onAbrir={setDirectorAbierto}
-          />
-        ))}
+        {directores.map((miembro, indice) =>
+          indice < 2 ? (
+            <MiembroDestacado
+              key={miembro.id}
+              miembro={miembro}
+              acento={ACENTOS[indice % ACENTOS.length]}
+              onAbrir={setDirectorAbierto}
+            />
+          ) : (
+            <MiembroCard
+              key={miembro.id}
+              miembro={miembro}
+              acento={ACENTOS[indice % ACENTOS.length]}
+              onAbrir={setDirectorAbierto}
+            />
+          ),
+        )}
       </motion.div>
 
       {asesores.length > 0 && (
-        <motion.div variants={staggerContainer(0.08)} {...revealProps} className="mt-16">
-          <p className="mb-6 text-center text-xs font-medium uppercase tracking-[0.2em] text-brand-500">
-            Asesores
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            {asesores.map((miembro) => (
-              <AsesorCard key={miembro.id} miembro={miembro} />
+        <motion.div
+          variants={staggerContainer(0.08)}
+          {...revealProps}
+          viewport={{ once: true, amount: 0.1 }}
+          className="mt-20"
+        >
+          <div className="mb-8 flex items-center gap-4">
+            <p className={`${CARGO_CLASS} shrink-0`}>Asesores</p>
+            <span aria-hidden="true" className="h-px flex-1 bg-brand-900/25" />
+          </div>
+          <div className="grid gap-10 sm:grid-cols-2 sm:gap-x-8">
+            {asesores.map((miembro, indice) => (
+              <AsesorCard key={miembro.id} miembro={miembro} acento={ACENTOS[indice % ACENTOS.length]} />
             ))}
           </div>
         </motion.div>
