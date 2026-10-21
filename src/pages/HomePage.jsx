@@ -7,7 +7,6 @@ import Equipo from '../components/sections/Equipo'
 import AxiomaCurioso from '../components/sections/AxiomaCurioso'
 import Galeria from '../components/sections/Galeria'
 import Eventos from '../components/sections/Eventos'
-import Unete from '../components/sections/Unete'
 import Contacto from '../components/sections/Contacto'
 
 // El one-pager. Igual que App.jsx antes: solo importa y ordena las
@@ -35,7 +34,6 @@ function HomePage() {
         <AxiomaCurioso />
         <Eventos />
         <Galeria />
-        <Unete />
         <Contacto />
       </main>
     </>

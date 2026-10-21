@@ -5,20 +5,22 @@ import { useActiveSection } from '../hooks/useActiveSection'
 import { useNavbarTone } from '../hooks/useNavbarTone'
 import { useAuth } from '../lib/auth'
 
-// Links que hacen scroll a una sección del one-pager ("/").
-// Si agregan una sección nueva al one-pager, agréguenla aquí también.
+// Links que hacen scroll a una sección del one-pager ("/"), EN EL MISMO
+// ORDEN en que aparecen las secciones en la página. Si agregan una sección
+// nueva al one-pager, agréguenla aquí también.
 const SCROLL_LINKS = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'quienes-somos', label: 'Quiénes Somos' },
   { id: 'equipo', label: 'Equipo' },
   { id: 'eventos', label: 'Eventos' },
   { id: 'galeria', label: 'Galería' },
+  { id: 'contacto', label: 'Contacto' },
 ]
 
-// Link de navegación real de React Router (página independiente).
+// Link de navegación real de React Router (página independiente). Va aparte
+// de los de arriba, al final y destacado: los demás bajan por esta misma
+// página, este te saca a otra, y mezclarlos en medio de la lista confundía.
 const ROUTE_LINK = { path: '/problemas', label: 'Problemas' }
-
-const CONTACTO_LINK = { id: 'contacto', label: 'Contacto' }
 
 // Último link del Navbar: cambia según haya sesión (ver src/lib/auth.js).
 const AUTH_LINKS = {
@@ -26,7 +28,7 @@ const AUTH_LINKS = {
   out: { path: '/cuenta', label: 'Iniciar sesión' },
 }
 
-const SECTION_IDS = [...SCROLL_LINKS.map((link) => link.id), CONTACTO_LINK.id]
+const SECTION_IDS = SCROLL_LINKS.map((link) => link.id)
 
 // El color de todo el Navbar sale del tono de la sección que tiene detrás
 // (ver useNavbarTone): los links heredan ese color con currentColor, así
@@ -131,37 +133,19 @@ export default function Navbar() {
             </li>
           ))}
           <li>
+            {/* Dorado y plano, como los botones principales del sitio: es lo
+                más importante de la página y se distingue de los links que
+                solo bajan por la portada. */}
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
               aria-current={enProblemas ? 'page' : undefined}
-              className={desktopLinkClass(enProblemas)}
+              className={`${FOCUS_RING} border border-[#FFB401] bg-[#FFB401] px-3 py-1 text-sm font-medium text-neutral-950 transition-colors hover:bg-transparent ${
+                tone === 'light' ? 'hover:text-white' : 'hover:text-neutral-950'
+              }`}
             >
               {ROUTE_LINK.label}
-              {enProblemas && (
-                <motion.span
-                  layoutId="nav-underline"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-current"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
             </Link>
-          </li>
-          <li className="relative">
-            <a
-              href={`#${CONTACTO_LINK.id}`}
-              onClick={(event) => handleScrollClick(event, CONTACTO_LINK.id)}
-              className={desktopLinkClass(activeId === CONTACTO_LINK.id)}
-            >
-              {CONTACTO_LINK.label}
-              {activeId === CONTACTO_LINK.id && (
-                <motion.span
-                  layoutId="nav-underline"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-current"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
-            </a>
           </li>
           <li>
             {/* Plano, como el resto de los botones del sitio: borde + texto,
@@ -211,25 +195,15 @@ export default function Navbar() {
               </a>
             </li>
           ))}
-          <li>
+          <li className="mt-1">
             <Link
               to={ROUTE_LINK.path}
               onClick={() => setIsOpen(false)}
               aria-current={enProblemas ? 'page' : undefined}
-              className={mobileLinkClass(enProblemas)}
+              className={`${FOCUS_RING} block border border-[#FFB401] bg-[#FFB401] px-3 py-2 text-center text-sm font-medium text-neutral-950`}
             >
               {ROUTE_LINK.label}
             </Link>
-          </li>
-          <li>
-            <a
-              href={`#${CONTACTO_LINK.id}`}
-              onClick={(event) => handleScrollClick(event, CONTACTO_LINK.id)}
-              aria-current={activeId === CONTACTO_LINK.id ? 'true' : undefined}
-              className={mobileLinkClass(activeId === CONTACTO_LINK.id)}
-            >
-              {CONTACTO_LINK.label}
-            </a>
           </li>
           <li>
             <Link

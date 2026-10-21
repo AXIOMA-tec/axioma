@@ -2,6 +2,7 @@ import { MeshGradient } from '@paper-design/shaders-react'
 import { motion } from 'framer-motion'
 import { fadeUp, revealProps, staggerContainer } from '../motion/variants'
 import { CORREO, INSTAGRAM_URL, UNETE_URL, WHATSAPP_URL } from '../../lib/contacto'
+import PreguntasFrecuentes from './PreguntasFrecuentes'
 
 // Sección Contacto (id="contacto") — cierre de la página.
 // Fondo animado con shaders (@paper-design/shaders-react), mismo tipo de
@@ -72,6 +73,10 @@ export default function Contacto() {
           Escríbenos y te contamos cómo participar en los entrenamientos, los
           cursos de los sábados y los concursos.
         </motion.p>
+
+        <motion.div variants={fadeUp} className="w-full">
+          <PreguntasFrecuentes />
+        </motion.div>
 
         <motion.div variants={fadeUp} className="flex flex-col items-center gap-5">
           <a
