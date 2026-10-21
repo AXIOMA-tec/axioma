@@ -18,6 +18,10 @@ import { api } from '../../lib/api'
 // propósito: no tocar), para que la franja no se sienta apagada/genérica
 // y quede claro que las tres cifras son "de la misma familia" que el resto
 // del sitio.
+// Lo importante de los dos párrafos de "¿Qué es Axioma?" va en negritas y en
+// el azul oscuro pleno (el resto del texto va un poco más tenue).
+const RESALTADO = 'font-semibold text-brand-900'
+
 const DORADO = '#FFB401'
 const NARANJA = '#E57505'
 const ROJO = '#B70B0D'
@@ -225,18 +229,25 @@ export default function QuienesSomos() {
                 escribiría el club. Sin dos puntos ni guion largo a
                 propósito, para que no suene a texto de IA. */}
             <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
-              Axioma es el club de matemáticas del Tec de Monterrey y el
-              capítulo estudiantil de la Sociedad Matemática Mexicana. Es el
-              punto de encuentro para estudiantes apasionados por resolver
-              problemas, enseñar y competir. Formamos talento matemático de
+              Axioma es el{' '}
+              <strong className={RESALTADO}>club de matemáticas del Tec de Monterrey</strong>{' '}
+              y el{' '}
+              <strong className={RESALTADO}>
+                capítulo estudiantil de la Sociedad Matemática Mexicana
+              </strong>
+              . Es el punto de encuentro para estudiantes apasionados por
+              resolver problemas, enseñar y competir. Formamos{' '}
+              <strong className={RESALTADO}>talento matemático</strong> de
               forma seria y constante, para elevar el prestigio académico
               del Tec y dejar un impacto real a través de la educación.
             </motion.p>
             <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
-              Queremos ser la principal cuna de talento matemático del
-              Tecnológico de Monterrey, reconocidos por liderar en
-              competencias nacionales y por formar activamente a los
-              próximos talentos de la región.
+              Queremos ser la{' '}
+              <strong className={RESALTADO}>
+                principal cuna de talento matemático del Tecnológico de Monterrey
+              </strong>
+              , reconocidos por liderar en competencias nacionales y por
+              formar activamente a los próximos talentos de la región.
             </motion.p>
           </motion.div>
 
