@@ -421,12 +421,12 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
   const [enviandoComentario, setEnviandoComentario] = useState(false)
   const [errorComentario, setErrorComentario] = useState(null)
 
-  // Arranca con lo que ya trajo la lista (estadoPorMi, ver
-  // problems.routes.js): null, 'en_progreso' o 'resuelto'. Como ProblemaPanel
-  // monta este componente con key={problema._id}, cada problema arranca
-  // limpio, sin heredar el estado del anterior.
-  const [estado, setEstado] = useState(problema.estadoPorMi ?? null)
-  const [guardandoEstado, setGuardandoEstado] = useState(false)
+  // El estado sale directo de la lista (estadoPorMi, ver problems.routes.js):
+  // null, 'en_progreso' o 'resuelto'. No se copia a un estado propio de este
+  // componente porque se quedaría viejo si la lista se vuelve a pedir con el
+  // panel abierto (por ejemplo al iniciar sesión).
+  const estado = problema.estadoPorMi ?? null
+  const [errorEstado, setErrorEstado] = useState(null)
 
   useEffect(() => {
     let cancelado = false
@@ -460,21 +460,26 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
   // marcar). Clic en la otra -> la pone en ese estado (POST con { estado }),
   // sin importar si ya había una marca distinta puesta antes: el backend es
   // idempotente, siempre deja el documento con el estado que se mandó.
+  //
+  // El cambio se ve al instante y se revierte si el servidor falla. El
+  // servidor gratuito se duerme cuando nadie lo usa y la primera petición
+  // puede tardar casi un minuto; esperar a que conteste antes de pintar el
+  // clic hacía que el botón pareciera trabado.
   const handleElegirEstado = async (nuevoEstado) => {
-    setGuardandoEstado(true)
-    const destino = estado === nuevoEstado ? null : nuevoEstado
+    const anterior = estado
+    const destino = anterior === nuevoEstado ? null : nuevoEstado
+    setErrorEstado(null)
+    onEstadoChange?.(problema._id, destino)
     try {
       await apiFetch(`/api/problems/${problema._id}/resuelto`, {
         method: destino ? 'POST' : 'DELETE',
         token: auth.token,
         body: destino ? { estado: destino } : undefined,
       })
-      setEstado(destino)
-      onEstadoChange?.(problema._id, destino)
     } catch (err) {
+      onEstadoChange?.(problema._id, anterior)
       if (err.status === 401) onAuthExpired()
-    } finally {
-      setGuardandoEstado(false)
+      else setErrorEstado('No se pudo guardar. Intenta de nuevo en unos segundos.')
     }
   }
 
@@ -541,9 +546,8 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
                 <button
                   type="button"
                   onClick={() => handleElegirEstado('en_progreso')}
-                  disabled={guardandoEstado}
                   aria-pressed={estado === 'en_progreso'}
-                  className={`border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] transition-colors disabled:opacity-50 ${focusRing} ${
+                  className={`border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] transition-colors ${focusRing} ${
                     estado === 'en_progreso'
                       ? 'border-neutral-950 bg-amber-400 text-neutral-950'
                       : 'border-neutral-950 bg-white text-neutral-950 hover:bg-neutral-100'
@@ -554,9 +558,8 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
                 <button
                   type="button"
                   onClick={() => handleElegirEstado('resuelto')}
-                  disabled={guardandoEstado}
                   aria-pressed={estado === 'resuelto'}
-                  className={`border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] transition-colors disabled:opacity-50 ${focusRing} ${
+                  className={`border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] transition-colors ${focusRing} ${
                     estado === 'resuelto'
                       ? 'border-neutral-950 bg-emerald-600 text-white hover:bg-emerald-700'
                       : 'border-neutral-950 bg-white text-neutral-950 hover:bg-neutral-100'
@@ -567,6 +570,11 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
               </div>
             )}
           </div>
+          {errorEstado && (
+            <p role="alert" className="mt-2 text-right text-xs text-red-700">
+              {errorEstado}
+            </p>
+          )}
 
           {/* div, no <p>: una fórmula en "display mode" se renderiza como un
               <div>, y un <div> no puede vivir dentro de un <p> en HTML. */}
