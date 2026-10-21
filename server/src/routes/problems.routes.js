@@ -20,6 +20,7 @@ import jwt from 'jsonwebtoken'
 import Problem from '../models/Problem.js'
 import Comment from '../models/Comment.js'
 import Resuelto from '../models/Resuelto.js'
+import { problemaDeLaSemana } from '../lib/semana.js'
 
 const router = Router()
 
@@ -58,10 +59,13 @@ router.get('/', async (req, res) => {
   ])
   const totalPorProblema = new Map(conteos.map((c) => [c._id.toString(), c.total]))
   const estadoPorProblema = new Map(resueltos.map((r) => [r.problem.toString(), r.estado]))
+  const codigoDeLaSemana = problemaDeLaSemana(problems)?.codigo
   const problemsConExtras = problems.map((p) => ({
     ...p.toObject(),
     totalComentarios: totalPorProblema.get(p._id.toString()) ?? 0,
     estadoPorMi: estadoPorProblema.get(p._id.toString()) ?? null,
+    // true en un solo problema (el de esta semana, ver lib/semana.js).
+    deLaSemana: p.codigo === codigoDeLaSemana,
   }))
   res.json(problemsConExtras)
 })

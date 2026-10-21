@@ -427,6 +427,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
   // panel abierto (por ejemplo al iniciar sesión).
   const estado = problema.estadoPorMi ?? null
   const [errorEstado, setErrorEstado] = useState(null)
+  const [solucionAbierta, setSolucionAbierta] = useState(false)
 
   useEffect(() => {
     let cancelado = false
@@ -585,6 +586,42 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
           >
             {renderEnunciado(problema.enunciado)}
           </div>
+
+          {/* Solo en los problemas que tienen solución guardada. Cerrada por
+              defecto: las páginas de entrenamiento para concursos
+              recomiendan intentarlo un buen rato antes de verla, y una
+              solución abierta de entrada le quita eso a quien apenas llega.
+              ProblemaPanel monta este componente con key={problema._id}, así
+              que al cambiar de problema vuelve a empezar cerrada. */}
+          {problema.solucion && (
+            <div className="mt-10 border border-neutral-950">
+              <button
+                type="button"
+                onClick={() => setSolucionAbierta((abierta) => !abierta)}
+                aria-expanded={solucionAbierta}
+                className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-xs font-medium uppercase tracking-[0.18em] text-neutral-950 transition-colors hover:bg-[#FFB401] ${focusRing}`}
+              >
+                <span>{solucionAbierta ? 'Ocultar solución' : 'Ver solución'}</span>
+                <span aria-hidden="true">{solucionAbierta ? '−' : '+'}</span>
+              </button>
+
+              {!solucionAbierta && (
+                <p className="border-t border-neutral-300 px-4 py-3 text-sm text-neutral-500">
+                  Antes de abrirla, intenta el problema un rato. Se aprende más así.
+                </p>
+              )}
+
+              {solucionAbierta && (
+                <div
+                  className={`whitespace-pre-line border-t border-neutral-950 px-4 py-5 leading-relaxed text-neutral-800 ${
+                    expandido ? 'text-lg sm:text-[clamp(1.125rem,1.4vw,1.375rem)]' : 'text-base'
+                  }`}
+                >
+                  {renderEnunciado(problema.solucion)}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="mt-12 border-t border-neutral-950 pt-4">
             <h4 className={labelClass}>Comentarios · {comentarios.length}</h4>
@@ -1407,6 +1444,10 @@ export default function Problemas() {
     return { años: contar('año'), temas: contar('tema'), tipos: contar('tipo') }
   }, [problemas])
 
+  // El backend marca con deLaSemana: true a un solo problema (el de esta
+  // semana), así que no hay nada que calcular aquí.
+  const problemaDeLaSemana = useMemo(() => problemas.find((p) => p.deLaSemana) ?? null, [problemas])
+
   // Cuántos problemas hay en cada estado de progreso (solo se muestra con
   // sesión, ver el grupo "Mi progreso" del sidebar).
   const conteosEstado = useMemo(
@@ -1650,6 +1691,34 @@ export default function Problemas() {
 
           {listo && (
             <>
+              {/* Problema de la semana: se sortea solo y cambia cada lunes (ver
+                  server/src/lib/semana.js). Solo se ve sin filtros activos,
+                  para no estorbar a quien ya está buscando algo concreto. */}
+              {!hayFiltrosActivos && problemaDeLaSemana && (
+                <div className="mb-8 flex flex-col border border-neutral-950 sm:flex-row sm:items-stretch">
+                  <div className="flex shrink-0 items-center bg-[#FFB401] px-4 py-3 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-950 sm:w-44">
+                    Problema de la semana
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-4">
+                    <div className="min-w-0">
+                      <p className="text-base text-neutral-950 sm:text-lg">
+                        {formatearTitulo(problemaDeLaSemana)}
+                      </p>
+                      <p className="mt-0.5 text-xs text-neutral-500">
+                        {problemaDeLaSemana.tema} · {problemaDeLaSemana.dificultad} · Cambia cada lunes
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => abrirProblema(problemaDeLaSemana)}
+                      className={`border border-neutral-950 bg-white px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-neutral-950 transition-colors hover:bg-[#FFB401] ${focusRing}`}
+                    >
+                      Intentarlo →
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Buscador: título, tema, tipo, año y enunciado. Escribir en él
                   cambia la vista a "resultados"; "/" lo enfoca desde
                   cualquier parte de la página. */}
