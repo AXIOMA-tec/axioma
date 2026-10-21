@@ -428,6 +428,26 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
   const estado = problema.estadoPorMi ?? null
   const [errorEstado, setErrorEstado] = useState(null)
   const [solucionAbierta, setSolucionAbierta] = useState(false)
+  // Antes de mostrar la solución se pregunta una vez, dentro de la misma
+  // caja (no una ventana emergente, que cansaría en cada uno de los 300 y
+  // pico problemas con solución).
+  const [confirmandoSolucion, setConfirmandoSolucion] = useState(false)
+
+  // Si ya marcaste el problema como Resuelto no hace falta preguntar: ya lo
+  // lograste tú y verla ya no le quita nada a nadie.
+  const alPedirSolucion = () => {
+    if (solucionAbierta) {
+      setSolucionAbierta(false)
+    } else if (estado === 'resuelto') {
+      setSolucionAbierta(true)
+    } else {
+      setConfirmandoSolucion((confirmando) => !confirmando)
+    }
+  }
+  const mostrarSolucion = () => {
+    setConfirmandoSolucion(false)
+    setSolucionAbierta(true)
+  }
 
   useEffect(() => {
     let cancelado = false
@@ -597,7 +617,7 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
             <div className="mt-10 border border-neutral-950">
               <button
                 type="button"
-                onClick={() => setSolucionAbierta((abierta) => !abierta)}
+                onClick={alPedirSolucion}
                 aria-expanded={solucionAbierta}
                 className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-xs font-medium uppercase tracking-[0.18em] text-neutral-950 transition-colors hover:bg-[#FFB401] ${focusRing}`}
               >
@@ -605,10 +625,43 @@ function ProblemaDetalle({ problema, expandido, auth, onAuthSuccess, onAuthExpir
                 <span aria-hidden="true">{solucionAbierta ? '−' : '+'}</span>
               </button>
 
-              {!solucionAbierta && (
+              {!solucionAbierta && !confirmandoSolucion && (
                 <p className="border-t border-neutral-300 px-4 py-3 text-sm text-neutral-500">
                   Antes de abrirla, intenta el problema un rato. Se aprende más así.
                 </p>
+              )}
+
+              {confirmandoSolucion && (
+                <div
+                  aria-live="polite"
+                  className="flex flex-col gap-4 border-t border-neutral-950 bg-[#FFB401]/15 px-4 py-4"
+                >
+                  <p className="text-sm leading-relaxed text-neutral-800">
+                    {/* El @ es del tono del club; un lector de pantalla lo
+                        leería como "arroba", por eso el texto oculto. */}
+                    <span aria-hidden="true" className="font-medium text-neutral-950">
+                      ¿Segur@?{' '}
+                    </span>
+                    <span className="sr-only">¿Seguro o segura? </span>
+                    Intentarlo un rato más te va a servir más que verla. Pero tú decides.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={mostrarSolucion}
+                      className={`border border-neutral-950 bg-[#FFB401] px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-neutral-950 transition-colors hover:bg-white ${focusRing}`}
+                    >
+                      Sí, mostrar solución
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmandoSolucion(false)}
+                      className={`border border-neutral-950 bg-white px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-neutral-950 transition-colors hover:bg-neutral-100 ${focusRing}`}
+                    >
+                      Intentar un rato más
+                    </button>
+                  </div>
+                </div>
               )}
 
               {solucionAbierta && (
