@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { api, apiFetch } from '../lib/api'
@@ -21,6 +21,66 @@ function formatearFecha(fecha) {
 const focusRing = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-900'
 const primaryButtonClass = `inline-flex items-center gap-2 border border-brand-900 bg-[#FFB401] px-5 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-brand-900 transition-colors hover:bg-white ${focusRing}`
 const secondaryButtonClass = `inline-flex items-center gap-2 border border-brand-900 px-5 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-brand-900 transition-colors hover:bg-brand-900 hover:text-white ${focusRing}`
+
+// Tarjeta con título, un contador y una flecha: la lista viene CERRADA y se
+// abre al darle clic. Con cientos de comentarios o problemas marcados, la
+// página del perfil se volvía eterna; así lo único que se ve de entrada es
+// el título y cuántos hay. `cantidad` es null mientras carga. Si no hay
+// nada que desplegar (cargando, error o lista vacía), no hay flecha y se
+// muestra `aviso` directo. Ya abierta, la lista tiene alto máximo con su
+// propio scroll, para que no empuje todo lo demás hacia abajo.
+function SeccionPlegable({ titulo, cantidad, aviso, children }) {
+  const [abierta, setAbierta] = useState(false)
+  const idLista = useId()
+  const hayLista = cantidad > 0
+
+  return (
+    <div className="mt-8 overflow-hidden rounded-2xl border border-brand-200 bg-white shadow-sm">
+      {hayLista ? (
+        <h2 className="text-lg font-semibold text-brand-900">
+          <button
+            type="button"
+            onClick={() => setAbierta((valor) => !valor)}
+            aria-expanded={abierta}
+            aria-controls={idLista}
+            className={`flex w-full items-center justify-between gap-4 p-6 text-left transition-colors hover:bg-brand-50 ${focusRing}`}
+          >
+            <span>{titulo}</span>
+            <span className="flex items-center gap-3">
+              <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-900/70">
+                {cantidad}
+              </span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className={`h-4 w-4 text-brand-500 transition-transform duration-200 ${abierta ? 'rotate-180' : ''}`}
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </span>
+          </button>
+        </h2>
+      ) : (
+        <div className="border-b border-brand-100 p-6">
+          <h2 className="text-lg font-semibold text-brand-900">{titulo}</h2>
+        </div>
+      )}
+
+      {!hayLista && aviso}
+
+      {hayLista && abierta && (
+        <div id={idLista} className="max-h-[28rem] overflow-y-auto border-t border-brand-100">
+          {children}
+        </div>
+      )}
+    </div>
+  )
+}
 
 // Página /perfil: username y correo de quien tiene la sesión iniciada.
 // Los datos se piden a GET /api/auth/me (la fuente de verdad es la base, no
@@ -152,111 +212,103 @@ function PerfilPage() {
               aportado. `comentarios === null` es "todavía no responde la
               API" (loading); un arreglo vacío es "ya respondió, no hay
               nada". */}
-          <div className="mt-8 overflow-hidden rounded-2xl border border-brand-200 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-brand-100 p-6">
-              <h2 className="text-lg font-semibold text-brand-900">Tus comentarios</h2>
-              {comentarios && comentarios.length > 0 && (
-                <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-900/70">
-                  {comentarios.length}
-                </span>
-              )}
-            </div>
-
-            {comentarios === null && !errorComentarios && (
-              <p className="p-6 text-sm text-brand-500">Cargando…</p>
-            )}
-            {errorComentarios && (
-              <p className="p-6 text-sm text-red-700">No se pudieron cargar: {errorComentarios}</p>
-            )}
-            {comentarios?.length === 0 && (
-              <p className="p-6 text-sm text-brand-900/60">
-                Todavía no has comentado ningún problema.{' '}
-                <Link to="/problemas" className="underline decoration-brand-300 underline-offset-4 hover:text-brand-900">
-                  Ve al archivo
-                </Link>{' '}
-                y opina en el primero que te llame la atención.
-              </p>
-            )}
-            {comentarios && comentarios.length > 0 && (
-              <ul className="divide-y divide-brand-100">
-                {comentarios.map((c) => (
-                  <li key={c._id} className="p-6">
-                    <Link
-                      to={c.problem ? `/problemas?p=${c.problem.codigo}` : '/problemas'}
-                      className="text-sm font-medium text-brand-900 underline decoration-brand-300 underline-offset-4 hover:text-brand-600"
-                    >
-                      {c.problem
-                        ? `${c.problem.tipo} ${c.problem.año} — Problema ${numeroProblema(c.problem.codigo)}`
-                        : 'Problema eliminado'}
-                    </Link>
-                    <p className="mt-2 line-clamp-2 text-sm text-brand-900/70">{c.body}</p>
-                    <p className="mt-2 text-xs text-brand-400">{formatearFecha(c.createdAt)}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <SeccionPlegable
+            titulo="Tus comentarios"
+            cantidad={comentarios?.length ?? null}
+            aviso={
+              <>
+                {comentarios === null && !errorComentarios && (
+                  <p className="p-6 text-sm text-brand-500">Cargando…</p>
+                )}
+                {errorComentarios && (
+                  <p className="p-6 text-sm text-red-700">No se pudieron cargar: {errorComentarios}</p>
+                )}
+                {comentarios?.length === 0 && (
+                  <p className="p-6 text-sm text-brand-900/60">
+                    Todavía no has comentado ningún problema.{' '}
+                    <Link to="/problemas" className="underline decoration-brand-300 underline-offset-4 hover:text-brand-900">
+                      Ve al archivo
+                    </Link>{' '}
+                    y opina en el primero que te llame la atención.
+                  </p>
+                )}
+              </>
+            }
+          >
+            <ul className="divide-y divide-brand-100">
+              {comentarios?.map((c) => (
+                <li key={c._id} className="p-6">
+                  <Link
+                    to={c.problem ? `/problemas?p=${c.problem.codigo}` : '/problemas'}
+                    className="text-sm font-medium text-brand-900 underline decoration-brand-300 underline-offset-4 hover:text-brand-600"
+                  >
+                    {c.problem
+                      ? `${c.problem.tipo} ${c.problem.año} — Problema ${numeroProblema(c.problem.codigo)}`
+                      : 'Problema eliminado'}
+                  </Link>
+                  <p className="mt-2 line-clamp-2 text-sm text-brand-900/70">{c.body}</p>
+                  <p className="mt-2 text-xs text-brand-400">{formatearFecha(c.createdAt)}</p>
+                </li>
+              ))}
+            </ul>
+          </SeccionPlegable>
 
           {/* Tu progreso: mismo patrón que "Tus comentarios" — marcar un
               problema en Problemas.jsx lo agrega aquí, para llevar un
               registro de avance sin hacer pública la lista (eso se decidió
               a propósito, ver comentarios). Cada fila trae su propia
               casilla de color: verde = resuelto, ámbar = en progreso. */}
-          <div className="mt-8 overflow-hidden rounded-2xl border border-brand-200 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-brand-100 p-6">
-              <h2 className="text-lg font-semibold text-brand-900">Tu progreso</h2>
-              {resueltos && resueltos.length > 0 && (
-                <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-900/70">
-                  {resueltos.length}
-                </span>
-              )}
-            </div>
-
-            {resueltos === null && !errorResueltos && (
-              <p className="p-6 text-sm text-brand-500">Cargando…</p>
-            )}
-            {errorResueltos && (
-              <p className="p-6 text-sm text-red-700">No se pudieron cargar: {errorResueltos}</p>
-            )}
-            {resueltos?.length === 0 && (
-              <p className="p-6 text-sm text-brand-900/60">
-                Todavía no has marcado ningún problema como resuelto o en progreso.{' '}
-                <Link to="/problemas" className="underline decoration-brand-300 underline-offset-4 hover:text-brand-900">
-                  Ve al archivo
-                </Link>{' '}
-                y márcalo cuando le entres a uno.
-              </p>
-            )}
-            {resueltos && resueltos.length > 0 && (
-              <ul className="divide-y divide-brand-100">
-                {resueltos.map((r) => (
-                  <li key={r._id} className="flex items-start gap-3 p-6">
-                    <span
-                      aria-hidden="true"
-                      className={`mt-1.5 h-2 w-2 shrink-0 ${
-                        r.estado === 'en_progreso' ? 'bg-amber-400' : 'bg-emerald-600'
-                      }`}
-                    />
-                    <div className="min-w-0">
-                      <Link
-                        to={r.problem ? `/problemas?p=${r.problem.codigo}` : '/problemas'}
-                        className="text-sm font-medium text-brand-900 underline decoration-brand-300 underline-offset-4 hover:text-brand-600"
-                      >
-                        {r.problem
-                          ? `${r.problem.tipo} ${r.problem.año} — Problema ${numeroProblema(r.problem.codigo)}`
-                          : 'Problema eliminado'}
-                      </Link>
-                      <p className="mt-1 text-xs text-brand-500">
-                        {r.estado === 'en_progreso' ? 'En progreso' : 'Resuelto'}
-                        {' · '}
-                        {formatearFecha(r.createdAt)}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <SeccionPlegable
+            titulo="Tu progreso"
+            cantidad={resueltos?.length ?? null}
+            aviso={
+              <>
+                {resueltos === null && !errorResueltos && (
+                  <p className="p-6 text-sm text-brand-500">Cargando…</p>
+                )}
+                {errorResueltos && (
+                  <p className="p-6 text-sm text-red-700">No se pudieron cargar: {errorResueltos}</p>
+                )}
+                {resueltos?.length === 0 && (
+                  <p className="p-6 text-sm text-brand-900/60">
+                    Todavía no has marcado ningún problema como resuelto o en progreso.{' '}
+                    <Link to="/problemas" className="underline decoration-brand-300 underline-offset-4 hover:text-brand-900">
+                      Ve al archivo
+                    </Link>{' '}
+                    y márcalo cuando le entres a uno.
+                  </p>
+                )}
+              </>
+            }
+          >
+            <ul className="divide-y divide-brand-100">
+              {resueltos?.map((r) => (
+                <li key={r._id} className="flex items-start gap-3 p-6">
+                  <span
+                    aria-hidden="true"
+                    className={`mt-1.5 h-2 w-2 shrink-0 ${
+                      r.estado === 'en_progreso' ? 'bg-amber-400' : 'bg-emerald-600'
+                    }`}
+                  />
+                  <div className="min-w-0">
+                    <Link
+                      to={r.problem ? `/problemas?p=${r.problem.codigo}` : '/problemas'}
+                      className="text-sm font-medium text-brand-900 underline decoration-brand-300 underline-offset-4 hover:text-brand-600"
+                    >
+                      {r.problem
+                        ? `${r.problem.tipo} ${r.problem.año} — Problema ${numeroProblema(r.problem.codigo)}`
+                        : 'Problema eliminado'}
+                    </Link>
+                    <p className="mt-1 text-xs text-brand-500">
+                      {r.estado === 'en_progreso' ? 'En progreso' : 'Resuelto'}
+                      {' · '}
+                      {formatearFecha(r.createdAt)}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </SeccionPlegable>
 
           {/* Accesos directos: la razón de estar aquí no es solo ver la
               tarjeta, es seguir usando el sitio con la sesión ya iniciada. */}
