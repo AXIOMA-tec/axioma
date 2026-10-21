@@ -337,7 +337,7 @@ function PanelCoordinacion({ director, onClose }) {
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
         className={`cursor-boundary flex max-h-[88vh] w-full flex-col overflow-hidden border-2 border-brand-900 bg-white ${
-          solo ? 'max-w-xl' : 'max-w-3xl'
+          solo ? 'max-w-2xl' : 'max-w-5xl'
         }`}
         onClick={(event) => event.stopPropagation()}
       >
@@ -359,6 +359,9 @@ function PanelCoordinacion({ director, onClose }) {
           </button>
         </header>
 
+        {/* El tamaño de la foto se adapta a la altura de la ventana (hasta 224
+            px): en una pantalla baja se achica un poco en vez de obligar a
+            hacer scroll para llegar a los enlaces. */}
         {/* Tarjetas compactas: foto cuadrada a un lado y nombre, cargo y
             redes al otro. Así los enlaces se ven sin tener que bajar (con la
             foto arriba y los enlaces hasta abajo, había que hacer scroll
@@ -379,11 +382,11 @@ function PanelCoordinacion({ director, onClose }) {
                   src={c.foto}
                   nombre={c.nombre}
                   acento={acento}
-                  className="aspect-square w-28 shrink-0 sm:w-32"
+                  className={`mr-2 mb-2 aspect-square shrink-0 sm:mr-3 sm:mb-3 ${solo ? 'w-40 sm:w-[min(16rem,32vh)]' : 'w-32 sm:w-[min(14rem,26vh)]'}`}
                 />
                 <div className="flex min-w-0 flex-col gap-2">
                   <div>
-                    <p className="font-display text-base leading-tight text-brand-900 sm:text-lg">{c.nombre}</p>
+                    <p className="font-display text-base leading-tight text-brand-900 sm:text-xl">{c.nombre}</p>
                     <div className="mt-1.5">
                       <Cargo rol={c.rol || 'Coordinación'} acento={acento} />
                     </div>
