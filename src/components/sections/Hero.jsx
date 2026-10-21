@@ -94,8 +94,8 @@ export default function Hero() {
             Ven a mejorar y entrenar tus mates
           </motion.h1>
 
-          <motion.p variants={word} className="max-w-xl text-base text-white/65 sm:text-lg">
-            Problemas de nivel olímpico, para cualquier carrera y sin necesidad de experiencia previa.
+          <motion.p variants={word} className="max-w-2xl text-base text-white/65 sm:text-lg">
+            Entrenamientos, concursos y un archivo de problemas de nivel olímpico. Abierto a cualquier carrera y sin necesidad de experiencia previa.
           </motion.p>
         </motion.div>
       </motion.div>

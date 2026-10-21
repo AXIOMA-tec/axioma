@@ -59,18 +59,26 @@ const EVENTOS_RESPALDO = [
 // la fecha en grande, como un cartel tipográfico. "29 de agosto" -> "29" +
 // "agosto"; si la fecha no empieza con "N de" (ej. "Fecha por confirmar"),
 // se muestra completa.
-function FechaCartel({ fecha }) {
+//
+// `oscuro` es para los próximos que todavía no tienen póster: la fecha va en
+// dorado sobre fondo oscuro (ver EventCard), para que se vea como algo que
+// viene y no como un recuadro apagado.
+function FechaCartel({ fecha, oscuro = false }) {
   const partes = fecha.match(/^(\d{1,2})\s+de\s+(.+)$/u)
   if (!partes) {
     return (
-      <span className="px-6 text-center font-display text-3xl uppercase leading-tight text-brand-400">
+      <span
+        className={`px-6 text-center font-display text-3xl uppercase leading-tight ${
+          oscuro ? 'text-[#FFB401]' : 'text-brand-400'
+        }`}
+      >
         {fecha}
       </span>
     )
   }
   return (
-    <span className="flex flex-col items-center px-4 text-center text-brand-400">
-      <span className="font-display text-8xl leading-none">{partes[1]}</span>
+    <span className={`flex flex-col items-center px-4 text-center ${oscuro ? 'text-white/85' : 'text-brand-400'}`}>
+      <span className={`font-display text-8xl leading-none ${oscuro ? 'text-[#FFB401]' : ''}`}>{partes[1]}</span>
       <span className="mt-2 text-sm font-medium uppercase tracking-[0.2em]">{partes[2]}</span>
     </span>
   )
@@ -80,6 +88,10 @@ function FechaCartel({ fecha }) {
 // Los eventos pasados se ven en blanco y negro, como archivo.
 function EventCard({ evento }) {
   const esProximo = evento.tipo === 'proximo'
+  // Un próximo sin póster todavía: en vez de un recuadro gris y apagado, un
+  // cartel oscuro con la fecha en dorado y un aviso de que el póster viene
+  // en camino.
+  const proximoSinPoster = esProximo && !evento.src
 
   return (
     <motion.div
@@ -89,20 +101,33 @@ function EventCard({ evento }) {
       className="flex w-64 shrink-0 snap-center flex-col gap-3 sm:w-72"
     >
       <div
-        className={`relative flex aspect-[3/4] items-center justify-center overflow-hidden border border-dashed border-brand-300 bg-brand-100 text-xs text-brand-400 transition-all duration-300 ${
-          esProximo ? '' : 'grayscale opacity-70'
-        }`}
+        className={`relative flex aspect-[3/4] items-center justify-center overflow-hidden border text-xs transition-all duration-300 ${
+          proximoSinPoster
+            ? 'border-[#120303] bg-[#120303] text-white/70'
+            : 'border-dashed border-brand-300 bg-brand-100 text-brand-400'
+        } ${esProximo ? '' : 'grayscale opacity-70'}`}
       >
         {evento.src ? (
           <img src={evento.src} alt={evento.alt} className="h-full w-full object-cover" />
         ) : (
-          <FechaCartel fecha={evento.fecha} />
+          <FechaCartel fecha={evento.fecha} oscuro={proximoSinPoster} />
+        )}
+
+        {proximoSinPoster && (
+          <span className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] text-white/60">
+            <span aria-hidden="true" className="h-1.5 w-1.5 bg-[#FFB401]" />
+            Cartel próximamente
+          </span>
         )}
 
         {esProximo ? (
-          <span className="absolute left-3 top-3 flex items-center gap-1.5 bg-brand-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+          <span
+            className={`absolute left-3 top-3 flex items-center gap-1.5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${
+              proximoSinPoster ? 'bg-[#FFB401] text-[#120303]' : 'bg-brand-900 text-white'
+            }`}
+          >
             <motion.span
-              className="h-1.5 w-1.5 bg-white"
+              className={`h-1.5 w-1.5 ${proximoSinPoster ? 'bg-[#120303]' : 'bg-white'}`}
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
             />
@@ -150,6 +175,16 @@ function EventCarousel({ eventos }) {
     setCanScrollLeft(track.scrollLeft > 8)
     setCanScrollRight(track.scrollLeft + track.clientWidth < track.scrollWidth - 8)
   }
+
+  // Siempre arranca en el primer evento (los próximos). Sin esto, la tira
+  // aparecía ya desplazada hacia los pasados: al cargar se pinta primero una
+  // lista de respaldo y luego llega la real, y el "imán" de scroll (snap) del
+  // navegador se queda pegado a la tarjeta que tenía centrada, que en la
+  // lista nueva quedó más adelante, y arrastra la tira hasta ahí.
+  const idsEventos = eventos.map((evento) => evento.id).join(',')
+  useEffect(() => {
+    trackRef.current?.scrollTo({ left: 0, behavior: 'instant' })
+  }, [idsEventos])
 
   useEffect(() => {
     updateArrows()

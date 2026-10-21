@@ -18,9 +18,14 @@ import { api } from '../../lib/api'
 // propósito: no tocar), para que la franja no se sienta apagada/genérica
 // y quede claro que las tres cifras son "de la misma familia" que el resto
 // del sitio.
-// Lo importante de los dos párrafos de "¿Qué es Axioma?" va en negritas y en
-// el azul oscuro pleno (el resto del texto va un poco más tenue).
-const RESALTADO = 'font-semibold text-brand-900'
+// Lo importante de los dos párrafos de "¿Qué es Axioma?": texto en el azul
+// oscuro pleno (el resto va más tenue) con un subrayado dorado fino. Antes
+// era solo negritas, pero la letra del texto (ITC Avant Garde Book) existe
+// en un único peso y el navegador simula la negrita, así que apenas se
+// notaba; y un resaltador de marcatextos se veía pesado. El subrayado de
+// texto (no un fondo) también se parte bien si la frase cae en dos renglones.
+const RESALTADO =
+  'font-semibold text-brand-900 underline decoration-[#FFB401] decoration-[3px] underline-offset-[5px]'
 
 const DORADO = '#FFB401'
 const NARANJA = '#E57505'
@@ -228,7 +233,7 @@ export default function QuienesSomos() {
                 frases larguísimas con dos puntos), no como algo que
                 escribiría el club. Sin dos puntos ni guion largo a
                 propósito, para que no suene a texto de IA. */}
-            <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
+            <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/70">
               Axioma es el{' '}
               <strong className={RESALTADO}>club de matemáticas del Tec de Monterrey</strong>{' '}
               y el{' '}
@@ -236,12 +241,11 @@ export default function QuienesSomos() {
                 capítulo estudiantil de la Sociedad Matemática Mexicana
               </strong>
               . Es el punto de encuentro para estudiantes apasionados por
-              resolver problemas, enseñar y competir. Formamos{' '}
-              <strong className={RESALTADO}>talento matemático</strong> de
+              resolver problemas, enseñar y competir. Formamos talento matemático de
               forma seria y constante, para elevar el prestigio académico
               del Tec y dejar un impacto real a través de la educación.
             </motion.p>
-            <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/80">
+            <motion.p variants={fadeUp} className="text-lg leading-relaxed text-brand-900/70">
               Queremos ser la{' '}
               <strong className={RESALTADO}>
                 principal cuna de talento matemático del Tecnológico de Monterrey

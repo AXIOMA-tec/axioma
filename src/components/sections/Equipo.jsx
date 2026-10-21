@@ -317,7 +317,25 @@ function PanelCoordinacion({ director, onClose }) {
     ? director.rol.replace('Dirección de', 'Coordinación de')
     : `Equipo de ${director.rol}`
 
-  const solo = director.coordinadores.length === 1
+  // Cuántas personas hay decide el diseño. Con 1, 2 o 3 sobra espacio, así
+  // que las fotos crecen para aprovecharlo (con 3 pasan a tarjetas verticales
+  // en una sola fila). Con 4 o más hay dos filas y las fotos se quedan más
+  // compactas, para que todo siga cabiendo sin hacer scroll. En todos los
+  // casos el tamaño también se adapta a la ventana: en una pantalla baja se
+  // achican un poco en vez de obligar a bajar para llegar a los enlaces.
+  const total = director.coordinadores.length
+  const DISENIOS = {
+    uno: { panel: 'max-w-3xl', grid: '', li: 'items-center gap-5', foto: 'w-40 sm:w-[min(20rem,38vh)]' },
+    dos: { panel: 'max-w-6xl', grid: 'sm:grid-cols-2', li: 'items-center gap-5', foto: 'w-32 sm:w-[min(18rem,34vh,22vw)]' },
+    tres: {
+      panel: 'max-w-5xl',
+      grid: 'sm:grid-cols-3',
+      li: 'items-center gap-5 sm:flex-col sm:items-start sm:gap-4',
+      foto: 'w-32 sm:w-[min(100%,34vh)]',
+    },
+    compacto: { panel: 'max-w-5xl', grid: 'sm:grid-cols-2', li: 'items-center gap-5', foto: 'w-32 sm:w-[min(14rem,26vh)]' },
+  }
+  const disenio = DISENIOS[['uno', 'dos', 'tres'][total - 1] ?? 'compacto']
 
   return (
     <motion.div
@@ -336,9 +354,7 @@ function PanelCoordinacion({ director, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="titulo-coordinacion"
-        className={`cursor-boundary flex max-h-[88vh] w-full flex-col overflow-hidden border-2 border-brand-900 bg-white ${
-          solo ? 'max-w-2xl' : 'max-w-5xl'
-        }`}
+        className={`cursor-boundary flex max-h-[92vh] w-full flex-col overflow-hidden border-2 border-brand-900 bg-white ${disenio.panel}`}
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex shrink-0 items-start justify-between gap-4 border-b-2 border-brand-900 p-5 sm:p-6">
@@ -359,9 +375,6 @@ function PanelCoordinacion({ director, onClose }) {
           </button>
         </header>
 
-        {/* El tamaño de la foto se adapta a la altura de la ventana (hasta 224
-            px): en una pantalla baja se achica un poco en vez de obligar a
-            hacer scroll para llegar a los enlaces. */}
         {/* Tarjetas compactas: foto cuadrada a un lado y nombre, cargo y
             redes al otro. Así los enlaces se ven sin tener que bajar (con la
             foto arriba y los enlaces hasta abajo, había que hacer scroll
@@ -370,19 +383,17 @@ function PanelCoordinacion({ director, onClose }) {
           variants={staggerContainer(0.06)}
           initial="hidden"
           animate="show"
-          className={`grid gap-x-6 gap-y-7 overflow-y-auto overscroll-contain p-5 pb-7 sm:p-6 sm:pb-8 ${
-            solo ? '' : 'sm:grid-cols-2'
-          }`}
+          className={`grid gap-x-6 gap-y-7 overflow-y-auto overscroll-contain p-5 pb-7 sm:p-6 sm:pb-8 ${disenio.grid}`}
         >
           {director.coordinadores.map((c, i) => {
             const acento = ACENTOS[i % ACENTOS.length]
             return (
-              <motion.li key={`${c.nombre}-${i}`} variants={fadeUp} className="group flex items-center gap-5">
+              <motion.li key={`${c.nombre}-${i}`} variants={fadeUp} className={`group flex ${disenio.li}`}>
                 <Retrato
                   src={c.foto}
                   nombre={c.nombre}
                   acento={acento}
-                  className={`mr-2 mb-2 aspect-square shrink-0 sm:mr-3 sm:mb-3 ${solo ? 'w-40 sm:w-[min(16rem,32vh)]' : 'w-32 sm:w-[min(14rem,26vh)]'}`}
+                  className={`mr-2 mb-2 aspect-square shrink-0 sm:mr-3 sm:mb-3 ${disenio.foto}`}
                 />
                 <div className="flex min-w-0 flex-col gap-2">
                   <div>
@@ -481,7 +492,7 @@ function AsesorCard({ miembro, acento }) {
         src={miembro.foto}
         nombre={miembro.nombre}
         acento={acento}
-        className="mr-2 mb-2 aspect-square w-32 shrink-0 sm:mr-3 sm:mb-3 sm:w-40"
+        className="mr-2 mb-2 aspect-square w-36 shrink-0 sm:mr-3 sm:mb-3 sm:w-52"
       />
       <div className="flex min-w-0 flex-col gap-3">
         <div className="flex flex-col gap-2">
